@@ -1,0 +1,30 @@
+<modification>
+    <id>Journal Home page fixed footer</id>
+    <version>1</version>
+    <vqmver>2.3.2</vqmver>
+    <author>GraFX - Demeter Attila</author>
+
+    <file name="catalog/view/theme/journal2/template/common/home.tpl">
+        <operation>
+            <search position="after"><![CDATA[<?php echo $footer; ?>]]></search>
+            <add><![CDATA[
+        <?php if (isset($home_page) && $home_page) { ?>
+        <script type="text/javascript">
+        $( document ).ready(function() {
+            $('footer').addClass('fixed_footer');
+            $('.extended-container').hide();
+        });
+        </script>
+        <?php } ?>
+            ]]></add>
+        </operation>
+    </file>
+
+    <file name="">
+        <operation>
+            <search position=""><![CDATA[]]></search>
+            <add><![CDATA[]]></add>
+        </operation>
+    </file>
+
+</modification>

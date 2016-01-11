@@ -1,0 +1,251 @@
+<modification>
+    <id>Access to api</id>
+    <version>1</version>
+    <vqmver>1</vqmver>
+    <author>Koncz Andrea</author>
+	
+    <file name="admin/language/romana/sale/customer.php">
+        <operation>
+            <search position="after"><![CDATA[$_['text_limited_permision'] = 'limited';//Slave]]></search>
+            <add><![CDATA[
+            $_['text_api_access']       = 'Access API';
+            $_['text_operation_name']   = 'Operatiune';
+
+            ]]></add>
+        </operation>
+    </file>
+
+    <file name="admin/model/sale/customer.php">
+        <operation>
+            <search position="replace"><![CDATA[public function addCustomer($data) {]]></search>
+            <add><![CDATA[
+            public function addCustomer($data, &$customer_id=false) {
+            ]]></add>
+        </operation>
+    </file>
+    
+    <file name="admin/controller/sale/customer.php">
+        <operation>
+            <search position="after"><![CDATA[$this->data['entry_status'] = $this->language->get( 'entry_status' );]]></search>
+            <add><![CDATA[
+            $this->data['text_api_access'] = $this->language->get( 'text_api_access' );
+            $this->data['text_operation_name'] = $this->language->get( 'text_operation_name' );
+            ]]></add>
+        </operation>
+
+
+        <operation>
+            <search position="replace"><![CDATA[$this->model_sale_customer->addCustomer( $this->request->post );]]></search>
+            <add><![CDATA[
+                $this->model_sale_customer->addCustomer( $this->request->post, $customer_id );
+
+                $this->load->model( 'sale/api_access' );
+                if ( $this->request->post['api_access'] == 1 )
+                {
+                    // se genereaza un cod md5 pt client
+//                   $customer_security_code = mb_substr(mt_rand(), 0, 10);
+		    $unic_code = md5(uniqid(rand(),1));  
+		    $customer_security_code = substr($unic_code, 0, 10);
+                    $this->model_sale_api_access->addCustomerApiAccess( $customer_id, $customer_security_code );
+                }
+            ]]></add>
+        </operation>
+
+
+
+        <operation>
+            <search position="after"><![CDATA[$this->model_sale_customer->editCustomer( $this->request->get['customer_id'], $this->request->post );]]></search>
+            <add><![CDATA[
+            $this->load->model( 'sale/api_access' );
+            if ( $this->request->post['api_access'] == 1 )
+            {
+                // se genereaza un cod md5 pt client
+		$unic_code = md5(uniqid(rand(),1));  
+                $customer_security_code = substr($unic_code, 0, 10);
+
+                $this->model_sale_api_access->addCustomerApiAccess( $this->request->get['customer_id'], $customer_security_code );
+            }
+            else
+            {
+                $this->model_sale_api_access->deleteCustomerApiAccess($this->request->get['customer_id']);
+            }
+
+
+            $this->load->model( 'sale/api_customer_operation' );
+            if( isset($_REQUEST["active_operations"]) )
+            {
+                $operations = $this->request->post["active_operations"];
+                $nr = sizeof($operations);
+                if ( $nr > 0 )
+                {
+                    // se salveaza in baza de data operatiuniile alese pt client
+                    $this->model_sale_api_customer_operation->addCustomerOperation($this->request->get['customer_id'], $operations );
+                }
+            }
+            else
+            {
+                    $this->model_sale_api_customer_operation->deleteCustomerOperations($this->request->get['customer_id']);
+            }
+
+
+            ]]></add>
+        </operation>
+
+        <operation>
+            <search position="before"><![CDATA[if( isset( $this->request->get['customer_id'] ) && ($this->request->server['REQUEST_METHOD'] != 'POST') )]]></search>
+            <add><![CDATA[ $this->data['have_api_access'] =  0;  ]]></add>
+        </operation>
+
+        <operation>
+            <search position="after" offset="2"><![CDATA[if( isset( $this->request->get['customer_id'] ) && ($this->request->server['REQUEST_METHOD'] != 'POST') )]]></search>
+            <add><![CDATA[
+
+             // verifica daca clientul are deja acces la API
+             $this->load->model( 'sale/api_access' );
+             $have_api_access = $this->model_sale_api_access->getCustomerApiAccess( $this->request->get['customer_id'] );
+             $this->data['have_api_access'] =  $have_api_access;
+
+             if ( $this->data['have_api_access'] == 1 )
+             {
+                // se citeste din baza de date operatiuniile care sunt active momentan
+                $this->load->model( 'sale/api_operation' );
+                $operations = $this->model_sale_api_operation->getActiveOperations();
+                $this->data['operations'] = $operations;
+
+                // se citeste operatiuniile care sunt deja setate clientului
+                $this->load->model( 'sale/api_customer_operation' );
+                $customer_operations = $this->model_sale_api_customer_operation->getCustomerOperations( $this->request->get['customer_id'] );
+                $this->data['customer_operations'] = $customer_operations;
+             }
+
+            ]]></add>
+        </operation>
+
+        <operation>
+            <search position="before"><![CDATA[$this->load->model( 'sale/customer_group' );]]></search>
+            <add><![CDATA[
+            if( isset( $this->request->post['api_access'] ) )
+            {
+                  $this->data['api_access'] = $this->request->post['api_access'];
+            }
+            elseif( isset( $have_api_access ) )
+            {
+                  $this->data['api_access'] = $have_api_access;
+            }
+            else
+            {
+                  $this->data['api_access'] = '';
+            }
+            ]]></add>
+        </operation>
+    </file>
+    
+    <file name="admin/view/template/sale/customer_form.tpl">
+        <operation>
+            <search position="after" offset="9"><![CDATA[<td><select name="status">]]></search>
+            <add><![CDATA[
+				  <tr>
+                <td><?php echo $text_api_access; ?></td>
+                <td><select name="api_access">
+                    <?php if ($api_access) { ?>
+                    <option value="1" selected="selected"><?php echo $text_enabled; ?></option>
+                    <option value="0"><?php echo $text_disabled; ?></option>
+                    <?php } else { ?>
+                    <option value="1"><?php echo $text_enabled; ?></option>
+                    <option value="0" selected="selected"><?php echo $text_disabled; ?></option>
+                    <?php } ?>
+                  </select></td>
+              </tr>
+              
+            ]]></add>
+        </operation>
+
+        <operation>
+            <search position="replace"><![CDATA[<a href="#tab-ip"><?php echo $tab_ip; ?></a></div>]]></search>
+            <add><![CDATA[
+            <?php if( $have_api_access == 1 ) { ?>
+            <a href="#tab-ip"><?php echo $tab_ip; ?></a><a href="#tab-api_access"><?php echo $text_api_access; ?></a></div>
+            <?php } else { ?>
+            <a href="#tab-ip"><?php echo $tab_ip; ?></a></div>
+            <?php }  ?>
+             ]]></add>
+        </operation>
+
+        <operation>
+            <search position="after" offset="31"><![CDATA[<div id="tab-ip">]]></search>
+            <add><![CDATA[
+            <?php if( $have_api_access == 1 ) { ?>
+            <div id="tab-api_access">
+              <table class="list">
+                <thead>
+                  <tr>
+                    <td class="left"><?php echo $text_operation_name; ?></td>
+                  </tr>
+                </thead>
+                <tbody>
+                  <?php if ($operations) { ?>
+                  <?php foreach ($operations as $operation) { ?>
+                  <tr>
+                    <td class="left"><input <?php echo ( in_array($operation['api_operation_id'], $customer_operations) ? "checked=checked" : "" ); ?> type="checkbox" name="active_operations[]" value="<?php echo $operation['api_operation_id']; ?>"><?php echo $operation['name']; ?></td>
+                  </tr>
+                  <?php } ?>
+                  <?php } else { ?>
+                  <tr>
+                    <td class="center" ><?php echo $text_no_results; ?></td>
+                  </tr>
+                  <?php } ?>
+                </tbody>
+              </table>
+            </div>
+            <?php }  ?>
+             ]]></add>
+        </operation>
+    </file>
+
+
+    <file name="catalog/view/theme/default/template/account/account.tpl">
+        <operation>
+            <search position="replace"><![CDATA[<?php echo $content_bottom; ?></div>]]></search>
+            <add><![CDATA[
+            <?php if ( $customer_B2B ) { ?>
+                <table class="list">
+                <thead>
+                  <tr>
+                     <td class="left">
+                        12. <a href="<?php echo $file_upload; ?>"><?php echo $text_file_upload; ?></a>
+                     </td>
+                  </tr>
+                  </thead>
+                </table>
+              <?php }?>
+            ]]></add>
+        </operation>
+    </file>
+
+    <file name="catalog/language/romana/account/account.php">
+        <operation>
+            <search position="after"><![CDATA[$_['text_subject_notification'] = 'NOTIFICARE - modificare date';]]></search>
+            <add><![CDATA[
+            $_['text_file_upload'] = 'Incarcare fisier (folosit pentru sincronizarea proprietatiilor produselor)';
+            ]]></add>
+        </operation>
+    </file>
+
+    <file name="catalog/controller/account/account.php">
+        <operation>
+            <search position="after"><![CDATA[$this->data['text_list_reclamation'] = $this->language->get( 'text_list_reclamation' );]]></search>
+            <add><![CDATA[
+            $this->data['text_file_upload'] = $this->language->get( 'text_file_upload' );
+            ]]></add>
+        </operation>
+
+        <operation>
+            <search position="after"><![CDATA[$this->data['document'] = $this->url->link( 'document/document/listdocuments', '', 'SSL' );]]></search>
+            <add><![CDATA[
+            $this->data['file_upload'] = $this->url->link( 'gfx_api/matchclientdata/fileUpload', '', 'SSL' );
+            ]]></add>
+        </operation>
+    </file>
+
+    
+</modification>

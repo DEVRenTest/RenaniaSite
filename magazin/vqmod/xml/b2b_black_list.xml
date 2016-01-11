@@ -1,0 +1,197 @@
+
+<modification>
+
+    <id>ax_customer</id>
+    <version>1.0.0</version>
+    <vqmver>2.1.5</vqmver>
+    <author>Demeter Attila</author>
+
+    <file name="admin/model/sale/customer.php">
+        <operation>
+            <search position="replace"><![CDATA[email = '" . $this->db->escape($data['email']) . "', telephone = '" . $this->db->escape($data['telephone']) . "', fax = '" . $this->db->escape($data['fax']) . "', newsletter = '" . (int)$data['newsletter'] . "', customer_group_id = '" . (int)$data['customer_group_id'] . "', status = '" . (int)$data['status'] . "'  WHERE customer_id = '" . (int)$customer_id . "'");]]></search>
+            <add><![CDATA[email = '" . $this->db->escape($data['email']) . "', telephone = '" . $this->db->escape($data['telephone']) . "', fax = '" . $this->db->escape($data['fax']) . "', newsletter = '" . (int)$data['newsletter'] . "', customer_group_id = '" . (int)$data['customer_group_id'] . "', status = '" . (int)$data['status'] . "', black_list = " . (int)$data['black_list'] . "  WHERE customer_id = '" . (int)$customer_id . "'");]]></add>
+        </operation>
+    </file>
+
+    <file name="catalog/language/romana/account/account.php">
+        <operation>
+            <search position="after"><![CDATA[$_['text_subject_notification'] = 'NOTIFICARE - modificare date';]]></search>
+            <add><![CDATA[
+    $_['text_List'] = 'LISTA CLIENTI RAU PLATNICI';
+            ]]></add>
+        </operation>
+    </file>
+
+    <file name="catalog/controller/account/account.php">
+        <operation>
+            <search position="before"><![CDATA[protected function validate() {]]></search>
+            <add><![CDATA[
+        /*public function black_list() {
+            if( !$this->customer->isLogged() )
+            {
+                $this->session->data['redirect'] = $this->url->link( 'account/account', '', 'SSL' );
+                $this->redirect( $this->url->link( 'account/login', '', 'SSL' ) );
+            }
+
+            $this->language->load( 'account/account' );
+            $this->language->load( 'romana' );
+            $this->load->model('account/customer');
+
+            $this->data['customer_B2B']  = false;
+            //show for B2B customers the invoices
+
+            if( isset( $this->request->get['page'] ) )
+            {
+                $page = $this->request->get['page'];
+            }
+            else
+            {
+                $page = 1;
+            }
+            $this->data['search_action'] = $this->url->link('account/account/black_list', '', 'SSL');
+
+            if( $this->customer->getCustomerGroupId() == 3 || $this->customer->getCustomerGroupId() == 4 )
+            {
+                $this->data['customer_B2B']  = true;
+
+                if (isset($this->request->post['search_client']) && !empty($this->request->post['search_client'])) {
+
+                    $this->data['search_client'] = $search = $this->request->post['search_client'];
+
+                } elseif (isset($this->request->get['search_client']) && !empty($this->request->get['search_client'])) {
+
+                    $this->data['search_client'] = $search = $this->request->get['search_client'];
+
+                } else {
+                    $this->data['search_client'] = $search = '';
+                }
+
+                $this->data['black_list_Length'] = $this->model_account_customer->getBlack_list_Length($search);
+                $this->data['black_list'] = $this->model_account_customer->getBlack_list($page, $search);
+            }
+
+            $this->document->setTitle( $this->language->get( 'text_List' ) );
+            $this->data['heading_title'] = $this->language->get( 'text_List' );
+            //$this->data['heading_title'] = "Lista";
+            $this->data['user'] = $this->customer->getFirstName()." ".$this->customer->getLastName();
+
+            $this->data['breadcrumbs'] = array( );
+
+            $this->data['breadcrumbs'][] = array(
+                'text' => $this->language->get( 'text_home' ),
+                'href' => $this->url->link( 'common/home' ),
+                'separator' => false
+            );
+
+            $this->data['breadcrumbs'][] = array(
+                'text' => $this->language->get( 'text_account' ),
+                'href' => $this->url->link( 'account/account', '', 'SSL' ),
+                'separator' => $this->language->get( 'text_separator' )
+            );
+
+            $this->data['breadcrumbs'][] = array(
+                'text'      => $this->language->get('text_List'),
+                'href'      => $this->url->link('account/account/black_list', '', 'SSL'),
+                'separator' => $this->language->get('text_separator')
+            );
+
+            $pagination = new Pagination();
+            $pagination->total = (int)$this->data['black_list_Length'];
+            $pagination->page = (int)$page;
+            $pagination->limit = 10;
+            $pagination->text = $this->language->get( 'text_pagination' );
+            $pagination->url = $this->url->link( 'account/account/black_list', 'page={page}&search_client='.$search, 'SSL');
+
+            $this->data['pagination'] = $pagination->render();
+
+            //echo "<pre>"; var_dump($this->data['pagination']); die('sdvs');
+
+
+          //$this->load->model('account/customer');
+
+          if( file_exists( DIR_TEMPLATE.$this->config->get( 'config_template' ).'/template/account/black_list.tpl' ) )
+            {
+                $this->template = $this->config->get( 'config_template' ).'/template/account/black_list.tpl';
+            }
+            else
+            {
+                $this->template = 'default/template/account/black_list.tpl';
+            }
+
+            $this->children = array(
+
+            'common/dream_column_header_top', 'common/dream_column_header_bottom', 'common/dream_column_footer_top', 'common/dream_column_footer_bottom',
+
+                'common/column_left',
+                'common/column_right',
+                'common/content_top',
+                'common/content_bottom',
+                'common/footer',
+                'common/header'
+            );
+
+            $this->response->setOutput( $this->render() );
+
+        }*/ ]]></add>
+        </operation>
+        <operation>
+            <search position="after"><![CDATA[$results = $this->model_account_address->getAddresses();]]></search>
+            <add><![CDATA[
+            $this->load->model('account/customer');
+            if( $this->customer->getCustomerGroupId() == 3 || $this->customer->getCustomerGroupId() == 4 ) {
+
+                if (isset($this->request->post['search_client']) && !empty($this->request->post['search_client'])) {
+
+                    $this->data['search_client'] = $search = $this->request->post['search_client'];
+
+                } elseif (isset($this->request->get['search_client']) && !empty($this->request->get['search_client'])) {
+
+                    $this->data['search_client'] = $search = $this->request->get['search_client'];
+
+                } else {
+                    $this->data['search_client'] = $search = '';
+                }
+
+                $this->data['black_list'] = $this->model_account_customer->getBlack_list_Length($search);
+                $this->data['black_list_link'] = $this->url->link('account/account/black_list');
+            }
+            ]]></add>
+        </operation>
+    </file>
+    <file name="catalog/model/account/customer.php">
+        <operation>
+            <search position="before"><![CDATA[public function getAgents($data = array()) { ]]></search>
+            <add><![CDATA[
+    public function getBlack_list($page, $search) {
+
+        if ($page > 1) {
+            (int)$page--;
+            $page = $page*10;
+        }
+
+        if(empty($search)) {
+
+            $query = $this->db->query("SELECT * FROM `B2B_adresa` LIMIT ".$page.", 10;");
+
+        } elseif (!empty($search)) {
+
+            $query = $this->db->query("SELECT * FROM `B2B_adresa` WHERE (accountnum LIKE '%".$search."%' OR street LIKE '%".$search."%' OR city LIKE '%".$search."%' OR county LIKE '%".$search."%') LIMIT ".$page.", 10;");
+
+        }
+
+        return $query->rows;
+    }
+
+    public function getBlack_list_Length($search) {
+        if(empty($search)) {
+            $query = $this->db->query("SELECT COUNT(recid) AS `lines` FROM `B2B_adresa`;");
+        } elseif (!empty($search)) {
+            $query = $this->db->query("SELECT COUNT(recid) AS `lines` FROM `B2B_adresa` WHERE accountnum LIKE '%".$search."%';");
+        }
+
+        return $query->row['lines'];
+    }
+     ]]></add>
+        </operation>
+    </file>
+</modification>

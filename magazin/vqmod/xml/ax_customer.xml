@@ -1,0 +1,442 @@
+
+<modification>
+
+   <id>ax_customer</id>
+   <version>1.0.0</version>
+   <vqmver>2.1.5</vqmver>
+   <author>Koncz Andrea</author>
+	
+   <file name="admin/controller/sale/customer.php">
+      <!--<operation>
+         <search position="before"><![CDATA[public function update()]]>
+         </search>
+         <add><![CDATA[
+         public function insertInAxCustomer()
+         {
+            $this->load->model( 'sale/ax_customer' );
+
+            if( ($this->request->server['REQUEST_METHOD'] == 'POST') && $this->validateForm() )
+            {
+                  $this->model_sale_ax_customer->adminAxCustomer( $this->request->get['customer_id'], $this->request->post );
+            }
+         }
+			]]>
+         </add>
+      </operation>
+      <operation>
+         <search position="after"><![CDATA[$this->model_sale_customer->editCustomer( $this->request->get['customer_id'], $this->request->post );]]>
+         </search>
+         <add><![CDATA[
+         if( $this->request->post['customer_group_id'] == 3 || $this->request->post['customer_group_id'] == 4 )
+         {
+               $this->insertInAxCustomer();
+         }
+			]]>
+         </add>
+      </operation>-->
+       <operation>
+           <search position="replace"><![CDATA[$this->data['addresses'] = $this->model_sale_customer->getAddresses( $this->request->get['customer_id'] );]]></search>
+           <add><![CDATA[   if($customer_info['customer_group_id'] == 3 || $customer_info['customer_group_id'] == 4) {
+                $this->data['addresses'] = $this->model_sale_customer->getB2BAddresses( $customer_info['ax_code'] );
+           } else {
+                $this->data['addresses'] = $this->model_sale_customer->getAddresses( $this->request->get['customer_id'] );
+            }]]></add>
+       </operation>
+       <operation>
+           <search position="before"><![CDATA[if( (utf8_strlen( $value['firstname'] ) < 1) || (utf8_strlen( $value['firstname'] ) > 32) )]]></search>
+           <add><![CDATA[ if($this->request->post['customer_group_id'] != 3 && $this->request->post['customer_group_id'] != 4 ) { ]]></add>
+       </operation>
+       <operation>
+           <search position="before"><![CDATA[if( (utf8_strlen( $value['address_1'] ) < 3) || (utf8_strlen( $value['address_1'] ) > 128) )]]></search>
+           <add><![CDATA[} // b2b user if end]]></add>
+       </operation>
+   </file>
+
+    <file name="admin/model/sale/customer.php">
+        <operation>
+            <search position="before"><![CDATA[public function getAddresses($customer_id) {]]></search>
+            <add><![CDATA[  public function getB2bAddresses($ax_code) {
+		$address_data = array();
+
+		$query = $this->db->query("SELECT `accountnum`,`tipadresa`,`nrcrt`,`street` AS `address_1`,`city`,`county`,`zipcode` AS `postcode`,`recid` AS `address_id`,`recversion` FROM B2B_adresa WHERE accountnum = '" .$ax_code. "'");
+
+		foreach ($query->rows as $result) {
+			if ($result) {
+			    $result['country_id'] = 175;
+			    $zone_id = $this->db->query("SELECT `zone_id` FROM " . DB_PREFIX . "zone WHERE `country_id` =".$result['country_id']." AND `code` = '".$result['county']."';");
+			    $result['zone_id'] = $zone_id->row['zone_id'];
+				$address_data[$result['address_id']] = $result;
+			}
+		}
+
+		return $address_data;
+	}	]]></add>
+        </operation>
+    </file>
+
+    <file name="admin/view/template/sale/customer_form.tpl">
+        <operation>
+            <search position="before"><![CDATA[<div id="tab-address-<?php echo $address_row; ?>" class="vtabs-content">]]></search>
+            <add><![CDATA[
+            <?php if($customer_group_id == 3 || $customer_group_id == 4) { // b2b if begin, to find search for "b2b if end" ?>
+            <div id="tab-address-<?php echo $address_row; ?>" class="vtabs-content">
+            <input type="hidden" name="address[<?php echo $address_row; ?>][address_id]" value="<?php echo $address['address_id']; ?>" />
+            <table class="form">
+              <tr>
+                <td><span class="required">*</span> <?php echo $entry_address_1; ?></td>
+                <td><input type="text" name="address[<?php echo $address_row; ?>][address_1]" value="<?php echo $address['address_1']; ?>"  />
+                  <?php if (isset($error_address_address_1[$address_row])) { ?>
+                  <span class="error"><?php echo $error_address_address_1[$address_row]; ?></span>
+                  <?php } ?></td>
+              </tr>
+              <tr>
+                <td><span class="required">*</span> <?php echo $entry_city; ?></td>
+                <td><input type="text" name="address[<?php echo $address_row; ?>][city]" value="<?php echo $address['city']; ?>"  />
+                  <?php if (isset($error_address_city[$address_row])) { ?>
+                  <span class="error"><?php echo $error_address_city[$address_row]; ?></span>
+                  <?php } ?></td>
+              </tr>
+              <tr>
+                <td><span id="postcode-required<?php echo $address_row; ?>" class="required">*</span> <?php echo $entry_postcode; ?></td>
+                <td><input type="text" name="address[<?php echo $address_row; ?>][postcode]" value="<?php echo $address['postcode']; ?>"  /></td>
+              </tr>
+              <tr>
+                <td><span class="required">*</span> <?php echo $entry_country; ?></td>
+                <td><select name="address[<?php echo $address_row; ?>][country_id]" onchange="country(this, '<?php echo $address_row; ?>', '<?php echo $address['zone_id']; ?>');"  >
+                    <option value=""><?php echo $text_select; ?></option>
+                    <?php foreach ($countries as $country) { ?>
+                    <?php if ($country['country_id'] == $address['country_id']) { ?>
+                    <option value="<?php echo $country['country_id']; ?>" selected="selected"><?php echo $country['name']; ?></option>
+                    <?php } else { ?>
+                    <option value="<?php echo $country['country_id']; ?>"><?php echo $country['name']; ?></option>
+                    <?php } ?>
+                    <?php } ?>
+                  </select>
+                  <?php if (isset($error_address_country[$address_row])) { ?>
+                  <span class="error"><?php echo $error_address_country[$address_row]; ?></span>
+                  <?php } ?></td>
+              </tr>
+              <tr>
+                <td><span class="required">*</span> <?php echo $entry_zone; ?></td>
+                <td><select name="address[<?php echo $address_row; ?>][zone_id]"  >
+                  </select>
+                  <?php if (isset($error_address_zone[$address_row])) { ?>
+                  <span class="error"><?php echo $error_address_zone[$address_row]; ?></span>
+                  <?php } ?></td>
+              </tr>
+            </table>
+          </div>
+          <?php } else { ?>
+            ]]></add>
+        </operation>
+        <operation>
+            <search position="before" offset="4"><![CDATA[<div id="tab-history">]]></search>
+            <add><![CDATA[
+            <?php } // b2b if end ?>
+            ]]></add>
+        </operation>
+        <operation>
+            <search position="replace"><![CDATA[<span id="address-add"><?php echo $button_add_address; ?>&nbsp;<img src="view/image/add.png" alt="" onclick="addAddress();" /></span></div>]]></search>
+            <add><![CDATA[<?php if($customer_group_id == 3 || $customer_group_id == 4) { ?>
+             </div>
+             <?php } else { ?>
+             <span id="address-add"><?php echo $button_add_address; ?>&nbsp;<img src="view/image/add.png" alt="" onclick="addAddress();" /></span></div>
+             <?php } ?>]]></add>
+        </operation>
+        <operation>
+            <search position="replace"><![CDATA[if (json['zone'][i]['zone_id'] == zone_id) {]]></search>
+            <add><![CDATA[<?php //if($customer_group_id == 3 || $customer_group_id == 4) { ?>
+                        //if (json['zone'][i]['code'] == zone_id) {
+                    <?php //} else { ?>
+                        if (json['zone'][i]['zone_id'] == zone_id) {
+                    <?php //} ?>
+            ]]></add>
+        </operation>
+    </file>
+   
+   <file name="catalog/controller/module/quickcheckout.php">
+       <!--<operation>2528
+           <search position="before"><![CDATA[$country_info = $this->model_localisation_country->getCountry( $this->request->get['country_id'] );]]></search>
+           <add><![CDATA[
+        if( $this->customer->isLogged() && ( $this->customer->getCustomerGroupId() == 3 || $this->customer->getCustomerGroupId() == 4 ) ){
+            die('c id '.$this->request->get['country_id']);
+        }
+           ]]></add>
+       </operation>-->
+       <operation>
+           <search position="before"><![CDATA[$this->load->model('account/address');]]></search>
+           <add><![CDATA[          // Attila  quick checkout get addresses if logged user is b2b
+        if( $this->customer->isLogged() && ( $this->customer->getCustomerGroupId() == 3 || $this->customer->getCustomerGroupId() == 4 ) ){
+
+            $customer_data = $this->model_account_customer->getCustomer($this->customer->getId());
+            // B2B_adresa
+            $this->load->model('invoice/address');
+            $this->data['b2b_addresses'] = array();
+            $this->data['addresses'] = array();
+            $b2b_addresses = $this->model_invoice_address->getAllAddresses( $this->customer->getAxCode());
+
+            // echo "B2B adresa <pre>"; print_r($b2b_addresses); die('dfbdgf');
+
+            foreach ($b2b_addresses as $value ) {
+
+                $this->data['addresses'][$value['recid']] = array(
+                    'address_id' => $value['recid'],
+                    'firstname' => $customer_data['firstname'],
+                    'lastname' => $customer_data['lastname'],
+                    'accountnum' => $value['accountnum'],
+                    'nrcrt' => $value['nrcrt'],
+                    'address_1'    => $value['street'],
+                    'postcode' => $value['zipcode'],
+                    'city' => $value['city'],
+                    'zone' => $value['county'],
+                    'country' => 'Romania',
+                    //'b2b_update'     => $this->url->link('account/b2b_address/update', 'accountnum=' . $value['accountnum'].'&nrcrt='.$value['nrcrt'], 'SSL'),
+                    //'b2b_delete'     => $this->url->link('account/b2b_address/delete', 'accountnum=' . $value['accountnum'].'&nrcrt='.$value['nrcrt'], 'SSL')
+                );
+            }
+            /*unset($this->session->data['payment_address']);
+            unset($this->session->data['shipping_address']);
+            unset($this->session->data['guest']['payment']);
+            unset($this->session->data['guest']['shipping']);
+            unset($this->session->data['addresses']);
+            unset($this->session->data['value']);*/
+
+            $this->session->data['addresses'] = $this->data['addresses'];
+
+            /*echo "Session <pre>";
+            print_r($this->session);
+            echo "data_ <pre>";
+            print_r($this->data['addresses']);
+            die ('1-1');*/
+        }
+        else{]]></add>
+       </operation>
+       <operation>
+           <search position="after"><![CDATA[$this->data['addresses'] = $this->model_account_address->getAddresses();]]></search>
+           <add><![CDATA[
+            /*echo "ANDI<pre>";
+            print_r($this->data['addresses']);
+            die('dgndsgfnb');*/
+        }]]></add>
+       </operation>
+       <operation>
+           <search position="after"><![CDATA[$this->data['shipping_address']['fields']['country_id']['options'] = $options;]]></search>
+           <add><![CDATA[
+           // echo "<pre>"; print_r($shipping_address); die('sfvs');
+           ]]></add>
+       </operation>
+      <operation>
+         <search position="after"><![CDATA[$this->checkout['order_id'] = $this->model_quickcheckout_order->addOrder( $data );]]>
+         </search>
+         <add><![CDATA[
+                $this->load->model( 'account/customer' );
+                if ( $this->customer->isLogged() )
+                {
+                      $customer_info = $this->model_account_customer->getCustomer( $this->session->data['customer_id'] );
+
+                      $customer_group_id = "";
+
+                      if( $customer_info )
+                      {
+                         $customer_group_id = $customer_info['customer_group_id'];
+                      }
+
+                      if( in_array( $customer_group_id, array( 3, 4 ) ) ) // B&B, gallery & B2B customer
+                      {
+                         $this->load->model( 'quickcheckout/ax_order' );
+                         $this->checkout['ax_order_id'] = $this->model_quickcheckout_ax_order->addAxOrder( $data );
+                      }
+                 }
+			]]>
+         </add>
+      </operation>
+      <operation>
+         <search position="after"><![CDATA[$this->model_quickcheckout_order->updateOrder( $this->checkout['order_id'], $data );]]>
+         </search>
+         <add><![CDATA[
+            if (isset($this->data['confirm']['fields']['comment']['value']) && $this->data['confirm']['fields']['comment']['value']) {
+                 $this->data['confirm']['fields']['comment']['value'] = '';
+            }
+            $this->load->model( 'account/customer' );
+            
+            if ( $this->customer->isLogged() )
+            {
+               $customer_info = $this->model_account_customer->getCustomer( $this->session->data['customer_id'] );
+
+               $customer_group_id = "";
+               if( $customer_info )
+               {
+                  $customer_group_id = $customer_info['customer_group_id'];
+               }
+
+               if( in_array( $customer_group_id, array( 3, 4 ) ) ) // B2B, gallery & B2B customer
+               {
+                  $this->load->model( 'quickcheckout/ax_order' );
+                  $this->model_quickcheckout_ax_order->updateAxOrder( $this->checkout['ax_order_id'], $this->checkout['order_id'], $data );
+               }
+             }
+			]]>
+         </add>
+      </operation>
+       <!--<operation>
+            <search position="before"><![CDATA[$country_data = $this->get_country_data( $shipping_address['country_id'], $shipping_address['zone_id'] );]]></search>
+            <add><![CDATA[
+            /*if( $this->customer->getCustomerGroupId() == 3 || $this->customer->getCustomerGroupId() == 4 ){
+                $b2b_address_ID = explode("_", $this->checkout['shipping_address']['address_id']);
+
+                echo $this->checkout['shipping_address']['address_id']." address ID <pre>";
+                print_r($b2b_address_ID);
+                die('1');
+
+                $b2b_address_data = $this->model_quickcheckout_order->getB2BAddressDataByCode( $b2b_address_ID );
+
+                $customer_data = $this->model_account_customer->getCustomer($this->customer->getId());
+
+                /*echo "address data <pre>";
+                print_r( $b2b_address_data );
+
+                $shipping_address = array(
+                    'country_id' => (isset( $b2b_address_data['country_id'] )) ? $b2b_address_data['country_id'] : '',
+                    'firstname' => (isset( $customer_data['firstname'] )) ? $customer_data['firstname'] : '',
+                    'lastname' => (isset( $customer_data['lastname'] )) ? $customer_data['lastname'] : '',
+                    'company' => (isset( $b2b_address_data['company'] )) ? $b2b_address_data['company'] : '',
+                    'company_id' => (isset( $b2b_address_data['company_id'] )) ? $b2b_address_data['company_id'] : '',
+                    'tax_id' => (isset( $b2b_address_data['tax_id'] )) ? $b2b_address_data['tax_id'] : '',
+                    'address_1' => (isset( $b2b_address_data['street'] )) ? $b2b_address_data['street'] : '',
+                    'address_2' => (isset( $b2b_address_data['address_2'] )) ? $b2b_address_data['address_2'] : '',
+                    'postcode' => (isset( $b2b_address_data['zipcode'] )) ? $b2b_address_data['zipcode'] : '',
+                    'city' => (isset( $b2b_address_data['city'] )) ? $b2b_address_data['city'] : '',
+                    'zone_id' => (isset( $b2b_address_data['zone_id'] )) ? $b2b_address_data['zone_id'] : $this->config->get( 'config_zone_id' ),
+                    'country' => (isset( $b2b_address_data['country'] )) ? $b2b_address_data['country'] : '',
+                    'iso_code_2' => (isset( $b2b_address_data['iso_code_2'] )) ? $b2b_address_data['iso_code_2'] : '',
+                    'iso_code_3' => (isset( $b2b_address_data['iso_code_3'] )) ? $b2b_address_data['iso_code_3'] : '',
+                    'address_format' => (isset( $b2b_address_data['address_format'] )) ? $b2b_address_data['address_format'] : '',
+                    'zone' => (isset( $b2b_address_data['zone'] )) ? $b2b_address_data['zone'] : '',
+                    'zone_code' => (isset( $b2b_address_data['zone_code'] )) ? $b2b_address_data['zone_code'] : '',
+                    'exists' => (isset( $b2b_address_data['exists'] )) ? $b2b_address_data['exists'] : 0,
+                    'address_id' => (isset( $b2b_address_data['accountnum'] ) && isset( $b2b_address_data['nrcrt'] )) ? $b2b_address_data['accountnum']."_".$b2b_address_data['nrcrt'] : '',
+                );
+
+                echo "POST <pre>";
+                print_r($_POST);
+            }*/
+
+            /*print_r( $this->checkout['shipping_address']['address_id'] );
+            echo "shipping_address <pre>";
+            print_r($shipping_address);
+            die('111');*/
+            ]]></add>
+        </operation>-->
+       <operation>
+           <search position="replace"><![CDATA[$country_data = $this->model_account_address->getAddress( $this->checkout['shipping_address']['address_id'] );]]></search>
+           <add><![CDATA[ if( $this->customer->isLogged() && ( $this->customer->getCustomerGroupId() == 3 || $this->customer->getCustomerGroupId() == 4 ) ){
+                            $country_data = $this->model_account_address->getB2BAddress( $this->checkout['shipping_address']['address_id'] );
+                            //echo $this->checkout['shipping_address']['address_id'];var_dump($country_data);die('1212');
+                        } else {
+                            $country_data = $this->model_account_address->getAddress( $this->checkout['shipping_address']['address_id'] );
+                        } ]]></add>
+       </operation>
+
+   </file>
+
+    <file name="catalog/model/account/address.php">
+        <operation>
+            <search position="before"><![CDATA[public function getAddress($address_id) {]]></search>
+            <add><![CDATA[
+    public function getB2BAddress($address_id) {
+		$address_query = $this->db->query("SELECT DISTINCT * FROM B2B_adresa WHERE recid = '" . (int)$address_id . "'");
+		//var_dump($address_query);die("12 -- 1 SELECT DISTINCT * FROM B2B_adresa WHERE recid = " . (int)$address_id . "");
+
+		if ($address_query->num_rows) {
+			/*$country_query = $this->db->query("SELECT * FROM `" . DB_PREFIX . "country` WHERE country_id = '" . (int)$address_query->row['country_id'] . "'");
+
+			if ($country_query->num_rows) {
+				$country = $country_query->row['name'];
+				$iso_code_2 = $country_query->row['iso_code_2'];
+				$iso_code_3 = $country_query->row['iso_code_3'];
+				$address_format = $country_query->row['address_format'];
+			} else {
+				$country = '';
+				$iso_code_2 = '';
+				$iso_code_3 = '';
+				$address_format = '';
+			}
+
+			$zone_query = $this->db->query("SELECT * FROM `" . DB_PREFIX . "zone` WHERE zone_id = '" . (int)$address_query->row['zone_id'] . "'");
+
+			if ($zone_query->num_rows) {
+				$zone = $zone_query->row['name'];
+				$zone_code = $zone_query->row['code'];
+			} else {
+				$zone = '';
+				$zone_code = '';
+			}*/
+
+			$customer_data = $this->model_account_customer->getCustomer($this->customer->getId());
+
+			$address_data = array(
+				'firstname'         => (isset( $customer_data['firstname'] )) ? $customer_data['firstname'] : '',
+                'lastname'          => (isset( $customer_data['lastname'] )) ? $customer_data['lastname'] : '',
+				'company'           => (isset( $address_query->row['company'] )) ? $address_query->row['company'] : '',
+				'company_id'        => (isset( $address_query->row['company_id'] )) ? $address_query->row['company_id'] : '',
+				'banca'             => (isset( $address_query->row['banca'] )) ? $address_query->row['banca'] : '',
+				'iban'              => (isset( $address_query->row['iban'] )) ? $address_query->row['iban'] : '',
+				'tax_id'            => (isset( $address_query->row['tax_id'] )) ? $address_query->row['tax_id'] : '',
+				'address_1'         => (isset( $address_query->row['street'] )) ? $address_query->row['street'] : '',
+				'address_2'         => (isset( $address_query->row['address_2'] )) ? $address_query->row['address_2'] : '',
+				'postcode'          => (isset( $address_query->row['zipcode'] )) ? $address_query->row['zipcode'] : '',
+				'city'              => (isset( $address_query->row['city'] )) ? $address_query->row['city'] : '',
+				'zone_id'           => (isset( $address_query->row['zone_id'] )) ? $address_query->row['zone_id'] : '',
+				'zone'              => (isset( $address_query->row['zone'] )) ? $address_query->row['zone'] : '',
+				'zone_code'         => (isset( $address_query->row['zone_code'] )) ? $address_query->row['zone_code'] : '',
+				'country_id'        => (isset( $address_query->row['country_id'] )) ? $address_query->row['country_id'] : '',
+				'country'           => (isset( $address_query->row['country'] )) ? $address_query->row['country'] : '',
+				'iso_code_2'        => (isset( $address_query->row['iso_code_2'] )) ? $address_query->row['iso_code_2'] : '',
+				'iso_code_3'        => (isset( $address_query->row['iso_code_3'] )) ? $address_query->row['iso_code_3'] : '',
+				'address_format'    => (isset( $address_query->row['address_format'] )) ? $address_query->row['address_format'] : '',
+
+			);
+
+			return $address_data;
+		} else {
+			return false;
+		}
+	}
+            ]]></add>
+        </operation>
+    </file>
+
+    <file name="catalog/model/quickcheckout/order.php">
+        <!--<operation>
+            <search position="before"><![CDATA[public function updateOrder($order_id,$data) {]]></search>
+            <add><![CDATA[
+    public function getB2BAddressDataByCode($b2b_address_ID) {
+
+        $B2BAddressData = $this->db->query("SELECT * FROM `B2B_adresa` WHERE `accountnum`='".$b2b_address_ID[0]."' AND `nrcrt` = ".$b2b_address_ID[1]." AND `tipadresa`='LIVRARE';");
+        return $B2BAddressData->row;
+    }
+            ]]></add>
+        </operation>-->
+    </file>
+
+<!--   <file name="view/theme/default/template/module/category.tpl">
+      <operation>
+         <search position="replace"><![CDATA[<span id="facebook"></span>]]>
+         </search>
+         <add><![CDATA[
+               <div id="fb-root"></div>
+               <script>(function(d, s, id) {
+               var js, fjs = d.getElementsByTagName(s)[0];
+               if (d.getElementById(id)) return;
+               js = d.createElement(s); js.id = id;
+               js.src = "//connect.facebook.net/ro_RO/all.js#xfbml=1";
+               fjs.parentNode.insertBefore(js, fjs);
+               }(document, 'script', 'facebook-jssdk'));</script>
+               <div class="fb-like-box" data-href="https://www.facebook.com/TineTeBine" data-colorscheme="light" data-show-faces="true" data-header="true" data-stream="false" data-show-border="true" ></div>
+               </div>
+			]]>
+         </add>
+      </operation>
+   </file>-->
+	
+</modification>

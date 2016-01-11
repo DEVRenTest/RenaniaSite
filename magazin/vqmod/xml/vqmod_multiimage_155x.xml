@@ -1,0 +1,114 @@
+<modification>
+	<id>Multi Image Uploader for Products</id>
+	<version>4.00</version>
+	<vqmver>1.0.8</vqmver>
+	<author>Kamen Sharlandjiev</author>
+
+	<file name="admin/view/template/catalog/product_form.tpl">
+        <operation>
+            <search position="before"><![CDATA[
+           <div class="box">
+            ]]></search>
+            <add><![CDATA[
+                <script type="text/javascript" src="view/javascript/fileuploader.js"></script>
+                <link rel="stylesheet" type="text/css" href="view/stylesheet/fileuploader.css" />
+            ]]></add>
+        </operation>
+        <operation>
+            <search position="after"><![CDATA[
+            <td class="right"><input type="text" name="product_image[' + image_row + '][sort_order]
+            ]]></search>
+            <add><![CDATA[
+                html += '<td><input type="radio" name="def_img" id="radio_' + image_row + '" value="" disabled="disabled"></td>';
+            ]]></add>
+        </operation>
+        <operation>
+            <search position="after"><![CDATA[
+            $('#' + thumb).replaceWith(
+            ]]></search>
+            <add><![CDATA[
+              var row =field.replace('image','');  $('#radio_'+row).replaceWith('<input type="radio" name="def_img" value='+$('#' + field).attr('value')+'>');
+            ]]></add>
+        </operation>
+        <operation>
+            <search position="after"><![CDATA[
+            <td class="right"><?php echo $entry_sort_order; ?></td>
+            ]]></search>
+            <add><![CDATA[
+                <td>Default Image</td>
+            ]]></add>
+        </operation>
+        <operation>
+            <search position="before"><![CDATA[
+            <td class="left"><a onclick="$('#image
+            ]]></search>
+            <add><![CDATA[
+                <td><input type="radio" name="def_img" value="<?php  if (isset($product_image['image'])) { echo $product_image['image']; } ?>"></td>
+            ]]></add>
+        </operation>                                    
+        <operation>
+            <search position="replace"><![CDATA[
+            <a onclick="addImage();" class="button"><?php echo $button_add_image; ?></a>
+            ]]></search>
+            <add><![CDATA[
+			</td><td><div id="file-uploader"><noscript><p>Please enable JavaScript to use file uploader.</p><!-- or put a simple form for upload here --></noscript></div><a onclick="addImage();" class="button"><?php echo $button_add_image; ?></a>
+            ]]></add>
+        </operation>
+                
+        <operation>
+            <search position="before"><![CDATA[
+          <?php echo $footer; ?>
+            ]]></search>
+            <add><![CDATA[
+<script type="text/javascript"><!--
+var uploader = new qq.FileUploader({
+    element: document.getElementById('file-uploader'),
+    action: 'index.php?route=tool/upload&token=<?php echo $token;?>',
+    allowedExtensions: ['jpg', 'jpeg', 'png', 'gif'],
+    onComplete: function(id, fileName, responseJSON){addMultiImage(responseJSON.fileName); },
+});
+var image_row = <?php echo $image_row; ?>;
+function addMultiImage(img) {
+
+            html ='<tbody id="image-row'+ image_row +'">';
+              html+='<tr>';
+                html+='<td class="left"><div class="image"><img src="<?php echo HTTP_CATALOG."image/"; ?>/'+img+'" alt="" id="thumb' + image_row + '" height=100 />';
+                    html+='<input type="hidden" name="product_image[' + image_row + '][image]" value="' + img + '" id="image' + image_row + '" />';
+                    html+='<br />';
+                    html+='<a onclick="image_upload(\'image' + image_row + '\', \'thumb' + image_row + '\');"><?php echo $text_browse; ?></a>&nbsp;&nbsp;|&nbsp;&nbsp;';
+                    html+='<a onclick="$(\'#thumb' + image_row + '\').attr(\'src\', \'<?php echo $no_image; ?>\'); $(\'#image' + image_row + '\').attr(\'value\', \'\');"><?php echo $text_clear; ?></a></div></td>';
+                    html+='<td class="right"><input type="text" name="product_image[' + image_row + '][sort_order]" value="<?php if (isset($product_image['image'])) { echo $product_image["sort_order"]; } ?>" size="2" /></td>';
+                    html += '<td><input type="radio" name="def_img" value="'+img+'"></td>';
+                    html+='<td class="left"><a onclick=\'$("#image-row' + image_row + '").remove();\' class="button"><?php echo $button_remove; ?></a></td>';
+              html+='</tr>';
+              html+='</tbody>';	
+	$('#images tfoot').before(html);
+	image_row++;
+}
+//--></script> 
+            ]]></add>
+        </operation> 
+
+	</file>
+	<file name="admin/model/catalog/product.php">
+        <operation>
+            <search position="after"><![CDATA[
+			$this->db->query("UPDATE " . DB_PREFIX . "product SET image = 
+            ]]></search>
+            <add><![CDATA[
+    		  if (isset($data['def_img']) && $data['def_img'] != "") {
+                 $q="UPDATE " . DB_PREFIX . "product SET image = '" . $this->db->escape($data['def_img']) . "' WHERE product_id = '" . (int)$product_id . "'";
+    		     $this->db->query($q);  
+		      }
+            ]]></add>
+        </operation>
+        <operation>
+            <search position="after"><![CDATA[
+			foreach ($data['product_image']
+            ]]></search>
+            <add><![CDATA[
+    		  if ($this->config->get('multiimageuploader_deletedef') && isset($data['def_img']) && $data['def_img'] == $product_image['image']) { continue;}
+            ]]></add>
+        </operation>        
+     </file>   		
+</modification>

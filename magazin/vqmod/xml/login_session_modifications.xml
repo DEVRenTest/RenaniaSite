@@ -1,0 +1,43 @@
+<modification>
+    <id>Login session modifications</id>
+    <version>1</version>
+    <vqmver>2.3.2</vqmver>
+    <author>GraFX - Demeter Attila</author>
+
+    <file name="system/library/session.php">
+        <operation>
+            <search position="after"><![CDATA[ini_set('session.use_trans_sid', 'Off');]]></search>
+            <add><![CDATA[
+            ini_set('session.cookie_domain', substr($_SERVER['SERVER_NAME'],strpos($_SERVER['SERVER_NAME'],"."),100));
+            ]]></add>
+        </operation>
+        <operation>
+            <search position="replace"><![CDATA[session_set_cookie_params(0, '/');]]></search>
+            <add><![CDATA[
+                    session_name( "customer_login" );
+                    ini_set('session.cookie_domain', '.renania.ro');
+                    //session_set_cookie_params(0, rtrim(dirname($_SERVER['PHP_SELF'])), '.' . str_replace('www.', '', $_SERVER['HTTP_HOST']));
+                    //session_set_cookie_params(86400, '/', '.renania.ro');
+                    session_set_cookie_params(0, '/');
+                ]]></add>
+        </operation>
+    </file>
+    <file name="system/startup.php">
+        <operation>
+            <search position="replace"><![CDATA[session_set_cookie_params(0, '/');]]></search>
+            <add><![CDATA[session_set_cookie_params(0, '/', '.renania.ro');]]></add>
+        </operation>
+    </file>
+    <file name="catalog/controller/common/header.php">
+        <operation>
+            <search position="after"><![CDATA[$this->data['text_welcome'] = sprintf($this->language->get('text_welcome'), $this->url->link('account/register', '', 'SSL'), $this->url->link('account/login', '', 'SSL'));]]></search>
+            <add><![CDATA[$this->data['text_welcome'] = str_replace('b2b.renania.ro','magazin.renania.ro',$this->data['text_welcome']);]]></add>
+        </operation>
+    </file>
+    <file name="catalog/controller/account/login.php">
+        <operation>
+            <search position="after"><![CDATA[$this->data['register'] = $this->url->link( 'account/register', '', 'SSL' );]]></search>
+            <add><![CDATA[$this->data['register'] = str_replace('b2b.renania.ro','magazin.renania.ro',$this->data['register']);]]></add>
+        </operation>
+    </file>
+</modification>

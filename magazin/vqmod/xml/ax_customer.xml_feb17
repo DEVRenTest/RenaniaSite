@@ -1,0 +1,115 @@
+
+<modification>
+
+   <id>ax_customer</id>
+   <version>1.0.0</version>
+   <vqmver>2.1.5</vqmver>
+   <author>Koncz Andrea</author>
+	
+<!--   <file name="admin/controller/sale/customer.php">
+      <operation>
+         <search position="before"><![CDATA[public function update()]]>
+         </search>
+         <add><![CDATA[
+         public function insertInAxCustomer()
+         {
+            $this->load->model( 'sale/ax_customer' );
+
+            if( ($this->request->server['REQUEST_METHOD'] == 'POST') && $this->validateForm() )
+            {
+                  $this->model_sale_ax_customer->adminAxCustomer( $this->request->get['customer_id'], $this->request->post );
+            }
+         }
+			]]>
+         </add>
+      </operation>
+      <operation>
+         <search position="after"><![CDATA[$this->model_sale_customer->editCustomer( $this->request->get['customer_id'], $this->request->post );]]>
+         </search>
+         <add><![CDATA[
+         if( $this->request->post['customer_group_id'] == 3 || $this->request->post['customer_group_id'] == 4 )
+         {
+               $this->insertInAxCustomer();
+         }
+			]]>
+         </add>
+      </operation>
+   </file>-->
+
+   
+   
+   <file name="catalog/controller/module/quickcheckout.php">
+      <operation>
+         <search position="after"><![CDATA[$this->checkout['order_id'] = $this->model_quickcheckout_order->addOrder( $data );]]>
+         </search>
+         <add><![CDATA[
+                $this->load->model( 'account/customer' );
+                if ( $this->customer->isLogged() )
+                {
+                  $customer_info = $this->model_account_customer->getCustomer( $this->session->data['customer_id'] );
+
+                  $customer_group_id = "";
+
+                  if( $customer_info )
+                  {
+                     $customer_group_id = $customer_info['customer_group_id'];
+                  }
+
+                  if( in_array( $customer_group_id, array( 3, 4 ) ) ) // B&B, gallery & B2B customer
+                  {
+                     $this->load->model( 'quickcheckout/ax_order' );
+                     $this->checkout['ax_order_id'] = $this->model_quickcheckout_ax_order->addAxOrder( $data );
+                  }
+                 }
+			]]>
+         </add>
+      </operation>
+      <operation>
+         <search position="after"><![CDATA[$this->model_quickcheckout_order->updateOrder( $this->checkout['order_id'], $data );]]>
+         </search>
+         <add><![CDATA[
+            $this->load->model( 'account/customer' );
+            
+            if ( $this->customer->isLogged() )
+            {
+               $customer_info = $this->model_account_customer->getCustomer( $this->session->data['customer_id'] );
+
+               $customer_group_id = "";
+               if( $customer_info )
+               {
+                  $customer_group_id = $customer_info['customer_group_id'];
+               }
+
+               if( in_array( $customer_group_id, array( 3, 4 ) ) ) // B2B, gallery & B2B customer
+               {
+                  $this->load->model( 'quickcheckout/ax_order' );
+                  $this->model_quickcheckout_ax_order->updateAxOrder( $this->checkout['ax_order_id'], $this->checkout['order_id'], $data );
+               }
+             }
+			]]>
+         </add>
+      </operation>
+   </file>
+   
+   
+<!--   <file name="view/theme/default/template/module/category.tpl">
+      <operation>
+         <search position="replace"><![CDATA[<span id="facebook"></span>]]>
+         </search>
+         <add><![CDATA[
+               <div id="fb-root"></div>
+               <script>(function(d, s, id) {
+               var js, fjs = d.getElementsByTagName(s)[0];
+               if (d.getElementById(id)) return;
+               js = d.createElement(s); js.id = id;
+               js.src = "//connect.facebook.net/ro_RO/all.js#xfbml=1";
+               fjs.parentNode.insertBefore(js, fjs);
+               }(document, 'script', 'facebook-jssdk'));</script>
+               <div class="fb-like-box" data-href="https://www.facebook.com/TineTeBine" data-colorscheme="light" data-show-faces="true" data-header="true" data-stream="false" data-show-border="true" ></div>
+               </div>
+			]]>
+         </add>
+      </operation>
+   </file>-->
+	
+</modification>

@@ -1,0 +1,90 @@
+<modification>
+    <id>Admin Voucher modifications</id>
+    <version>1</version>
+    <vqmver>2.3.2</vqmver>
+    <author>GraFX - Demeter Attila</author>
+
+    <file name="admin/controller/sale/voucher.php">
+        <operation>
+            <search position="before"><![CDATA[$this->template = 'sale/voucher_form.tpl';]]></search>
+            <add><![CDATA[
+        if( isset( $this->request->post['date_expiration'] ) )
+        {
+            $this->data['date_expiration'] = $this->request->post['date_expiration'];
+        }
+        elseif( !empty( $voucher_info ) )
+        {
+            $this->data['date_expiration'] = $voucher_info['date_expiration'];
+        }
+        else
+        {
+            $this->data['date_expiration'] = "";
+        }
+		]]></add>
+        </operation>
+        <operation>
+            <search position="after" offset="1"><![CDATA[$this->error['amount'] = $this->language->get( 'error_amount' );]]></search>
+            <add><![CDATA[
+        $regEx = '/(\d{4})-(\d{2})-(\d{2}) (\d{2}):(\d{2}):(\d{2})/';
+        preg_match($regEx, $this->request->post['date_expiration'], $result);
+
+		if( !$result )
+        {
+            $this->error['date_expiration'] = $this->language->get( 'error_date_expiration' );
+        }
+
+        ]]></add>
+        </operation>
+        <operation>
+            <search position="after"><![CDATA[$this->data['error_amount'] = '';]]></search>
+            <add><![CDATA[
+        if( isset( $this->error['date_expiration'] ) )
+        {
+            $this->data['error_date_expiration'] = $this->error['date_expiration'];
+        }
+        else
+        {
+            $this->data['error_date_expiration'] = '';
+        }
+            ]]></add>
+        </operation>
+        <operation>
+            <search position="after"><![CDATA[$this->data['entry_status'] = $this->language->get( 'entry_status' );]]></search>
+            <add><![CDATA[
+        $this->data['entry_date_expiration'] = $this->language->get( 'entry_date_expiration' );
+		]]></add>
+        </operation>
+    </file>
+
+    <file name="admin/language/romana/sale/voucher.php">
+        <operation>
+            <search position="after"><![CDATA[$_['error_order']       = 'Atentie: Acest voucher nu poate fi sters fiindca face parte dintr-o <a href="%s">comanda</a>!';]]></search>
+            <add><![CDATA[
+        $_['error_date_expiration']       = 'Dată de expirare nu este correct!';
+		]]></add>
+        </operation>
+        <operation>
+            <search position="after"><![CDATA[$_['entry_status']      = 'Status:';]]></search>
+            <add><![CDATA[
+        $_['entry_date_expiration']      = 'Dată de expirare:';
+		]]></add>
+        </operation>
+    </file>
+
+    <file name="admin/view/template/sale/voucher_form.tpl">
+        <operation>
+            <search position="before"><![CDATA[</table>]]></search>
+            <add><![CDATA[
+        <tr>
+            <td><?php echo $entry_date_expiration; ?></td>
+            <td><input type="text" name="date_expiration" value="<?php echo (!$date_expiration) ? date( "Y-m-d H:i:s", mktime( date( 'H' ), date( 'i' ), date( 's' ), date( 'm' ), date( 'd' ) + 30, date( 'Y' ) ) ) : $date_expiration ; ?>" />
+                <?php if ($error_date_expiration) { ?>
+                <span class="error"><?php echo $error_date_expiration; ?></span>
+                <?php } ?>
+            </td>
+        </tr>
+		]]></add>
+        </operation>
+    </file>
+
+</modification>
