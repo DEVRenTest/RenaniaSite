@@ -1,0 +1,92 @@
+<modification>
+
+    <id>Add free cookie control module from Silktide (Google Analytics and Social Media - see README)(Monochrome theme)</id>
+    <version>2.0.1 for OC 1.5.x</version>
+    <vqmver>2.4.1</vqmver>
+    <author>stokeyblokey</author>
+
+    <file name="catalog/view/theme/*/template/common/header.tpl">
+        <operation>
+            <search position="replace"><![CDATA[<?php echo $google_analytics; ?>]]></search>
+            <add><![CDATA[
+            <?php $this->language->load( 'common/cookie' ); ?>
+<!-- Begin Cookie Consent plugin by Silktide - http://silktide.com/cookieconsent -->
+<link rel="stylesheet" type="text/css" href="https://s3-eu-west-1.amazonaws.com/assets.cookieconsent.silktide.com/current/style.min.css"/>
+<script type="text/javascript" src="https://s3-eu-west-1.amazonaws.com/assets.cookieconsent.silktide.com/current/plugin.min.js"></script>
+<script type="text/javascript">
+// <![CDATA[
+cc.initialise({
+	cookies: {
+		social: {},
+		analytics: {},
+		necessary: {}
+	},
+	settings: {
+		style: "monochrome",
+		bannerPosition: "push",
+		tagPosition: "vertical-left",
+		ignoreDoNotTrack: true,
+		disableallsites: true,
+		useSSL: true
+	},
+  strings: {
+      jqueryWarning:"<?php echo $this->language->get( 'heading_title' ); ?>",
+      noJsBlocksWarning:"<?php echo $this->language->get( 'text_noJsBlocksWarning' ); ?>",
+      noKeyWarning:"<?php echo $this->language->get( 'text_noKeyWarning' ); ?>",
+      invalidKeyWarning:"<?php echo $this->language->get( 'text_invalidKeyWarning' ); ?>",
+      necessaryDefaultTitle:"<?php echo $this->language->get( 'text_necessaryDefaultTitle' ); ?>",
+      socialDefaultTitle:"<?php echo $this->language->get( 'text_socialDefaultTitle' ); ?>",
+      analyticsDefaultTitle:"<?php echo $this->language->get( 'text_analyticsDefaultTitle' ); ?>",
+      advertisingDefaultTitle:"<?php echo $this->language->get( 'text_advertisingDefaultTitle' ); ?>",
+      defaultTitle:"<?php echo $this->language->get( 'text_defaultTitle' ); ?>",
+      necessaryDefaultDescription:"<?php echo $this->language->get( 'text_necessaryDefaultDescription' ); ?>",
+      socialDefaultDescription:"<?php echo $this->language->get( 'text_socialDefaultDescription' ); ?>",
+      analyticsDefaultDescription:"<?php echo $this->language->get( 'text_analyticsDefaultDescription' ); ?>",
+      advertisingDefaultDescription:"<?php echo $this->language->get( 'text_advertisingDefaultDescription' ); ?>",
+      defaultDescription:"<?php echo $this->language->get( 'text_defaultDescription' ); ?>",
+      notificationTitle:"<?php echo $this->language->get( 'text_notificationTitle' ); ?>",
+      notificationTitleImplicit:"<?php echo $this->language->get( 'text_notificationTitleImplicit' ); ?>",
+      poweredBy:"<?php echo $this->language->get( 'text_poweredBy' ); ?>",
+      privacyPolicy:"<?php echo $this->language->get( 'text_privacyPolicy' ); ?>",
+      learnMore:"<?php echo $this->language->get( 'text_learnMore' ); ?>",
+      seeDetails:"<?php echo $this->language->get( 'text_seeDetails' ); ?>",
+      seeDetailsImplicit:"<?php echo $this->language->get( 'text_seeDetailsImplicit' ); ?>",
+      hideDetails:"<?php echo $this->language->get( 'text_hideDetails' ); ?>",
+      savePreference:"<?php echo $this->language->get( 'text_savePreference' ); ?>",
+      saveForAllSites:"<?php echo $this->language->get( 'text_saveForAllSites' ); ?>",
+      allowCookies:"<?php echo $this->language->get( 'text_allowCookies' ); ?>",
+      allowCookiesImplicit:"<?php echo $this->language->get( 'text_allowCookiesImplicit' ); ?>",
+      allowForAllSites:"<?php echo $this->language->get( 'text_allowForAllSites' ); ?>",
+      customCookie:"<?php echo $this->language->get( 'text_customCookie' ); ?>",
+      privacySettings:"<?php echo $this->language->get( 'text_privacySettings' ); ?>",
+      privacySettingsDialogTitleA:"<?php echo $this->language->get( 'text_privacySettingsDialogTitleA' ); ?>",
+      privacySettingsDialogTitleB:"<?php echo $this->language->get( 'text_privacySettingsDialogTitleB' ); ?>",
+      privacySettingsDialogSubtitle:"<?php echo $this->language->get( 'text_privacySettingsDialogSubtitle' ); ?>",
+      closeWindow:"<?php echo $this->language->get( 'text_closeWindow' ); ?>",
+      changeForAllSitesLink:"<?php echo $this->language->get( 'text_changeForAllSitesLink' ); ?>",
+      preferenceUseGlobal:"<?php echo $this->language->get( 'text_preferenceUseGlobal' ); ?>",
+      preferenceConsent:"<?php echo $this->language->get( 'text_preferenceConsent' ); ?>",
+      preferenceDecline:"<?php echo $this->language->get( 'text_preferenceDecline' ); ?>",
+      preferenceAsk:"<?php echo $this->language->get( 'text_preferenceAsk' ); ?>",
+      preferenceAlways:"<?php echo $this->language->get( 'text_preferenceAlways' ); ?>",
+      preferenceNever:"<?php echo $this->language->get( 'text_preferenceNever' ); ?>",
+      notUsingCookies:"<?php echo $this->language->get( 'text_notUsingCookies' ); ?>",
+      clearedCookies:"<?php echo $this->language->get( 'text_clearedCookies' ); ?>",
+      allSitesSettingsDialogTitleA:"<?php echo $this->language->get( 'text_allSitesSettingsDialogTitleA' ); ?>",
+      allSitesSettingsDialogTitleB:"<?php echo $this->language->get( 'text_allSitesSettingsDialogTitleB' ); ?>",
+      allSitesSettingsDialogSubtitle:"<?php echo $this->language->get( 'text_allSitesSettingsDialogSubtitle' ); ?>",
+      backToSiteSettings:"<?php echo $this->language->get( 'text_backToSiteSettings' ); ?>"
+ }
+
+   
+});
+// ]]>
+<![CDATA[</script>
+
+<!-- End Cookie Consent plugin -->
+<!-- with credits to Stokeyblokey for the Opencart extension -->]]>
+<![CDATA[<script type="text/plain" class="cc-onconsent-analytics">]]>
+<![CDATA[<?php echo $google_analytics; ?> </script>]]></add>
+        </operation>
+	</file>
+</modification>

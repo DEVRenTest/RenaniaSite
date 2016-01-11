@@ -1,0 +1,151 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<modification>
+	<id>Admin Product Filter/Edit Category</id>
+	<version>2.0</version>
+	<vqmver>2.1.5</vqmver>
+	<author>giuseppe.davi@gmail.com</author>
+
+	<file name="admin/controller/catalog/product.php" error="log">        
+        <operation>
+			<search position="after" ><![CDATA[$this->data['products'][] = array(]]></search>
+			<add><![CDATA[
+            'categories' => $this->model_catalog_product->getProductCategories($result['product_id']),
+			]]></add>
+		</operation>
+		<operation>
+			<search position="before" ><![CDATA[if (isset($this->request->get['filter_name'])) {]]></search>
+			<add><![CDATA[
+			if (isset($this->request->get['filter_category_id'])) {
+				$url .= '&filter_category_id=' . $this->request->get['filter_category_id'];
+			}
+            if (isset($this->request->get['show_category_column'])) {
+                $url .= '&show_category_column =' . $this->request->get['show_category_column'];
+            }
+			]]></add>
+		</operation>
+		<operation>
+			<search position="after" index="1"><![CDATA[private function getList() {]]></search>
+			<add><![CDATA[
+            if (isset($this->request->get['show_category_column'])) {
+                $show_category_column = $this->request->get['show_category_column'];
+            } else {
+                $show_category_column = 1;
+            }
+            $this->data['show_category_column'] = $show_category_column;
+            if (isset($this->request->get['filter_category_id'])) {
+                $filter_category_id = $this->request->get['filter_category_id'];
+            } else {
+                $filter_category_id = null;
+            }
+            $url = '';
+			]]></add>
+		</operation>
+                
+		<operation>
+			<search position="after" index="1"><![CDATA[$this->data['column_name'] = $this->language->get('column_name');]]></search>
+			<add><![CDATA[
+            $this->data['column_category'] = $this->language->get('entry_category');
+            ]]></add>
+		</operation>
+        
+		<operation>
+			<search position="before" index="1"><![CDATA['filter_name'	  => $filter_name,]]></search>
+			<add><![CDATA[
+            'filter_category_id' => $filter_category_id,
+			]]></add>
+		</operation>
+		<operation>
+			<search position="after" index="1"><![CDATA[
+			$this->data['pagination'] = $pagination->render();
+			]]></search>
+			<add><![CDATA[
+            $this->load->model('catalog/category');
+            $this->data['categories'] = $this->model_catalog_category->getCategories(0);
+            $this->data['filter_category_id'] = $filter_category_id;
+			]]></add>
+		</operation>
+	</file>
+	<file name="admin/view/template/catalog/product_list.tpl"  error="log">
+        <!-- category column: header row -->
+        <operation>
+            <search position="after"><![CDATA[<td class="center"><?php echo $column_image; ?></td>]]></search>
+            <add><![CDATA[<td class="center category-column" ><?php echo $column_category ?></td>]]></add>
+        </operation>                
+        <!-- category column: filter row -->
+        <operation>
+            <search position="before"><![CDATA[<td><input type="text" name="filter_name" value="<?php echo $filter_name; ?>" /></td>]]></search>
+            <add><![CDATA[<td class="category-column"  ><br/></td>]]></add>
+        </operation>                
+        <!-- category column: data row -->
+        <operation>
+            <search position="before"><![CDATA[<td class="left"><?php echo $product['name']; ?></td>]]></search>
+            <add><![CDATA[
+            <td class="left category-column" >
+            <?php foreach ($categories as $category) { ?>
+                <?php if(in_array($category['category_id'],$product['categories'])) { ?>
+                    <div><?php echo $category['name']; ?></div>
+                <?php } ?>
+            <?php } ?>
+            </td>]]></add>
+        </operation>                
+        
+        <!-- category button: show/hide -->
+		<operation>
+			<search position="replace" ><![CDATA[<?php echo $heading_title; ?></h1>]]></search>
+			<add><![CDATA[         
+         <?php echo $heading_title; ?>:&nbsp;
+         <select name="filter_category_id" onchange="filter();">
+            <option value="">&nbsp;</option>
+            <?php foreach($categories as $c) { ?>
+            <option value="<?php echo $c['category_id']?>" <?php echo ($c['category_id'] == $filter_category_id ? 'selected' : '') ?>><?php echo $c['name'] ?></option>
+            <?php } ?>
+         </select>         
+         </h1>
+         <input type="hidden" id="show_category_column" value="<?php echo $show_category_column ?>" />
+         <div id="show_category_column_button" style="float:left;height:35px;width:24px;cursor:pointer;background:url('view/image/category.png') no-repeat center bottom" ></div>
+]]></add>
+        </operation>
+        
+        <!-- insert category parameter in url -->
+        <operation>
+			<search position="before" index="1"><![CDATA[var filter_name = $('input[name=\'filter_name\']').attr('value');]]></search>
+			<add><![CDATA[
+            var filter_category_id = $('select[name=\'filter_category_id\']').attr('value');
+
+            if (filter_category_id) {
+                url += '&filter_category_id=' + encodeURIComponent(filter_category_id);
+            }
+
+            var show_category_column = $('#show_category_column').attr('value');
+            if(show_category_column) {
+                url += '&show_category_column=' + encodeURIComponent(show_category_column);
+            }
+
+			]]></add>
+        </operation>
+        <operation>
+            <search position="after" index="1"><![CDATA[<script type="text/javascript"><!--]]></search>
+            <add><![CDATA[
+                $(document).ready(function() {
+                    $('#show_category_column_button').click(function() {                        
+                        var show_category_column = $('#show_category_column ').attr('value');
+                        
+                        if(show_category_column == '1') {
+                            $('#show_category_column ').attr('value','0');
+                            $('.category-column').fadeOut();
+                        }                        
+                        else {
+                            $('#show_category_column ').attr('value','1');
+                            $('.category-column').fadeIn();
+                        }                        
+                        
+                    });                    
+                    <?php if(!$show_category_column) { ?>
+                    $('.category-column').hide();
+                    <?php } ?>
+                });
+                ]]></add>
+        </operation>
+        </file>
+</modification>
+

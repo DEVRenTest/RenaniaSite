@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<channel>
+    <Product>
+        <id>123</id>
+        <sku>ABJ-252</sku>
+        <name>Nike Track Jacket</name>
+        <brand>Nike</brand>
+        <url>http://www.mystore.com/ABJ252.html</url>
+        <addtocart_url>http://www.mystore.com/addtocart?id=123</addtocart_url>
+        <image_url>http://www.mystore.com/images/ABJ252.jpg</image_url>
+        <thumbnail_url>http://www.mystore.com/thumbnails/ABJ252.jpg</thumbnail_url>
+        <description>This is a really great jacket. It's available in several colors and will keep you warm.</description>
+	<quantity>100</quantity>
+	<price>2</price>
+        <msrp>54.99</msrp>
+        <categories>
+            <category>Apparel</category>
+            <category>Apparel/Men's</category>
+            <category>Apparel/Men's/Jackets</category>
+        </categories>
+        <colors>
+            <color>Red</color>
+            <color>Blue</color>
+            <color>Black</color>
+        </colors>
+        <display_colors>
+            <display_color>#D80626</display_color>
+            <display_color>#2B98E5</display_color>
+            <display_color>#121212</display_color>
+        </display_colors>
+        <rating>5</rating>
+        <num_ratings>4</num_ratings>
+        <sizes>
+            <size>Small</size>
+            <size>Medium</size>
+            <size>Large</size>
+        </sizes>
+    </Product>
+    <Product>
+        <id>162</id>
+        <sku>ADI-42</sku>
+        <name>Adidas Soccer Shirt</name>
+        <brand>Adidas</brand>
+        <url>http://www.mystore.com/ADI42.html</url>
+        <addtocart_url>http://www.mystore.com/addtocart?id=162</addtocart_url>
+        <image_url>http://www.mystore.com/images/ADI42.jpg</image_url>
+        <thumbnail_url>http://www.mystore.com/thumbnails/ADI42.jpg</thumbnail_url>
+        <description>This is a white t-shirt with a soccer ball on it.</description>
+	<quantity>100</quantity>
+	<price>22</price>
+        <msrp>18.99</msrp>
+        <categories>
+            <category>Apparel</category>
+            <category>Apparel/Men's</category>
+            <category>Apparel/Men's/Shirts</category>
+        </categories>
+        <colors>
+            <color>White</color>
+        </colors>
+        <display_colors>
+            <display_color>#FFFFFF</display_color>
+        </display_colors>
+        <rating>3.5</rating>
+        <num_ratings>2</num_ratings>
+        <sizes>
+            <size>Large</size>
+            <size>X-Large</size>
+        </sizes>
+    </Product>
+</channel>

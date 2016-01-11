@@ -1,0 +1,295 @@
+<modification>
+  <id>EXTRA POSITIONS UNLIMITED BY DREAMVENTION</id>
+  <version>1.0</version>
+  <vqmver>2.1.1</vqmver>
+  <author>Dreamvention.com</author>
+  <file name="admin/view/template/module/*">
+    <operation>
+      <search position="before">
+        <![CDATA[<?php if ($module['position'] == 'content_top') { ?>]]>
+      </search>
+      <add>
+        <![CDATA[<?php echo $module['extra_position_html']; ?>]]>
+      </add>
+    </operation>
+  </file>
+  <file name="admin/view/template/module/*.tpl">
+    <operation>
+      <search position="before" index="2">
+        <![CDATA[<option value="content_top"><?php echo $text_content_top; ?></option>]]>
+      </search>
+      <add>
+        <![CDATA[
+		html += '<?php echo $extra_position_js; ?>';
+		]]>
+      </add>
+    </operation>
+  </file>
+  <file name="admin/controller/module/*.php">
+    <operation>
+      <search position="before">
+        <![CDATA[$this->response->setOutput($this->render());]]>
+      </search>
+      <add>
+        <![CDATA[$this->load->model('catalog/d_extra_positions_unlimited');
+          
+          if (isset($this->data['modules'])) $this->data['extra_position_js']=$this->model_catalog_d_extra_positions_unlimited->getExtraPositions($this->data['modules']);]]>
+      </add>
+    </operation>
+  </file>
+  <!--controllers-->
+  <!--header-->
+  <file name="catalog/controller/common/header.php">
+    <operation>
+      <search position="after">
+        <![CDATA[$this->children = array(]]>
+      </search>
+      <add>
+        <![CDATA['common/dream_column_header_top', 'common/dream_column_header_bottom', 'common/dream_column_footer_top', 'common/dream_column_footer_bottom', 'common/dream_column_footer_top', 'common/dream_column_footer_bottom',]]>
+      </add>
+    </operation>
+  </file>
+  <!--footer-->
+  <file name="catalog/controller/common/footer.php">
+    <operation>
+      <search position="after">
+        <![CDATA[$this->data['powered'] = sprintf($this->language->get('text_powered'), $this->config->get('config_name'), date('Y', time()));]]>
+      </search>
+      <add>
+        <![CDATA[$this->children = array(
+          
+          'common/dream_column_header_top', 'common/dream_column_header_bottom', 'common/dream_column_footer_top', 'common/dream_column_footer_bottom', 'common/dream_column_footer_top', 'common/dream_column_footer_bottom',
+          
+          'module/language',
+          
+          'module/currency',
+          
+          'module/cart',
+          
+          );]]>
+      </add>
+    </operation>
+  </file>
+  <!--account-->
+  <file name="catalog/controller/account/*.php">
+    <operation>
+      <search position="after">
+        <![CDATA[$this->children = array(]]>
+      </search>
+      <add>
+        <![CDATA['common/dream_column_header_top', 'common/dream_column_header_bottom', 'common/dream_column_footer_top', 'common/dream_column_footer_bottom',]]>
+      </add>
+    </operation>
+  </file>
+  <!--affiliate-->
+  <!--account-->
+  <file name="catalog/controller/affiliate/*.php">
+    <operation>
+      <search position="after">
+        <![CDATA[$this->children = array(]]>
+      </search>
+      <add>
+        <![CDATA['common/dream_column_header_top', 'common/dream_column_header_bottom', 'common/dream_column_footer_top', 'common/dream_column_footer_bottom',]]>
+      </add>
+    </operation>
+  </file>
+  <!--checkout-->
+  <!--cart-->
+  <file name="catalog/controller/checkout/*.php">
+    <operation>
+      <search position="after">
+        <![CDATA[$this->children = array(]]>
+      </search>
+      <add>
+        <![CDATA['common/dream_column_header_top', 'common/dream_column_header_bottom', 'common/dream_column_footer_top', 'common/dream_column_footer_bottom',]]>
+      </add>
+    </operation>
+  </file>
+  <!--common-->
+  <!--home-->
+  <file name="catalog/controller/common/home.php">
+    <operation>
+      <search position="after">
+        <![CDATA[$this->children = array(]]>
+      </search>
+      <add>
+        <![CDATA['common/dream_column_header_top', 'common/dream_column_header_bottom', 'common/dream_column_footer_top', 'common/dream_column_footer_bottom',]]>
+      </add>
+    </operation>
+  </file>
+  <!--maintenance-->
+  <file name="catalog/controller/common/maintenance.php">
+    <operation>
+      <search position="after">
+        <![CDATA[$this->children = array(]]>
+      </search>
+      <add>
+        <![CDATA['common/dream_column_header_top', 'common/dream_column_header_bottom', 'common/dream_column_footer_top', 'common/dream_column_footer_bottom',]]>
+      </add>
+    </operation>
+  </file>
+  <!--success-->
+  <file name="catalog/controller/common/success.php">
+    <operation>
+      <search position="after">
+        <![CDATA[$this->children = array(]]>
+      </search>
+      <add>
+        <![CDATA['common/dream_column_header_top', 'common/dream_column_header_bottom', 'common/dream_column_footer_top', 'common/dream_column_footer_bottom',]]>
+      </add>
+    </operation>
+  </file>
+  <!--error-->
+  <!--not_found-->
+  <file name="catalog/controller/error/not_found.php">
+    <operation>
+      <search position="after">
+        <![CDATA[$this->children = array(]]>
+      </search>
+      <add>
+        <![CDATA['common/dream_column_header_top', 'common/dream_column_header_bottom', 'common/dream_column_footer_top', 'common/dream_column_footer_bottom',]]>
+      </add>
+    </operation>
+  </file>
+  <!--information-->
+  <!--contact-->
+  <file name="catalog/controller/information/*.php">
+    <operation>
+      <search position="after">
+        <![CDATA[$this->children = array(]]>
+      </search>
+      <add>
+        <![CDATA['common/dream_column_header_top', 'common/dream_column_header_bottom', 'common/dream_column_footer_top', 'common/dream_column_footer_bottom',]]>
+      </add>
+    </operation>
+  </file>
+  <!--product-->
+  <!--category-->
+  <file name="catalog/controller/product/*.php">
+    <operation>
+      <search position="after">
+        <![CDATA[$this->children = array(]]>
+      </search>
+      <add>
+        <![CDATA['common/dream_column_header_top', 'common/dream_column_header_bottom', 'common/dream_column_footer_top', 'common/dream_column_footer_bottom',]]>
+      </add>
+    </operation>
+  </file>
+  <!--default Opencart-->
+  <file name="catalog/view/theme/*/template/common/header.tpl">
+    <operation error="skip">
+      <search position="before">
+        <![CDATA[<div id="header"]]>
+      </search>
+      <add>
+        <![CDATA[<?php echo $dream_column_header_top; ?>]]>
+      </add>
+    </operation>
+    <operation error="skip">
+      <search position="after">
+        <![CDATA[<div id="notification"></div>]]>
+      </search>
+      <add>
+        <![CDATA[<?php echo $dream_column_header_bottom; ?>]]>
+      </add>
+    </operation>
+  </file>
+  <file name="catalog/view/theme/*/template/common/footer.tpl">
+    <operation error="skip">
+      <search position="before">
+        <![CDATA[<div id="footer"]]>
+      </search>
+      <add>
+        <![CDATA[<?php echo $dream_column_footer_top; ?>]]>
+      </add>
+    </operation>
+    <operation error="skip">
+      <search position="after">
+        <![CDATA[<div id="powered"><?php echo $powered; ?></div>]]>
+      </search>
+      <add>
+        <![CDATA[<?php echo $dream_column_footer_bottom; ?>]]>
+      </add>
+    </operation>
+  </file>
+  <!--shoppica-->
+  <file name="catalog/view/theme/shoppica2/template/common/header.tpl">
+    <operation error="skip">
+      <search position="before">
+        <![CDATA[<!-- end of header -->]]>
+      </search>
+      <add>
+        <![CDATA[<?php echo $dream_column_header_bottom; ?>]]>
+      </add>
+    </operation>
+  </file>
+  <file name="catalog/view/theme/shoppica2/template/common/footer.tpl">
+    <operation error="skip">
+      <search position="before">
+        <![CDATA[<!-- end of FOOTER -->]]>
+      </search>
+      <add>
+        <![CDATA[<?php echo $dream_column_footer_bottom; ?>]]>
+      </add>
+    </operation>
+  </file>
+  <!--dreamwhite-->
+  <file name="catalog/view/theme/dreamwhite/template/common/header.tpl">
+    <operation error="skip">
+      <search position="after">
+        <![CDATA[<header id="header_bg">]]>
+      </search>
+      <add>
+        <![CDATA[<?php echo $dream_column_header_top; ?>]]>
+      </add>
+    </operation>
+    <operation error="skip">
+      <search position="before">
+        <![CDATA[</header>]]>
+      </search>
+      <add>
+        <![CDATA[<?php echo $dream_column_header_bottom; ?>]]>
+      </add>
+    </operation>
+  </file>
+  <file name="catalog/view/theme/dreamwhite/template/common/footer.tpl">
+    <operation error="skip">
+      <search position="after">
+        <![CDATA[<footer id="footer">]]>
+      </search>
+      <add>
+        <![CDATA[<?php echo $dream_column_footer_top; ?>]]>
+      </add>
+    </operation>
+    <operation error="skip">
+      <search position="before">
+        <![CDATA[</footer>]]>
+      </search>
+      <add>
+        <![CDATA[<?php echo $dream_column_footer_bottom; ?>]]>
+      </add>
+    </operation>
+  </file>
+  <!--journal-->
+  <file name="catalog/view/theme/journal/template/common/header.tpl">
+    <operation error="skip">
+      <search position="before">
+        <![CDATA[<div id="journal-header">]]>
+      </search>
+      <add>
+        <![CDATA[<?php echo $dream_column_header_top; ?>]]>
+      </add>
+    </operation>
+
+  </file>
+  <file name="catalog/view/theme/journal/template/common/footer.tpl">
+    <operation error="skip">
+      <search position="after">
+        <![CDATA[<?php endif; // custom text // ?>]]>
+      </search>
+      <add>
+        <![CDATA[<?php echo $dream_column_footer_bottom; ?>]]>
+      </add>
+    </operation>
+  </file>
+</modification>

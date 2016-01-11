@@ -1,0 +1,188 @@
+
+<modification>
+
+    <id>B2B order export to xls</id>
+    <version>1</version>
+    <vqmver>2.3.2</vqmver>
+    <author>GraFX - Demeter Attila</author>
+
+    <file name="catalog/controller/account/order.php">
+        <operation>
+           <search position="before"><![CDATA[public function info() {]]></search>
+           <add><![CDATA[
+    public function export_to_xls() {
+      $this->language->load('account/order');
+
+      if (isset($this->request->get['order_id'])) {
+          $order_id = $this->request->get['order_id'];
+      } else {
+          $order_id = 0;
+      }
+
+      if (!$this->customer->isLogged()) {
+          $this->session->data['redirect'] = $this->url->link('account/order/info', 'order_id=' . $order_id, 'SSL');
+
+          $this->redirect($this->url->link('account/login', '', 'SSL'));
+      }
+
+      $this->load->model('account/order');
+
+      $order_info = $this->model_account_order->getOrder($order_id);
+      $products = $this->model_account_order->getOrderProducts($this->request->get['order_id']);
+
+      //echo "<pre>"; print_r($products);
+
+      foreach( $products as &$product ) {
+
+          $option_data = array();
+
+          $options = $this->model_account_order->getOrderOptions($this->request->get['order_id'], $product['order_product_id']);
+
+          foreach ($options as $option) {
+              if ($option['type'] != 'file') {
+                  $value = $option['value'];
+              } else {
+                  $value = utf8_substr($option['value'], 0, utf8_strrpos($option['value'], '.'));
+              }
+              if(sizeof($options) == 1) {
+                  $option_data[] = array(
+                      'name'  => $option['name'],
+                      'value' => (utf8_strlen($value) > 20 ? utf8_substr($value, 0, 20) . '..' : $value),
+                      'product_option_value_id' => $option['product_option_value_id']
+
+                  );
+
+              } elseif (sizeof($options) == 2) {
+                  $option_data[] = array(
+                      'name'  => $option['name'],
+                      'value' => (utf8_strlen($value) > 20 ? utf8_substr($value, 0, 20) . '..' : $value),
+                      'option_value_id' => $option['product_option_value_id']
+
+                  );
+              }
+          }
+
+          foreach ($option_data as $option) {
+              $product['name'] .= ' - '.$option['name'].' : '.$option['value'];
+              $product['cod_concatenat'] = $this->cart->getProductAxCode($product['order_product_id'], $option_data);
+          }
+      }
+      $totals = $this->model_account_order->getOrderTotals($order_id);
+
+      require_once dirname(__FILE__).'/../../system/PHPExcel/Classes/PHPExcel.php';
+
+      $objPHPExcel = new PHPExcel();
+
+      // Set document properties
+      $objPHPExcel->getProperties()->setCreator("Renania")
+      ->setLastModifiedBy("Renania")
+      ->setTitle("Renania Factura fiscala")
+      ->setSubject("Renania Factura fiscala")
+      ->setDescription("Test document for PHPExcel, generated using PHP classes.")
+      ->setKeywords("office PHPExcel php")
+      ->setCategory("Test result file");
+
+      $objPHPExcel->setActiveSheetIndex(0)->mergeCells('A1:D1')
+      ->setCellValue('A1', 'Detalii despre comanda');
+
+      // Define the columns headers
+      $objPHPExcel->getActiveSheet()->mergeCells('A2:C2');
+      $objPHPExcel->getActiveSheet()->mergeCells('D2:F2');
+      $objPHPExcel->setActiveSheetIndex(0)
+      ->setCellValue('A2', 'Comanda nr. '.$order_id)
+
+      ->setCellValue('D2', 'Metoda de plata: '.$order_info['payment_method']);
+
+      $objPHPExcel->getActiveSheet()->mergeCells('A3:C3');
+      $objPHPExcel->getActiveSheet()->mergeCells('D3:F3');
+      $objPHPExcel->setActiveSheetIndex(0)
+      ->setCellValue('A3', 'Data adaugarii: '.$order_info['date_added'])
+      ->setCellValue('D3', 'Metoda de livrare: '.$order_info['shipping_method']);
+
+      /*$objPHPExcel->getActiveSheet()->mergeCells('A4:D4');
+      $objPHPExcel->setActiveSheetIndex(0)
+      ->setCellValue('A4', 'Data scadenta '.$invoice_duedate);*/
+
+      // Define the columns headers
+      $objPHPExcel->setActiveSheetIndex(0)
+      ->setCellValue('A5', 'Cod concatenat')
+      ->setCellValue('B5', 'Denumire produs')
+      ->setCellValue('C5', 'Model')
+      ->setCellValue('D5', 'Cantitate')
+      ->setCellValue('E5', 'Pret')
+      ->setCellValue('F5', 'Total');
+
+      // row counter variable for foreach
+      $rowCounter = 6;
+      $total = 0;
+
+      //var_dump($invoice_lines);
+
+      // copy data in to the xls
+
+      //echo "<pre>"; print_r($products);
+      foreach( $products as &$product ) {
+
+          $objPHPExcel->setActiveSheetIndex(0)
+          ->setCellValue('A' . $rowCounter, $product['cod_concatenat'])
+          ->setCellValue('B' . $rowCounter, $product['name'])
+          ->setCellValue('C' . $rowCounter, $product['model'])
+          ->setCellValue('D' . $rowCounter, $product['quantity'])
+          ->setCellValue('E' . $rowCounter, $this->currency->format($product['price'] + ($this->config->get('config_tax') ? $product['tax'] : 0), $order_info['currency_code'], $order_info['currency_value']))
+          ->setCellValue('F' . $rowCounter, $this->currency->format($product['total'] + ($this->config->get('config_tax') ? ($product['tax'] * $product['quantity']) : 0), $order_info['currency_code'], $order_info['currency_value']));
+
+          $rowCounter++;
+          $total += $product['total'];
+      }
+
+      foreach ($totals as $total) {
+          $objPHPExcel->setActiveSheetIndex(0)
+          ->setCellValue('E' . $rowCounter, $total['title'])
+          ->setCellValue('F' . $rowCounter, $total['text']);
+          $rowCounter++;
+      }
+
+      // Rename worksheet
+      $objPHPExcel->getActiveSheet()->setTitle('Simple');
+
+
+      // Set active sheet index to the first sheet, so Excel opens this as the first sheet
+      $objPHPExcel->setActiveSheetIndex(0);
+
+      // automatic column width calculation
+      foreach (range('A', $objPHPExcel->getActiveSheet()->getHighestDataColumn()) as $col) {
+      $objPHPExcel->getActiveSheet()
+      ->getColumnDimension($col)
+      ->setAutoSize(true);
+      }
+
+      //ob_clean();
+      // Redirect output to a client’s web browser (Excel5)
+      header('Content-Type: application/vnd.ms-excel');
+      header('Content-Disposition: attachment;filename="'.$order_id.'.xls"');
+      header('Cache-Control: max-age=0');
+      // If you're serving to IE 9, then the following may be needed
+      header('Cache-Control: max-age=1');
+
+      // If you're serving to IE over SSL, then the following may be needed
+      header ('Expires: Mon, 26 Jul 1997 05:00:00 GMT'); // Date in the past
+      header ('Last-Modified: '.gmdate('D, d M Y H:i:s').' GMT'); // always modified
+      header ('Cache-Control: cache, must-revalidate'); // HTTP/1.1
+      header ('Pragma: public'); // HTTP/1.0
+      $objWriter = PHPExcel_IOFactory::createWriter($objPHPExcel, 'Excel5');
+      $objWriter->save('php://output');
+      exit;
+    }
+      ]]></add>
+        </operation>
+    </file>
+
+    <file name="catalog/view/theme/default/template/account/order_info.tpl">
+        <operation>
+            <search position="after"><![CDATA[<div class="buttons">]]></search>
+            <add><![CDATA[ <?php if ($this->customer->getCustomerGroupId() == 4 || $this->customer->getCustomerGroupId() == 3) { ?>
+            <a class="button" href="<?php echo HTTP_SERVER.'index.php?route=account/order/export_to_xls&order_id='.$order_id ?>">Descarca in Excel</a>
+            <?php } ?> ]]></add>
+        </operation>
+    </file>
+</modification>

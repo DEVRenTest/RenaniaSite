@@ -1,0 +1,341 @@
+<modification>
+    <id>Extra Registration Fields Admin - Middle Name</id>
+    <version>1</version>
+    <vqmver>2.3.2</vqmver>
+    <author>Andrei Bogdan(andrei.opencart@yahoo.com)</author>
+	<!-- sale/customer -->
+    <file name="admin/view/template/sale/customer_form.tpl">
+        <operation>
+            <search position="before" index="1"><![CDATA[<td><span class="required">*</span> <?php echo $entry_lastname; ?></td>]]></search>
+            <add><![CDATA[
+                <td> <?php echo $entry_middlename; ?></td>
+                <td><input type="text" name="middlename" value="<?php echo $middlename; ?>" />
+                  <?php if ($error_middlename) { ?>
+                  <span class="error"><?php echo $error_middlename; ?></span>
+                  <?php } ?></td>
+              </tr>
+              <tr>
+              <td> <?php echo $entry_identity_card_number; ?></td>
+                <td><input type="text" name="identity_card_number" value="<?php echo $identity_card_number; ?>" />
+                  <?php if ($error_identity_card_number) { ?>
+                  <span class="error"><?php echo $error_identity_card_number; ?></span>
+                  <?php } ?></td>
+              </tr>
+              <tr>
+              <td> <?php echo $entry_mobile_phone; ?></td>
+                <td><input type="text" name="mobile_phone" value="<?php echo $mobile_phone; ?>" />
+                  <?php if ($error_mobile_phone) { ?>
+                  <span class="error"><?php echo $error_mobile_phone; ?></span>
+                  <?php } ?></td>
+              </tr>
+              <tr>
+            ]]></add>
+        </operation>
+    </file>
+    <file name="admin/language/romana/sale/customer.php">
+        <operation>
+            <search position="before"><![CDATA[$_['entry_lastname']]]></search>
+            <add><![CDATA[
+				$_['entry_middlename']                = 'CNP:';
+				$_['entry_identity_card_number']      = 'Serie carte identitate:';
+				$_['entry_mobile_phone']              = 'Telefon mobil:';
+            ]]></add>
+        </operation>
+        <operation>
+            <search position="before"><![CDATA[$_['error_lastname']]]></search>
+            <add><![CDATA[
+				$_['error_middlename']                = 'CNP-ul trebuie introdus!';
+            $_['error_identity_card_number']      = 'Seria cartii de identitate - seria (compusa din doua litere) și numărul (compus din 6 cifre)!';
+				$_['error_mobile_phone']              = 'Numarul telefonului mobil trebuie sa fie formata din cifre!';
+            ]]></add>
+        </operation>
+    </file>
+    <file name="admin/controller/sale/customer.php">
+        <operation>
+            <search position="after"><![CDATA[$this->data['entry_firstname'] = $this->language->get('entry_firstname');]]></search>
+            <add><![CDATA[
+                $this->data['entry_middlename'] = $this->language->get('entry_middlename');
+                $this->data['entry_identity_card_number'] = $this->language->get('entry_identity_card_number');
+                $this->data['entry_mobile_phone'] = $this->language->get('entry_mobile_phone');
+            ]]></add>
+        </operation>
+        <operation>
+            <search position="before"><![CDATA[if (isset($this->error['lastname'])) {]]></search>
+            <add><![CDATA[
+				if (isset($this->error['middlename'])) {
+					$this->data['error_middlename'] = $this->error['middlename'];
+				} else {
+					$this->data['error_middlename'] = '';
+				}
+            if (isset($this->error['identity_card_number'])) {
+					$this->data['error_identity_card_number'] = $this->error['identity_card_number'];
+				} else {
+					$this->data['error_identity_card_number'] = '';
+				}
+            if (isset($this->error['mobile_phone'])) {
+					$this->data['error_mobile_phone'] = $this->error['mobile_phone'];
+				} else {
+					$this->data['error_mobile_phone'] = '';
+				}
+            ]]></add>
+        </operation>
+        <operation>
+            <search position="before"><![CDATA[if (isset($this->request->post['firstname'])) {]]></search>
+            <add><![CDATA[
+                if (isset($this->request->post['middlename'])) {
+                    $this->data['middlename'] = $this->request->post['middlename'];
+                } elseif (isset($customer_info)) {
+                    $this->data['middlename'] = $customer_info['middlename'];
+                } else {
+                    $this->data['middlename'] = '';
+                }
+                if (isset($this->request->post['identity_card_number'])) {
+                    $this->data['identity_card_number'] = $this->request->post['identity_card_number'];
+                } elseif (isset($customer_info)) {
+                    $this->data['identity_card_number'] = $customer_info['identity_card_number'];
+                } else {
+                    $this->data['identity_card_number'] = '';
+                }
+                if (isset($this->request->post['mobile_phone'])) {
+                    $this->data['mobile_phone'] = $this->request->post['mobile_phone'];
+                } elseif (isset($customer_info)) {
+                    $this->data['mobile_phone'] = $customer_info['mobile_phone'];
+                } else {
+                    $this->data['mobile_phone'] = '';
+                }
+            ]]></add>
+        </operation>
+		<!-- validate -->
+        <operation>
+            <search position="before"><![CDATA[if ((utf8_strlen($this->request->post['lastname']) < 1) || (utf8_strlen($this->request->post['lastname']) > 32)) {]]></search>
+            <add><![CDATA[
+				if ( (utf8_strlen($this->request->post['middlename']) > 32)) {
+					$this->error['middlename'] = $this->language->get('error_middlename');
+				}
+            if ((utf8_strlen($this->request->post['identity_card_number']) > 15) || (!preg_match('/^[a-zA-Z0-9]+$/', $this->request->post['identity_card_number'])) )
+            {
+					$this->error['identity_card_number'] = $this->language->get('error_identity_card_number');
+				}
+            if ((utf8_strlen($this->request->post['mobile_phone']) > 15) || (!is_numeric( $this->request->post['mobile_phone'] ) ) ) 
+            {
+					$this->error['mobile_phone'] = $this->language->get('error_mobile_phone');
+				}
+            ]]></add>
+        </operation>
+    </file>
+    <file name="admin/model/sale/customer.php">
+        <operation>
+            <search position="replace"><![CDATA[ lastname = '" . $this->db->escape($data['lastname']) . "',]]></search>
+            <add><![CDATA[ 
+            middlename = '" . $this->db->escape($data['middlename']) . "', lastname = '" . $this->db->escape($data['lastname']) . "',identity_card_number = '" . $this->db->escape($data['identity_card_number']) . "',mobile_phone = '" . $this->db->escape($data['mobile_phone']) . "',
+            ]]></add>
+        </operation>
+    </file>
+	<!-- sales/order -->
+	<file name="admin/view/template/sale/order_info.tpl">
+		<operation>
+			<search position="replace"><![CDATA[<?php echo $firstname; ?> <?php echo $lastname; ?>]]></search>
+			<add><![CDATA[
+                <?php echo $fullname; ?>
+			]]></add>
+		</operation>
+	</file>
+    <file name="admin/language/romana/sale/order.php">
+        <operation>
+            <search position="before"><![CDATA[$_['text_lastname']]]></search>
+            <add><![CDATA[
+                $_['text_middlename']                           = 'CNP:';
+                $_['text_identity_card_number']                 = 'Serie carte identitate:';
+                $_['text_mobile_phone']                         = 'Telefon mobil:';
+            ]]></add>
+        </operation>
+        <operation>
+            <search position="before"><![CDATA[$_['entry_lastname']]]></search>
+            <add><![CDATA[
+                $_['entry_middlename']                          = 'CNP:';
+                $_['entry_identity_card_number']                = 'Serie carte identitate:';
+                $_['entry_mobile_phone']                        = 'Telefon mobil:';
+            ]]></add>
+        </operation>
+        <operation>
+            <search position="before"><![CDATA[$_['error_lastname']]]></search>
+            <add><![CDATA[
+                $_['error_middlename']                          = 'CNP-ul trebuie introdus!';
+                $_['error_identity_card_number']                = 'Seria cartii de identitate - seria (compusa din doua litere) și numărul (compus din 6 cifre)!';
+                $_['error_mobile_phone']                        = 'Numarul telefonului mobil trebuie sa fie formata din cifre!';
+            ]]></add>
+        </operation>
+    </file>
+    <file name="admin/controller/sale/order.php">
+		<operation>
+            <search position="before"><![CDATA[$this->data['text_lastname'] = $this->language->get('text_lastname');]]></search>
+            <add><![CDATA[
+                $this->data['text_middlename'] = $this->language->get('text_middlename');
+                $this->data['text_identity_card_number'] = $this->language->get('text_identity_card_number');
+                $this->data['text_mobile_phone'] = $this->language->get('text_mobile_phone');
+            ]]></add>
+        </operation>
+		<operation>
+            <search position="after"><![CDATA[$this->data['lastname'] = $order_info['lastname'];]]></search>
+            <add><![CDATA[
+                $this->data['fullname'] = $order_info['customer'];
+            ]]></add>
+        </operation>
+		<operation>
+            <search position="before"><![CDATA[$this->data['entry_lastname'] = $this->language->get('entry_lastname');]]></search>
+            <add><![CDATA[
+                $this->data['entry_middlename'] = $this->language->get('entry_middlename');
+                $this->data['entry_identity_card_number'] = $this->language->get('entry_identity_card_number');
+                $this->data['entry_mobile_phone'] = $this->language->get('entry_mobile_phone');
+            ]]></add>
+        </operation>
+		<operation>
+            <search position="before"><![CDATA[if (isset($this->error['lastname'])) {]]></search>
+            <add><![CDATA[
+				if (isset($this->error['middlename'])) {
+					$this->data['error_middlename'] = $this->error['middlename'];
+				} else {
+					$this->data['error_middlename'] = '';
+				}
+            if (isset($this->error['identity_card_number'])) {
+					$this->data['error_identity_card_number'] = $this->error['identity_card_number'];
+				} else {
+					$this->data['error_identity_card_number'] = '';
+				}
+            if (isset($this->error['mobile_phone'])) {
+					$this->data['error_mobile_phone'] = $this->error['mobile_phone'];
+				} else {
+					$this->data['error_mobile_phone'] = '';
+				}
+            ]]></add>
+		<!-- validate -->
+        <operation>
+			<search position="before"><![CDATA[if ((utf8_strlen($this->request->post['lastname']) < 1) || (utf8_strlen($this->request->post['lastname']) > 32)) {]]></search>
+			<add><![CDATA[
+				if ( (utf8_strlen($this->request->post['middlename']) > 32)) {
+					$this->error['middlename'] = $this->language->get('error_middlename');
+				}
+            if ((utf8_strlen($this->request->post['identity_card_number']) > 15) || (!preg_match('/^[a-zA-Z0-9]+$/', $this->request->post['identity_card_number'])) ){
+					$this->error['identity_card_number'] = $this->language->get('error_identity_card_number');
+				}
+            if ((utf8_strlen($this->request->post['mobile_phone']) > 15) || (!is_numeric( $this->request->post['mobile_phone'] ) ) ) 
+            {
+					$this->error['mobile_phone'] = $this->language->get('error_mobile_phone');
+				}
+			]]></add>
+		</operation>
+        </operation>
+		<!-- // add payment field here -->
+    </file>
+	<file name="admin/model/sale/order.php">
+		<operation>
+			<search position="replace"><![CDATA[CONCAT(c.firstname, ' ', c.lastname)]]></search>
+			<add><![CDATA[CONCAT(c.firstname, ' ', o.middlename, ' ', c.lastname)]]></add>
+		</operation>
+        <operation>
+            <search position="replace"><![CDATA[o.lastname) AS customer,]]></search>
+            <add><![CDATA[o.lastname) AS customer, c.ax_code, o.customer_group_id,]]></add>
+        </operation>
+        <operation>
+            <search position="replace"><![CDATA[`" . DB_PREFIX . "order` o"]]></search>
+            <add><![CDATA[`" . DB_PREFIX . "order` o, `" . DB_PREFIX . "customer` c"]]></add>
+        </operation>
+        <operation>
+            <search position="before"><![CDATA[$sort_data = array(]]></search>
+            <add><![CDATA[$sql .= " AND c.`customer_id` = o.`customer_id`"; ]]></add>
+        </operation>
+		<operation>
+			<search position="before"><![CDATA['lastname'                => $order_query->row['lastname'],]]></search>
+			<add><![CDATA[
+            'middlename'                => $order_query->row['middlename'],
+            'identity_card_number'      => $order_query->row['identity_card_number'],
+            'mobile_phone'              => $order_query->row['mobile_phone'],
+            ]]></add>
+		</operation>
+	</file>
+	<!-- sale/order/insert/edit -->
+	<file name="admin/view/template/sale/order_form.tpl">
+		<operation>
+			<search position="before" index="1"><![CDATA[<td><span class="required">*</span> <?php echo $entry_email; ?></td>]]></search>
+			<add><![CDATA[
+				  <td> <?php echo $entry_middlename; ?></td>
+				  <td><input type="text" name="middlename" value="<?php echo $middlename; ?>" />
+					<?php if ($error_middlename) { ?>
+					<span class="error"><?php echo $error_middlename; ?></span>
+					<?php } ?></td>
+				</tr>
+				<tr>
+            <td> <?php echo $entry_identity_card_number; ?></td>
+				  <td><input type="text" name="identity_card_number" value="<?php echo $identity_card_number; ?>" />
+					<?php if ($error_identity_card_number) { ?>
+					<span class="error"><?php echo $error_identity_card_number; ?></span>
+					<?php } ?></td>
+				</tr>
+				<tr>
+			]]></add>
+		</operation>
+	</file>
+   	<file name="admin/view/template/sale/order_form.tpl">
+		<operation>
+			<search position="before" index="1"><![CDATA[<td><span class="required">*</span> <?php echo $entry_telephone; ?></td>]]></search>
+			<add><![CDATA[
+            <td><span class="required">*</span> <?php echo $entry_mobile_phone; ?></td>
+				  <td><input type="text" name="mobile_phone" value="<?php echo $mobile_phone; ?>" />
+					<?php if ($error_mobile_phone) { ?>
+					<span class="error"><?php echo $error_mobile_phone; ?></span>
+					<?php } ?></td>
+				</tr>
+				<tr>
+			]]></add>
+		</operation>
+	</file>
+	<file name="admin/controller/sale/order.php">
+        <operation>
+			<search position="before"><![CDATA[if (isset($this->request->post['lastname'])) {]]></search>
+			<add><![CDATA[
+				if (isset($this->request->post['middlename'])) {
+					$this->data['middlename'] = $this->request->post['middlename'];
+				} elseif (!empty($order_info)) { 
+					$this->data['middlename'] = $order_info['middlename'];
+				} else {
+					$this->data['middlename'] = '';
+				}
+				if (isset($this->request->post['identity_card_number'])) {
+					$this->data['identity_card_number'] = $this->request->post['identity_card_number'];
+				} elseif (!empty($order_info)) { 
+					$this->data['identity_card_number'] = $order_info['identity_card_number'];
+				} else {
+					$this->data['identity_card_number'] = '';
+				}
+				if (isset($this->request->post['mobile_phone'])) {
+					$this->data['mobile_phone'] = $this->request->post['mobile_phone'];
+				} elseif (!empty($order_info)) { 
+					$this->data['mobile_phone'] = $order_info['mobile_phone'];
+				} else {
+					$this->data['mobile_phone'] = '';
+				}
+			]]></add>
+		</operation>
+		<!-- payment adr -->
+        <operation>
+			<search position="replace"><![CDATA['lastname'  => $order_info['payment_lastname'],]]></search>
+			<add><![CDATA[
+				'lastname'  => $order_info['middlename'] . ' ' . $order_info['payment_lastname'],
+				'identity_card_number'  => $order_info['identity_card_number'],
+				'mobile_phone'  => $order_info['mobile_phone'],
+			]]></add>
+		</operation>
+		<operation>
+            <search position="after"><![CDATA['customer' => $result['customer'],]]></search>
+            <add><![CDATA[      'ax_code' => $result['ax_code'],]]></add>
+        </operation>		
+	</file>
+	<file name="admin/model/sale/order.php">
+		<operation>
+			<search position="replace"><![CDATA[lastname = '" . $this->db->escape($data['lastname']) . "',]]></search>
+			<add><![CDATA[
+         middlename = '" . $this->db->escape($data['middlename']) . "', lastname = '" . $this->db->escape($data['lastname']) . "',identity_card_number = '" . $this->db->escape($data['identity_card_number']) . "',mobile_phone = '" . $this->db->escape($data['mobile_phone']) . "',
+         ]]></add>
+		</operation>
+	</file>
+</modification>

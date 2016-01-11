@@ -1,0 +1,136 @@
+.FilterTitle, .FilterTitleFirst {
+	border: #cfd4da solid 1px;
+	border-left: none;
+	border-right: none;
+	display: block;
+	padding: 10px;
+	margin: 0 10px;
+	color: #002f67;
+	font-size: 14px;
+	font-weight: bold;
+}
+
+.FilterElement {
+	display: block;
+	margin-left: 10px;
+	color: #222;
+	padding: 10px 0 10px 25px;
+	/*background: url(../cs-images/img/check_empty.png) no-repeat 5px 10px;*/
+}
+
+.box_backgr {background:#E3E3E3;border-left: 1px solid #092F6C;
+border-right: 1px solid #092F6C;}
+
+/*.box {
+background:#E3E3E3;
+}*/
+
+#filterpro .box-content {
+margin-top: -29px;
+}
+
+#filterpro .option_box {
+	border-bottom: #cfd4da solid 1px;
+	border-left: none;
+	border-right: none;
+	display: block;
+	padding: 10px;
+	margin: 0px 10px;
+	color: #002f67;
+	font-size: 14px;
+	font-weight: bold;
+	
+/*    border: 1px solid #38B0E3;
+    border-radius: 7px;
+    display: inline-block;
+    margin: 5px;
+    min-width: 138px;
+    padding: 5px;
+    vertical-align: top;*/
+}
+    /*balazs*/
+    #filterpro .option_box label{
+        font-weight: normal;
+        font-size: 12px;
+    }
+    /*eof balazs*/
+#filterpro .price_limit {
+    border: 0;
+    color: #38B0E3;
+    font-weight: bold;
+    width: 100%;
+}
+
+#filterpro .ui-widget-header {
+    background: none repeat scroll 0 0 #38B0E3;
+    border: 0 none;
+    color: #FFFFFF;
+    font-weight: bold;
+}
+
+#filterpro select {
+    width: 126px;
+}
+
+#filterpro .ui-state-hover, #filterpro .ui-state-focus, #filterpro .ui-state-active {
+    border: 1px solid #38B0E3;
+    background: none repeat scroll 0 0 #d9f2fc;
+}
+
+#filterpro .price_slider {
+    padding: 5px;
+}
+
+#filterpro .price_slider  input {
+    width: 40px;
+}
+
+#filterpro .option_values {
+    padding-top: 5px;
+}
+
+#filterpro .option_name, #filterpro .attribute_group_name {
+    background: url("../image/filter-bullet-down.png") no-repeat scroll right center transparent;
+    cursor: pointer;
+    padding: 5px;
+}
+#filterpro .attribute_group_name{
+    padding-left: 0;
+}
+
+#filterpro .hided {
+    background: url("../image/filter-bullet-up.png") no-repeat scroll right center transparent;
+    cursor: pointer;
+}
+
+#filterpro_box .clear_filter {
+    border-bottom: 1px dashed;
+    text-decoration: none;
+    float: right;
+}
+
+#filterpro .collapsible, #filterpro .collapsible tbody, #filterpro .collapsible table{
+    max-height: 200px;
+	width: 190px;
+    overflow-x: hidden;
+    overflow-y: auto;
+}
+#filterpro img {
+    cursor: pointer;
+    margin: 2px
+}
+
+#filterpro img.selected {
+    border: 2px solid;
+    margin: 0;
+}
+#column-left + #column-right + #content .product-grid > div.loadmask {
+    width: 100%;
+}
+
+#filterpro input {
+    margin: 4px 3px;
+}
+#filterpro table{
+     margin-bottom: 5px;
+}

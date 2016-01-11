@@ -1,0 +1,1427 @@
+<modification>
+
+    <id>Multiple cart</id>
+    <version>1.0.0</version>
+    <vqmver>2.1.5</vqmver>
+    <author>Demeter Attila</author>
+
+    <file name="system/library/cart.php">
+        <operation>
+            <search position="replace"><![CDATA[$product_id, $qty = 1, $option, $profile_id]]></search>
+            <add><![CDATA[$product_id, $qty = 1, $option, $profile_id, $cart_id = ""]]></add>
+        </operation>
+        <operation>
+            <search position="after" offset="1"><![CDATA[$key .= ( int ) $profile_id;]]></search>
+            <add><![CDATA[
+        $key .= $cart_id.':';
+        ]]></add>
+        </operation>
+        <operation>
+            <search position="after"><![CDATA[$product_id = $product[0];]]></search>
+            <add><![CDATA[ //echo "<pre>"; print_r($product); die('afds');
+                $cart_id = $product[2];]]></add>
+        </operation>
+        <operation>
+            <search position="before"><![CDATA['product_id' => $product_query->row['product_id'],]]></search>
+            <add><![CDATA[                      'cart_id' => $cart_id,]]></add>
+        </operation>
+    </file>
+
+    <file name="catalog/model/quickcheckout/order.php">
+        <operation>
+            <search position="replace"><![CDATA[$this->db->query("INSERT INTO `" . DB_PREFIX . "order` SET invoice_prefix = '" . $this->db->escape($data['invoice_prefix']) . "', store_id = '" . (int)$data['store_id'] . "', store_name = '" . $this->db->escape($data['store_name']) . "', store_url = '" . $this->db->escape($data['store_url']) . "', customer_id = '" . (int)$data['customer_id'] . "', customer_group_id = '" . (int)$data['customer_group_id'] . "', firstname = '" . $this->db->escape($data['firstname']) . "', lastname = '" . $this->db->escape($data['lastname']) . "', email = '" . $this->db->escape($data['email']) . "', telephone = '" . $this->db->escape($data['telephone']) . "', fax = '" . $this->db->escape($data['fax']) . "', payment_firstname = '" . $this->db->escape($data['payment_firstname']) . "', payment_lastname = '" . $this->db->escape($data['payment_lastname']) . "', payment_company = '" . $this->db->escape($data['payment_company']) . "', payment_company_id = '" . $this->db->escape($data['payment_company_id']) . "', payment_tax_id = '" . $this->db->escape($data['payment_tax_id']) . "', payment_address_1 = '" . $this->db->escape($data['payment_address_1']) . "', payment_address_2 = '" . $this->db->escape($data['payment_address_2']) . "', payment_city = '" . $this->db->escape($data['payment_city']) . "', payment_postcode = '" . $this->db->escape($data['payment_postcode']) . "', payment_country = '" . $this->db->escape($data['payment_country']) . "', payment_country_id = '" . (int)$data['payment_country_id'] . "', payment_zone = '" . $this->db->escape($data['payment_zone']) . "', payment_zone_id = '" . (int)$data['payment_zone_id'] . "', payment_address_format = '" . $this->db->escape($data['payment_address_format']) . "', payment_method = '" . $this->db->escape($data['payment_method']) . "', payment_code = '" . $this->db->escape($data['payment_code']) . "', shipping_firstname = '" . $this->db->escape($data['shipping_firstname']) . "', shipping_lastname = '" . $this->db->escape($data['shipping_lastname']) . "', shipping_company = '" . $this->db->escape($data['shipping_company']) . "', shipping_address_1 = '" . $this->db->escape($data['shipping_address_1']) . "', shipping_address_2 = '" . $this->db->escape($data['shipping_address_2']) . "', shipping_city = '" . $this->db->escape($data['shipping_city']) . "', shipping_postcode = '" . $this->db->escape($data['shipping_postcode']) . "', shipping_country = '" . $this->db->escape($data['shipping_country']) . "', shipping_country_id = '" . (int)$data['shipping_country_id'] . "', shipping_zone = '" . $this->db->escape($data['shipping_zone']) . "', shipping_zone_id = '" . (int)$data['shipping_zone_id'] . "', shipping_address_format = '" . $this->db->escape($data['shipping_address_format']) . "', shipping_method = '" . $this->db->escape($data['shipping_method']) . "', shipping_code = '" . $this->db->escape($data['shipping_code']) . "', comment = '" . $this->db->escape($data['comment']) . "', total = '" . (float)$data['total'] . "', affiliate_id = '" . (int)$data['affiliate_id'] . "', commission = '" . (float)$data['commission'] . "', language_id = '" . (int)$data['language_id'] . "', currency_id = '" . (int)$data['currency_id'] . "', currency_code = '" . $this->db->escape($data['currency_code']) . "', currency_value = '" . (float)$data['currency_value'] . "', ip = '" . $this->db->escape($data['ip']) . "', forwarded_ip = '" .  $this->db->escape($data['forwarded_ip']) . "', user_agent = '" . $this->db->escape($data['user_agent']) . "', accept_language = '" . $this->db->escape($data['accept_language']) . "', date_added = NOW(), date_modified = NOW()");]]></search>
+            <add><![CDATA[          $this->db->query("INSERT INTO `" . DB_PREFIX . "order` SET `cart_id` = ".." invoice_prefix = '" . $this->db->escape($data['invoice_prefix']) . "', store_id = '" . (int)$data['store_id'] . "', store_name = '" . $this->db->escape($data['store_name']) . "', store_url = '" . $this->db->escape($data['store_url']) . "', customer_id = '" . (int)$data['customer_id'] . "', customer_group_id = '" . (int)$data['customer_group_id'] . "', firstname = '" . $this->db->escape($data['firstname']) . "', lastname = '" . $this->db->escape($data['lastname']) . "', email = '" . $this->db->escape($data['email']) . "', telephone = '" . $this->db->escape($data['telephone']) . "', fax = '" . $this->db->escape($data['fax']) . "', payment_firstname = '" . $this->db->escape($data['payment_firstname']) . "', payment_lastname = '" . $this->db->escape($data['payment_lastname']) . "', payment_company = '" . $this->db->escape($data['payment_company']) . "', payment_company_id = '" . $this->db->escape($data['payment_company_id']) . "', payment_tax_id = '" . $this->db->escape($data['payment_tax_id']) . "', payment_address_1 = '" . $this->db->escape($data['payment_address_1']) . "', payment_address_2 = '" . $this->db->escape($data['payment_address_2']) . "', payment_city = '" . $this->db->escape($data['payment_city']) . "', payment_postcode = '" . $this->db->escape($data['payment_postcode']) . "', payment_country = '" . $this->db->escape($data['payment_country']) . "', payment_country_id = '" . (int)$data['payment_country_id'] . "', payment_zone = '" . $this->db->escape($data['payment_zone']) . "', payment_zone_id = '" . (int)$data['payment_zone_id'] . "', payment_address_format = '" . $this->db->escape($data['payment_address_format']) . "', payment_method = '" . $this->db->escape($data['payment_method']) . "', payment_code = '" . $this->db->escape($data['payment_code']) . "', shipping_firstname = '" . $this->db->escape($data['shipping_firstname']) . "', shipping_lastname = '" . $this->db->escape($data['shipping_lastname']) . "', shipping_company = '" . $this->db->escape($data['shipping_company']) . "', shipping_address_1 = '" . $this->db->escape($data['shipping_address_1']) . "', shipping_address_2 = '" . $this->db->escape($data['shipping_address_2']) . "', shipping_city = '" . $this->db->escape($data['shipping_city']) . "', shipping_postcode = '" . $this->db->escape($data['shipping_postcode']) . "', shipping_country = '" . $this->db->escape($data['shipping_country']) . "', shipping_country_id = '" . (int)$data['shipping_country_id'] . "', shipping_zone = '" . $this->db->escape($data['shipping_zone']) . "', shipping_zone_id = '" . (int)$data['shipping_zone_id'] . "', shipping_address_format = '" . $this->db->escape($data['shipping_address_format']) . "', shipping_method = '" . $this->db->escape($data['shipping_method']) . "', shipping_code = '" . $this->db->escape($data['shipping_code']) . "', comment = '" . $this->db->escape($data['comment']) . "', total = '" . (float)$data['total'] . "', affiliate_id = '" . (int)$data['affiliate_id'] . "', commission = '" . (float)$data['commission'] . "', language_id = '" . (int)$data['language_id'] . "', currency_id = '" . (int)$data['currency_id'] . "', currency_code = '" . $this->db->escape($data['currency_code']) . "', currency_value = '" . (float)$data['currency_value'] . "', ip = '" . $this->db->escape($data['ip']) . "', forwarded_ip = '" .  $this->db->escape($data['forwarded_ip']) . "', user_agent = '" . $this->db->escape($data['user_agent']) . "', accept_language = '" . $this->db->escape($data['accept_language']) . "', date_added = NOW(), date_modified = NOW()");]]></add>
+        </operation>
+
+    </file>
+
+    <file name="catalog/controller/module/quickcheckout.php">
+        <operation>
+            <search position="before" offset="1"><![CDATA[if( isset( $this->request->post['payment_method'] ) )]]></search>
+            <add><![CDATA[
+        $cart_id = 0;
+
+        foreach ($this->cart->getProducts() as $product)
+        {
+            if ($product['cart_id'])
+            {
+                $cart_id = $product['cart_id'];
+                break;
+            }
+        }
+            ]]></add>
+        </operation>
+    </file>
+
+    <file name="catalog/controller/checkout/cart.php">
+        <operation>
+            <search position="replace"><![CDATA[$this->cart->add( $this->request->post['product_id'], $quantity, $option, $profile_id );]]></search>
+            <add><![CDATA[
+                if ( isset($this->request->post['cart_id']) && $this->request->post['cart_id'] )
+                {
+                    $cart_id = $this->request->post['cart_id'];
+                }
+                else
+                {
+                    $cart_id = 0;
+                }
+
+                $this->cart->add( $this->request->post['product_id'], $quantity, $option, $profile_id, $cart_id );
+            ]]></add>
+        </operation>
+        <operation>
+            <search position="before"><![CDATA[if( !empty( $this->session->data['vouchers'] ) )]]></search>
+            <add><![CDATA[
+            if ($B2B) {
+                $this->load->model( 'checkout/cart' );
+                $this->load->model( 'setting_email_address/setting_email_address' );
+
+                $this->language->load('total/sub_total');
+                $this->language->load('total/total');
+
+                $taxes = $this->cart->getTaxes();
+
+                $this->data['text_sub_total'] = $this->language->get('text_sub_total');
+                //$this->data['text_tax'] = $this->db->query("SElECT * FROM `oc_tax_rate` WHERE `tax_rate_id` = ".key($taxes).";")->row['name'];
+                $this->data['text_tax'] = $this->db->query("SElECT * FROM `oc_tax_rate` WHERE `tax_rate_id` = 86;")->row['name'];
+                $this->data['text_total'] = $this->language->get('text_total');
+
+                //$store_id = $this->config->get('config_store_id');
+                $store_id = 1;
+                $customer_group_id = $this->customer->getCustomerGroupId();
+
+                $customer_email = $this->customer->getEmail();
+
+                $support_email = $this->model_setting_email_address_setting_email_address->getEmailAddress( "SUPPORT_DIRECT" );
+
+                $match = strpos("  ".$support_email['email'], $customer_email);
+
+                if ($match) {
+                    $this->data['support_admin'] = true;
+                    $this->data['support_carts'] = $this->model_checkout_cart->getSupportCarts($customer_group_id);
+                    $this->data['B2B_customers_to_support'] = $this->model_checkout_cart->getB2BUsers();
+                    // echo "<pre>"; print_r($this->data['support_carts']); die('contr dfadfba');
+                } else {
+                    $this->data['support_admin'] = false;
+                    $this->data['support_carts'] = "";
+                    $this->data['B2B_customers_to_support'] = "";
+                }
+
+                $this->data['connected_carts'] = $this->model_checkout_cart->getConnectedCarts($this->session->data['customer_id'], $customer_group_id);
+                // echo "<pre>"; print_r($this->data['connected_carts']); die('opencart/vqmod/xml/multiple_cart.xml:109');
+                if ($this->data['connected_carts']) {
+                    foreach ($this->data['connected_carts'] as &$cart) {
+
+                        $cart['sub_total'] = 0;
+                        $cart['tax'] = 0;
+
+                        foreach ($cart['products'] as &$product) {
+                            if( $product['image'] )
+                            {
+                                $product['image'] = $this->model_tool_image->resize( $product['image'], $this->config->get( 'config_image_cart_width' ), $this->config->get( 'config_image_cart_height' ) );
+                            }
+                            else
+                            {
+                                $product['image'] = '';
+                            }
+
+                            if( $product['tax_class_id'] )
+                            {
+                                $tax_rates = $this->tax->getRates( $product['price'], $product['tax_class_id'] );
+
+                                foreach( $tax_rates as $tax_rate )
+                                {
+                                    /*if( !isset( $tax_data[$tax_rate['tax_rate_id']] ) )
+                                    {
+                                        $cart['tax'] = ($tax_rate['amount'] * $product['quantity']);
+                                    }
+                                    else
+                                    {
+                                        $cart['tax'] += ($tax_rate['amount'] * $product['quantity']);
+                                    }*/
+
+                                    $cart['tax'] += ($tax_rate['amount'] * $product['quantity']);
+                                }
+                            }
+
+                            if( ($this->config->get( 'config_customer_price' ) && $this->customer->isLogged()) || !$this->config->get( 'config_customer_price' ) )
+                            {
+                                $product['total'] = $this->currency->format( $this->tax->calculate( $product['price'], $product['tax_class_id'], $this->config->get( 'config_tax' ) ) * $product['quantity'] );
+                                $cart['sub_total'] += $this->tax->calculate( $product['price'], $product['tax_class_id'], $this->config->get( 'config_tax' ) ) * $product['quantity'];
+                            }
+                            else
+                            {
+                                $product['total'] = false;
+                            }
+
+                            if( ($this->config->get( 'config_customer_price' ) && $this->customer->isLogged()) || !$this->config->get( 'config_customer_price' ) )
+                            {
+                                $product['price'] = $this->currency->format( $this->tax->calculate( $product['price'], $product['tax_class_id'], $this->config->get( 'config_tax' ) ) );
+                            }
+                            else
+                            {
+                                $product['price'] = false;
+                            }
+
+                            //echo "cart tax/product<pre>"; print_r($cart['tax']);
+
+                            //$this->url->link( 'product/product', 'product_id='.$product['product_id'] )\
+
+                        } // die('sadvs');
+                        $cart['total'] = $cart['sub_total'] + $cart['tax'];
+                    }
+                }
+
+                /*echo $this->session->data['customer_id']." ".$customer_group_id." ".$store_id."<br>";
+                die('advsdvsadvs');*/
+
+                $this->data['saved_carts'] = $this->model_checkout_cart->getCarts($this->session->data['customer_id'], $customer_group_id, $store_id);
+
+                // echo "<pre>"; print_r($this->data['saved_carts']); die('opencart/vqmod/xml/multiple_cart.xml:175');
+
+                if ($this->data['support_carts']) {
+                    foreach ($this->data['support_carts'] as &$cart) {
+
+                        $cart['sub_total'] = 0;
+                        $cart['tax'] = 0;
+
+                        foreach ($cart['products'] as &$product) {
+                            if( $product['image'] )
+                            {
+                                $product['image'] = $this->model_tool_image->resize( $product['image'], $this->config->get( 'config_image_cart_width' ), $this->config->get( 'config_image_cart_height' ) );
+                            }
+                            else
+                            {
+                                $product['image'] = '';
+                            }
+
+                            if( $product['tax_class_id'] )
+                            {
+                                $tax_rates = $this->tax->getRates( $product['price'], $product['tax_class_id'] );
+
+                                foreach( $tax_rates as $tax_rate )
+                                {
+                                    /*if( !isset( $tax_data[$tax_rate['tax_rate_id']] ) )
+                                    {
+                                        $cart['tax'] = ($tax_rate['amount'] * $product['quantity']);
+                                    }
+                                    else
+                                    {
+                                        $cart['tax'] += ($tax_rate['amount'] * $product['quantity']);
+                                    }*/
+
+                                    $cart['tax'] += ($tax_rate['amount'] * $product['quantity']);
+                                }
+                            }
+
+                            if( ($this->config->get( 'config_customer_price' ) && $this->customer->isLogged()) || !$this->config->get( 'config_customer_price' ) )
+                            {
+                                $product['total'] = $this->currency->format( $this->tax->calculate( $product['price'], $product['tax_class_id'], $this->config->get( 'config_tax' ) ) * $product['quantity'] );
+                                $cart['sub_total'] += $this->tax->calculate( $product['price'], $product['tax_class_id'], $this->config->get( 'config_tax' ) ) * $product['quantity'];
+                            }
+                            else
+                            {
+                                $product['total'] = false;
+                            }
+
+                            if( ($this->config->get( 'config_customer_price' ) && $this->customer->isLogged()) || !$this->config->get( 'config_customer_price' ) )
+                            {
+                                $product['price'] = $this->currency->format( $this->tax->calculate( $product['price'], $product['tax_class_id'], $this->config->get( 'config_tax' ) ) );
+                            }
+                            else
+                            {
+                                $product['price'] = false;
+                            }
+
+                            //echo "cart tax/product<pre>"; print_r($cart['tax']);
+
+                            //$this->url->link( 'product/product', 'product_id='.$product['product_id'] )\
+
+                        } // die('sadvs');
+                        $cart['total'] = $cart['sub_total'] + $cart['tax'];
+                    }
+                }
+                //print_r($this->data['saved_carts']); die('opencart/vqmod/xml/multiple_cart.xml:239');
+
+                foreach ($this->data['saved_carts'] as &$cart) {
+
+                    $cart['sub_total'] = 0;
+                    $cart['tax'] = 0;
+
+                    foreach ($cart['products'] as &$product) {
+                        if( $product['image'] )
+                        {
+                            $product['image'] = $this->model_tool_image->resize( $product['image'], $this->config->get( 'config_image_cart_width' ), $this->config->get( 'config_image_cart_height' ) );
+                        }
+                        else
+                        {
+                            $product['image'] = '';
+                        }
+
+                        if( $product['tax_class_id'] )
+                        {
+                            $tax_rates = $this->tax->getRates( $product['price'], $product['tax_class_id'] );
+
+                            foreach( $tax_rates as $tax_rate )
+                            {
+                                /*if( !isset( $tax_data[$tax_rate['tax_rate_id']] ) )
+                                {
+                                    $cart['tax'] = ($tax_rate['amount'] * $product['quantity']);
+                                }
+                                else
+                                {
+                                    $cart['tax'] += ($tax_rate['amount'] * $product['quantity']);
+                                }*/
+
+                                $cart['tax'] += ($tax_rate['amount'] * $product['quantity']);
+                            }
+                        }
+
+                        if( ($this->config->get( 'config_customer_price' ) && $this->customer->isLogged()) || !$this->config->get( 'config_customer_price' ) )
+                        {
+                            $product['total'] = $this->currency->format( $this->tax->calculate( $product['price'], $product['tax_class_id'], $this->config->get( 'config_tax' ) ) * $product['quantity'] );
+                            $cart['sub_total'] += $this->tax->calculate( $product['price'], $product['tax_class_id'], $this->config->get( 'config_tax' ) ) * $product['quantity'];
+                        }
+                        else
+                        {
+                            $product['total'] = false;
+                        }
+
+                        if( ($this->config->get( 'config_customer_price' ) && $this->customer->isLogged()) || !$this->config->get( 'config_customer_price' ) )
+                        {
+                            $product['price'] = $this->currency->format( $this->tax->calculate( $product['price'], $product['tax_class_id'], $this->config->get( 'config_tax' ) ) );
+                        }
+                        else
+                        {
+                            $product['price'] = false;
+                        }
+
+                        //echo "cart tax/product<pre>"; print_r($cart['tax']);
+
+                        //$this->url->link( 'product/product', 'product_id='.$product['product_id'] )\
+
+                    } // die('sadvs');
+                    $cart['total'] = $cart['sub_total'] + $cart['tax'];
+                }
+                // echo "<pre>"; print_r($this->data['saved_carts']); die('1sfvdf');
+            }
+            ]]></add>
+        </operation>
+        <operation>
+            <search position="after"><![CDATA[$this->data['text_freq_year'] = $this->language->get( 'text_freq_year' );]]></search>
+            <add><![CDATA[
+            $this->data['text_save_cart'] = $this->language->get( 'text_save_cart' );
+            $this->data['text_cart_name'] = $this->language->get( 'text_cart_name' );
+            $this->data['text_error'] = $this->language->get( 'text_empty' );
+
+            $this->data['save_cart_action'] = $this->url->link( 'checkout/cart/save_cart' );
+            $this->data['delete_cart_action'] = $this->url->link( 'checkout/cart/delete_cart' );
+
+            $this->data['customer_B2B']  = false;
+
+            if( $this->customer->getCustomerGroupId() == 3 || $this->customer->getCustomerGroupId() == 4 )
+            {
+                $this->data['customer_B2B']  = true;
+            }
+            ]]></add>
+        </operation>
+        <operation>
+            <search position="before"><![CDATA[$this->data['products'][] = array(]]></search>
+            <add><![CDATA[
+                $this->load->model( 'checkout/cart' );
+                $ax_code = '';
+                //echo "<pre>"; print_r($product); die('212');
+
+                if (sizeof($option_data) == 2) {
+                    $type = 3;
+                    $ax_code = $this->model_checkout_cart->getProductAxCode(3, $product, $product['option'], '');
+                    if ($product['model'] == '81016-00L') {
+                        //die('get ax_code 1'.$ax_code);
+                    }
+                } elseif (sizeof($option_data) == 1) {
+                    $type = 2;
+                    $ax_code = $this->model_checkout_cart->getProductAxCode(2, $product, '', $product['option'][0]['product_option_value_id']);
+                    if ($product['model'] == '81016-00L') {
+                        //die('get ax_code 2 '.$ax_code);
+                    }
+                } else {
+                    $type = 1;
+                    $ax_code = $this->model_checkout_cart->getProductAxCode(1, $product, '', '');
+                    if ($product['model'] == '81016-00L') {
+                        //die('get ax_code 3 '.$ax_code);
+                    }
+                }
+
+                if (!$ax_code) {
+                    $mail = new Mail();
+                    $mail->protocol = $this->config->get( 'config_mail_protocol' );
+                    $mail->parameter = $this->config->get( 'config_mail_parameter' );
+                    $mail->hostname = $this->config->get( 'config_smtp_host' );
+                    $mail->username = $this->config->get( 'config_smtp_username' );
+                    $mail->password = $this->config->get( 'config_smtp_password' );
+                    $mail->port = $this->config->get( 'config_smtp_port' );
+                    $mail->timeout = $this->config->get( 'config_smtp_timeout' );
+
+                    $mail->setTo( 'attila@grafx.ro;claudia.grec@renania.ro' );
+
+                    $mail->setFrom($this->config->get('config_email'));
+                    $mail->setSender('DEV Renania ax code');
+
+                    $subject = "ax code";
+                    $message = "Date ax incorrecte la produsul cu model <strong>".$product['model']."</strong>";
+                    $mail->setSubject( html_entity_decode( $subject, ENT_QUOTES, 'UTF-8' ) );
+                    $mail->setHtml( html_entity_decode( $message, ENT_QUOTES, 'UTF-8' ) );
+                    $mail->send();
+                }
+            ]]></add>
+        </operation>
+        <operation>
+            <search position="after"><![CDATA['key' => $product['key'],]]></search>
+            <add><![CDATA[                  'ax_code' => $ax_code,]]></add>
+        </operation>
+        <!--<operation>
+            <search position="after"><![CDATA[$products = $this->cart->getProducts();]]></search>
+            <add><![CDATA[
+            echo "<pre>"; print_r($products); die('212');
+            ]]></add>
+        </operation>-->
+        <operation>
+            <search position="before"><![CDATA[$this->data['products_recurring'] = array( );]]></search>
+            <add><![CDATA[
+            //echo "<pre>"; print_r($this->data); /*print_r($this->cart);*/ die('1212');
+            ]]></add>
+        </operation>
+        <operation>
+            <search position="before"><![CDATA[protected function validateCoupon()]]></search>
+            <add><![CDATA[
+    public function save_cart() {
+        if( isset( $this->request->post['cart_name'] ) && !empty( $this->request->post['cart_name']  ) && $this->customer->isLogged() ) {
+            $this->load->model( 'checkout/cart' );
+            $this->load->model( 'setting/extension' );
+            $this->load->model( 'setting/setting' );
+            $this->load->model( 'account/customer' );
+
+            $cart_to_save['cart_name'] = $this->request->post['cart_name'];
+            $cart_to_save['store_id'] = $this->config->get('config_store_id');
+            $cart_to_save['customer_id'] = $this->session->data['customer_id'];
+
+            $customer_info = $this->model_account_customer->getCustomer( $this->session->data['customer_id'] );
+
+            if ( $customer_info ) {
+                $cart_to_save['customer_group_id'] = $customer_info['customer_group_id'];
+            }
+
+            $cart_to_save['currency_id'] = $this->currency->getId();
+            $cart_to_save['currency_code'] = $this->session->data['currency'];
+            $cart_to_save['currency_value'] = $this->currency->getValue( $this->currency->getCode() );
+            $cart_to_save['language_id'] = $this->config->get( 'config_language_id' );
+
+            $total_data = array( );
+            $total = 0;
+            $taxes = $this->cart->getTaxes();
+
+            // echo "<pre>";
+
+//            $B2B = false;
+//            if ( in_array( $this->customer->getCustomerGroupId(), array( 3,4 ) )  ) // B2B
+//            {
+//                $B2B = true;
+//            }
+//            $this->data['B2B'] = $B2B;
+
+            // Display prices
+            if( ($this->config->get( 'config_customer_price' ) && $this->customer->isLogged()) || !$this->config->get( 'config_customer_price' ) )
+            {
+                $sort_order = array( );
+
+                $results = $this->model_setting_extension->getExtensions( 'total' );
+
+                foreach( $results as $key => $value )
+                {
+                    $sort_order[$key] = $this->config->get( $value['code'].'_sort_order' );
+                }
+
+                array_multisort( $sort_order, SORT_ASC, $results );
+                //print_r( $results );
+
+                foreach( $results as $result )
+                {
+                    if( $this->config->get( $result['code'].'_status' ) )
+                    {
+                        $this->load->model( 'total/'.$result['code'] );
+
+                        $this->{'model_total_'.$result['code']}->getTotal( $total_data, $total, $taxes );
+                    }
+
+                    $sort_order = array( );
+
+                    foreach( $total_data as $key => $value )
+                    {
+                        $sort_order[$key] = $value['sort_order'];
+                    }
+
+                    array_multisort( $sort_order, SORT_ASC, $total_data );
+                }
+            }
+
+            foreach ($total_data as $data) {
+                if ($data['code'] == 'total') {
+                    $cart_to_save['total'] = $data['value'];
+                }
+            }
+
+            $this->load->model('tool/image');
+            //echo "<pre>"; print_r($this->cart->getProducts()); die('sdvs');
+
+            foreach( $this->cart->getProducts() as $product )
+            {
+                if( $product['image'] )
+                {
+                    $image = $this->model_tool_image->resize( $product['image'], $this->config->get( 'config_image_cart_width' ), $this->config->get( 'config_image_cart_height' ) );
+                }
+                else
+                {
+                    $image = '';
+                }
+
+                $option_data = array( );
+
+                foreach( $product['option'] as $option )
+                {
+                    if( $option['type'] != 'file' )
+                    {
+                        $value = $option['option_value'];
+                    }
+                    else
+                    {
+                        $value = $this->encryption->decrypt( $option['option_value'] );
+                    }
+
+                    $option_data[] = array(
+                        'product_option_id' => $option['product_option_id'],
+                        'product_option_value_id' => $option['product_option_value_id'],
+                        'option_id' => $option['option_id'],
+                        'option_value_id' => $option['option_value_id'],
+                        'name' => $option['name'],
+                        'value' => $value,
+                        'type' => $option['type']
+                    );
+                }
+
+                $product_data[] = array(
+                    'product_id' => $product['product_id'],
+                    'name' => $product['name'],
+                    'image' => $image,
+                    'model' => $product['model'],
+                    'option' => $option_data,
+                    'download' => $product['download'],
+                    'quantity' => $product['quantity'],
+                    'subtract' => $product['subtract'],
+                    'price' => $product['price'],
+                    'total' => $product['total'],
+                    'tax' => $this->tax->getTax( $product['price'], $product['tax_class_id'] ),
+                    'reward' => $product['reward']
+                );
+            }
+            $cart_to_save['products'] = $product_data;
+            $cart_to_save['totals'] = $total_data;
+
+            //echo "<pre>"; print_r($cart_to_save); die('2');
+
+            $cart_id = $this->model_checkout_cart->saveCart($cart_to_save);
+
+
+        }
+
+        $this->clear_cart();
+
+        if(isset($_POST['dont_redirect']) && $_POST['dont_redirect']) {
+            echo $cart_id;
+        }
+        else
+        {
+
+            if (isset($_POST['support_subject']) && isset($_POST['support_message']) && $_POST['support_subject'] && $_POST['support_message'])
+            {
+                $support_data = $_POST;
+                $support_data['cart_id'] = $cart_id;
+                echo $cart_id." opencart/vqmod/xml/multiple_cart.xml:519 <pre>"; print_r($support_data);
+
+                $new_support = $this->new_support_content($support_data);
+            }
+
+            $this->redirect( $this->url->link( 'checkout/cart' ) );
+        }
+    }
+
+    public function clear_cart() {
+		$this->cart->clear();
+	}
+
+	public function get_axcodes_and_quantitys() {
+	    if (in_array($this->customer->getCustomerGroupId(), array(3,4)) && isset($_POST['cart_id']) && !empty($_POST['cart_id'])) {
+	        $get_axcode_and_quantitys = "SELECT ax_code, quantity FROM `oc_cart_product` WHERE `cart_id` = ".$_POST['cart_id'].";";
+	        $get_axcode_and_quantitys = $this->db->query($get_axcode_and_quantitys);
+
+	        if ($get_axcode_and_quantitys->num_rows) {
+	            $get_axcode_and_quantitys = $get_axcode_and_quantitys->rows;
+
+	            echo json_encode($get_axcode_and_quantitys);
+	        } else {
+	            die('get_axcode_and_quantitys error 1');
+	        }
+	    } else {
+            die('get_axcode_and_quantitys error 2');
+        }
+	}
+
+    public function update_saved_cart() {
+        if (isset( $this->request->post['cart_id'] ) && !empty( $this->request->post['cart_id']  ) && $this->customer->isLogged()) {
+
+            $this->load->model( 'checkout/cart' );
+            $customer_group_id = $this->customer->getCustomerGroupId();
+
+            if ( isset($_POST['action']) && $_POST['action'] == 'insert') {
+
+                $insert = $this->model_checkout_cart->insert_to_saved_cart($_POST['cart_id'], $_POST['ax_code'], $_POST['quantity']);
+
+                //$cart_data = $this->model_checkout_cart->getCartTotalData($customer_group_id, $_POST['cart_id']);
+                //print_r($cart_data); die('update insert saved cart');
+                echo $insert;
+
+            } elseif (isset($_POST['action']) && $_POST['action'] == 'update') {
+
+                $response = $this->model_checkout_cart->update_cart($_POST['cart_id'], $_POST['ax_code'], $_POST['quantity']);
+
+                //$cart_data = $this->model_checkout_cart->getCartTotalData($customer_group_id, $_POST['cart_id']);
+                //print_r($cart_data); die('update update saved cart');
+                echo '1';
+
+            } else {
+                print('something is wrong');
+            }
+        }
+    }
+
+    public function update_saved_cart_name () {
+        if (isset($_POST['cart_id']) && !empty($_POST['cart_id']) && isset($_POST['cart_new_name']) && !empty($_POST['cart_new_name'])) {
+            $update = "UPDATE `oc_cart` SET `cart_name` = '".$_POST['cart_new_name']."' WHERE `cart_id` = ".$_POST['cart_id'].";";
+            $update = $this->db->query($update);
+
+            echo $update;
+        } else {
+            echo "update failed";
+        }
+    }
+
+    public function update_saved_cart_product_quantity () {
+        if (isset($_POST['cart_id']) && !empty($_POST['cart_id']) && isset($_POST['ax_code']) && !empty($_POST['ax_code']) && isset($_POST['quantity']) && !empty($_POST['quantity'])) {
+            $update = "UPDATE `oc_cart_product` SET `quantity` = ".$_POST['quantity']." WHERE `cart_id` = ".$_POST['cart_id']." AND `ax_code` = '".$_POST['ax_code']."';";
+            $update = $this->db->query($update);
+
+            echo $update;
+        } else {
+            echo "update failed";
+        }
+    }
+
+    public function get_saved_cart_data($cart_id) {
+        $store_id = $this->config->get('config_store_id');
+        $customer_group_id = $this->customer->getCustomerGroupId();
+
+        $cart_total_data = $this->model_checkout_cart->getCartTotalData($this->session->data['customer_id'], $customer_group_id, $store_id, $cart_id);
+    }
+
+    public function get_option_data() {
+        if ( isset($_POST['ax_code']) && !empty($_POST['ax_code']) && in_array($this->customer->getCustomerGroupId(), array(3,4)) ) {
+            $ax_data = $this->db->query("SELECT ax.*, p.product_id FROM `ax_code` AS ax, oc_product AS p WHERE ax.`ax_code` = '".$_POST['ax_code']."' AND p.upc = ax.upc;")->row;
+
+            /*echo "asfbdf<pre>";
+            print_r($ax_data);
+            die('asfbdf');*/
+
+            $product_id = $ax_data['product_id'];
+
+            if ( $ax_data ) {
+
+                if ($ax_data['type'] == 3) {
+
+                    $get_options = "SELECT `pocv`.*, ovd.`option_id`, `od`.`name`, `ovd`.`name` AS `value`
+                                            FROM `oc_product_option_combination_value` AS pocv, `oc_option_value_description` AS `ovd`, `".DB_PREFIX."option_description` AS `od`
+                                            WHERE pocv.`product_option_combination_id` = ".$ax_data['id']."
+                                            AND ovd.`language_id` = '".( int ) $this->config->get( 'config_language_id' )."'
+                                            AND ovd.`option_value_id` = pocv.`option_value_id`
+                                            AND `od`.`option_id` = `ovd`.`option_id`;";
+
+                    $get_options = $this->db->query($get_options)->rows;
+
+                    foreach ($get_options as &$option) {
+                        //print_r($option);
+                        $option_data = "SELECT * FROM oc_product_option_value WHERE product_id = ".$ax_data['product_id']." AND option_value_id = ".$option['option_value_id'].";";
+                        //print_r($option_data);
+                        $option_data = $this->db->query($option_data)->rows;
+
+                        //print_r($option_data); die('sfbdf 3 model');
+                        $option = array_merge($option, $option_data[0]);
+                    }
+
+                    $ax_data = array();
+
+                    $ax_data['product_id'] = $product_id;
+                    $ax_data['option'][$get_options[0]['product_option_id']] = $get_options[0]['product_option_value_id'];
+                    $ax_data['option'][$get_options[1]['product_option_id']] = $get_options[1]['product_option_value_id'];
+
+
+
+                } elseif ($ax_data['type'] == 2) {
+
+                    $get_options = "SELECT `pov`.*, `od`.`name`, `ovd`.`name` AS `value`
+                                            FROM `".DB_PREFIX."product_option_value` AS `pov`, `".DB_PREFIX."option_description` AS `od`, `".DB_PREFIX."option_value_description` AS `ovd`
+                                            WHERE `product_option_value_id` = ".$ax_data['id']."
+                                            AND `od`.`option_id` = `pov`.`option_id`
+                                            AND `ovd`.`option_value_id` = `pov`.`option_value_id`;";
+
+                    $get_options = $this->db->query($get_options)->rows;
+
+                    $ax_data = array();
+
+                    $ax_data['product_id'] = $product_id;
+                    $ax_data['option'][$get_options[0]['product_option_id']] = $get_options[0]['product_option_value_id'];
+
+                } else {
+
+                    $ax_data = array();
+                    $ax_data['product_id'] = $product_id;
+                }
+
+                //print_r($ax_data); die('done sfbdf');
+                echo json_encode($ax_data);
+            }
+        }
+    }
+
+    public function delete_from_default_cart() {
+
+        $id = substr($_POST['remove_link'], strpos($_POST['remove_link'], 'remove=') + 7);
+        //die($id);
+        //$product_id = $this->db->query("SELECT `oc_product`.`product_id` FROM `ax_code`, oc_product WHERE ax_code = '".$_POST['ax_code']."' AND oc_product.`upc` = `ax_code`.`upc`;")->row['product_id'];
+        if( isset( $this->session->data['cart'][$id] ) ) {
+            unset( $this->session->data['cart'][$id] );
+            echo "1";
+        } else {
+            var_dump($_POST['remove_link']);
+            echo "delete failed from default cart ".$id;
+            print_r($this->cart);
+        }
+        //$this->cart->remove( $id );
+    }
+
+    public function delete_from_saved_cart() {
+
+        if(isset($_POST['cart_id']) && !empty($_POST['cart_id']) && isset($_POST['ax_code']) && !empty($_POST['ax_code'])) {
+
+            $delete = "DELETE FROM oc_cart_product WHERE cart_id = ".$_POST['cart_id']." AND ax_code = '".$_POST['ax_code']."';";
+            $delete = $this->db->query($delete);
+
+            $check_if_cart_have_support = "SELECT * FROM oc_cart_support WHERE cart_id = ".$_POST['cart_id'].";";
+            //echo $check_if_cart_have_support."<br>";
+            $check_if_cart_have_support = $this->db->query($check_if_cart_have_support)->row;
+
+            /*
+            echo "<pre>";
+            print_r($check_if_cart_have_support);
+            */
+
+            if($check_if_cart_have_support){
+
+                $get_prod_data_by_ax = "SELECT * FROM ax_code WHERE ax_code = '".$_POST['ax_code']."';";
+                $prod_data_by_ax = $this->db->query($get_prod_data_by_ax)->row;
+
+                $add_action = "INSERT INTO `oc_cart_support_message`
+                                SET
+                                `cart_support_id` = ".$check_if_cart_have_support['cart_support_id'].",
+                                `customer_id` = ".$check_if_cart_have_support['customer_id'].",
+                                `cart_id` = ".$_POST['cart_id'].",
+                                `type` = 'history',
+                                `message` = 'X a sters ".$prod_data_by_ax['product_name']." ".$prod_data_by_ax['upc']."',
+                                `date_added` = NOW();";
+
+                //die($add_action);
+
+                $this->db->query($add_action);
+            }
+
+            die('sfvsafaf');
+
+            $check_if_cart_have_product = "SELECT * FROM oc_cart_product WHERE cart_id = ".$_POST['cart_id'].";";
+            $check_if_cart_have_product = $this->db->query($check_if_cart_have_product)->num_rows;
+
+            if (!$check_if_cart_have_product) {
+                 $delete_cart = "DELETE FROM oc_cart WHERE cart_id = ".$_POST['cart_id'].";";
+                 $delete_cart = $this->db->query($delete_cart);
+            }
+
+            if ($delete) {
+                echo "1";
+            } else {
+                echo "delete from saved cart failed";
+            }
+        }
+    }
+
+    public function delete_cart() {
+        if ( isset( $this->request->get['cart_id'] ) && !empty( $this->request->get['cart_id']  ) && $this->customer->isLogged() ) {
+            //echo "<pre>"; print_r($_GET); die('delete');
+            $this->load->model( 'checkout/cart' );
+            $this->model_checkout_cart->deleteCart($this->request->get['cart_id'], $this->session->data['customer_id']);
+
+            echo 1;
+            $this->redirect( $this->url->link( 'checkout/cart' ) );
+        }
+    }
+
+    public function customer_has_saved_cart() {
+        if ( $this->customer->isLogged() ) {
+            $check_customer_carts = "SELECT COUNT(`customer_id`) AS `id` FROM `oc_cart` WHERE `customer_id` = ".$this->session->data['customer_id'].";";
+
+            $check_customer_carts = $this->db->query($check_customer_carts)->row['id'];
+
+            //die('fuggveny bent '.$check_customer_carts);
+
+            return $check_customer_carts;
+        } else {
+            return false;
+        }
+
+    }
+
+    public function check_if_default_cart_not_empty () {
+        if ( $this->customer->isLogged() && in_array( $this->customer->getCustomerGroupId(), array( 3,4 ) )) {
+
+            if ($this->cart->hasProducts()) {
+                echo json_encode("not_empty");
+            } else {
+                echo json_encode("empty");
+            }
+        } else {
+            echo "not logged";
+            $this->redirect( $this->url->link( 'account/login' ) );
+        }
+    }
+
+    private function get_total_data( &$total_data, &$total, &$taxes )
+    {
+        $total_data = array( );
+        $total = 0;
+        $taxes = $this->cart->getTaxes();
+        $sort_order = array( );
+
+        $results = $this->model_setting_extension->getExtensions( 'total' );
+
+        foreach( $results as $key => $value )
+        {
+            $sort_order[$key] = $this->config->get( $value['code'].'_sort_order' );
+        }
+
+        array_multisort( $sort_order, SORT_ASC, $results );
+
+        foreach( $results as $result )
+        {
+            if( $this->config->get( $result['code'].'_status' ) )
+            {
+                $this->load->model( 'total/'.$result['code'] );
+
+                $this->{'model_total_'.$result['code']}->getTotal( $total_data, $total, $taxes );
+            }
+        }
+
+        $sort_order = array( );
+
+        foreach( $total_data as $key => $value )
+        {
+            $sort_order[$key] = $value['sort_order'];
+        }
+
+        array_multisort( $sort_order, SORT_ASC, $total_data );
+
+        return $total_data;
+    }
+
+    public function add_support_history () {
+        if ( $this->customer->isLogged() && in_array( $this->customer->getCustomerGroupId(), array( 3,4 ) )) {
+
+            if ( $this->request->post['cart_id'] && $this->request->post['action'] && $this->request->post['ax_code'] ) {
+                $add_action = "INSERT INTO oc_cart_support_history SET cart_id = ".$_POST['cart_id'].", action = '".$this->request->post['action']."', ax_code = '".$_POST['ax_code']."', added_at = NOW();";
+                //die($add_action);
+                $this->db->query($add_action);
+
+                $product_data = $this->getProductDataByAxcode($_POST['ax_code'], 'not all');
+
+                $add_action = "INSERT INTO oc_cart_support_message
+                                SET `cart_support_id` = ".$_POST['cart_support_id'].",
+                                    `customer_id` = ".$this->customer->getId().",
+                                    `cart_id` = ".$_POST['cart_id'].",
+                                    `type`='history',
+                                    `message` = 'a adaugat in cos ".$product_data['product_name']." ".$product_data['upc']." ".$_POST['ax_code']."',
+                                    `date_added` = NOW();";
+                $this->db->query($add_action);
+            }
+        }
+    }
+
+    public function getProductDataByAxcode ($ax_code = "", $what = "") {
+
+        $ax_data = "SELECT ax.*, p.product_id FROM `ax_code` AS ax, oc_product AS p WHERE ax.`ax_code` = '".$ax_code."' AND p.upc = ax.upc;";
+        //die($ax_data);
+        $ax_data = $this->db->query($ax_data)->row;
+
+        $product_id = $ax_data['product_id'];
+
+        if ( $ax_data && $what == 'all' ) {
+
+            if ($ax_data['type'] == 3) {
+
+                $get_options = "SELECT `pocv`.*, ovd.`option_id`, `od`.`name`, `ovd`.`name` AS `value`
+                                        FROM `oc_product_option_combination_value` AS pocv, `oc_option_value_description` AS `ovd`, `".DB_PREFIX."option_description` AS `od`
+                                        WHERE pocv.`product_option_combination_id` = ".$ax_data['id']."
+                                        AND ovd.`language_id` = '".( int ) $this->config->get( 'config_language_id' )."'
+                                        AND ovd.`option_value_id` = pocv.`option_value_id`
+                                        AND `od`.`option_id` = `ovd`.`option_id`;";
+
+                $get_options = $this->db->query($get_options)->rows;
+
+                foreach ($get_options as &$option) {
+                    //print_r($option);
+                    $option_data = "SELECT * FROM oc_product_option_value WHERE product_id = ".$ax_data['product_id']." AND option_value_id = ".$option['option_value_id'].";";
+                    //print_r($option_data);
+                    $option_data = $this->db->query($option_data)->rows;
+
+                    //print_r($option_data); die('sfbdf 3 model');
+                    $option = array_merge($option, $option_data[0]);
+                }
+
+                $ax_data = array();
+
+                $ax_data['product_id'] = $product_id;
+                $ax_data['option'][$get_options[0]['product_option_id']] = $get_options[0]['product_option_value_id'];
+                $ax_data['option'][$get_options[1]['product_option_id']] = $get_options[1]['product_option_value_id'];
+
+
+
+            } elseif ($ax_data['type'] == 2) {
+
+                $get_options = "SELECT `pov`.*, `od`.`name`, `ovd`.`name` AS `value`
+                                        FROM `".DB_PREFIX."product_option_value` AS `pov`, `".DB_PREFIX."option_description` AS `od`, `".DB_PREFIX."option_value_description` AS `ovd`
+                                        WHERE `product_option_value_id` = ".$ax_data['id']."
+                                        AND `od`.`option_id` = `pov`.`option_id`
+                                        AND `ovd`.`option_value_id` = `pov`.`option_value_id`;";
+
+                $get_options = $this->db->query($get_options)->rows;
+
+                $ax_data = array();
+
+                $ax_data['product_id'] = $product_id;
+                $ax_data['option'][$get_options[0]['product_option_id']] = $get_options[0]['product_option_value_id'];
+
+            } else {
+
+                $ax_data = array();
+                $ax_data['product_id'] = $product_id;
+            }
+
+            echo "all data";
+            //echo json_encode($ax_data);
+        } else {
+            return $ax_data;
+        }
+    }
+           ]]></add>
+        </operation>
+    </file>
+
+    <file name="catalog/controller/account/account.php">
+        <operation>
+            <search position="after"><![CDATA[$results = $this->model_account_address->getAddresses();]]></search>
+            <add><![CDATA[
+            $this->data['consulting_saved_carts_link'] = $this->url->link('account/consulting_saved_carts');
+            ]]></add>
+        </operation>
+        <operation>
+            <search position="after"><![CDATA[$this->data['button_continue'] = $this->language->get('text_edit');]]></search>
+            <add><![CDATA[
+        $customer_have_carts = "SELECT COUNT(`customer_id`) AS `id` FROM `oc_cart` WHERE `customer_id` = ".$this->session->data['customer_id'].";";
+
+        $this->data['customer_have_carts'] = $this->db->query($customer_have_carts)->row['id'];
+            ]]></add>
+        </operation>
+        <operation>
+            <search position="before"><![CDATA[protected function validate() {]]></search>
+            <add><![CDATA[
+    public function my_saved_carts () {
+
+        if( !$this->customer->isLogged() && ($this->customer->getCustomerGroupId() != 3 || $this->customer->getCustomerGroupId() != 4) )
+        {
+            $this->session->data['redirect'] = $this->url->link( 'account/account', '', 'SSL' );
+            $this->redirect( $this->url->link( 'account/login', '', 'SSL' ) );
+        }
+
+        $this->load->model( 'checkout/cart' );
+        $this->load->model( 'tool/image' );
+
+        $this->language->load('total/sub_total');
+        $this->language->load('total/total');
+        $this->language->load('account/account');
+        $this->language->load('account/my_saved_carts');
+        $this->language->load('checkout/cart');
+
+        $this->data['column_image'] = $this->language->get( 'column_image' );
+        $this->data['column_name'] = $this->language->get( 'column_name' );
+        $this->data['column_model'] = $this->language->get( 'column_model' );
+        $this->data['column_quantity'] = $this->language->get( 'column_quantity' );
+        $this->data['column_price'] = $this->language->get( 'column_price' );
+        $this->data['column_total'] = $this->language->get( 'column_total' );
+
+        $this->data['button_remove'] = $this->language->get( 'button_remove' );
+
+        $taxes = $this->cart->getTaxes();
+
+        $this->data['text_sub_total'] = $this->language->get('text_sub_total');
+        //$this->data['text_tax'] = $this->db->query("SElECT * FROM `oc_tax_rate` WHERE `tax_rate_id` = ".key($taxes).";")->row['name'];
+        $this->data['text_tax'] = $this->db->query("SElECT * FROM `oc_tax_rate` WHERE `tax_rate_id` = 86;")->row['name'];
+        $this->data['text_total'] = $this->language->get('text_total');
+        $this->data['text_save_cart'] = $this->language->get( 'text_save_cart' );
+        $this->data['text_cart_name'] = $this->language->get( 'text_cart_name' );
+
+        $store_id = $this->config->get('config_store_id');
+        $customer_group_id = $this->customer->getCustomerGroupId();
+
+        $this->data['saved_carts'] = $this->model_checkout_cart->getCarts($this->session->data['customer_id'], $customer_group_id, $store_id);
+
+        foreach ($this->data['saved_carts'] as &$cart) {
+
+            $cart['sub_total'] = 0;
+
+            foreach ($cart['products'] as &$product) {
+                if( $product['image'] )
+                {
+                    $product['image'] = $this->model_tool_image->resize( $product['image'], $this->config->get( 'config_image_cart_width' ), $this->config->get( 'config_image_cart_height' ) );
+                }
+                else
+                {
+                    $product['image'] = '';
+                }
+
+                if( $product['tax_class_id'] )
+                {
+                    $tax_rates = $this->tax->getRates( $product['price'], $product['tax_class_id'] );
+
+                    foreach( $tax_rates as $tax_rate )
+                    {
+                        /*if( !isset( $tax_data[$tax_rate['tax_rate_id']] ) )
+                        {
+                            $cart['tax'] = ($tax_rate['amount'] * $product['quantity']);
+                        }
+                        else
+                        {
+                            $cart['tax'] += ($tax_rate['amount'] * $product['quantity']);
+                        }*/
+                        $cart['tax'] += ($tax_rate['amount'] * $product['quantity']);
+                    }
+                }
+
+                if( ($this->config->get( 'config_customer_price' ) && $this->customer->isLogged()) || !$this->config->get( 'config_customer_price' ) )
+                {
+                    $product['total'] = $this->currency->format( $this->tax->calculate( $product['price'], $product['tax_class_id'], $this->config->get( 'config_tax' ) ) * $product['quantity'] );
+                    $cart['sub_total'] += $this->tax->calculate( $product['price'], $product['tax_class_id'], $this->config->get( 'config_tax' ) ) * $product['quantity'];
+                }
+                else
+                {
+                    $product['total'] = false;
+                }
+
+                if( ($this->config->get( 'config_customer_price' ) && $this->customer->isLogged()) || !$this->config->get( 'config_customer_price' ) )
+                {
+                    $product['price'] = $this->currency->format( $this->tax->calculate( $product['price'], $product['tax_class_id'], $this->config->get( 'config_tax' ) ) );
+                }
+                else
+                {
+                    $product['price'] = false;
+                }
+
+                //echo "cart tax/product<pre>"; print_r($cart['tax']);
+
+                //$this->url->link( 'product/product', 'product_id='.$product['product_id'] )\
+
+            } // die('sadvs');
+            $cart['total'] = $cart['sub_total'] + $cart['tax'];
+        }
+        //echo "<pre>"; print_r($this->data); die('dfbdf');
+
+        $this->document->setTitle( $this->language->get( 'My_saved_carts' ) );
+        $this->data['heading_title'] = $this->language->get( 'My_saved_carts' );
+        $this->data['user'] = $this->customer->getFirstName()." ".$this->customer->getLastName();
+
+        $this->data['breadcrumbs'] = array( );
+
+        $this->data['breadcrumbs'][] = array(
+            'text' => $this->language->get( 'text_home' ),
+            'href' => $this->url->link( 'common/home' ),
+            'separator' => false
+        );
+
+        $this->data['breadcrumbs'][] = array(
+            'text' => $this->language->get( 'text_account' ),
+            'href' => $this->url->link( 'account/account', '', 'SSL' ),
+            'separator' => $this->language->get( 'text_separator' )
+        );
+
+        //echo "<pre>"; print_r($this->data); die('fsvds');
+
+        if( file_exists( DIR_TEMPLATE.$this->config->get( 'config_template' ).'/template/account/my_saved_carts.tpl' ) )
+            {
+                $this->template = $this->config->get( 'config_template' ).'/template/account/my_saved_carts.tpl';
+            }
+            else
+            {
+                $this->template = 'default/template/account/my_saved_carts.tpl';
+            }
+
+            $this->children = array(
+
+            'common/dream_column_header_top', 'common/dream_column_header_bottom', 'common/dream_column_footer_top', 'common/dream_column_footer_bottom',
+
+                'common/column_left',
+                'common/column_right',
+                'common/content_top',
+                'common/content_bottom',
+                'common/footer',
+                'common/header'
+            );
+
+            $this->response->setOutput( $this->render() );
+    }
+            ]]></add>
+        </operation>
+    </file>
+
+    <file name="catalog/view/theme/*/template/common/footer.tpl">
+        <operation>
+            <search position="before" offset="1"><![CDATA[</body>]]></search>
+            <add><![CDATA[
+                <script type="text/javascript" src="catalog/view/javascript/multicart.js"></script>
+                ]]>
+            </add>
+        </operation>
+    </file>
+
+    <file name="catalog/view/theme/*/template/checkout/cart.tpl">
+        <operation>
+            <search position="after" offset="1"><![CDATA[&nbsp;(<?php echo $weight; ?>)]]></search>
+            <add><![CDATA[      <?php if($B2B && $products && !$activated_cart_id && $deelete == 'delete to saved carts') { // If default not empty and not activated from saved cart ?>
+      <a id="get_cart_save_form" class="button button_blue">Creeaza cos nou de cumparaturi</a>
+      <?php } elseif ($products && $activated_cart_id && $deelete == 'delete to saved carts') { // If default not empty and not activated from saved cart ?>
+      <form id="restore_activated_cart_form" action="<?= $action_restore_activated_cart ?>" method="post">
+          <input type="hidden" name="cart_id" value="<?= $activated_cart_id ?>">
+          <input type="submit" id="save_back_default_cart" class="button button_blue" value="Creeaza cos nou de cumparaturi s <?= $activated_cart_id ?>">
+      </form>
+      <?php } ?>
+      ]]></add>
+        </operation>
+        <operation>
+            <search position="after" ><![CDATA[<?php echo $content_top; ?>]]></search>
+            <add><![CDATA[
+        <div class="popup_background" id="save_new_cart_popup">
+            <div class="popup_container">
+                <div class="popup_head">
+                    <h2>Salvare cos de cumparaturi<a class="close_popup_x close_popup"></a></h2>
+                </div>
+                <div class="popup_body">
+                    <form action="<?= $save_cart_action; ?>" method="POST" id="save_new_cart_form">
+                        <input type="text" name="cart_name" value="" placeholder="<?= $text_cart_name; ?>" style="width: 90%;">
+                        <input type="submit" class="button" id="save_new_cart_btn" value="<?= $text_save_cart; ?>"/>
+                        <a class="close_popup button">Anulare</a>
+                    </form>
+                </div>
+            </div>
+
+        </div>
+      ]]></add>
+        </operation>
+        <operation>
+            <search position="before" offset="1"><![CDATA[<?php foreach ($totals as $total) { ?>]]></search>
+            <add><![CDATA[
+            <?php if ( $B2B && !$activated_cart_support ) { ?>
+      <div class="cart-total-left">
+          <div class="saved_bottom_buttons">
+              <?php /*  && $deelete == 'delete to saved carts' ?>
+              <a class="button support_direct" id="default_ask_sup_from_btn">Solicita consultanta</a>
+              <?php */ ?>
+              <form id="default_support_form" action="action="<?= $save_cart_action; ?>"" style="display: none;">
+                  <table>
+                      <col width="130">
+                      <col width="400">
+                      <tr>
+                          <td>
+                              <label for="cart_name">Nume cos</label>
+                          </td>
+                          <td>
+                              <input name="cart_name" id="cart_name" value="" type="text">
+                              <span class="error" style="display: none;" id="cart_name_length_error">Numele cosului trebuie sa contine cel putin 3 caractere!</span>
+                          </td>
+                      </tr>
+                      <tr>
+                          <td>
+                              <label for="support_subject">Subiect</label>
+                          </td>
+                          <td>
+                              <input name="support_subject" id="support_subject" value="" type="text">
+                              <span class="error" style="display: none;" id="support_subject_length_error">Subiectul trebuie sa contine cel putin 3 caractere!</span>
+                          </td>
+                      </tr>
+                      <tr>
+                          <td>
+                              <label for="support_message">Mesaj</label>
+                          </td>
+                          <td>
+                              <textarea name="support_message" id="support_message" value="" type="text"></textarea>
+                              <span class="error" style="display: none;" id="support_message_length_error">Mesajul trebuie sa contine cel putin 15 caractere!</span>
+                          </td>
+                      </tr>
+                      <tr>
+                          <td></td>
+                          <td>
+                              <input type="hidden" name="saved_with_support" value="saved_with_support">
+                              <a class="button" id="save_def_and_sup_btn_submit">Salveaza si trimite</a>
+                          </td>
+                      </tr>
+                  </table>
+              </form>
+          </div>
+      </div>
+      <?php } elseif ( $B2B && $activated_cart_support ) { ?>
+      <a class="button support_direct" id="default_ask_sup_from_btn">Solicita consultanta <?= sizeof($activated_cart_support) ? "(".sizeof($activated_cart_support).")" : "" ?></a>
+      <?php } ?>
+      ]]></add>
+        </operation>
+        <operation>
+            <search position="replace" offset="2"><![CDATA[<?php echo $button_checkout; ?></a>]]></search>
+            <add><![CDATA[      <?php if($products) { ?>
+    <div class="right"><a id="order" href="<?php echo $checkout; ?>" class="button"><?php echo $button_checkout; ?></a></div>
+    <div class="center"><a href="<?php echo $continue; ?>" class="button"><?php echo $button_shopping; ?></a></div>
+    <?php } ?>
+    </div>]]></add>
+        </operation>
+        <operation>
+            <search position="before"><![CDATA[<?php echo $content_bottom; ?></div>]]></search>
+            <add><![CDATA[
+    <?php if ($B2B && $saved_carts == 'delete to saved carts') { ?>
+        <?php foreach ($saved_carts as $cart) { ?>
+            <div class="saved_cart_name_container">
+                <input class="saved_cart_name" type="text" value="<?= $cart['cart_name']; ?>" name="cart_name_<?= $cart['cart_id']; ?>" cart="<?= $cart['cart_id']; ?>" />
+                <a class="button update_saved_cart_name_btn" id="name_update_btn_<?= $cart['cart_id']; ?>">Renumire cos</a>
+                <span class="success" style="display:none; margin-left: 10px;">Actualizarea numelui cosului s-a efectuat cu success!</span>
+            </div>
+            <div class="cart-info">
+                <table class="saved_cart">
+                    <thead>
+                        <tr>
+                            <td class="image"><?php echo $column_image; ?></td>
+                            <td class="name"><?php echo $column_name; ?></td>
+                            <td class="model"><?php echo $column_model; ?></td>
+                            <td class="quantity"><?php echo $column_quantity; ?></td>
+                            <td class="price"><?php echo $column_price; ?></td>
+                            <td class="total"><?php echo $column_total; ?></td>
+                        </tr>
+                    </thead>
+                    <tbody id="<?= $cart['cart_id']; ?>">
+                        <?php foreach ($cart['products'] as $product) { ?>
+                        <tr class="product" ax_code="<?= $product['ax_code']; ?>" cart="<?= $cart['cart_id']; ?>">
+                            <td class="image">
+                                <?php if ($product['image']) { ?>
+                                    <a href="<?php echo $product['href']; ?>"><img src="<?php echo $product['image']; ?>" alt="<?php echo $product['name']; ?>" title="<?php echo $product['name']; ?>" /></a>
+                                <?php } ?>
+                            </td>
+                            <td class="name"><a href="<?php echo $product['href']; ?>"><?php echo $product['name']; ?></a>
+                                <div>
+                                    <?php foreach ($product['option'] as $option) { ?>
+                                    - <small><?php echo $option['name']; ?>: <?php echo $option['value']; ?></small><br />
+                                    <?php } ?>
+                                </div>
+                                <?php if ($product['reward']) { ?>
+                                    <small><?php echo $product['reward']; ?></small>
+                                <?php } ?></td>
+                            <td class="model"><?php echo $product['model']; ?></td>
+
+                            <?php /* ?>
+                            <td class="quantity"><?php echo $product['quantity']; ?></td>
+                            <?php */ ?>
+
+                            <td class="quantity"><input type="text" name="quantity_[<?php echo $product['product_id']; ?>]" value="<?php echo $product['quantity']; ?>" size="1" />
+                                <input type="image" src="catalog/view/theme/default/image/update.png" class="saved_update_btn" alt="<?php echo $button_update; ?>" title="<?php echo $button_update; ?>" />
+                                <a class="saved_delete_product_btn"><img src="catalog/view/theme/default/image/remove.png" alt="<?php echo $button_remove; ?>" title="<?php echo $button_remove; ?>" /></a>
+                            </td>
+
+                            <td class="price"><?php echo $product['price']; ?></td>
+                            <td class="total"><?php echo $product['total']; ?></td>
+                        </tr>
+                        <?php } ?>
+                      <?php foreach ($vouchers as $vouchers) { ?>
+                      <tr>
+                        <td class="image"></td>
+                        <td class="name"><?php echo $vouchers['description']; ?></td>
+                        <td class="model"></td>
+                        <td class="quantity"><input type="text" name="" value="1" size="1" disabled="disabled" />
+                          &nbsp;<a href="<?php echo $vouchers['remove']; ?>"><img src="catalog/view/theme/default/image/remove.png" alt="<?php echo $button_remove; ?>" title="<?php echo $button_remove; ?>" /></a></td>
+                        <td class="price"><?php echo $vouchers['amount']; ?></td>
+                        <td class="total"><?php echo $vouchers['amount']; ?></td>
+                      </tr>
+                      <?php } ?>
+                    </tbody>
+                </table>
+            </div>
+            <div class="cart-total">
+                <div class="cart-total-left">
+                    <div class="saved_bottom_buttons">
+                        <a class="button ask_delete_saved_cart"><?= $button_remove; ?></a>
+                        <span class="confirm_delete_saved_cart" style="display:none;">
+                            <span>Sunteti sigur?</span>
+                            <a class="button" href="<?= $delete_cart_action; ?>&cart_id=<?= $cart['cart_id']; ?>">DA</a>
+                            <a class="button dont_delete_saved_cart">NU</a>
+                        </span>
+                        <a class="button button_blue ask_activate_cart" cart_id="<?= $cart['cart_id']; ?>">Activeaza cos</a>
+                    </div>
+                    <div class="saved_bottom_buttons">
+                        <a class="button support_direct">Solicita consultanta <?= sizeof($cart['support']) ? "(".sizeof($cart['support']).")" : "" ?> </a>
+                    </div>
+                </div>
+                <table id="total">
+                      <tr>
+                        <td class="right"><b><?php echo $text_sub_total; ?>:</b></td>
+                        <td class="right"><?php echo round($cart['sub_total'], 2); ?><?php echo $this->session->data['currency']; ?></td>
+                      <tr>
+                      </tr>
+                        <td class="right"><b><?php echo $text_tax; ?></b></td>
+                        <td class="right"><?php echo round($cart['tax'], 2); ?><?php echo $this->session->data['currency']; ?></td>
+                      <tr>
+                      </tr>
+                        <td class="right"><b><?php echo $text_total; ?></b></td>
+                        <td class="right"><?php echo number_format((float)$cart['total'], 2, '.', ''); ?><?php echo $this->session->data['currency']; ?></td>
+                      </tr>
+                </table>
+            </div>
+            <div class="support_container" id="<?= $cart['cart_id'] ?>_support_container" style="display: none;">
+                <?php foreach ($cart['support'] as $support) { ?>
+                <div class="support_message">
+                    <?php if ($support['cart_owner']) { ?>
+                    <div class="support_culomn_left"></div>
+                    <div class="support_culomn_right active_msg">
+                        <div class="support_head">
+                            <div class="customer_name"><?= $support['firstname']." ".$support['lastname'] ?></div>
+                            <div class="date_added"> - <?= $support['date_added'] ?> - </div>
+                        </div>
+                        <div class="support_content <?= $support['cart_owner'] ?>">
+                            <p><?= $support['subject'] ?></p>
+                            <p><?= $support['message'] ?></p>
+                            <?php if ($support['product_id']) { ?>
+
+                            <form id="<?= $support['cart_support_id'] ?>_cart_support_product" class="cart_support_product">
+                                <input type="hidden" name="cart_id" value="<?= $cart['cart_id'] ?>" />
+                                <input type="hidden" name="product_id" value="<?= $support['product_id'] ?>" />
+                                <input type="hidden" name="ax_code" value="<?= $support['ax_code'] ?>" />
+                                <div class="cart_support_product_name">
+                                    <p><?= $support['name'] ?></p>
+                                    <div class="cart_support_product_option">
+                                        <?php foreach ($support['option'] as $option) { ?>
+                                            <input type="hidden" name="option[<?= $option['product_option_id'] ?>]" value="<?= $option['product_option_value_id'] ?>" />
+                                            <p><small> -    <?= $option['od_name'] ?>: </small>
+                                            <small><?= $option['ovd_name'] ?></small></p>
+                                        <?php } ?>
+                                    </div>
+                                </div>
+                                <div class="cart_support_product_model"><?= $support['model'] ?></div>
+                                <div class="cart_support_product_quantity">
+                                    <input type="text" id="<?= $support['cart_support_message_id'] ?>quantity" name="quantity" value="<?= $support['quantity'] ?>">
+                                </div>
+                                <div class="cart_support_price">
+                                </div>
+                                <div class="asked_sup_pr_to_cart">
+                                    <a class="button sup_pr_to_cart_btn" id="<?= $cart['cart_id'] ?>" ax_code="<?= $support['ax_code'] ?>" cart_support_id="<?= $support['cart_support_id'] ?>">Adauga la cos</a>
+                                </div>
+                            </form>
+                            <?php } ?>
+                        </div>
+                    </div>
+                    <?php } else { ?>
+                    <div class="support_culomn_left active_msg">
+                        <div class="support_head">
+                            <div class="customer_name"><?= $support['lastname']." ".$support['firstname'] ?></div>
+                            <div class="date_added"> - <?= $support['date_added'] ?> - </div>
+                        </div>
+                        <div class="support_content <?= $support['cart_owner'] ?>">
+                            <p><?= $support['subject'] ?></p>
+                            <p><?= $support['message'] ?></p>
+                            <?php if ($support['product_id']) { ?>
+
+                            <form id="<?= $support['cart_support_id'] ?>_cart_support_product" class="cart_support_product">
+                                <input type="hidden" name="cart_id" value="<?= $cart['cart_id'] ?>" />
+                                <input type="hidden" name="product_id" value="<?= $support['product_id'] ?>" />
+                                <input type="hidden" name="ax_code" value="<?= $support['ax_code'] ?>" />
+                                <div class="cart_support_product_name">
+                                    <p><?= $support['name'] ?></p>
+                                    <div class="cart_support_product_option">
+                                        <?php foreach ($support['option'] as $option) { ?>
+                                            <input type="hidden" name="option[<?= $option['product_option_id'] ?>]" value="<?= $option['product_option_value_id'] ?>" />
+                                            <p><small> -    <?= $option['od_name'] ?>: </small>
+                                            <small><?= $option['ovd_name'] ?></small></p>
+                                        <?php } ?>
+                                    </div>
+                                </div>
+                                <div class="cart_support_product_model"><?= $support['model'] ?></div>
+                                <div class="cart_support_product_quantity">
+                                    <input type="text" id="<?= $support['cart_support_message_id'] ?>quantity" name="quantity" value="<?= $support['quantity'] ?>">
+                                </div>
+                                <div class="cart_support_price">
+                                </div>
+                                <div class="asked_sup_pr_to_cart">
+                                    <a class="button sup_pr_to_cart_btn" id="<?= $cart['cart_id'] ?>" ax_code="<?= $support['ax_code'] ?>" cart_support_id="<?= $support['cart_support_id'] ?>" cart_support_msg_id="<?= $support['cart_support_message_id'] ?>">Adauga la cos</a>
+                                </div>
+                            </form>
+                            <?php } ?>
+                        </div>
+                    </div>
+                    <div class="support_culomn_right"></div>
+                    <?php } ?>
+                </div>
+                <?php } ?>
+            </div>
+            <form class="support_direct_body" id="<?= $cart['cart_id'] ?>support_direct_body" style="display: none;" method="POST">
+                <input type="hidden" value="<?= $cart['cart_id'] ?>" name="cart_id" >
+
+                <input type="text" name="support_subject" class="support_subject" id="<?= $cart['cart_id'] ?>support_subject" placeholder="Subiect" />
+                <span class="error" style="display: none;">Subiectul trebuie sa fie inter 3 si 250 charactere!</span>
+                <textarea name="support_message" class="support_message" id="<?= $cart['cart_id'] ?>support_message" placeholder="Mesaj"></textarea>
+                <span class="error" style="display: none;">Mesajul trebuie sa fie inter 3 si 250 charactere!</span>
+                <a class="button new_support_direct_btn" data-cart_id="<?= $cart[cart_id]; ?>">Trimite</a>
+                <span class="success support_sent_alert" id="<?= $cart['cart_id'] ?>support_sent" style="display: none;">Supportul a fost trimis!</span>
+            </form>
+        <?php } ?>
+    <?php } ?>
+            ]]></add>
+        </operation>
+        <operation>
+            <search position="after"><![CDATA[<?php echo $content_bottom; ?></div>]]></search>
+            <add><![CDATA[
+
+            ]]></add>
+        </operation>
+    </file>
+
+    <file name="catalog/view/theme/journal2/template/common/header.tpl">
+        <operation>
+            <search position="after"><![CDATA[$this->journal2->minifier->addStyle('catalog/view/theme/journal2/css/icons.css');]]></search>
+            <add><![CDATA[
+            $this->journal2->minifier->addStyle('catalog/view/theme/journal2/css/multicart.css');
+            ]]></add>
+        </operation>
+    </file>
+</modification>

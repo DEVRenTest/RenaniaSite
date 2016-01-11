@@ -1,0 +1,49 @@
+<modification>
+
+	<id>jQListEdit Price Column VQMod</id>
+	<version>149.3</version>
+	<vqmver>1.0.2</vqmver>
+	<author>qphoria</author>
+	
+	<file name="admin/view/template/catalog/product_list.tpl">
+        <operation error="skip"><!-- 1.4.x -->
+            <search position="replace"><![CDATA[
+            <span style="text-decoration:line-through"><?php echo $product['price']; ?></span><br/><span style="color:#b00;"><?php echo $product['special']; ?></span>
+            ]]></search>
+            <add><![CDATA[
+            <span style="text-decoration:line-through" id="product|price|product_id|<?php echo $product['product_id']; ?>" class="edit_text"><?php echo $product['price']; ?></span><br/>
+			<span style="color:#b00;" id="product|special|product_id|<?php echo $product['product_id']; ?>" class=""><?php echo $product['special']; ?></span>
+            ]]></add>
+        </operation>
+		<operation error="skip"><!-- 1.5.x -->
+            <search position="replace" offset="1"><![CDATA[
+			<span style="text-decoration: line-through;"><?php echo $product['price']; ?></span><br/>
+            ]]></search>
+            <add><![CDATA[
+            <span style="text-decoration:line-through" id="product|price|product_id|<?php echo $product['product_id']; ?>" class="edit_text"><?php echo $product['price']; ?></span><br/>
+			<span style="color:#b00;" id="product|special|product_id|<?php echo $product['product_id']; ?>" class=""><?php echo $product['special']; ?></span>
+            ]]></add>
+        </operation>
+		<operation>
+            <search position="replace"><![CDATA[
+            <?php echo $product['price']; ?>
+            ]]></search>
+            <add><![CDATA[
+            <span id="product|price|product_id|<?php echo $product['product_id']; ?>" class="edit_text"><?php echo $product['price']; ?></span>
+            ]]></add>
+        </operation>
+	</file>
+	
+</modification>
+
+<!--
+<modification>	- This is the highest level of the file and there can only be one
+<id>			- This is the name of the mod. Format: Free form text. (Informational)
+<version>		- This is the version of the mod. Format: Number and Decimal (1.0.0) (Informational)
+<author>		- This is the author of the mod. Format: Free form text (Informational)
+<file>			- This is the name of the file to modify. Requires attribute "name" as relative filename (catalog/controller/product/product.php). There can be multiple
+<operation>		- This is the wrapper of the actual operation occuring. There can be multiple operations to the same file.
+<search>		- This is the first required step of the operation. Uses an optional attribute "position" set to before|after|replace. replace is default. One per operation. Use CDATA tags to wrap code.
+<add>			- This is the second required step of the operation. Uses an optional attribute "trim" set to true|false to trim away whitespace and linebreaks. false is default. One per operation. Location of added data depends on the position of the <search> command. Use CDATA tags to wrap code.
+<![CDATA[  ]]>	- These are called CDATA tags and they are used by xml to specify that the data between should not be evaluated.
+-->

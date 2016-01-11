@@ -1,0 +1,36 @@
+<?php
+$_['text_new_subject'] = '%s - Comanda %s';
+$_['text_new_greeting'] = 'Va multumim pentru interesul Dvs.pentru produsele %s. Un reprezentant de vanzari va lua legatura cu Dvs. pentru confirmarea comenzii.';
+$_['text_new_received'] = 'Ati primit o noua returnare.';
+$_['text_new_link'] = 'Pentru a viziona comanda ta, dati click pe urmatorul link:';
+$_['text_new_order_detail'] = 'Detaliile comenzii';
+$_['text_new_instruction'] = 'Instructiuni';
+$_['text_new_order_id'] = 'Comanda nr.:';
+$_['text_new_date_added'] = 'Data adaugarii:';
+$_['text_new_order_status'] = 'Statusul comenzii:';
+$_['text_new_payment_method'] = 'Metoda de plata:';
+$_['text_new_shipping_method'] = 'Metoda de livrare:';
+$_['text_new_email'] = 'E-mail:';
+$_['text_new_telephone'] = 'Telefon:';
+$_['text_new_ip'] = 'Adresa IP:';
+$_['text_new_payment_address'] = 'Adresa de facturare';
+$_['text_new_shipping_address'] = 'Adresa de livrare';
+$_['text_new_products'] = 'Produse';
+$_['text_new_product'] = 'Produs';
+$_['text_new_model'] = 'Model';
+$_['text_new_quantity'] = 'Cantitate';
+$_['text_new_price'] = 'Pret unitar';
+$_['text_new_order_total'] = 'Pret comanda';
+$_['text_new_total'] = 'Pret total';
+$_['text_new_download'] = 'Odata ce plata a fost confirmata, urmeaza urmatorul link pentru a putea accesa descarcarile:';
+$_['text_new_comment'] = 'Comentariile pentru comanda ta sunt:';
+$_['text_new_footer'] = 'Va rugam sa raspundeti la acest e-mail daca aveti vreo intrebare.';
+$_['text_new_powered'] = ''; //Bazat pe <a href="http://www.opencart.com">OpenCart</a>.';
+$_['text_update_subject'] = '%s - Actualizare comanda %s';
+$_['text_update_order'] = 'Comanda nr.:';
+$_['text_update_date_added'] = 'Data comenzii:';
+$_['text_update_order_status'] = 'Comanda Dvs. a fost actualizata cu urmatorul status:';
+$_['text_update_comment'] = 'Comentariile pentru comanda Dvs. sunt:';
+$_['text_update_link'] = 'Pentru a viziona comanda Dvs., dati click pe urmatorul link:';
+$_['text_update_footer'] = 'Va rugam sa raspundeti la acest e-mail daca aveti vreo intrebare.';
+?>

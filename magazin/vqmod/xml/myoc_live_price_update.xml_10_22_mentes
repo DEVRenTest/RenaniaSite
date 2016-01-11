@@ -1,0 +1,206 @@
+<modification>
+	<id>Live Price Update</id>
+	<version>1.1</version>
+	<vqmver>2.1.7</vqmver>
+	<author>OpenCart.my</author>
+	<file name="catalog/view/theme/*/template/product/product.tpl">
+<!--		<operation error="skip">
+			<search position="replace"><![CDATA[<input type="button" value="<?php echo $button_cart; ?>" id="button-cart" class="button"/>]]></search>
+			<add><![CDATA[<input type="button" value="<?php echo $button_cart; ?>" id="button-cart" class="button"
+            <?php print "stoc=".$stock." szoveg=".$text_no_stock." b2b=".$B2B;  if( $stock == $text_no_stock && isset($B2B) && !$B2B) { ?>
+                disabled="disabled"
+                style="color:#BBBBBB; background: #999999;"
+            <?php } ?>
+      />]]>
+      </add>
+		</operation>-->
+		<operation error="skip">
+			<search position="replace"><![CDATA[<?php echo $stock; ?>]]></search>
+			<add><![CDATA[<span id="myoc-lpu-stock"><?php echo $stock; ?></span>]]></add>
+		</operation>
+		<operation error="skip">
+			<search position="replace"><![CDATA[<?php echo $price; ?>]]></search>
+			<add><![CDATA[<span id="myoc-lpu-price"><?php echo $price; ?></span>]]></add>
+		</operation>
+		<operation error="skip">
+			<search position="replace"><![CDATA[<?php echo $special; ?>]]></search>
+			<add><![CDATA[<span id="myoc-lpu-special"><?php echo $special; ?></span>]]></add>
+		</operation>
+		<operation error="skip">
+			<search position="replace"><![CDATA[<?php echo $tax; ?>]]></search>
+			<add><![CDATA[<span id="myoc-lpu-extax"><?php echo $tax; ?></span>]]></add>
+		</operation>
+		<operation>
+			<search position="before"><![CDATA[<?php echo $footer; ?>]]></search>
+			<add><![CDATA[<script type="text/javascript"><!--
+         
+				function myocLivePriceUpdate(parameter) {
+					var _url = 'index.php?route=myoc/live_price_update';
+               
+					$.ajax({
+						type: 'post',
+						url: _url,
+						dataType: 'json',
+						data: $('select[name="profile_id"], input[name^="option"][type="checkbox"]:checked, input[name^="option"][type="radio"]:checked, select[name^="option"], input[type="hidden"], input[name="quantity"][type="radio"]:checked, select[name="quantity"] '),
+						/* data: $('select[name="profile_id"], input[name^="option"][type="checkbox"]:checked, input[name^="option"][type="radio"]:checked, select[name^="option"], input[type="hidden"], input[name="quantity"][type="text"], input[name="quantity"][type="radio"]:checked, select[name="quantity"]'), */
+
+						success: function (myocData) {			
+                  
+							<?php if (!$this->config->get('config_customer_price') || ($this->config->get('config_customer_price') && $this->customer->isLogged())) { ?>
+							$('#myoc-lpu-price').fadeOut(110).queue(function(nx) {
+								$(this).html(myocData.price);
+								nx();
+							}).fadeIn(90);
+							$('#myoc-lpu-special').fadeOut(100).delay(10).queue(function(nx) {
+								$(this).html(myocData.special);
+								nx();
+							}).fadeIn(90);
+							$('#myoc-lpu-extax').fadeOut(90).delay(20).queue(function(nx) {
+								$(this).html(myocData.extax);
+								nx();
+							}).fadeIn(90);
+              $('#myoc-lpu-stock').fadeOut(90).delay(20).queue(function(nx) {
+								$(this).html(myocData.stock);
+								nx();
+							}).fadeIn(90);
+               
+ 
+              $('#button-cart').fadeOut(90).delay(20).queue(function(nx) {
+                                         
+                     if ( myocData.customer_group_id == 3 || myocData.customer_group_id == 4) // B2B client
+                     {
+                           if ( myocData.have_b2b_price != 0  )  //&& myocData.b2b_product_stoc != 0
+                           {
+                              $(this).attr( "style", "" );
+                              $(this).removeAttr( "disabled" );
+                           }
+                           else
+                           {
+                              $(this).attr( "style", "color:#BBBBBB; background: #999999;" );
+                              $(this).attr( "disabled", "disabled" );
+                           }
+                     }
+                     else
+                     {                           
+                           if ( myocData.stock != myocData.text_no_stock) // ( myocData.stock*1 != 0 )  
+                           {
+                              $(this).attr( "style", "" );
+                              $(this).removeAttr( "disabled" );
+                              $(this).attr( "value", myocData.text_add_to_cart );
+                              
+                              $("#delivery").html( '<div><span class="product_info_text">' + myocData.text_delivery + '</span><span class="product_info_icon"> <img src="catalog/view/theme/default/image/2 zile.png" alt="' + myocData.text_delivery + '" title="' + myocData.text_delivery + '" /></span></div>');
+                            }
+                           else
+                           {          
+                              $(this).attr( "style", "color:#BBBBBB; background: #999999;" );
+                              $(this).attr( "disabled", "disabled" );
+                              
+                              $(this).attr( "value", myocData.text_out_of_stock );
+                              $("#delivery").html( '');
+                           }                           
+                     }
+              
+								nx();
+							}).fadeIn(90);
+                     
+                  if (myocData.customer_group_id == 3 || myocData.customer_group_id == 4 )
+                     {                              
+                        if( parameter != 1 || myocData.product_optionNr == 0 )
+                        {
+                           $(".b2b_stoc").show();                  
+                           $(".b2b_stoc").html(myocData.text_qty +' ' + myocData.b2b_product_stoc);
+                                                      
+                           if ( myocData.b2b_product_stoc != 0 )
+                           {
+                              $("#delivery").html( '<div><span class="product_info_text">' + myocData.text_delivery + '</span><span class="product_info_icon"> <img src="catalog/view/theme/default/image/2 zile.png" alt="' + myocData.text_delivery + '" title="' + myocData.text_delivery + '" /></span></div>');
+                              $("#notify_when_appears").html( '' );
+                           }
+                           else
+                           {
+                              $("#delivery").html( '');
+                              $("#notify_when_appears").html( '<div> <input type="button" value="Anunta-ma cand apare" id="notify_me" class="button" /></div>');
+                           }
+                        } 
+                     }
+                     else // regular customer
+                     {                     
+                        if ( myocData.stock != myocData.text_no_stock) // ( myocData.stock*1 != 0 )  
+                        {
+                           $("#notify_when_appears").html( '' );
+                        }
+                        else
+                        {                                    
+                           if ( parameter !=1 || myocData.product_optionNr == 0)
+                           {
+                              $("#notify_when_appears").html( '<div> <input type="button" value="Anunta-ma cand apare" id="notify_me" class="button" /></div>');
+                           }
+                        }     
+                     }
+                                          
+							<?php } ?>
+						},
+						error: function(xhr, ajaxOptions, thrownError) {
+							console.log(thrownError + "\r\n" + xhr.statusText + "\r\n" + xhr.responseText);
+						}
+					});               
+               
+				}
+            
+            $('#notify_me').live('click',function(e){
+               e.preventDefault();
+
+                  var id =  $(this).attr("id");
+                  $( '#notify_message' ).html('');
+                  $( '#notify_message' ).show();
+                                    
+                  $.ajax({ 
+                     type: 'post',
+                     url: 'index.php?route=myoc/notify_me',
+                     dataType: 'json',
+                     data: $('select[name="profile_id"], input[name^="option"][type="checkbox"]:checked, input[name^="option"][type="radio"]:checked, select[name^="option"], input[type="hidden"], input[name="quantity"][type="radio"]:checked, select[name="quantity"] '),
+                     success: function (response) {		
+                     
+                        $( '#notify_message' ).removeClass( 'success' );
+                        $( '#notify_message' ).removeClass( 'warning' );
+                        if( response.status == 'ok' )
+                           {
+                              $( '#notify_message' ).html( response.msg );
+                              $( '#notify_message' ).addClass( 'success' );
+                           }
+                           else
+                           {
+                              $( '#notify_message' ).html( response.msg );
+                              $( '#notify_message' ).addClass( 'warning' );
+                           }
+
+                           setTimeout(function(){
+                              $( '#notify_message' ).fadeOut( 1000 );
+                           },2000);
+
+                     },
+                     error: function(xhr, ajaxOptions, thrownError) {
+                        console.log(thrownError + "\r\n" + xhr.statusText + "\r\n" + xhr.responseText);
+                     }
+                  
+                  });
+         });
+
+         $(document).ready(function() {
+
+            myocLivePriceUpdate(1);
+
+            $('select[name="profile_id"],:input[name^="option"]').change(myocLivePriceUpdate);
+            var _qty = $(':input[name^="quantity"]').val();
+            $(':input[name^="quantity"]').bind('change keyup', function() {
+               if($(this).val() != _qty) {
+                  myocLivePriceUpdate();
+                  _qty = $(this).val();
+
+               }
+            });
+
+         });
+            	//--></script>]]></add>
+		</operation>
+	</file>
+</modification>

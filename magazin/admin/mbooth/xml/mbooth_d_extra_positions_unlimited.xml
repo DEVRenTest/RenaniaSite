@@ -1,0 +1,40 @@
+<extension>
+    <id>Extra Positions Unlimited</id>
+    <type>module</type>
+    <version>1.0</version>
+    <mbooth_version>1.0</mbooth_version>
+    <author>Dreamvention</author>
+    <files>
+		<file>admin/mbooth/xml/mbooth_d_extra_positions_unlimited.xml</file>
+				
+		<!-- Admin -->
+		<file>admin/controller/module/d_extra_positions_unlimited.php</file>
+		
+		
+		<file>admin/language/english/module/d_extra_positions_unlimited.php</file>
+	
+		<file>admin/model/catalog/d_extra_positions_unlimited.php</file>
+		
+		<file>admin/view/template/module/d_extra_positions_unlimited.tpl</file>
+		<file>admin/view/stylesheet/d_extra_positions_unlimited.css</file>
+		<file>admin/view/javascript/dreamvention/ui-slider/jquery.ui-slider.js</file>
+		
+		<!-- Shopunity -->
+		<file>admin/view/stylesheet/shopunity.css</file>
+		<file>admin/view/javascript/shopunity.js</file>
+		<file>admin/view/image/sprite_shopunity.png</file>
+		
+		<!-- Catalog -->
+		<file>catalog/controller/common/dream_column_header_top.php</file>
+		<file>catalog/controller/common/dream_column_header_bottom.php</file>
+		<file>catalog/controller/common/dream_column_footer_top.php</file>
+		<file>catalog/controller/common/dream_column_footer_bottom.php</file>
+		
+		<file>catalog/view/theme/default/template/common/dream_column_header_top.tpl</file>
+		<file>catalog/view/theme/default/template/common/dream_column_header_bottom.tpl</file>
+		<file>catalog/view/theme/default/template/common/dream_column_footer_top.tpl</file>
+		<file>catalog/view/theme/default/template/common/dream_column_footer_bottom.tpl</file>
+		
+		<file>vqmod/xml/a_vqmod_extra_positions_unlimited.xml_</file>
+    </files>
+</extension>

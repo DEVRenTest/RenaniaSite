@@ -1,0 +1,432 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<modification>
+
+	<id>Journal2 Product Labels</id>
+
+	<version>1.5.x</version>
+
+	<vqmver required="true">2.4.0</vqmver>
+
+	<author>digital-atelier.com</author>
+
+
+
+    <file path="catalog/controller/product/" name="product.php">
+
+        <operation error="skip">
+
+            <search position="after"><![CDATA[$this->load->model('catalog/product');]]></search>
+
+            <add><![CDATA[
+
+                $this->load->model('journal2/product');
+
+            ]]></add>
+
+        </operation>
+
+        <operation error="skip">
+
+            <search position="before"><![CDATA[if ($product_info['quantity'] <= 0) {]]></search>
+
+            <add><![CDATA[
+
+                if (true && $product_info['quantity'] <= 0) {
+
+                    $this->data['stock_status'] = 'outofstock';
+
+                }
+
+                if (true && $product_info['quantity'] > 0) {
+
+                    $this->data['stock_status'] = 'instock';
+
+                }
+
+                $this->data['labels'] = $this->model_journal2_product->getLabels($product_info['product_id']);
+
+            ]]></add>
+
+        </operation>
+
+    </file>
+
+	
+
+	<file path="catalog/controller/product/" name="category.php">
+
+		<operation error="skip">
+
+			<search position="after"><![CDATA[$this->load->model('catalog/product');]]></search>
+
+			<add><![CDATA[
+
+                $this->load->model('journal2/product');
+
+            ]]></add>
+
+		</operation>
+
+        <operation error="skip">
+
+            <search position="after"><![CDATA['thumb'       => $image,]]></search>
+
+            <add><![CDATA[
+
+                'labels'        => $this->model_journal2_product->getLabels($result['product_id']),
+
+            ]]></add>
+
+        </operation>
+
+	</file>
+
+
+
+    <file path="catalog/controller/product/compare.php">
+
+        <operation error="skip">
+
+            <search position="after"><![CDATA[$this->load->model('catalog/product');]]></search>
+
+            <add><![CDATA[
+
+                $this->load->model('journal2/product');
+
+            ]]></add>
+
+        </operation>
+
+        <operation error="skip">
+
+            <search position="after"><![CDATA['thumb'        => $image,]]></search>
+
+            <add><![CDATA[
+
+                'labels'        => $this->model_journal2_product->getLabels($product_info['product_id']),
+
+            ]]></add>
+
+        </operation>
+
+    </file>
+
+
+
+    <file path="catalog/controller/account/wishlist.php">
+
+        <operation error="skip">
+
+            <search position="after"><![CDATA[$this->load->model('catalog/product');]]></search>
+
+            <add><![CDATA[
+
+                $this->load->model('journal2/product');
+
+            ]]></add>
+
+        </operation>
+
+        <operation error="skip">
+
+            <search position="after"><![CDATA['thumb'      => $image,]]></search>
+
+            <add><![CDATA[
+
+                'labels'        => $this->model_journal2_product->getLabels($product_info['product_id']),
+
+            ]]></add>
+
+        </operation>
+
+    </file>
+
+
+
+    <file path="catalog/controller/product/" name="special.php">
+
+        <operation error="skip">
+
+            <search position="after"><![CDATA[$this->load->model('catalog/product');]]></search>
+
+            <add><![CDATA[
+
+                $this->load->model('journal2/product');
+
+            ]]></add>
+
+        </operation>
+
+        <operation error="skip">
+
+            <search position="after"><![CDATA['thumb'       => $image,]]></search>
+
+            <add><![CDATA[
+
+                'labels'        => $this->model_journal2_product->getLabels($result['product_id']),
+
+            ]]></add>
+
+        </operation>
+
+    </file>
+
+
+
+    <file path="catalog/controller/product/" name="manufacturer.php">
+
+        <operation error="skip">
+
+            <search position="after"><![CDATA[$this->load->model('catalog/product');]]></search>
+
+            <add><![CDATA[
+
+                $this->load->model('journal2/product');
+
+            ]]></add>
+
+        </operation>
+
+        <operation error="skip">
+
+            <search position="after"><![CDATA['thumb'       => $image,]]></search>
+
+            <add><![CDATA[
+
+                'labels'        => $this->model_journal2_product->getLabels($result['product_id']),
+
+            ]]></add>
+
+        </operation>
+
+    </file>
+
+
+
+    <file path="catalog/controller/product/" name="search.php">
+
+        <operation error="skip">
+
+            <search position="after"><![CDATA[$this->load->model('catalog/product');]]></search>
+
+            <add><![CDATA[
+
+                $this->load->model('journal2/product');
+
+            ]]></add>
+
+        </operation>
+
+        <operation error="skip">
+
+            <search position="after"><![CDATA['thumb'       => $image,]]></search>
+
+            <add><![CDATA[
+
+                'labels'        => $this->model_journal2_product->getLabels($result['product_id']),
+
+            ]]></add>
+
+        </operation>
+
+    </file>
+
+
+
+    <file path="catalog/controller/product/" name="product.php">
+
+        <operation error="skip">
+
+            <search position="after"><![CDATA[$this->load->model('catalog/product');]]></search>
+
+            <add><![CDATA[
+
+                $this->load->model('journal2/product');
+
+            ]]></add>
+
+        </operation>
+
+        <operation error="skip">
+
+            <search position="after"><![CDATA['thumb'   	 => $image,]]></search>
+
+            <add><![CDATA[
+
+                'labels'        => ($result['product_id']) ? $this->model_journal2_product->getLabels($result['product_id']) : "",
+
+            ]]></add>
+
+        </operation>
+
+    </file>
+
+
+
+    <file path="catalog/controller/module/" name="bestseller.php">
+
+        <operation error="skip">
+
+            <search position="after"><![CDATA[$this->load->model('catalog/product');]]></search>
+
+            <add><![CDATA[
+
+                $this->load->model('journal2/product');
+
+            ]]></add>
+
+        </operation>
+
+        <operation error="skip">
+
+            <search position="after"><![CDATA['thumb'   	 => $image,]]></search>
+
+            <add><![CDATA[
+
+                'labels'        => $this->model_journal2_product->getLabels($result['product_id']),
+
+            ]]></add>
+
+        </operation>
+
+    </file>
+
+
+
+    <file path="catalog/controller/module/" name="featured.php">
+
+        <operation error="skip">
+
+            <search position="after"><![CDATA[$this->load->model('catalog/product');]]></search>
+
+            <add><![CDATA[
+
+                $this->load->model('journal2/product');
+
+            ]]></add>
+
+        </operation>
+
+        <operation error="skip">
+
+            <search position="after"><![CDATA['thumb'   	 => $image,]]></search>
+
+            <add><![CDATA[
+
+                'labels'        => $this->model_journal2_product->getLabels($product_info['product_id']),
+
+            ]]></add>
+
+        </operation>
+
+    </file>
+
+
+
+    <file path="catalog/controller/module/" name="latest.php">
+
+        <operation error="skip">
+
+            <search position="after"><![CDATA[$this->load->model('catalog/product');]]></search>
+
+            <add><![CDATA[
+
+                $this->load->model('journal2/product');
+
+            ]]></add>
+
+        </operation>
+
+        <operation error="skip">
+
+            <search position="after"><![CDATA['thumb'   	 => $image,]]></search>
+
+            <add><![CDATA[
+
+                'labels'        => $this->model_journal2_product->getLabels($result['product_id']),
+
+            ]]></add>
+
+        </operation>
+
+    </file>
+
+
+
+    <file path="catalog/controller/module/" name="special.php">
+
+        <operation error="skip">
+
+            <search position="after"><![CDATA[$this->load->model('catalog/product');]]></search>
+
+            <add><![CDATA[
+
+                $this->load->model('journal2/product');
+
+            ]]></add>
+
+        </operation>
+
+        <operation error="skip">
+
+            <search position="after"><![CDATA['thumb'   	 => $image,]]></search>
+
+            <add><![CDATA[
+
+                'labels'        => $this->model_journal2_product->getLabels($result['product_id']),
+
+            ]]></add>
+
+        </operation>
+
+    </file>
+
+    <file name="catalog/model/catalog/product.php">
+        <operation>
+            <search position="before"><![CDATA[
+                $query = $this->db->query("SELECT DISTINCT *, pd.name AS name, p.image, m.name AS manufacturer, (SELECT price FROM " . DB_PREFIX . "product_disc
+            ]]></search>
+            <add><![CDATA[
+        else
+        {
+            $ax_type = "SELECT
+                          p.`model`,
+                          ax.`type`
+                          FROM " . DB_PREFIX . "product p, `ax_code` `ax`
+                          WHERE `p`.`product_id` = ".$product_id."
+                          AND ax.upc = p.model";
+
+            $ax_type = $this->db->query($ax_type);
+            if($ax_type->num_rows) {
+                $ax_type = $ax_type->row['type'];
+
+                if ($ax_type == 2) {
+                    $query_stock_query = "SELECT SUM(quantity) AS `total_stock`
+                                                  FROM `oc_product_option_value`
+                                                  WHERE `product_id` = '".(int)$product_id."';";
+                    $query_stock = $this->db->query($query_stock_query);
+                } elseif ($ax_type == 3) {
+                    $query_stock_query = "SELECT SUM( poc.stock ) AS total_stock
+                                                      FROM `oc_product_option_combination` AS poc
+                                                      WHERE product_id = '".(int)$product_id."';";
+                    $query_stock = $this->db->query($query_stock_query);
+                } else {
+                    $query_stock_query = "SELECT `quantity` AS total_stock
+                                                      FROM `oc_product`
+                                                      WHERE product_id = '".(int)$product_id."';";
+                    $query_stock = $this->db->query($query_stock_query);
+                }
+
+            }
+        }
+            ]]></add>
+        </operation>
+    </file>
+
+
+
+</modification>
+
+
+

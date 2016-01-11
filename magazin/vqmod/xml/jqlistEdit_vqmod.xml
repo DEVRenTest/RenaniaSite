@@ -1,0 +1,335 @@
+<modification>
+
+	<id>jQListEdit VQMod</id>
+	<version>149.3</version>
+	<vqmver>1.0.2</vqmver>
+	<author>qphoria</author>
+	
+
+	<file name="admin/view/template/catalog/category_list.tpl">
+        <operation>
+            <search position="before"><![CDATA[
+            <?php if ($error_warning) { ?>
+            ]]></search>
+            <add><![CDATA[
+            <?php include(DIR_APPLICATION . 'controller/jedit/jedit.inc.php'); ?>
+            ]]></add>
+        </operation>
+        <operation>
+            <search position="replace"><![CDATA[
+            <td class="left"><?php echo $category['name']; ?></td>
+            ]]></search>
+            <add><![CDATA[
+            <td class="left"><span id="category_description|name|category_id|<?php echo $category['category_id']; ?>" class="edit_text"><?php echo $category['name']; ?></span></td>
+            ]]></add>
+        </operation>
+		<operation>
+            <search position="replace"><![CDATA[
+            <td class="right"><?php echo $category['sort_order']; ?></td>
+            ]]></search>
+            <add><![CDATA[
+            <td class="right"><span id="category|sort_order|category_id|<?php echo $category['category_id']; ?>" class="edit_text"><?php echo $category['sort_order']; ?></span></td>
+            ]]></add>
+        </operation>
+	</file>
+
+	<file name="admin/view/template/catalog/download_list.tpl">
+        <operation>
+            <search position="before"><![CDATA[
+            <?php if ($error_warning) { ?>
+            ]]></search>
+            <add><![CDATA[
+            <?php include(DIR_APPLICATION . 'controller/jedit/jedit.inc.php'); ?>
+            ]]></add>
+        </operation>
+        <operation>
+            <search position="replace"><![CDATA[
+            <td class="left"><?php echo $download['name']; ?></td>
+            ]]></search>
+            <add><![CDATA[
+            <td class="left"><span id="download_description|name|download_id|<?php echo $download['download_id']; ?>" class="edit_text"><?php echo $download['name']; ?></span></td>
+            ]]></add>
+        </operation>
+		<operation>
+            <search position="replace"><![CDATA[
+            <td class="right"><?php echo $download['remaining']; ?></td>
+            ]]></search>
+            <add><![CDATA[
+            <td class="right"><span id="download|remaining|download_id|<?php echo $download['download_id']; ?>" class="edit_text"><?php echo $download['remaining']; ?></span></td>
+            ]]></add>
+        </operation>
+	</file>
+
+	<file name="admin/view/template/catalog/information_list.tpl">
+        <operation>
+            <search position="before"><![CDATA[
+            <?php if ($error_warning) { ?>
+            ]]></search>
+            <add><![CDATA[
+            <?php include(DIR_APPLICATION . 'controller/jedit/jedit.inc.php'); ?>
+            ]]></add>
+        </operation>
+        <operation>
+            <search position="replace"><![CDATA[
+            <td class="left"><?php echo $information['title']; ?></td>
+            ]]></search>
+            <add><![CDATA[
+            <td class="left"><span id="information_description|title|information_id|<?php echo $information['information_id']; ?>" class="edit_text"><?php echo $information['title']; ?></span></td>
+            ]]></add>
+        </operation>
+		<operation>
+            <search position="replace"><![CDATA[
+            <td class="right"><?php echo $information['sort_order']; ?></td>
+            ]]></search>
+            <add><![CDATA[
+            <td class="right"><span id="information|sort_order|information_id|<?php echo $information['information_id']; ?>" class="edit_text"><?php echo $information['sort_order']; ?></span></td>
+            ]]></add>
+        </operation>
+	</file>
+
+	<file name="admin/view/template/catalog/manufacturer_list.tpl">
+        <operation>
+            <search position="before"><![CDATA[
+            <?php if ($error_warning) { ?>
+            ]]></search>
+            <add><![CDATA[
+            <?php include(DIR_APPLICATION . 'controller/jedit/jedit.inc.php'); ?>
+            ]]></add>
+        </operation>
+        <operation>
+            <search position="replace"><![CDATA[
+            <td class="left"><?php echo $manufacturer['name']; ?></td>
+            ]]></search>
+            <add><![CDATA[
+            <td class="left"><span id="manufacturer|name|manufacturer_id|<?php echo $manufacturer['manufacturer_id']; ?>" class="edit_text"><?php echo $manufacturer['name']; ?></span></td>
+            ]]></add>
+        </operation>
+		<operation>
+            <search position="replace"><![CDATA[
+            <td class="right"><?php echo $manufacturer['sort_order']; ?></td>
+            ]]></search>
+            <add><![CDATA[
+            <td class="right"><span id="manufacturer|sort_order|manufacturer_id|<?php echo $manufacturer['manufacturer_id']; ?>" class="edit_text"><?php echo $manufacturer['sort_order']; ?></span></td>
+            ]]></add>
+        </operation>
+	</file>
+
+	<file name="admin/view/template/catalog/review_list.tpl">
+        <operation>
+            <search position="before"><![CDATA[
+            <?php if ($error_warning) { ?>
+            ]]></search>
+            <add><![CDATA[
+            <?php include(DIR_APPLICATION . 'controller/jedit/jedit.inc.php'); ?>
+            ]]></add>
+        </operation>
+        <operation>
+            <search position="replace"><![CDATA[
+            <td class="left"><?php echo $review['author']; ?></td>
+            ]]></search>
+            <add><![CDATA[
+            <td class="left"><span id="review|author|review_id|<?php echo $review['review_id']; ?>" class="edit_text"><?php echo $review['author']; ?></span></td>
+            ]]></add>
+        </operation>
+		<operation>
+            <search position="replace"><![CDATA[
+            <td class="right"><?php echo $review['rating']; ?></td>
+            ]]></search>
+            <add><![CDATA[
+            <td class="right"><span id="review|rating|review_id|<?php echo $review['review_id']; ?>" class="edit_text"><?php echo $review['rating']; ?></span></td>
+            ]]></add>
+        </operation>
+		<operation>
+            <search position="replace"><![CDATA[
+            <td class="left"><?php echo $review['status']; ?></td>
+            ]]></search>
+            <add><![CDATA[
+            <td class="left"><span id="review|status|review_id|<?php echo $review['review_id']; ?>" class="edit_select_status"><?php echo $review['status']; ?></span></td>
+            ]]></add>
+        </operation>
+	</file>
+
+	<file name="admin/view/template/catalog/product_list.tpl">
+        <operation>
+            <search position="before"><![CDATA[
+            <?php if ($error_warning) { ?>
+            ]]></search>
+            <add><![CDATA[
+            <?php include(DIR_APPLICATION . 'controller/jedit/jedit.inc.php'); ?>
+            ]]></add>
+        </operation>
+        <operation>
+            <search position="replace"><![CDATA[
+            <td class="left"><?php echo $product['name']; ?></td>
+            ]]></search>
+            <add><![CDATA[
+            <td class="left"><span id="product_description|name|product_id|<?php echo $product['product_id']; ?>" class="edit_text"><?php echo $product['name']; ?></span></td>
+            ]]></add>
+        </operation>
+		<operation>
+            <search position="replace"><![CDATA[
+            <td class="left"><?php echo $product['model']; ?></td>
+            ]]></search>
+            <add><![CDATA[
+            <td class="left"><span id="product|model|product_id|<?php echo $product['product_id']; ?>" class="edit_text"><?php echo $product['model']; ?></span></td>
+            ]]></add>
+        </operation>
+		<operation>
+            <search position="replace"><![CDATA[
+            <span style="color: #FF0000;"><?php echo $product['quantity']; ?></span>
+            ]]></search>
+            <add><![CDATA[
+            <span style="color: #FF0000;"><span id="product|quantity|product_id|<?php echo $product['product_id']; ?>" class="edit_text"><?php echo $product['quantity']; ?></span></span>
+            ]]></add>
+        </operation>
+		<operation>
+            <search position="replace"><![CDATA[
+            <span style="color: #FFA500;"><?php echo $product['quantity']; ?></span>
+            ]]></search>
+            <add><![CDATA[
+            <span style="color: #FFA500;"><span id="product|quantity|product_id|<?php echo $product['product_id']; ?>" class="edit_text"><?php echo $product['quantity']; ?></span></span>
+            ]]></add>
+        </operation>
+		<operation>
+            <search position="replace"><![CDATA[
+            <span style="color: #008000;"><?php echo $product['quantity']; ?></span>
+            ]]></search>
+            <add><![CDATA[
+            <span style="color: #008000;"><span id="product|quantity|product_id|<?php echo $product['product_id']; ?>" class="edit_text"><?php echo $product['quantity']; ?></span></span>
+            ]]></add>
+        </operation>
+		<operation>
+            <search position="replace"><![CDATA[
+            <td class="left"><?php echo $product['status']; ?></td>
+            ]]></search>
+            <add><![CDATA[
+            <td class="left"><span id="product|status|product_id|<?php echo $product['product_id']; ?>" class="edit_select_status"><?php echo $product['status']; ?></span></td>
+            ]]></add>
+        </operation>
+    </file>
+    <file name="admin/view/template/sale/coupon_list.tpl">
+        <operation>
+            <search position="before"><![CDATA[
+            <?php if ($error_warning) { ?>
+            ]]></search>
+            <add><![CDATA[
+            <?php include(DIR_APPLICATION . 'controller/jedit/jedit.inc.php'); ?>
+            ]]></add>
+        </operation>
+        <operation>
+            <search position="replace"><![CDATA[
+            <td class="left"><?php echo $coupon['name']; ?></td>
+            ]]></search>
+            <add><![CDATA[
+            <td class="left"><span id="coupon_description|name|coupon_id|<?php echo $coupon['coupon_id']; ?>" class="edit_text"><?php echo $coupon['name']; ?></span></td>
+            ]]></add>
+        </operation>
+		<operation>
+            <search position="replace"><![CDATA[
+            <td class="left"><?php echo $coupon['code']; ?></td>
+            ]]></search>
+            <add><![CDATA[
+            <td class="left"><span id="coupon|code|coupon_id|<?php echo $coupon['coupon_id']; ?>" class="edit_text"><?php echo $coupon['code']; ?></span></td>
+            ]]></add>
+        </operation>
+		<operation>
+            <search position="replace"><![CDATA[
+            <td class="right"><?php echo $coupon['discount']; ?></td>
+            ]]></search>
+            <add><![CDATA[
+            <td class="right"><span id="coupon|discount|coupon_id|<?php echo $coupon['coupon_id']; ?>" class="edit_text"><?php echo $coupon['discount']; ?></span></td>
+            ]]></add>
+        </operation>
+		<operation>
+            <search position="replace"><![CDATA[
+            <td class="left"><?php echo $coupon['status']; ?></td>
+            ]]></search>
+            <add><![CDATA[
+            <td class="left"><span id="coupon|status|coupon_id|<?php echo $coupon['coupon_id']; ?>" class="edit_select_status"><?php echo $coupon['status']; ?></span></td>
+            ]]></add>
+        </operation>
+    </file>
+
+    <file name="admin/view/template/sale/customer_list.tpl">
+        <operation>
+            <search position="before"><![CDATA[
+            <?php if ($error_warning) { ?>
+            ]]></search>
+            <add><![CDATA[
+            <?php include(DIR_APPLICATION . 'controller/jedit/jedit.inc.php'); ?>
+            ]]></add>
+        </operation>
+        <operation>
+            <search position="replace"><![CDATA[
+            <td class="left"><?php echo $customer['name']; ?></td>
+            ]]></search>
+            <add><![CDATA[
+            <td class="left"><?php $names = explode(' ', $customer['name'], 2); ?><span id="customer|firstname|customer_id|<?php echo $customer['customer_id']; ?>" class="edit_text"><?php echo $names[0]; ?></span> <span id="customer|lastname|customer_id|<?php echo $customer['customer_id']; ?>" class="edit_text"><?php echo $names[1]; ?></span></td>
+            ]]></add>
+        </operation>
+		<operation>
+            <search position="replace"><![CDATA[
+            <td class="left"><?php echo $customer['email']; ?></td>
+            ]]></search>
+            <add><![CDATA[
+            <td class="left"><span id="customer|email|customer_id|<?php echo $customer['customer_id']; ?>" class="edit_text"><?php echo $customer['email']; ?></span></td>
+            ]]></add>
+        </operation>
+		<operation>
+            <search position="replace"><![CDATA[
+            <td class="left"><?php echo $customer['customer_group']; ?></td>
+            ]]></search>
+            <add><![CDATA[
+            <td class="left"><span id="customer|customer_group_id|customer_id|<?php echo $customer['customer_id']; ?>" class="edit_select_customer_group"><?php echo $customer['customer_group']; ?></span></td>
+            ]]></add>
+        </operation>
+		<operation>
+            <search position="replace"><![CDATA[
+            <td class="left"><?php echo $customer['status']; ?></td>
+            ]]></search>
+            <add><![CDATA[
+            <td class="left"><span id="customer|status|customer_id|<?php echo $customer['customer_id']; ?>" class="edit_select_status"><?php echo $customer['status']; ?></span></td>
+            ]]></add>
+        </operation>
+		<operation>
+            <search position="replace"><![CDATA[
+            <td class="left"><?php echo $customer['approved']; ?></td>
+            ]]></search>
+            <add><![CDATA[
+            <td class="left"><span id="customer|approved|customer_id|<?php echo $customer['customer_id']; ?>" class="edit_select_yesno"><?php echo $customer['approved']; ?></span></td>
+            ]]></add>
+        </operation>
+    </file>
+
+    <file name="admin/view/template/sale/order_list.tpl">
+        <operation>
+            <search position="before"><![CDATA[
+            <?php if ($error_warning) { ?>
+            ]]></search>
+            <add><![CDATA[
+            <?php include(DIR_APPLICATION . 'controller/jedit/jedit.inc.php'); ?>
+            ]]></add>
+        </operation>
+        <operation>
+            <search position="replace"><![CDATA[
+            <td class="left"><?php echo $order['status']; ?></td>
+            ]]></search>
+            <add><![CDATA[
+            <td class="left"><span id="order|order_status_id|order_id|<?php echo $order['order_id']; ?>" class="edit_select_order_status"><?php echo $order['status']; ?></span></td>
+            ]]></add>
+        </operation>
+	</file>
+
+</modification>
+
+<!--
+<modification>	- This is the highest level of the file and there can only be one
+<id>			- This is the name of the mod. Format: Free form text. (Informational)
+<version>		- This is the version of the mod. Format: Number and Decimal (1.0.0) (Informational)
+<author>		- This is the author of the mod. Format: Free form text (Informational)
+<file>			- This is the name of the file to modify. Requires attribute "name" as relative filename (catalog/controller/product/product.php). There can be multiple
+<operation>		- This is the wrapper of the actual operation occuring. There can be multiple operations to the same file.
+<search>		- This is the first required step of the operation. Uses an optional attribute "position" set to before|after|replace. replace is default. One per operation. Use CDATA tags to wrap code.
+<add>			- This is the second required step of the operation. Uses an optional attribute "trim" set to true|false to trim away whitespace and linebreaks. false is default. One per operation. Location of added data depends on the position of the <search> command. Use CDATA tags to wrap code.
+<![CDATA[  ]]>	- These are called CDATA tags and they are used by xml to specify that the data between should not be evaluated.
+-->

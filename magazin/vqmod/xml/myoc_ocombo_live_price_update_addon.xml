@@ -1,0 +1,38 @@
+<modification>
+	<id>Option Combination Live Price Update Addon</id>
+	<version>1.0</version>
+	<vqmver>2.1.7</vqmver>
+	<author>OpenCart.my</author>
+    <file name="catalog/controller/myoc/live_price_update.php">
+        <operation error="skip">
+            <search position="before"><![CDATA[
+                if (isset($this->request->post['option'])) {
+            ]]></search>
+            <add><![CDATA[
+                if(isset($this->request->post['option_combo']))
+                { 
+                    $option_combo = $this->model_catalog_product->getProductOptionComboValues($this->request->post['product_id'], $this->request->post['option_combo']);
+
+                    $option_combo_setting = $this->model_catalog_product->getProductOptionComboSetting($this->request->post['product_id']);
+                    $option_combo_quantity_box = $option_combo_setting['quantity_box'];
+
+                    if(!$option_combo_quantity_box)
+                    {
+                        $product_option_combo = $this->model_catalog_product->getProductOptionCombo($this->request->post['option_combo']);
+                        if($product_option_combo['quantity'] > 0)
+                        {
+                            $quantity = $product_option_combo['quantity'];
+                        }
+                    }
+                    if(!isset($this->request->post['option']))
+                    {
+                        $this->request->post['option'] = array();
+                    }
+                    $this->request->post['option'] += $option_combo;
+
+                    $product_info['special'] = 0;           
+                }
+            ]]></add>
+        </operation>
+    </file>
+</modification>

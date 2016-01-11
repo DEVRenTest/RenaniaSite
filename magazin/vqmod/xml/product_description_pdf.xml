@@ -1,0 +1,1061 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<modification>
+        <id>Product Description</id>
+        <version>1.0</version>
+        <author>Avarah | avarahvahin@gmail.com</author>  
+		
+	<file name="admin/model/catalog/product.php">
+		<operation>
+			<search position="before">
+			<![CDATA[
+			public function addProduct($data)
+			]]>
+			</search>
+			<add>
+			<![CDATA[
+			public function create_table(){
+				$this->db->query("CREATE TABLE IF NOT EXISTS `" . DB_PREFIX . "product_description_download_pdf` (
+								  `product_description_download_pdf_id` INT(11) NOT NULL AUTO_INCREMENT,
+								  `product_id` INT(11) NOT NULL,
+								  `language_id` INT(11) NOT NULL,
+								  `file_name` TEXT NOT NULL,
+								  PRIMARY KEY (`product_description_download_pdf_id`)
+								) ENGINE=INNODB DEFAULT CHARSET=latin1;");
+
+				$this->db->query("CREATE TABLE IF NOT EXISTS `oc_product_description_download_pdf_to_customer_group` (
+								  `product_description_download_pdf_to_customer_group_id` int(11) NOT NULL AUTO_INCREMENT,
+								  `product_description_download_pdf_id` int(11) NOT NULL,
+								  `customer_group_id` int(11) NOT NULL,
+								  `product_id` INT(11) NOT NULL,
+								  PRIMARY KEY (`product_description_download_pdf_to_customer_group_id`)
+								) ENGINE=InnoDB DEFAULT CHARSET=latin1;");
+			}
+			]]>
+			</add>
+		</operation>
+
+			<operation>
+			<search position="after">
+			<![CDATA[
+			$product_id = $this->db->getLastId();
+			]]>
+			</search>
+			<add>
+			<![CDATA[
+		if(isset($data['description_document'])) {
+
+			foreach ($data['description_document'] as $language_id => $value) {
+				$this->db->query("INSERT INTO " . DB_PREFIX . "product_description_download_pdf SET product_id = '" . (int)$product_id . "', language_id = '" . (int)$language_id . "', file_name = '" . $this->db->escape($value['file_name']) . "'");
+			}
+		}
+			]]>
+			</add>
+		</operation>
+
+		<operation>
+			<search position="before" index="2">
+			<![CDATA[
+			if (isset($data['image'])) {
+			]]>
+			</search>
+			<add>
+			<![CDATA[
+
+			//echo "<pre>"; print_r($data); die('opencart/vqmod/xml/product_description_pdf.xml:63');
+
+			//$this->db->query("DELETE FROM " . DB_PREFIX . "product_description_download_pdf WHERE product_id = '" . (int)$product_id . "'");
+			//$this->db->query("DELETE FROM " . DB_PREFIX . "product_description_download_pdf_to_customer_group WHERE product_id = '" . (int)$product_id . "'");
+
+			foreach ($data['description_document'] as $language_id => $value) {
+				$this->db->query("INSERT INTO " . DB_PREFIX . "product_description_download_pdf SET product_id = '" . (int)$product_id . "', language_id = '" . (int)$language_id . "', file_name = '" . $this->db->escape($value['file_name']) . "'");
+			}
+
+			$product_description_download_pdf_id = $this->db->getLastId();
+
+			foreach ($data['description_pdf_to_customer_group'] as $customer_group) {
+				$insert_description_pdf_to_customer_group = "INSERT INTO " . DB_PREFIX . "product_description_download_pdf_to_customer_group SET product_description_download_pdf_id = '".(int)$product_description_download_pdf_id."', customer_group_id = '" . (int)$customer_group . "', product_id = '" . (int)$product_id . "';";
+				$this->db->query($insert_description_pdf_to_customer_group);
+				//echo "<br>".$insert_description_pdf_to_customer_group."<br>";
+			}
+			//die('opencart/vqmod/xml/product_description_pdf.xml:77');
+			]]>
+			</add>
+		</operation>
+
+			<operation>
+			<search position="before" index="3">
+			<![CDATA[
+			$this->cache->delete('product');
+			]]>
+			</search>
+			<add>
+			<![CDATA[
+			$this->db->query("DELETE FROM " . DB_PREFIX . "product_description_download_pdf WHERE product_id = '" . (int)$product_id . "'");
+			]]>
+			</add>
+		</operation>
+
+		<operation>
+			<search position="before">
+			<![CDATA[
+			public function getProductAttributes($product_id) {
+			]]>
+			</search>
+			<add>
+			<![CDATA[
+		public function getProductDocument($product_id) {
+			$product_document_data = array();
+
+			$product_document_data = $this->db->query("SELECT * FROM " . DB_PREFIX . "product_description_download_pdf WHERE product_id = '" . (int)$product_id . "'")->rows;
+
+			//echo "<pre>"; print_r($product_document_data);  die('opencart/vqmod/xml/product_description_pdf.xml:136');
+
+			foreach($product_document_data as &$doc){
+				$get_doc_to_group = "SELECT customer_group_id FROM " . DB_PREFIX . "product_description_download_pdf_to_customer_group WHERE product_description_download_pdf_id = ".$doc['product_description_download_pdf_id']." ;";
+				$doc['customer_to_group'] = $this->db->query($get_doc_to_group)->rows;
+			}
+
+			return $product_document_data;
+		}
+
+		public function get_pr_document_details($pr_document_id) { // Not USED !!!
+
+			$product_document_data_details = $this->db->query("SELECT * FROM " . DB_PREFIX . "product_description_download_pdf WHERE product_description_download_pdf_id = '" . (int)$pr_document_id . "'")->row;
+
+			$description_to_customer_group = "SELECT
+												  dtg.*, `cgd`.`name`
+												FROM
+												  oc_product_description_download_pdf_to_customer_group dtg,
+												  oc_customer_group_description cgd
+												WHERE dtg.product_description_download_pdf_id = '" . (int)$pr_document_id . "'
+												  AND cgd.`customer_group_id` = dtg.`customer_group_id`;";
+
+			//die($description_to_customer_group.'<br>opencart/vqmod/xml/product_description_pdf.xml:127');
+
+			$description_to_customer_group = $this->db->query($description_to_customer_group)->rows;
+
+			$product_document_data_details['customer_to_group'] = $description_to_customer_group;
+
+			$product_document_data_details['file_name'] = trim(substr($product_document_data_details['file_name'],0,strrpos($product_document_data_details['file_name'],'.')));
+
+			/*if ($description_to_customer_group->rows) {
+				foreach ($description_to_customer_group->rows as $key => $item) {
+					$product_document_data[$result['language_id']]['customer_group'] .= (!$key) ? $item['name'] : ", ".$item['name'];
+				}
+			}*/
+
+			echo "<pre>"; print_r($product_document_data_details);  die('opencart/vqmod/xml/product_description_pdf.xml:141');
+
+		}
+
+		public function insert_product_document($data) {
+
+			$response = '';
+
+			//echo "<pre>"; print_r($data); die('opencart/vqmod/xml/product_description_pdf.xml:142');
+
+			$insert_product_document_query = "INSERT INTO " . DB_PREFIX . "product_description_download_pdf SET product_id = '" . (int)$data['product_id'] . "', language_id = '" . (int)$data['language_id'] . "', file_name = '" . $this->db->escape($data['file_name']) . "', `document_name` = '" . $this->db->escape($data['document_name']) . "', `document_type` = '" . $this->db->escape($data['document_type']) . "', `document_description` = '" . $this->db->escape($data['document_description']) . "';";
+
+			//die($insert_product_document_query.'<br><br>opencart/vqmod/xml/product_description_pdf.xml:146');
+
+			$insert_product_document_query = $this->db->query($insert_product_document_query);
+
+			if ($insert_product_document_query) {
+				$response = true;
+			}
+
+			/*foreach ($data['description_document'] as $language_id => $value) {
+				$this->db->query("INSERT INTO " . DB_PREFIX . "product_description_download_pdf SET product_id = '" . (int)$product_id . "', language_id = '" . (int)$language_id . "', file_name = '" . $this->db->escape($value['file_name']) . "'");
+			}*/
+
+			$product_description_download_pdf_id = $this->db->getLastId();
+
+			if ($data['customer_group'] && is_array($data['customer_group'])) {
+				foreach ($data['customer_group'] as $customer_group) {
+					$insert_description_pdf_to_customer_group = "INSERT INTO " . DB_PREFIX . "product_description_download_pdf_to_customer_group SET product_description_download_pdf_id = '".(int)$product_description_download_pdf_id."', customer_group_id = '" . (int)$customer_group . "', product_id = '" . (int)$data['product_id'] . "';";
+					$this->db->query($insert_description_pdf_to_customer_group);
+					//echo "<br>".$insert_description_pdf_to_customer_group."<br>";
+				}
+			}
+		}
+
+		public function update_pr_document_details($data) {
+
+			$response = '';
+
+			//echo "<pre>"; print_r($data); die('opencart/vqmod/xml/product_description_pdf.xml:181');
+
+			$update_product_document_query = "UPDATE " . DB_PREFIX . "product_description_download_pdf SET product_id = '" . (int)$data['product_id'] . "', language_id = '" . (int)$data['language_id'] . "', file_name = '" . $this->db->escape($data['file_name']) . "', `document_name` = '" . $this->db->escape($data['document_name']) . "', `document_type` = '" . $this->db->escape($data['document_type']) . "', `document_description` = '" . $this->db->escape($data['document_description']) . "' WHERE product_description_download_pdf_id = '".$data['product_document_id']."';";
+
+			//die($update_product_document_query.'<br><br>opencart/vqmod/xml/product_description_pdf.xml:185');
+
+			$update_product_document_query = $this->db->query($update_product_document_query);
+
+			if ($update_product_document_query) {
+				$response = true;
+			}
+
+			/*foreach ($data['description_document'] as $language_id => $value) {
+				$this->db->query("INSERT INTO " . DB_PREFIX . "product_description_download_pdf SET product_id = '" . (int)$product_id . "', language_id = '" . (int)$language_id . "', file_name = '" . $this->db->escape($value['file_name']) . "'");
+			}*/
+
+			$delete_group = "DELETE FROM " . DB_PREFIX . "product_description_download_pdf_to_customer_group WHERE product_description_download_pdf_id = '" . (int)$data['product_document_id'] . "'";
+			//die($delete_group);
+			$this->db->query($delete_group);
+
+			$product_description_download_pdf_id = $this->db->getLastId();
+
+			if ($data['customer_group'] && is_array($data['customer_group'])) {
+				foreach ($data['customer_group'] as $customer_group) {
+					$update_description_pdf_to_customer_group = "INSERT INTO " . DB_PREFIX . "product_description_download_pdf_to_customer_group SET product_description_download_pdf_id = '".(int)$data['product_document_id']."', customer_group_id = '" . (int)$customer_group . "', product_id = '" . (int)$data['product_id'] . "';";
+					$this->db->query($update_description_pdf_to_customer_group);
+					//echo "<br>".$update_description_pdf_to_customer_group."<br>";
+				}
+			}
+
+			return $response;
+		}
+			]]>
+			</add>
+		</operation>
+	</file>
+	<file name="admin/controller/catalog/product.php">
+		<operation>
+			<search position="after">
+			<![CDATA[
+			$this->load->model('catalog/product');
+			]]>
+			</search>
+			<add>
+			<![CDATA[
+			$this->model_catalog_product->create_table();
+			]]>
+			</add>
+		</operation>
+
+		<operation>
+			<search position="after">
+			<![CDATA[
+			$this->data['tab_design']
+			]]>
+			</search>
+			<add>
+			<![CDATA[
+			$this->data['tab_download_pdf'] = $this->language->get('tab_download_pdf');
+			$this->data['entry_description_document'] = $this->language->get('entry_description_document');
+			$this->data['button_upload'] = $this->language->get('button_upload');
+			]]>
+			</add>
+		</operation>
+
+		<operation>
+			<search position="after" offset="1">
+			<![CDATA[
+			$this->data['product_description'] = array();
+			]]>
+			</search>
+			<add>
+			<![CDATA[
+			if (isset($this->request->post['description_document'])) {
+				$this->data['description_document'] = $this->request->post['description_document'];
+			} elseif (isset($this->request->get['product_id'])) {
+				$this->data['description_document'] = $this->model_catalog_product->getProductDocument($this->request->get['product_id']);
+			} else {
+				$this->data['description_document'] = array();
+			}
+
+			if (isset($this->request->get['product_id'])) {
+				$this->data['product_id'] = $this->request->get['product_id'];
+			} else {
+				$this->data['product_id'] = 0;
+			}
+
+			]]>
+			</add>
+		</operation>
+		<operation>
+			<search position="before">
+				<![CDATA[
+				public function autocomplete() {
+				]]>
+			</search>
+			<add><![CDATA[
+		public function insert_product_document() {
+
+			//echo "<pre>"; print_r($this->request->post); die('opencart/vqmod/xml/product_description_pdf.xml:199');
+
+			if (isset($this->request->post['product_document']) && is_array($this->request->post['product_document'])) {
+				$this->load->model('catalog/product');
+				$this->model_catalog_product->insert_product_document($this->request->post['product_document']);
+			}
+		}
+
+		public function update_pr_document_details() {
+
+			if (isset($this->request->post['product_document']) && is_array($this->request->post['product_document']) && $this->request->post['product_document']) {
+				$this->load->model('catalog/product');
+
+				//echo 'dfbdfbdfb<pre>'; print_r($this->request->post['product_document']);
+
+				$response = $this->model_catalog_product->update_pr_document_details($this->request->post['product_document']);
+			}
+
+			echo $response;
+		}
+
+		public function delete_pr_document_details() {
+
+		    $response = false;
+
+	  		if (isset($this->request->post['delete_document']) && $this->request->post['delete_document']) {
+
+	  			if (isset($this->request->post['delete_document']['all']) && $this->request->post['product_document']['all']) {
+
+	  				//die("delete all doc");
+	  			} else {
+	  			    foreach ($this->request->post['delete_document'] as $doc) {
+
+	  			        $delete_group = "DELETE FROM oc_product_description_download_pdf_to_customer_group WHERE product_description_download_pdf_id = ".$doc." ;";
+	  			        $this->db->query($delete_group);
+
+	  			        $delete_pdf = "DELETE FROM oc_product_description_download_pdf WHERE product_description_download_pdf_id = ".$doc." ;";
+	  			        $response = $this->db->query($delete_pdf);
+
+	  			        if($response) {
+	  			            echo "delete_success";
+	  			        } else {
+	  			            echo "delete_failed";
+	  			        }
+	  			    }
+	  			}
+
+	  			//var_dump($this->request->post); die('asfbvsdfvs');
+	  		}
+	  		//die('fail out of validate if');
+	  	}
+			]]></add>
+		</operation>
+	</file>
+
+	<file name="admin/language/romana/catalog/product.php">
+		<operation>
+			<search position="after">
+			<![CDATA[
+			$_['error_model']
+			]]>
+			</search>
+			<add>
+			<![CDATA[
+				$_['tab_download_pdf']='Download';
+	$_['entry_description_document']='Description Document';
+	$_['button_upload']='Upload';
+			]]>
+			</add>
+		</operation>
+	</file>
+
+	<file name="admin/view/template/catalog/product_form.tpl">
+		<operation>
+			<search position="replace">
+			<![CDATA[
+			<a href="#tab-mapping-ax_code"><?php echo $tab_mapping_ax_code; ?></a></div>
+			]]>
+			</search>
+			<add>
+			<![CDATA[
+			<a href="#tab-mapping-ax_code"><?php echo $tab_mapping_ax_code; ?></a><a href="#tab-download-pdf"><?php echo $tab_download_pdf; ?></a></div>
+			]]>
+			</add>
+		</operation>
+
+		<operation>
+			<search position="before">
+			<![CDATA[
+			</form>
+			]]>
+			</search>
+			<add>
+			<![CDATA[
+			<div id="tab-download-pdf">
+				<div class="heading" style="width: 500px; height: 42px; background: rgb(238, 238, 238) none repeat scroll 0px 0px; border-top-left-radius: 10px; border-top-right-radius: 10px;">
+				  	<h1 style="height: 34px; background: rgb(238, 238, 238) none repeat scroll 0px 0px; border-top-left-radius: 10px; border-top-right-radius: 10px; margin: 6px; width: 250px; display: inline-block;">
+				  		<img alt="" src="view/image/product.png"> Documente
+					</h1>
+				  	<div class="buttons" style="width: 150px; display: inline-block; float: right; margin: 8px;">
+				  		<a class="button" id="get_insert_form">Inserare</a>
+				  		<a class="button" id="delete_document">Sterge</a>
+					</div>
+				</div>
+				<div id="insert_document_popup" style="display:none;">
+					<form id="insert_document_form" class="mmmm">
+						<table>
+							<tr>
+								<td>Nume document</td>
+								<td>
+									<input name="product_document[product_id]" type="hidden" class="product_document_element" value="<?= $product_id ?>">
+									<input name="product_document[document_name]" type="text" id="new_document_name" class="product_document_element">
+									<span class="error" style="display:none;">Numele documentului trebuie sa fie intre 5 si 50 charactere!</span>
+								</td>
+							</tr>
+							<tr>
+								<td>Tip document</td>
+								<td><input name="product_document[document_type]" type="text" id="new_document_type" class="product_document_element">
+									<span class="error" style="display:none;">Tipul documentului trebuie sa fie intre 5 si 50 charactere!</span>
+								</td>
+							</tr>
+							<tr>
+								<td>Descriere document</td>
+								<td><textarea name="product_document[document_description]" id="new_document_type" class="product_document_element"></textarea>
+									<span class="error" style="display:none;">Descrierea documentului trebuie sa fie intre 5 si 250 charactere!!!</span>
+								</td>
+							</tr>
+							<tr>
+								<td>Drept de access</td>
+								<td>
+									<?php foreach ($customer_groups as $customer_group) { ?>
+										<input id="insert_pdf_to_customer_group[<?= $customer_group['customer_group_id'] ?>]" type="checkbox" name="product_document[customer_group][<?= $customer_group['customer_group_id'] ?>]" value="<?= $customer_group['customer_group_id'] ?>" class="product_document_element" />
+										<label for="insert_pdf_to_customer_group[<?= $customer_group['customer_group_id'] ?>]"><?= $customer_group['name'] ?></label><br>
+									<?php } ?>
+									<input id="insert_pdf_to_customer_group[5]" type="checkbox" name="product_document[customer_group][5]" value="5" class="product_document_element" />
+									<label for="insert_pdf_to_customer_group[5]">Public</label><br>
+								</td>
+							</tr>
+							<tr>
+								<td>Document</td>
+								<td>
+								<?php foreach ($languages as $language) { ?>
+									<input name="product_document[language_id]" type="hidden" class="product_document_element" value="<?php echo $language['language_id']; ?>">
+									<input id="field<?php echo $language['language_id']; ?>" type="text" name="product_document[file_name]" value="<?php echo isset($description_document[$language['language_id']]) ? $description_document[$language['language_id']]['file_name'] : ''; ?>" class="product_document_element" />
+									<a onclick="docupload(this.id)" id="button-upload<?php echo $language['language_id']; ?>" class="button">Adaugare document</a>
+									<br/><br/>
+								<?php } ?>
+								</td>
+							</tr>
+							<tr>
+								<td></td>
+								<td>
+									<a class="button" id="insert_document_btn">Salvare</a>
+									<a class="button" id="hide_insert_document_popup">Inchide</a>
+									<span class="success" id="success_product_document_insert_<?= $document['product_description_download_pdf_id'] ?>" style="display:none;">Document adaugt cu succes!</span>
+								</td>
+							</tr>
+						</table>
+					</form>
+				</div>
+				<?php /* ?>
+				<table class="form">
+			  		<tr>
+
+				  	</tr>
+				  	<tr>
+						<td><?= $entry_customer_group ?></td>
+						<td></td>
+					</tr>
+				  	<?php foreach ($customer_groups as $customer_group) { ?>
+				  	<tr>
+						<td>
+							<input id="description_pdf_to_customer_group[<?= $customer_group['customer_group_id'] ?>]" type="checkbox" name="description_pdf_to_customer_group[<?= $customer_group['customer_group_id'] ?>]" value="<?= $customer_group['customer_group_id'] ?>" />
+							<label for="description_pdf_to_customer_group[<?= $customer_group['customer_group_id'] ?>]"><?= $customer_group['name'] ?></label>
+						</td>
+				  	</tr>
+				  	<?php } ?>
+			  	</table>
+			  	<?php */ ?>
+			  	<?php if($description_document) { ?>
+				<div style="width: 500px;">
+					<div style="border-bottom: 1px solid #DDD; ">
+						<span><input type="checkbox" class="delete_document" name="delete_document[all]" value="all"></span>
+						<span style="width: 300px; display: inline-block; padding: 5px;"><strong>Numele documentului</strong></span>
+						<span style="width: 100px; display: inline-block; padding: 5px;"><strong>Actiune</strong></span>
+					</div>
+					<?php foreach ($description_document as $document) { ?>
+					<div style="border-bottom: 1px solid #DDD;">
+						<span><input type="checkbox" class="delete_document" name="delete_document[<?= $document['product_description_download_pdf_id'] ?>]" value="<?= $document['product_description_download_pdf_id'] ?>"></span>
+						<span style="width: 300px; display: inline-block; padding: 5px;"><?= $document['document_name'] ?></span>
+						<span style="width: 100px; display: inline-block; padding: 5px;">
+							<a href="javascript:void(0);" id="<?= $document['product_description_download_pdf_id'] ?>" class="get_pr_document_details">Editare</a>
+						</span>
+					</div>
+					<div class="pr_document_details" id="pr_document_details_<?= $document['product_description_download_pdf_id'] ?>" style="display:none;">
+						<?php //echo "<pre>"; print_r($document); print_r($customer_groups); ?>
+						<table>
+							<tr>
+								<td>Nume document</td>
+								<td>
+									<input name="product_document[product_document_id]" type="hidden" class="product_document_update_<?= $document['product_description_download_pdf_id'] ?>" value="<?= $document['product_description_download_pdf_id'] ?>">
+									<input name="product_document[product_id]" type="hidden" class="product_document_update_<?= $document['product_description_download_pdf_id'] ?>" value="<?= $product_id ?>">
+									<input name="product_document[document_name]" type="text" id="new_document_name" class="product_document_update_<?= $document['product_description_download_pdf_id'] ?>" value="<?= $document['document_name'] ?>" />
+									<span class="error" style="display:none;">Numele documentului trebuie sa fie intre 5 si 50 charactere!</span>
+								</td>
+							</tr>
+							<tr>
+								<td>Tip document</td>
+								<td><input name="product_document[document_type]" type="text" id="new_document_type" class="product_document_update_<?= $document['product_description_download_pdf_id'] ?>" value="<?= $document['document_type'] ?>" />
+									<span class="error" style="display:none;">Tipul documentului trebuie sa fie intre 5 si 50 charactere!</span>
+								</td>
+							</tr>
+							<tr>
+								<td>Descriere document</td>
+								<td><textarea name="product_document[document_description]" id="new_document_type" class="product_document_update_<?= $document['product_description_download_pdf_id'] ?>"><?= $document['document_description'] ?></textarea>
+									<span class="error" style="display:none;">Descrierea documentului trebuie sa fie intre 5 si 250 charactere!!!</span>
+								</td>
+							</tr>
+							<tr>
+								<td>Drept de access</td>
+								<td>
+									<?php foreach ($customer_groups as $customer_group) { ?>
+										<?php $match = false; ?>
+										<?php foreach ($document['customer_to_group'] as $doc_group) { ?>
+											<?php if ($doc_group['customer_group_id'] == $customer_group['customer_group_id']) { ?>
+												<?php $match = true; ?>
+												<input id="insert_pdf_to_customer_group[<?= $customer_group['customer_group_id'] ?>]" type="checkbox" <?= 'checked' ?> name="product_document[customer_group][<?= $customer_group['customer_group_id'] ?>]" value="<?= $customer_group['customer_group_id'] ?>" class="product_document_update_<?= $document['product_description_download_pdf_id'] ?>" />
+											<?php } ?>
+										<?php } ?>
+										<?php if (!$match) { ?>
+											<input id="insert_pdf_to_customer_group[<?= $customer_group['customer_group_id'] ?>]" type="checkbox"  name="product_document[customer_group][<?= $customer_group['customer_group_id'] ?>]" value="<?= $customer_group['customer_group_id'] ?>" class="product_document_update_<?= $document['product_description_download_pdf_id'] ?>" />
+										<?php } ?>
+										<label for="insert_pdf_to_customer_group[<?= $customer_group['customer_group_id'] ?>]"><?= $customer_group['name'] ?></label><br>
+									<?php } ?>
+									<?php $public = false; ?>
+									<?php foreach ($document['customer_to_group'] as $doc_group) { ?>
+										<?php if ($doc_group['customer_group_id'] == '5') { ?>
+											<input id="insert_pdf_to_customer_group[5]" type="checkbox" <?= 'checked' ?> name="product_document[customer_group][5]" value="5" class="product_document_update_<?= $document['product_description_download_pdf_id'] ?>" />
+										<?php $public = true; } ?>
+									<?php } ?>
+									<?php if (!$public) { ?>
+										<input id="insert_pdf_to_customer_group[5]" type="checkbox" name="product_document[customer_group][5]" value="5" class="product_document_update_<?= $document['product_description_download_pdf_id'] ?>" />
+									<?php } ?>
+									<label for="insert_pdf_to_customer_group[5]">Public</label><br>
+								</td>
+							</tr>
+							<tr>
+								<td>Document</td>
+								<td>
+								<?php foreach ($languages as $language) { ?>
+									<input name="product_document[language_id]" type="hidden" class="product_document_update_<?= $document['product_description_download_pdf_id'] ?>" value="<?php echo $language['language_id']; ?>">
+
+									<input id="field<?php echo $document['product_description_download_pdf_id']; ?>" type="text" name="product_document[file_name]" value="<?= $document['file_name'] ?>" class="product_document_update_<?= $document['product_description_download_pdf_id'] ?>" />
+									<a onclick="docupload(this.id)" id="button-upload<?php echo $document['product_description_download_pdf_id']; ?>" class="button button-upload">Adaugare document</a>
+									<?php /* ?>
+									<input id="field<?php echo $language['language_id']; ?>" type="text" name="description_document[<?php echo $language['language_id']; ?>][file_name]" value="<?php echo isset($description_document[$language['language_id']]) ? $description_document[$language['language_id']]['file_name'] : ''; ?>" />
+            						<a onclick="docupload(this.id)" id="button-upload<?php echo $language['language_id']; ?>" class="button"><?php echo $button_upload; ?></a>
+									<?php */ ?>
+									<br/><br/>
+								<?php } ?>
+								</td>
+							</tr>
+							<tr>
+								<td></td>
+								<td>
+									<a class="button update_document_btn" id="<?= $document['product_description_download_pdf_id'] ?>">Salvare</a>
+									<a class="button hide_update_document_popup" id="<?= $document['product_description_download_pdf_id'] ?>">Inchide</a>
+									<span class="success" id="success_product_document_update_<?= $document['product_description_download_pdf_id'] ?>" style="display:none;">Sa modificat cu succes!</span>
+								</td>
+							</tr>
+						</table>
+					</div>
+					<?php } ?>
+				</div>
+			  	<?php //echo "<pre>"; print_r($description_document); ?>
+			  	<?php } ?>
+			</div>
+			]]>
+			</add>
+		</operation>
+
+		<operation>
+			<search position="before">
+			<![CDATA[
+			<?php echo $footer; ?>
+			]]>
+			</search>
+			<add>
+			<![CDATA[
+		<script type="text/javascript" src="view/javascript/jquery/ajaxupload.js"></script>
+	<?php foreach ($languages as $language) { ?>
+	<script type="text/javascript"><!--
+	new AjaxUpload('#button-upload<?php echo $language['language_id']; ?>', {
+		action: 'index.php?route=catalog/download/upload&token=<?php echo $token; ?>',
+		name: 'file',
+		autoSubmit: true,
+		responseType: 'json',
+		onSubmit: function(file, extension) {
+			$('#button-upload<?php echo $language['language_id']; ?>').after('<img src="view/image/loading.gif" class="loading" style="padding-left: 5px;" />');
+			$('#button-upload<?php echo $language['language_id']; ?>').attr('disabled', true);
+		},
+		onComplete: function(file, json) {
+			$('#button-upload<?php echo $language['language_id']; ?>').attr('disabled', false);
+
+			if (json['success']) {
+				alert(json['success']);
+				$('#field<?php echo $language['language_id']; ?>').attr('value', json['filename']);
+			}
+
+			if (json['error']) {
+				alert(json['error']);
+			}
+
+			$('.loading').remove();
+		}
+	});
+	//--></script>
+	<?php } ?>
+	<?php foreach ($description_document as $document) { ?>
+	<script type="text/javascript"><!--
+	new AjaxUpload('#button-upload<?php echo $document['product_description_download_pdf_id']; ?>', {
+		action: 'index.php?route=catalog/download/upload&token=<?php echo $token; ?>',
+		name: 'file',
+		autoSubmit: true,
+		responseType: 'json',
+		onSubmit: function(file, extension) {
+            console.log(file+' '+extension);
+			$('#button-upload<?php echo $document['product_description_download_pdf_id']; ?>').after('<img src="view/image/loading.gif" class="loading" style="padding-left: 5px;" />');
+			$('#button-upload<?php echo $document['product_description_download_pdf_id']; ?>').attr('disabled', true);
+		},
+		onComplete: function(file, json) {
+			console.log(file+' '+json);
+			$('#button-upload<?php echo $document['product_description_download_pdf_id']; ?>').attr('disabled', false);
+
+			if (json['success']) {
+				alert(json['success']);
+				console.log(json['success']);
+				$('#field<?php echo $document['product_description_download_pdf_id']; ?>').attr('value', json['filename']);
+			}
+
+			if (json['error']) {
+				alert(json['error']);
+				console.log(json['error']);
+			}
+
+			$('.loading').remove();
+		}
+	});
+	//--></script>
+	<?php } ?>
+	<script type="text/javascript">
+	$( document ).ready(function() {
+		$('#get_insert_form').on( "click", function() {
+		  	$('#insert_document_popup').show();
+		  	$('.success').hide();
+		});
+
+		$('#hide_insert_document_popup').on( "click", function() {
+		  	$('#insert_document_popup').hide();
+		  	$('.success').hide();
+		});
+
+		$('#insert_document_btn').on( "click", function() {
+			var form_validation = false;
+
+			if ($('#new_document_name').val().length < 5 || $('#new_document_name').val().length > 50) {
+				//console.log('length validation '+$('#new_document_name').val().length);
+				form_validation = false;
+				$('#new_document_name').next('span').show();
+			} else {
+				$('#new_document_name').next('span').hide();
+				form_validation = true;
+			}
+
+			if ($('#new_document_type').val().length < 5 || $('#new_document_type').val().length > 50) {
+				//console.log('length validation '+$('#new_document_name').val().length);
+				form_validation = false;
+				$('#new_document_type').next('span').show();
+			} else {
+				$('#new_document_type').next('span').hide();
+				form_validation = true;
+			}
+
+			var insert_document_data = $('#form :input[class=product_document_element]').serialize();
+
+			if (form_validation) {
+				$.ajax({
+					url: 'index.php?route=catalog/product/insert_product_document&token=<?php echo $token; ?>',
+					type: 'POST',
+					async: false,
+					data: insert_document_data,
+					dataType: 'json',
+					success: function (response) {
+						console.log('insert_product_document response '+response);
+
+						//$('#success_product_document_insert').show();
+
+						window.location.reload(true);
+
+						//var obj = jQuery.parseJSON(response);
+					},
+					error: function (response) {
+						alert('insert_product_document error '+response);
+					}
+				});
+			}
+
+			console.log('length '+$('#new_document_name').val().length);
+		});
+
+		$('.get_pr_document_details').on('click', function(){
+
+			var pr_document_id = $(this).attr('id');
+
+			$('.success').hide();
+
+			$('#pr_document_details_'+pr_document_id).show();
+			console.log('pr documet_id '+pr_document_id);
+		});
+
+		$('.hide_update_document_popup').on('click', function() {
+
+			var pr_document_id = $(this).attr('id');
+
+			$('.success').hide();
+
+			$('#pr_document_details_'+pr_document_id).hide();
+		});
+
+		$('.update_document_btn').on('click', function() {
+
+			var pr_document_id = $(this).attr('id');
+
+			if(pr_document_id){
+
+				var update_document_data = $('#form :input[class=product_document_update_'+pr_document_id+']').serialize();
+
+				$.ajax({
+					url: 'index.php?route=catalog/product/update_pr_document_details&token=<?php echo $token; ?>',
+					type: 'POST',
+					async: false,
+					data: update_document_data,
+					dataType: 'json',
+					success: function (response) {
+						console.log('update_product_document response '+response);
+
+						$('#success_product_document_update_'+pr_document_id).show();
+
+						//var obj = jQuery.parseJSON(response);
+					},
+					error: function (response) {
+						alert('update_product_document error '+response);
+					}
+				});
+			}
+		});
+
+		$('#delete_document').on('click', function() {
+
+			var pr_document_id = $(this).attr('id');
+
+			if(pr_document_id){
+
+				var delete_document_data = $('#form :input[class=delete_document]').serialize();
+
+				$.ajax({
+					url: 'index.php?route=catalog/product/delete_pr_document_details&token=<?php echo $token; ?>',
+					type: 'POST',
+					async: false,
+					data: delete_document_data,
+					success: function (response) {
+						console.log('delete_product_document response '+response);
+                        if(response == "delete_success") {
+					        window.location.reload(true);
+					    }
+						//var obj = jQuery.parseJSON(response);
+					},
+					error: function (response) {
+						console.log('delete_product_document error '+response);
+					}
+				});
+			}
+		});
+
+	});
+	</script>
+			]]>
+			</add>
+		</operation>
+
+	</file>
+
+    <file name="admin/view/stylesheet/stylesheet.css">
+        <operation>
+            <search position="before">
+                <![CDATA[table.form {]]>
+            </search>
+            <add>
+                <![CDATA[
+	#insert_document_popup > table {
+		width:500px;
+	}
+				]]>
+            </add>
+        </operation>
+    </file>
+
+    <file name="catalog/model/catalog/product.php">
+		<operation>
+			<search position="before">
+			<![CDATA[
+			public function getProduct($product_id, $option = array())
+			]]>
+			</search>
+			<add>
+			<![CDATA[
+		public function getDocumentToDownload($doc_id, $customer_group_id = 5) {
+			$query = "SELECT * FROM " . DB_PREFIX . "product_description_download_pdf WHERE product_description_download_pdf_id = '" . (int)$doc_id . "' AND language_id= '".(int)$this->config->get('config_language_id') . "'";
+			$query = $this->db->query($query)->row;
+
+			return $query;
+		}
+
+		public function getProductDescriptionDocument($product_id, $customer_group_id = 5) {
+			$product_description_document_data = array();
+
+			$query = "SELECT * FROM " . DB_PREFIX . "product_description_download_pdf WHERE product_id = '" . (int)$product_id . "' AND language_id= '".(int)$this->config->get('config_language_id') . "'";
+			//die('<br>'.$query.'<br>');
+			$query = $this->db->query($query);
+
+			//echo "<pre>"; print_r($query); die('opencart/vqmod/xml/product_description_pdf.xml:716');
+
+			if ($query->rows) {
+				foreach ($query->rows as $result) {
+					$decription_doc_to_customer_group = "SELECT * FROM " . DB_PREFIX . "product_description_download_pdf_to_customer_group
+															WHERE product_description_download_pdf_id = '" . (int)$result['product_description_download_pdf_id'] . "'
+															AND customer_group_id = '".(int)$customer_group_id . "';";
+					//die('<br>'.$decription_doc_to_customer_group.'<br>');
+					$decription_doc_to_customer_group = $this->db->query($decription_doc_to_customer_group);
+
+					if ($decription_doc_to_customer_group->num_rows) {
+						$product_description_document_data[] = 	$result;
+					}
+				}
+			}
+
+			//echo "<pre>opencart/vqmod/xml/product_description_pdf.xml:728"; print_r($product_description_document_data); //die('');
+
+			return $product_description_document_data;
+		}
+			]]>
+			</add>
+		</operation>
+	</file>
+
+	<file name="catalog/language/romana/product/product.php">
+		<operation>
+			<search position="after">
+			<![CDATA[
+			$_['entry_captcha']
+			]]>
+			</search>
+			<add>
+			<![CDATA[
+			$_['download_description'] = 'Download Description: ';
+			]]>
+			</add>
+		</operation>
+	</file>
+
+	<file name="catalog/controller/product/product.php">
+		<operation>
+			<search position="after">
+			<![CDATA[
+			$this->data['entry_captcha']
+			]]>
+			</search>
+			<add>
+			<![CDATA[
+			$this->data['download_description'] = $this->language->get('download_description');
+			]]>
+			</add>
+		</operation>
+		<operation>
+			<search position="after" offset="1">
+			<![CDATA[
+			$this->data['tax'] = false;
+			]]>
+			</search>
+			<add>
+			<![CDATA[
+				//if($this->customer->isLogged()) {
+					$product_description_doc = $this->model_catalog_product->getProductDescriptionDocument($this->request->get['product_id'], ($this->customer->getCustomerGroupId()) ? $this->customer->getCustomerGroupId() : 5);
+
+					//echo "<pre>"; print_r($product_description_doc); die('opencart/vqmod/xml/product_description_pdf.xml:774');
+
+					foreach($product_description_doc as $file_name)
+					{
+						$customer_id = (int)$this->session->data['customer_id'];
+						$document_id = (int)$file_name['product_description_download_pdf_id'];
+
+						$sec_id = $customer_id + 17;
+
+						$this->data['product_doc'][]=array(
+							'href'=>$this->url->link('product/product/download','&id='.$document_id.'&sec='.$sec_id),
+							//'name'=>trim(substr($file_name,0,strrpos($file_name,'.')))
+							'name'=>$file_name['document_name'],
+							'type'=>$file_name['document_type'],
+							'description'=>$file_name['document_description']
+						);
+					}
+					//echo "<pre>"; print_r($this->data['product_doc']); die('opencart/vqmod/xml/product_description_pdf.xml:783');
+
+				//}
+			]]>
+			</add>
+		</operation>
+		<operation>
+			<search position="before">
+			<![CDATA[
+			if ((float)$product_info['special']) {
+			]]>
+			</search>
+			<add>
+			<![CDATA[
+			if($this->customer->isLogged()){$this->data['cust_reg']=true;}else{$this->data['cust_reg']=false;}
+			]]>
+			</add>
+		</operation>
+			<operation>
+			<search position="before">
+			<![CDATA[
+			public function write()
+			]]>
+			</search>
+			<add>
+			<![CDATA[
+		public function download() {
+
+			$this->load->model('catalog/product');
+
+			/*echo "<pre>";
+			var_dump($_GET);
+			die('bafbdsfvd');*/
+
+			if (isset($this->request->get['sec'])) {
+				$sec_id = (int)$this->request->get['sec'];
+				$customer_id = (int)$this->session->data['customer_id'];
+
+				$check = $sec_id - 17;
+
+				/*var_dump($sec_id);
+				var_dump($customer_id);
+				var_dump($check);
+				die('fbdsfbdfb');*/
+
+				if ($check != $customer_id) {
+					exit('Error:  Access denied!');
+				}
+
+			} else {
+				exit('Error: Access denied!');
+			}
+
+			if (isset($this->request->get['id'])) {
+				$document_id = $this->request->get['id'];
+			} else {
+				$document_id = 0;
+			}
+
+			//var_dump($document_id); die('fbdfbd');
+
+			$document_info = $this->model_catalog_product->getDocumentToDownload($document_id, $this->customer->getCustomerGroupId());
+			//echo "<pre>"; print_r($document_info); die('dfbadfbdf');
+			if ($document_info) {
+				$file = DIR_DOWNLOAD . $document_info['file_name'];
+				$mask = basename(trim(substr($document_info['file_name'],0,strrpos($document_info['file_name'],'.'))));
+
+				if (!headers_sent()) {
+					if (file_exists($file)) {
+						header('Content-Type: application/octet-stream');
+						header('Content-Disposition: attachment; filename="' . ($mask ? $mask : basename($file)) . '"');
+						header('Expires: 0');
+						header('Cache-Control: must-revalidate, post-check=0, pre-check=0');
+						header('Pragma: public');
+						header('Content-Length: ' . filesize($file));
+						if (ob_get_level()) ob_end_clean();
+						readfile($file, 'rb');
+						exit;
+					} else {
+						exit('Error: Could not find file ' . $file . '!');
+					}
+				} else {
+					exit('Error: Headers already sent out!');
+				}
+			} else {
+				$this->redirect($this->url->link('account/download', '', 'SSL'));
+			}
+		}
+			]]>
+			</add>
+		</operation>
+	</file>
+
+	<file name="catalog/view/theme/*/template/product/product.tpl">
+		<operation>
+			<search position="before" offset="1">
+				<![CDATA[
+		<div id="tab-description" class="tab-content"><?php echo $description; ?>
+		]]>
+			</search>
+			<add>
+				<![CDATA[
+			<?php if(is_array($product_doc)) { ?>
+			<a href="#tab-download" style="display: inline;" class="selected">Download</a>
+			<?php } ?>
+		]]>
+			</add>
+		</operation>
+		<operation>
+			<search position="before">
+			<![CDATA[
+			<div id="tab-description" class="tab-content"><?php echo $description; ?>
+			]]>
+			</search>
+			<add>
+			<![CDATA[
+			<?php if(is_array($product_doc)) { ?>
+			<div id="tab-download" class="tab-content">
+				<div class="download_description">
+					<span><?php //echo '<pre>'; print_r($product_doc); ?></span>
+					<table>
+						<thead>
+							<tr>
+								<td>Nume document</td>
+								<td>Tip document</td>
+								<td>Descriere document</td>
+								<td>Descarcare</td>
+							</tr>
+						</thead>
+						<tbody>
+							<?foreach ($product_doc as $doc) { ?>
+							<tr>
+								<td><?= $doc['name'] ?></td>
+								<td><?= $doc['type'] ?></td>
+								<td><?= $doc['description'] ?></td>
+								<td>
+									<a class="button" href="<?php echo $doc['href']; ?>">Descarcare</a><br>
+								</td>
+							</tr>
+							<?php } ?>
+						</tbody>
+					</table>
+				</div>
+			</div>
+			<?php /*echo "<pre>"; print_r($product_doc);*/ } ?>
+			]]>
+			</add>
+		</operation>
+	</file>
+	<file name="catalog/view/theme/default/stylesheet/stylesheet.css">
+		<operation>
+			<search position="before">
+				<![CDATA[.download-list {]]>
+			</search>
+			<add>
+				<![CDATA[
+	.download_description > table {
+		border: 1px solid black;
+		border-collapse: collapse;
+	}
+				]]>
+			</add>
+		</operation>
+	</file>
+
+</modification>

@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="UTF-8"?>
+                <!DOCTYPE cXML SYSTEM "http://xml.cXML.org/schemas/cXML/1.1.010/cXML.dtd">
+                    <cXML version="1.1.010" payloadID="1413878653.631907543@YOURDOMAIN" timestamp="2014-10-21T10:04:13+02:00">
+	                    <Header>
+		                    <From>
+                                <Credential domain="magazin.renania.ro">
+                                    <Identity>Renania</Identity>
+                                </Credential>
+                            </From>
+                            <To>
+                                <Credential domain="takata">
+                                    <Identity>takata</Identity>
+                                </Credential>
+                            </To>
+                            <Sender>
+                                <Credential domain="magazin.renania.ro">
+                                    <Identity>Renania</Identity>
+                                </Credential>
+                                <UserAgent>Renania-Software WEB-Interface</UserAgent>
+                            </Sender>
+                        </Header>
+                        <Message>
+                            <inReplyTo>20141021103.17208@IPADDRESS</inReplyTo>
+                            <PunchOutOrderMessage>
+                                <BuyerCookie>2103194819</BuyerCookie>
+                                <PunchOutOrderMessageHeader operationAllowed="edit">
+                                    <Total>
+                                        <Money currency="RON">47.2688</Money>
+                                    </Total>
+                                    <Tax>
+                                        <Money currency="RON">0</Money>
+                                    </Tax>
+                                </PunchOutOrderMessageHeader>
+                                <Itemln quantity="10">
+                                    <ItemID>
+                                        <SupplierPartID>353</SupplierPartID>
+                                        <SupplierPartAuxiliaryID>353</SupplierPartAuxiliaryID>
+                                    </ItemID>
+                                    <ItemDetail>
+                                        <UnitPrice>
+                                            <Money currency="RON">10.06</Money>
+                                        </UnitPrice>
+                                        <Description xml:lang="ro">
+                                            <ShortName>
+                                                <![CDATA[Tricou la baza gatului, art. ST2000]]>
+                                            </ShortName>
+                                        </Description>
+                                        <UnitOfMeasure>EA</UnitOfMeasure>
+                                        <Classification domain="UNSPSC">44120000</Classification>
+                                        <LeadTime></LeadTime>
+                                    </ItemDetail></Itemln>
+                        </PunchOutOrderMessage>
+                    </Message>
+                </cXML>

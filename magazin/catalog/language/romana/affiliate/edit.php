@@ -1,0 +1,33 @@
+<?php
+$_['heading_title'] = 'Informatiile contului meu';
+$_['text_account'] = 'Cont';
+$_['text_edit'] = 'Editeaza informatiile';
+$_['text_your_details'] = 'Detalii personale';
+$_['text_your_address'] = 'Adresa ta';
+$_['text_success'] = 'Succes: Contul tau a fost actualizat cu succes.';
+$_['entry_firstname'] = 'Prenume:';
+$_['entry_lastname'] = 'Nume:';
+$_['entry_email'] = 'E-Mail:';
+$_['entry_telephone'] = 'Telefon:';
+$_['entry_fax'] = 'Fax:';
+$_['entry_company'] = 'Companie:';
+$_['entry_banca'] = 'Banca:';
+$_['entry_iban'] = 'IBAN:';
+$_['entry_website'] = 'Web Site:';
+$_['entry_address_1'] = 'Adresa 1:';
+$_['entry_address_2'] = 'Adresa 2:';
+$_['entry_postcode'] = 'Cod postal:';
+$_['entry_city'] = 'Localitate:';
+$_['entry_country'] = 'Tara:';
+$_['entry_zone'] = 'Judet:';
+$_['error_exists'] = 'Eroare: Adresa de email este deja inregistrata!';
+$_['error_firstname'] = 'Prenumele trebuie sa contina intre 1 si 32 de caractere!';
+$_['error_lastname'] = 'Numele trebuie sa contina intre 1 si 32 de caractere!';
+$_['error_email'] = 'Adresa de email nu e valida!';
+$_['error_telephone'] = 'Numarul de telefon trebuie sa contina intre 3 si 32 de caractere!';
+$_['error_address_1'] = 'Adresa 1 trebuie sa contina intre 3 si 128 de caractere!';
+$_['error_city'] = 'Localitatea trebuie sa contina intre 3 si 128 de caractere!';
+$_['error_country'] = 'Selectati tara!';
+$_['error_zone'] = 'Va rugam selectati judetul!';
+$_['error_postcode'] = 'Codul postal trebuie sa fie intre 2 si 10 caractere!';
+?>

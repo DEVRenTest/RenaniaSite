@@ -1,0 +1,227 @@
+<modification>
+    <id>New Customer Fields Admin</id>
+    <version>1</version>
+    <vqmver>2.3.2</vqmver>
+    <author>shifty</author>
+	<!-- sale/customer -->
+    <file name="admin/view/template/sale/customer_form.tpl">
+        <operation>
+            <search position="before" index="1"><![CDATA[<tr class="tax-id-display">]]></search>
+            <add><![CDATA[
+                <tr>
+                    <td><?php echo $entry_iban; ?></td>
+                    <td><input type="text" name="address[<?php echo $address_row; ?>][iban]" value="<?php echo $address['iban']; ?>" /></td>
+                </tr>
+                <tr>
+                    <td><?php echo $entry_banca; ?></td>
+                    <td><input type="text" name="address[<?php echo $address_row; ?>][banca]" value="<?php echo $address['banca']; ?>" /></td>
+                </tr>
+            ]]></add>
+        </operation>
+        <operation>
+            <search position="before"><![CDATA[html += '    <tr class="tax-id-display">';]]></search>
+            <add><![CDATA[
+                html += '    <tr>';
+                html += '       <td><?php echo $entry_iban; ?></td>';
+                html += '        <td><input type="text" name="address[' + address_row + '][iban]" value="" /></td>';
+                html += '    </tr>';
+                html += '    <tr>';
+                html += '        <td><?php echo $entry_banca; ?></td>';
+                html += '        <td><input type="text" name="address[' + address_row + '][banca]" value="" /></td>';
+                html += '    </tr>';
+            ]]></add>
+        </operation>
+    </file>
+    <file name="admin/language/english/sale/customer.php">
+        <operation>
+            <search position="before"><![CDATA[
+                $_['entry_tax_id']          = 'Tax ID:';
+            ]]></search>
+            <add><![CDATA[
+                $_['entry_iban'] = 'Bank account:';
+                $_['entry_banca'] = 'Bank';
+            ]]></add>
+        </operation>
+    </file>
+    <file name="admin/language/romana/sale/customer.php">
+        <operation>
+            <search position="before"><![CDATA[
+                $_['entry_tax_id']          = 'Cod Taxa:';
+            ]]></search>
+            <add><![CDATA[
+                $_['entry_iban'] = 'Cont banca:';
+                $_['entry_banca'] = 'Banca:';
+            ]]></add>
+        </operation>
+    </file>
+    <file name="admin/controller/sale/customer.php">
+        <operation>
+            <search position="before"><![CDATA[
+                $this->data['entry_firstname'] = $this->language->get('entry_firstname');
+            ]]></search>
+            <add><![CDATA[
+				$this->data['entry_iban'] = $this->language->get('entry_iban');
+				$this->data['entry_banca'] = $this->language->get('entry_banca');
+            ]]></add>
+        </operation>
+    </file>
+    <file name="admin/model/sale/customer.php">
+		<!-- get adr -->
+        <operation>
+            <search position="before"><![CDATA['tax_id'         => $address_query->row['tax_id'],]]></search>
+            <add><![CDATA[
+                'iban'         => $address_query->row['iban'],
+				'banca'         => $address_query->row['banca'],
+            ]]></add>
+        </operation>
+		<!-- edit adr -->
+        <operation>
+            <search position="replace"><![CDATA[$this->db->query("DELETE FROM " . DB_PREFIX . "address WHERE customer_id = '" . (int)$customer_id . "'");]]></search>
+            <add><![CDATA[if ( (int)$data['customer_group_id'] != 3 || (int)$data['customer_group_id'] != 4 ){
+            $this->db->query("DELETE FROM " . DB_PREFIX . "address WHERE customer_id = '" . (int)$customer_id . "'");
+            } ]]></add>
+        </operation>
+		<operation>
+			<search position="replace"><![CDATA[$this->db->query("INSERT INTO " . DB_PREFIX . "address SET address_id = '" . (int)$address['address_id'] . "', customer_id = '" . (int)$customer_id . "', firstname = '" . $this->db->escape($address['firstname']) . "', lastname = '" . $this->db->escape($address['lastname']) . "', company = '" . $this->db->escape($address['company']) . "', company_id = '" . $this->db->escape($address['company_id']) . "', tax_id = '" . $this->db->escape($address['tax_id']) . "', address_1 = '" . $this->db->escape($address['address_1']) . "', address_2 = '" . $this->db->escape($address['address_2']) . "', city = '" . $this->db->escape($address['city']) . "', postcode = '" . $this->db->escape($address['postcode']) . "', country_id = '" . (int)$address['country_id'] . "', zone_id = '" . (int)$address['zone_id'] . "'");]]></search>
+			<add><![CDATA[  if ( (int)$data['customer_group_id'] == 3 || (int)$data['customer_group_id'] == 4 ){
+                    $zone_code = $this->db->query("SELECT `code` FROM " . DB_PREFIX . "zone WHERE `zone_id` =".$address['zone_id']);
+                    $this->db->query("UPDATE B2B_adresa SET street = '" . $this->db->escape($address['address_1']) . "', city = '" . $this->db->escape($address['city']) . "', zipcode = '" . $this->db->escape($address['postcode']) . "', county = '" . $zone_code->row['code'] . "' WHERE recid= ".$address['address_id'].";");
+                } else {
+                    //$this->db->query("INSERT INTO " . DB_PREFIX . "address SET address_id = '" . (int)$address['address_id'] . "', customer_id = '" . (int)$customer_id . "', firstname = '" . $this->db->escape($address['firstname']) . "', lastname = '" . $this->db->escape($address['lastname']) . "', company = '" . $this->db->escape($address['company']) . "', company_id = '" . $this->db->escape($address['company_id']) . "', banca ='" . $this->db->escape($address['banca']) . "', iban = '" . $this->db->escape($address['iban']) . "', tax_id = '" . $this->db->escape($address['tax_id']) . "', address_1 = '" . $this->db->escape($address['address_1']) . "', address_2 = '" . $this->db->escape($address['address_2']) . "', city = '" . $this->db->escape($address['city']) . "', postcode = '" . $this->db->escape($address['postcode']) . "', country_id = '" . (int)$address['country_id'] . "', zone_id = '" . (int)$address['zone_id'] . "'");
+                }
+			]]></add>
+		</operation>
+		<!-- add adr -->
+		<operation>
+			<search position="replace"><![CDATA[$this->db->query("INSERT INTO " . DB_PREFIX . "address SET customer_id = '" . (int)$customer_id . "', firstname = '" . $this->db->escape($address['firstname']) . "', lastname = '" . $this->db->escape($address['lastname']) . "', company = '" . $this->db->escape($address['company']) . "', company_id = '" . $this->db->escape($address['company_id']) . "', tax_id = '" . $this->db->escape($address['tax_id']) . "', address_1 = '" . $this->db->escape($address['address_1']) . "', address_2 = '" . $this->db->escape($address['address_2']) . "', city = '" . $this->db->escape($address['city']) . "', postcode = '" . $this->db->escape($address['postcode']) . "', country_id = '" . (int)$address['country_id'] . "', zone_id = '" . (int)$address['zone_id'] . "'");]]></search>
+			<add><![CDATA[
+				$this->db->query("INSERT INTO " . DB_PREFIX . "address SET customer_id = '" . (int)$customer_id . "', firstname = '" . $this->db->escape($address['firstname']) . "', lastname = '" . $this->db->escape($address['lastname']) . "', company = '" . $this->db->escape($address['company']) . "', company_id = '" . $this->db->escape($address['company_id']) . "', banca ='" . $this->db->escape($address['banca']) . "', iban = '" . $this->db->escape($address['iban']) . "', tax_id = '" . $this->db->escape($address['tax_id']) . "', address_1 = '" . $this->db->escape($address['address_1']) . "', address_2 = '" . $this->db->escape($address['address_2']) . "', city = '" . $this->db->escape($address['city']) . "', postcode = '" . $this->db->escape($address['postcode']) . "', country_id = '" . (int)$address['country_id'] . "', zone_id = '" . (int)$address['zone_id'] . "'");
+			]]></add>
+		</operation>
+    </file>
+	<!-- sales/order -->
+	<file name="admin/view/template/sale/order_info.tpl">
+		<operation>
+			<search position="before"><![CDATA[<?php if ($payment_tax_id) { ?>]]></search>
+			<add><![CDATA[
+                <?php if (isset($payment_iban) && $payment_iban) { ?>
+				<tr>
+                    <td><?php echo $entry_iban; ?></td>
+                    <td><?php echo $payment_iban; ?></td>
+                </tr>
+				<?php } ?>
+				<?php if (isset($payment_banca) && $payment_banca) { ?>
+                <tr>
+                    <td><?php echo $entry_banca; ?></td>
+                    <td><?php echo $payment_banca; ?></td>
+                </tr>
+				<?php } ?>
+			]]></add>
+		</operation>
+	</file>
+    <file name="admin/language/romana/sale/order.php">
+        <operation>
+            <search position="before"><![CDATA[$_['text_address_1']                          = 'Address 1:';]]></search>
+            <add><![CDATA[
+                $_['entry_iban'] = 'Cont banca:';
+                $_['entry_banca'] = 'Banca:';
+            ]]></add>
+        </operation>
+    </file>
+    <file name="admin/controller/sale/order.php">
+		<operation>
+            <search position="before"><![CDATA[$this->data['text_tax_id'] = $this->language->get('text_tax_id');]]></search>
+            <add><![CDATA[
+				$this->data['entry_iban'] = $this->language->get('entry_iban');
+				$this->data['entry_banca'] = $this->language->get('entry_banca');
+            ]]></add>
+        </operation>
+		<operation>
+			<search position="after"><![CDATA[
+				$this->data['payment_company_id'] = $order_info['payment_company_id'];
+			]]></search>
+			<add><![CDATA[
+				$this->data['payment_iban'] = $order_info['payment_iban'];
+				$this->data['payment_banca'] = $order_info['payment_banca'];
+			]]></add>
+		</operation>
+    </file>
+	<file name="admin/model/sale/order.php">
+		<operation>
+			<search position="after"><![CDATA[
+				'payment_tax_id'          => $order_query->row['payment_tax_id'],
+			]]></search>
+			<add><![CDATA[
+				'payment_iban'          => $order_query->row['payment_iban'],
+				'payment_banca'          => $order_query->row['payment_banca'],
+			]]></add>
+		</operation>
+	</file>
+	<!-- sale/order/insert -->
+	<file name="admin/view/template/sale/order_form.tpl">
+		<operation>
+			<search position="after"><![CDATA[
+<!--				<td><input type="text" name="payment_company_id" value="<?php echo $payment_company_id; ?>" /></td>-->
+               <td><input type="text" name="payment_company_id" value="<?php echo $payment_company_id; ?>" /></td>
+            </tr>
+			]]></search>
+			<add><![CDATA[
+				</tr>
+                <tr>
+                    <td><?php echo $entry_iban; ?></td>
+                    <td><input type="text" name="payment_iban" value="<?php echo $payment_iban; ?>" /></td>
+                </tr>
+                <tr>
+                    <td><?php echo $entry_banca; ?></td>
+                    <td><input type="text" name="payment_banca" value="<?php echo $payment_banca; ?>" /></td>
+                </tr>
+			]]></add>
+		</operation>
+	</file>
+	<file name="admin/controller/sale/order.php">
+		<operation>
+			<search position="before"><![CDATA[$this->data['entry_tax_id'] = $this->language->get('entry_tax_id');]]></search>
+			<add><![CDATA[
+				$this->data['entry_iban'] = $this->language->get('entry_iban');
+				$this->data['entry_banca'] = $this->language->get('entry_banca');
+			]]></add>
+		</operation>
+        <operation>
+			<search position="before"><![CDATA[
+				if (isset($this->request->post['payment_tax_id'])) {
+			]]></search>
+			<add><![CDATA[
+				
+				if (isset($this->request->post['payment_iban'])) {
+					$this->data['payment_iban'] = $this->request->post['payment_iban'];
+				} elseif (!empty($order_info)) { 
+					$this->data['payment_iban'] = $order_info['payment_iban'];
+				} else {
+					$this->data['payment_iban'] = '';
+				}
+
+				if (isset($this->request->post['payment_banca'])) {
+					$this->data['payment_banca'] = $this->request->post['payment_banca'];
+				} elseif (!empty($order_info)) { 
+					$this->data['payment_banca'] = $order_info['payment_banca'];
+				} else {
+					$this->data['payment_banca'] = '';
+				}
+			]]></add>
+		</operation>
+		<!-- payment adr -->
+        <operation>
+			<search position="before"><![CDATA['address_1' => $order_info['payment_address_1'],]]></search>
+			<add><![CDATA[
+				'payment_iban' => $order_info['payment_iban'],
+				'payment_banca' => $order_info['payment_banca'],
+			]]></add>
+		</operation>
+	</file>
+	<file name="admin/model/sale/order.php">
+		<operation>
+			<search position="replace"><![CDATA[ payment_company_id = '" . $this->db->escape($data['payment_company_id']) . "',]]></search>
+			<add><![CDATA[ payment_company_id = '" . $this->db->escape($data['payment_company_id']) . "', payment_banca = '" . $this->db->escape($data['payment_banca']) . "', payment_iban = '" . $this->db->escape($data['payment_iban']) . "',]]></add>
+		</operation>
+	</file>
+</modification>
