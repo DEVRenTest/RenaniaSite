@@ -1,5 +1,8 @@
 User-agent: *
 <<<<<<< HEAD
+<<<<<<< HEAD
 //modified 1 
 =======
 >>>>>>> refs/remotes/origin/master
+=======
+>>>>>>> origin/submaster
