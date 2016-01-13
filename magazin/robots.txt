@@ -1,5 +1,0 @@
-User-agent: *
-<<<<<<< HEAD
-//modified 1 
-=======
->>>>>>> refs/remotes/origin/master
