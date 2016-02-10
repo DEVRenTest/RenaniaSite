@@ -65,3 +65,36 @@ $RECYCLE.BIN/
 
 # Windows shortcuts
 *.lnk
+
+# Editor/IDE
+# =========================
+
+# cache files for sublime text
+*.tmlanguage.cache
+*.tmPreferences.cache
+*.stTheme.cache
+
+# workspace files are user-specific
+*.sublime-workspace
+
+# project files should be checked into the repository, unless a significant
+# proportion of contributors will probably not be using SublimeText
+*.sublime-project
+
+# sftp configuration file
+sftp-config.json
+
+# Opencart
+# =========================
+
+opencart/config.php
+opencart/admin/config.php
+opencart/download/
+opencart/system/cache/
+opencart/system/logs/
+opencart/image/cache/
+opencart/image/data/
+opencart/vqmod/logs/
+opencart/vqmod/vqcache/
+opencart/vqmod/mods.cache
+opencart/xmls/
