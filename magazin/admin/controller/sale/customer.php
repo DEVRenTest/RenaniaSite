@@ -1246,18 +1246,18 @@ class ControllerSaleCustomer extends Controller
         {
             $results = $this->model_sale_customer->getIpsByCustomerId( $this->request->get['customer_id'] );
 
-            // foreach( $results as $result )
-            // {
-            //     $ban_ip_total = $this->model_sale_customer->getTotalBanIpsByIp( $result['ip'] );
+            foreach( $results as $result )
+            {
+                $ban_ip_total = $this->model_sale_customer->getTotalBanIpsByIp( $result['ip'] );
 
-            //     $this->data['ips'][] = array(
-            //         'ip' => $result['ip'],
-            //         'total' => $this->model_sale_customer->getTotalCustomersByIp( $result['ip'] ),
-            //         'date_added' => date( 'd/m/y', strtotime( $result['date_added'] ) ),
-            //         'filter_ip' => $this->url->link( 'sale/customer', 'token='.$this->session->data['token'].'&filter_ip='.$result['ip'], 'SSL' ),
-            //         'ban_ip' => $ban_ip_total
-            //     );
-            // }
+                $this->data['ips'][] = array(
+                    'ip' => $result['ip'],
+                    'total' => $this->model_sale_customer->getTotalCustomersByIp( $result['ip'] ),
+                    'date_added' => date( 'd/m/y', strtotime( $result['date_added'] ) ),
+                    'filter_ip' => $this->url->link( 'sale/customer', 'token='.$this->session->data['token'].'&filter_ip='.$result['ip'], 'SSL' ),
+                    'ban_ip' => $ban_ip_total
+                );
+            }
         }
 
         $this->template = 'sale/customer_form.tpl';
