@@ -87,14 +87,17 @@ sftp-config.json
 # Opencart
 # =========================
 
-opencart/config.php
-opencart/admin/config.php
-opencart/download/
-opencart/system/cache/
-opencart/system/logs/
-opencart/image/cache/
-opencart/image/data/
-opencart/vqmod/logs/
-opencart/vqmod/vqcache/
-opencart/vqmod/mods.cache
-opencart/xmls/
+magazin/config.php
+magazin/admin/config.php
+magazin/download/
+magazin/system/cache/
+magazin/system/logs/
+magazin/image/cache/
+magazin/image/data/
+magazin/vqmod/logs/
+magazin/vqmod/vqcache/
+magazin/vqmod/mods.cache
+magazin/xmls/
+magazin/system/library/kint/
+magazin/catalog/controller/common/test.php
+magazin/admin/controller/common/test.php

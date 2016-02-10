@@ -245,7 +245,23 @@
          </tr>
       </tbody>
 </table>  
-  
+
+<?php if($show_approval_link){?>
+<table class="list">
+   <thead>
+      <tr>
+         <td class="left">
+            6. <?php echo $text_my_order_approval; ?>
+         </td>
+      </tr>
+    </thead>
+      <tbody>
+         <tr>
+            <td class="left"><a href="<?php echo $order_approval; ?>"><?php echo $text_order_approval; ?></a></td>
+         </tr>
+      </tbody>
+</table>  
+ <?php }?>
    
   <?php if ( $customer_B2B ) { ?>
   <table class="list">

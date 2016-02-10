@@ -10,6 +10,7 @@ $_['text_wait']             = 'Vă rugăm așteptați!';
 $_['text_balance']          = 'Balanță:';
 $_['text_add_ban_ip']       = 'Baneaza Ip-ul';
 $_['text_remove_ban_ip']    = 'Debaneaza IP-ul';
+$_['text_unlimited']        = 'Nelimitat';
 
 // Column
 $_['column_name']           = 'Numele clientului';
@@ -56,6 +57,7 @@ $_['entry_comment']         = 'Comentariu:';
 $_['entry_description']     = 'Descriere:';
 $_['entry_amount']          = 'Cantitate:';
 $_['entry_points']          = 'Puncte:<br /><span class="help">Use minus to remove points</span>';
+$_['entry_order_limit']     = 'Limită comenzi:';
 
 // Error
 $_['error_warning']         = 'Atenție: Vă rugăm verificați formularul pentru erori!';
@@ -80,4 +82,5 @@ $_['text_master']          = 'Client cu acces total';//Master
 $_['text_slave']           = 'Client cu acces limitat';//Slave
 $_['text_full_permision']  = 'full';//Master
 $_['text_limited_permision'] = 'limited';//Slave
+$_['error_order_limit']     = 'Limită invalidă!';//Slave
 ?>

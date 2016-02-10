@@ -25,6 +25,8 @@ $_['text_withouth_vat']     = 'Without VAT:';
 $_['button_add_address']    = 'Add Address';
 $_['button_back']           = 'Back';
 $_['button_continue']       = 'Continue';
+$_['button_approve'] 		= 'Approve';
+$_['button_deny'] 			= 'Deny';
 $_['button_cart']           = 'Add to Cart';
 $_['button_view_product']   = 'Vezi detalii';
 $_['button_compare']        = 'Add to Compare';
@@ -54,6 +56,7 @@ $_['button_voucher']        = 'Apply Voucher';
 $_['button_upload']         = 'Upload File';
 $_['button_reward']         = 'Apply Points';
 $_['button_quote']          = 'Get Quotes';
+$_['button_submit']         = 'Submit';
 
 // Error
 $_['error_upload_1']        = 'Warning: The uploaded file exceeds the upload_max_filesize directive in php.ini!';

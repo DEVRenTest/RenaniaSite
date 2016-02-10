@@ -86,6 +86,9 @@ class ControllerSettingSetting extends Controller {
 		$this->data['entry_order_edit'] = $this->language->get('entry_order_edit');
 		$this->data['entry_invoice_prefix'] = $this->language->get('entry_invoice_prefix');
 		$this->data['entry_order_status'] = $this->language->get('entry_order_status');
+		$this->data['entry_order_unapproved_status'] = $this->language->get('entry_order_unapproved_status');
+		$this->data['entry_order_customer_approved_status'] = $this->language->get('entry_order_customer_approved_status');
+		$this->data['entry_order_customer_refused_status'] = $this->language->get('entry_order_customer_refused_status');
 		$this->data['entry_complete_status'] = $this->language->get('entry_complete_status');	
 		$this->data['entry_stock_display'] = $this->language->get('entry_stock_display');
 		$this->data['entry_stock_warning'] = $this->language->get('entry_stock_warning');
@@ -629,6 +632,24 @@ class ControllerSettingSetting extends Controller {
 		} else {
 			$this->data['config_order_status_id'] = $this->config->get('config_order_status_id');		
 		}
+
+		if (isset($this->request->post['config_unapproved_order_status_id'])) {
+			$this->data['config_unapproved_order_status_id'] = $this->request->post['config_unapproved_order_status_id'];
+		} elseif ($this->config->get('config_unapproved_order_status_id')){
+			$this->data['config_unapproved_order_status_id'] = $this->config->get('config_unapproved_order_status_id');		
+		}else $this->data['config_unapproved_order_status_id'] = '';
+
+		if (isset($this->request->post['config_customer_approved_order_status_id'])) {
+			$this->data['config_customer_approved_order_status_id'] = $this->request->post['config_customer_approved_order_status_id'];
+		} elseif ($this->config->get('config_customer_approved_order_status_id')){
+			$this->data['config_customer_approved_order_status_id'] = $this->config->get('config_customer_approved_order_status_id');		
+		}else $this->data['config_customer_approved_order_status_id'] = '';
+
+		if (isset($this->request->post['config_customer_refused_order_status_id'])) {
+			$this->data['config_customer_refused_order_status_id'] = $this->request->post['config_customer_refused_order_status_id'];
+		} elseif ($this->config->get('config_customer_refused_order_status_id')){
+			$this->data['config_customer_refused_order_status_id'] = $this->config->get('config_customer_refused_order_status_id');		
+		}else $this->data['config_customer_refused_order_status_id'] = '';
 		
 		if (isset($this->request->post['config_complete_status_id'])) {
 			$this->data['config_complete_status_id'] = $this->request->post['config_complete_status_id'];

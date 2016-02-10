@@ -160,6 +160,13 @@ class ModelCheckoutOrder extends Model {
 		$order_info = $this->getOrder($order_id);
 		 
 		if ($order_info && !$order_info['order_status_id']) {
+			$this->load->model('account/customer');
+
+			// check if allocated budget is exceedded
+			if ($this->model_account_customer->exceedsBudget($order_info['customer_id']) && $this->config->get('config_unapproved_order_status_id')) {
+				$order_status_id = $this->config->get('config_unapproved_order_status_id');
+			}
+
 			// Fraud Detection
 			if ($this->config->get('config_fraud_detection')) {
 				$this->load->model('checkout/fraud');
@@ -174,7 +181,6 @@ class ModelCheckoutOrder extends Model {
 			// Ban IP
 			$status = false;
 			
-			$this->load->model('account/customer');
 			
 			if ($order_info['customer_id']) {
 				$results = $this->model_account_customer->getIps($order_info['customer_id']);
@@ -192,7 +198,7 @@ class ModelCheckoutOrder extends Model {
 			
 			if ($status) {
 				$order_status_id = $this->config->get('config_order_status_id');
-			}		
+			}
 				
 			$this->db->query("UPDATE `" . DB_PREFIX . "order` SET order_status_id = '" . (int)$order_status_id . "', date_modified = NOW() WHERE order_id = '" . (int)$order_id . "'");
 

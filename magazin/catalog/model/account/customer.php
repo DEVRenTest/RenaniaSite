@@ -307,5 +307,43 @@ class ModelAccountCustomer extends Model {
   public function saveContactPersonInfo($data) {
 		$this->db->query("UPDATE " . DB_PREFIX . "customer SET firstname = '" . $this->db->escape($data['firstname']) . "', lastname = '" . $this->db->escape($data['lastname']) . "', telephone = '" . $this->db->escape($data['telephone']) . "', mobile_phone = '" . $this->db->escape($data['mobile_phone']) . "' WHERE customer_id = '" . (int)$this->customer->getId() . "'");
   }
+
+	public function exceedsBudget($customer_id)
+	{
+		$limit = $this->db->query("SELECT order_limit FROM " . DB_PREFIX . "customer WHERE customer_id = '" . (int)$customer_id . "'")->row['order_limit'];
+		if ($limit == -1) {
+			return false;
+		}
+		$total_spent = $this->db->query("SELECT COALESCE(SUM(total), 0) as total FROM " . DB_PREFIX . "order WHERE customer_id = '" . (int)$customer_id . "' AND DATE(date_added) = CURDATE()")->row['total'];
+		if ($limit < $total_spent) {
+			return true;
+		} else {
+			return false;
+		}
+	}
+
+	public function getPendingOrders($ax_code) {
+		if (!$ax_code) {
+			return array();
+		}
+		$q = $this->db->query("SELECT o.*, os.name AS status FROM " . DB_PREFIX . "order o LEFT JOIN " . DB_PREFIX . "customer c ON o.customer_id = c.customer_id LEFT JOIN " . DB_PREFIX . "order_status os ON o.order_status_id = os.order_status_id WHERE c.ax_code = '" . $this->db->escape($ax_code) . "' AND o.order_status_id = '" . $this->config->get('config_unapproved_order_status_id') . "'");
+		if ($q->num_rows) {
+			return $q->rows;
+		} else {
+			return array();
+		}
+	}
+
+	public function canManageOrder($order_id) {
+		if (!$this->customer->getAxCode() || !$this->customer->getOrderLimit() || $this->customer->getOrderLimit() != -1) {
+			return false;
+		}
+		$q = $this->db->query("SELECT o.order_status_id, c.ax_code FROM " . DB_PREFIX . "order o LEFT JOIN " . DB_PREFIX . "customer c ON o.customer_id = c.customer_id WHERE o.order_id = '" . (int)$order_id . "'");
+		if ($q->num_rows && $q->row['ax_code'] == $this->customer->getAxCode() && $q->row['order_status_id'] == $this->config->get('config_unapproved_order_status_id')) {
+			return true;
+		} else {
+			return false;
+		}
+	}
 }
 ?>
