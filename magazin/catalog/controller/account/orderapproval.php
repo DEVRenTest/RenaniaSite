@@ -67,6 +67,8 @@ class ControllerAccountOrderapproval extends Controller {
 		$this->data['button_view'] = $this->language->get('button_view');
 		$this->data['button_continue'] = $this->language->get('button_continue');
 		$this->data['button_submit'] = $this->language->get('button_submit');
+		$this->data['button_approve'] = $this->language->get('button_approve');
+		$this->data['button_deny'] = $this->language->get('button_deny');
 
 		$this->data['text_order_approve'] = $this->language->get('text_order_approve');
 		$this->data['text_order_deny'] = $this->language->get('text_order_deny');
