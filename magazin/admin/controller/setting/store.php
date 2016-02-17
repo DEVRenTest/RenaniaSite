@@ -655,6 +655,14 @@ class ControllerSettingStore extends Controller {
 		} else {
 			$this->data['config_order_status_id'] = '';
 		}
+
+		if (isset($this->request->post['config_unapproved_order_status_id'])) {
+			$this->data['config_unapproved_order_status_id'] = $this->request->post['config_unapproved_order_status_id'];
+		} elseif (isset($store_info['config_unapproved_order_status_id'])) {
+			$this->data['config_unapproved_order_status_id'] = $store_info['config_unapproved_order_status_id'];		
+		} else {
+			$this->data['config_unapproved_order_status_id'] = '';
+		}
 		
 		$this->load->model('localisation/order_status');
 		

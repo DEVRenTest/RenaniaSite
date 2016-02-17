@@ -17,6 +17,8 @@ $_['text_separator'] = ' <span class="MiddleConnection"></span> ';
 $_['button_add_address'] = 'Adauga adresa';
 $_['button_back'] = 'Inapoi';
 $_['button_continue'] = 'Continuare';
+$_['button_approve'] = 'Aprobare';
+$_['button_deny'] = 'Refuzare';
 $_['button_cart'] = 'Adauga in cos';
 $_['button_view_product'] = 'Vezi detalii';
 $_['button_compare'] = 'Compara produs';
@@ -56,6 +58,7 @@ $_['error_upload_8'] = 'Atentie: Uploadarea fisierului oprita de extesnie!';
 $_['error_upload_999'] = 'Atentie: Niciun cod de eroare valabil!';
 $_['error_cart_content'] = '<div class="showlogin"><a href="/login">Trebuie sa va logati sau sa creeati un cont nou pentru a vedea preturile!</a></div>';
 $_['button_get_info'] = 'Cere info';
+$_['button_submit'] = 'Trimite';
 
 $_['text_high_stock']   = "In stoc";
 $_['text_medium_stock'] = "In stoc";

@@ -1,4 +1,6 @@
 <?php echo $header; ?>
+<div class="category">
+<button class="button order_status" id="sort_toggle"><?php echo $button_sort_toggle; ?></button>
 <div class="breadcrumb" xmlns="http://www.w3.org/1999/html">
     <?php foreach ($breadcrumbs as $breadcrumb) { ?>
     <span itemscope itemtype="http://data-vocabulary.org/Breadcrumb"><?php echo $breadcrumb['separator']; ?><a href="<?php echo $breadcrumb['href']; ?>" itemprop="url"><span itemprop="title"><?php echo $breadcrumb['text']; ?></span></a></span>
@@ -86,17 +88,7 @@
                     <!--<div class="arrow-down">&#9660;</div>-->
                 </div>
                 <div class="sort"><?php /* ?><b><?php echo $text_sort; ?></b><?php */ ?>
-                    <div id="sort_heading"><?php echo $text_sort; ?></div>
-                    <ul style="display: none">
-                        <?php foreach ($sorts as $sorts) { ?>
-                            <?php if ($sorts['value'] == $sort . '-' . $order) { ?>
-                            <li><a href="<?php echo $sorts['href']; ?>" class="selected"><?php echo $sorts['text']; ?></a></li>
-                            <?php } else { ?>
-                            <li><a href="<?php echo $sorts['href']; ?>"><?php echo $sorts['text']; ?></a></li>
-                            <?php } ?>
-                        <?php } ?>
-                    </ul>
-                    <?php /* ?>
+                    <!-- <div id="sort_heading"><?php echo $text_sort; ?></div> -->
                     <select onchange="location = this.value;">
                         <?php foreach ($sorts as $sorts) { ?>
                         <?php if ($sorts['value'] == $sort . '-' . $order) { ?>
@@ -106,7 +98,6 @@
                         <?php } ?>
                         <?php } ?>
                     </select>
-                    <?php */ ?>
                 </div>
             </div>
             <div class="product-filter">
@@ -357,4 +348,10 @@ if (view) {
 	display('<?php echo $this->journal2->settings->get("product_view", "grid"); ?>');
 }
 //--></script>
+</div>
 <?php echo $footer; ?>
+<script>
+$( "#sort_toggle" ).click(function() {
+    $('#category_toggle').toggle("swing");
+});
+</script>

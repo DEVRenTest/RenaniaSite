@@ -154,28 +154,22 @@
 
 <?php if ( !$customer_B2B ) { ?>
 <table class="list">
-   <thead>
+    <thead>
       <tr>
          <td width='50%'>
             3. <?php echo $text_available_delivery_addresses; ?>
-         </td>
-         <td class="right">
-            <!--a href="<!--?php echo $add_new_address; ?>"---><!---?php echo $text_add_new_address; ?---></a--->
-         </td>
+         </td>       
       </tr>
-      </thead>
-      <tbody>
+    </thead>
+    <tbody>
           <?php foreach ($addresses as $result) { ?>
          <tr>
             <td class="left">
                <?php echo $result['address']; ?>
             </td>     
-            <td class="right">
-               <a href="<?php echo $result['update']; ?>"><?php echo $button_edit;?></a> / <a class="confirm" href="<?php echo $result['delete']; ?>"><?php echo $button_delete; ?></a>
-            </td>     
          </tr>
            <?php } ?>
-      </tbody>
+    </tbody>
 </table>  
 <?php }?>
 
@@ -245,7 +239,23 @@
          </tr>
       </tbody>
 </table>  
-  
+
+<?php if($show_approval_link){?>
+<table class="list">
+   <thead>
+      <tr>
+         <td class="left">
+            6. <?php echo $text_my_order_approval; ?>
+         </td>
+      </tr>
+    </thead>
+      <tbody>
+         <tr>
+            <td class="left"><a href="<?php echo $order_approval; ?>"><?php echo $text_order_approval; ?></a></td>
+         </tr>
+      </tbody>
+</table>  
+ <?php }?>
    
   <?php if ( $customer_B2B ) { ?>
   <table class="list">

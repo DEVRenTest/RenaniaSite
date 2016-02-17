@@ -837,7 +837,11 @@ Android/Firefox
     display: none; } }
 @media only screen and (max-width: 760px) {
   #column-left, #column-right, .column-left-bg, .column-right-bg {
-    display: none !important; }
+    display: none !important;
+     }
+     .category #column-left, .category  #column-right, .category  .column-left-bg, .category  .column-right-bg {
+    display: block !important;
+     }
 
   #column-left + #content,
   #column-right + #content,
@@ -851,7 +855,11 @@ Android/Firefox
     margin: 0; }
 
   .route-product-compare #content {
-    overflow-x: auto; } }
+    overflow-x: auto; } 
+#column-left + span + #content {margin-left: 0;}
+.category #column-left {float: none;}
+
+}
 @media only screen and (max-width: 470px) {
   .product-compare {
     display: none; }

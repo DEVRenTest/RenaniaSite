@@ -78,7 +78,6 @@ class ControllerAccountAccount extends Controller
             die();
          }*/
         
-
         
         if( !$this->customer->isLogged() )
         {
@@ -302,12 +301,14 @@ class ControllerAccountAccount extends Controller
 
         $this->data['text_my_account'] = $this->language->get( 'text_my_account' );
         $this->data['text_my_orders'] = $this->language->get( 'text_my_orders' );
+        $this->data['text_my_order_approval'] = $this->language->get( 'text_my_order_approval' );
         $this->data['text_my_newsletter'] = $this->language->get( 'text_my_newsletter' );
         $this->data['text_edit'] = $this->language->get( 'text_edit' );
         $this->data['text_password'] = $this->language->get( 'text_password' );
         $this->data['text_address'] = $this->language->get( 'text_address' );
         $this->data['text_wishlist'] = $this->language->get( 'text_wishlist' );
         $this->data['text_order'] = $this->language->get( 'text_order' );
+        $this->data['text_order_approval'] = $this->language->get( 'text_order_approval' );
         $this->data['text_download'] = $this->language->get( 'text_download' );
         $this->data['text_reward'] = $this->language->get( 'text_reward' );
         $this->data['text_return'] = $this->language->get( 'text_return' );
@@ -528,6 +529,7 @@ class ControllerAccountAccount extends Controller
         $this->data['address'] = $this->url->link( 'account/address', '', 'SSL' );
         $this->data['wishlist'] = $this->url->link( 'account/wishlist' );
         $this->data['order'] = $this->url->link( 'account/order', '', 'SSL' );
+        $this->data['order_approval'] = $this->url->link( 'account/orderapproval', '', 'SSL' );
         $this->data['download'] = $this->url->link( 'account/download', '', 'SSL' );
         $this->data['return'] = $this->url->link( 'account/return', '', 'SSL' );
         $this->data['transaction'] = $this->url->link( 'account/transaction', '', 'SSL' );
@@ -559,6 +561,13 @@ class ControllerAccountAccount extends Controller
         {
             $this->template = 'default/template/account/account.tpl';
         }
+
+        $this->data['show_approval_link'] = false;
+        if ($this->customer->getAxCode() && $this->customer->getOrderLimit() && $this->customer->getOrderLimit() == -1) 
+        {
+            $this->data['show_approval_link'] = true;
+        }
+
 
         $this->children = array(
             'common/column_left',
