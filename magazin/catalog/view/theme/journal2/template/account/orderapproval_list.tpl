@@ -6,8 +6,8 @@
 </div>
 <?php echo $column_left; ?><?php echo $column_right; ?>
 <div id="content"><h1 class="heading-title"><?php echo $heading_title; ?></h1><?php echo $content_top; ?>
-  <form method="post" enctype="multipart/form-data" id="form">
   <?php if ($orders) { ?>
+  <form method="post" enctype="multipart/form-data" id="form">
     <table>
       <tbody>
         <?php foreach ($orders as $order) { ?>
@@ -34,18 +34,23 @@
         <?php } ?>
       </tbody>
     </table>
-    <label for="#order_action"><?php echo $text_selected_orders; ?></label>
-    <select id="order_action" name="order_status">
-      <option value="1"><?php echo $text_order_approve; ?></option>
-      <option value="0"><?php echo $text_order_deny; ?></option>
-    </select>
-    <a onclick="$('#form').submit();" class="button"><?php echo $button_submit; ?></a>
+    <input type="hidden" name="order_status">
+  </form>
+    <script>
+      $(document).ready(function(){
+          $(".order_status").on('click', function(){
+              $('input[name="order_status"]').val($(this).val());
+              $('#form').submit();
+          });
+      });
+    </script>
   <?php } else { ?>
   <div class="content"><p class="text-empty"><?php echo $text_empty; ?></p></div>
   <?php } ?>
-  </form>
   <div class="buttons">
     <div class="right"><a href="<?php echo $continue; ?>" class="button"><?php echo $button_continue; ?></a></div>
+    <button value="1" class="button order_status"><?php echo $button_approve; ?></button>
+    <button value="0" class="button order_status"><?php echo $button_deny; ?></button>
   </div>
   <?php echo $content_bottom; ?></div>
 <?php echo $footer; ?>
