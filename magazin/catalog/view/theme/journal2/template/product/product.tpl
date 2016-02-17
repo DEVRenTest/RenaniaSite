@@ -488,25 +488,18 @@
   <div id="tab-description" class="tab-content" itemprop="description"><?php echo $description; ?></div>
   <?php } ?>
   <?php if ($attribute_groups) { ?>
+  <!-- <pre><?php var_dump($attribute_groups); ?></pre> -->
   <div id="tab-attribute" class="tab-content">
     <table class="attribute">
-      <?php foreach ($attribute_groups as $attribute_group) { ?>
-      <thead>
+      <?php foreach ($attribute_groups as $attribute_group) { ?>     
+      <tbody>
+        <?php foreach ($attribute_group['attribute'] as $attribute) { ?>
         <tr>
             <td><?php echo $attribute_group['name']; ?></td>
             <td><?php echo $attribute_group['attribute'][0]['name']; ?></td>
         </tr>
-      </thead>
-        <?php /* ?>
-      <tbody>
-        <?php foreach ($attribute_group['attribute'] as $attribute) { ?>
-        <tr>
-          <td><?php echo $attribute['name']; ?></td>
-          <td><?php echo $attribute['text']; ?></td>
-        </tr>
         <?php } ?>
       </tbody>
-        <?php */ ?>
       <?php } ?>
     </table>
   </div>
