@@ -89,16 +89,6 @@
                 </div>
                 <div class="sort"><?php /* ?><b><?php echo $text_sort; ?></b><?php */ ?>
                     <div id="sort_heading"><?php echo $text_sort; ?></div>
-                    <ul style="display: none">
-                        <?php foreach ($sorts as $sorts) { ?>
-                            <?php if ($sorts['value'] == $sort . '-' . $order) { ?>
-                            <li><a href="<?php echo $sorts['href']; ?>" class="selected"><?php echo $sorts['text']; ?></a></li>
-                            <?php } else { ?>
-                            <li><a href="<?php echo $sorts['href']; ?>"><?php echo $sorts['text']; ?></a></li>
-                            <?php } ?>
-                        <?php } ?>
-                    </ul>
-                    <?php /* ?>
                     <select onchange="location = this.value;">
                         <?php foreach ($sorts as $sorts) { ?>
                         <?php if ($sorts['value'] == $sort . '-' . $order) { ?>
@@ -108,7 +98,6 @@
                         <?php } ?>
                         <?php } ?>
                     </select>
-                    <?php */ ?>
                 </div>
             </div>
             <div class="product-filter">
