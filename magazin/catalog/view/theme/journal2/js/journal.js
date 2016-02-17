@@ -273,6 +273,11 @@ Journal.updateProductPrice = function () {
             $('.product-info .price .price-old, .product-info .price .product-price').html(json.price);
             $('.product-info .price .price-new').html(json.special);
             $('.product-info .price .price-tax').html(json.tax);
+			if(json.stock==='Nu este in stoc'){
+				$('.journal-stock').addClass('stockEmptyRed');
+			}else{
+				$('.journal-stock').removeClass('stockEmptyRed');
+			}
             $('.description .journal-stock').removeClass('outofstock').removeClass('instock').addClass(json.cls).html(json.stock);
         }
     });
