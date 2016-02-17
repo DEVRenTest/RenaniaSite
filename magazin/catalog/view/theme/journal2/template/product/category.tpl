@@ -88,7 +88,7 @@
                     <!--<div class="arrow-down">&#9660;</div>-->
                 </div>
                 <div class="sort"><?php /* ?><b><?php echo $text_sort; ?></b><?php */ ?>
-                    <div id="sort_heading"><?php echo $text_sort; ?></div>
+                    <!-- <div id="sort_heading"><?php echo $text_sort; ?></div> -->
                     <select onchange="location = this.value;">
                         <?php foreach ($sorts as $sorts) { ?>
                         <?php if ($sorts['value'] == $sort . '-' . $order) { ?>

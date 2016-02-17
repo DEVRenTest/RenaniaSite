@@ -773,7 +773,9 @@ OC 2
 #filter_container > .sort {
   position: relative;
   display: inline-block;
-  height: 35px;
+  height: 45px;
+  width: 135px;
+  padding: 3px 6px;
 }
 
 #filter_container > .sort > ul,
