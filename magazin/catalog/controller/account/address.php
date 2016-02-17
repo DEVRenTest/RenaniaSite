@@ -49,6 +49,7 @@ class ControllerAccountAddress extends Controller {
   	}
 
   	public function update() {
+  		$this->redirect($this->url->link('account/address', '', 'SSL')); 
     	if (!$this->customer->isLogged()) {
 	  		$this->session->data['redirect'] = $this->url->link('account/address', '', 'SSL');
 
@@ -126,6 +127,7 @@ class ControllerAccountAddress extends Controller {
   	}
 
   	public function delete() {
+  		$this->redirect($this->url->link('account/address', '', 'SSL')); 
     	if (!$this->customer->isLogged()) {
 	  		$this->session->data['redirect'] = $this->url->link('account/address', '', 'SSL');
 
