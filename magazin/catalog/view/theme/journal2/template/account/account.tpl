@@ -154,28 +154,22 @@
 
 <?php if ( !$customer_B2B ) { ?>
 <table class="list">
-   <thead>
+    <thead>
       <tr>
          <td width='50%'>
             3. <?php echo $text_available_delivery_addresses; ?>
-         </td>
-         <td class="right">
-            <!--a href="<!--?php echo $add_new_address; ?>"---><!---?php echo $text_add_new_address; ?---></a--->
-         </td>
+         </td>       
       </tr>
-      </thead>
-      <tbody>
+    </thead>
+    <tbody>
           <?php foreach ($addresses as $result) { ?>
          <tr>
             <td class="left">
                <?php echo $result['address']; ?>
             </td>     
-            <td class="right">
-               <a href="<?php echo $result['update']; ?>"><?php echo $button_edit;?></a> / <a class="confirm" href="<?php echo $result['delete']; ?>"><?php echo $button_delete; ?></a>
-            </td>     
          </tr>
            <?php } ?>
-      </tbody>
+    </tbody>
 </table>  
 <?php }?>
 

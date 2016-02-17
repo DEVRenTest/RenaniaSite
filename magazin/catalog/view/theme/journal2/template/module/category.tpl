@@ -1,4 +1,4 @@
-<div class="box">
+<div class="box" id="category_toggle">
 
   <div class="box-heading-leftcat">
     <div class="Title">

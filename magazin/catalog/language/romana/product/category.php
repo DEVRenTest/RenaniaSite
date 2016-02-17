@@ -25,4 +25,6 @@ $_['text_rating_desc'] = 'Nota (Cea mai mica)';
 $_['text_model_asc'] = 'Model (A - Z)';
 $_['text_model_desc'] = 'Model (Z - A)';
 $_['text_limit'] = 'Produse pe pagina:';
+
+$_['button_sort_toggle']	= 'C<br />A<br />T<br />E<br />G<br />O<br />R<br />I<br />I';
 ?>

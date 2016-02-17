@@ -1,4 +1,6 @@
 <?php echo $header; ?>
+<div class="category">
+<button class="button order_status" id="sort_toggle"><?php echo $button_sort_toggle; ?></button>
 <div class="breadcrumb" xmlns="http://www.w3.org/1999/html">
     <?php foreach ($breadcrumbs as $breadcrumb) { ?>
     <span itemscope itemtype="http://data-vocabulary.org/Breadcrumb"><?php echo $breadcrumb['separator']; ?><a href="<?php echo $breadcrumb['href']; ?>" itemprop="url"><span itemprop="title"><?php echo $breadcrumb['text']; ?></span></a></span>
@@ -357,4 +359,10 @@ if (view) {
 	display('<?php echo $this->journal2->settings->get("product_view", "grid"); ?>');
 }
 //--></script>
+</div>
 <?php echo $footer; ?>
+<script>
+$( "#sort_toggle" ).click(function() {
+    $('#category_toggle').toggle("swing");
+});
+</script>
