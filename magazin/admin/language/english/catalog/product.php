@@ -73,6 +73,7 @@ $_['entry_filter']           = 'Filters:<br /><span class="help">(Autocomplete)<
 $_['entry_download']         = 'Downloads:<br /><span class="help">(Autocomplete)</span>';
 $_['entry_related']          = 'Related Products:<br /><span class="help">(Autocomplete)</span>';
 $_['entry_tag']          	 = 'Product Tags:<br /><span class="help">comma separated</span>';
+$_['entry_new_product']		 = 'New Product:<br /><span class="help">Set as new product</span>';
 $_['entry_reward']           = 'Reward Points:';
 $_['entry_layout']           = 'Layout Override:';
 $_['entry_profile']          = 'Profile:';

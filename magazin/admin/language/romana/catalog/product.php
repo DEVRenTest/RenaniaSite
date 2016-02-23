@@ -73,6 +73,7 @@ $_['entry_filter']           = 'Filtre:<br /><span class="help">(Completare Auto
 $_['entry_download']         = 'Descarcari:<br /><span class="help">(Completare Automata)</span>';
 $_['entry_related']          = 'Produse Asemănătoare:<br /><span class="help">(Completare Automata)</span>';
 $_['entry_tag']          	 = 'Etichete Produs:<br /><span class="help">separate prin virgula</span>';
+$_['entry_new_product']		 = 'Produs nou:<br /><span class="help">Setare ca produs nou</span>';
 $_['entry_reward']           = 'Puncte Recompensă:';
 $_['entry_layout']           = 'Treci Peste Aspect:<br/><span class="help">Implicit, un produs afiseaza in pagina modulele care sunt asociate aspectului Produs.Aici puteti seta ca acest produs sa afiseze modulele asociate altui aspect la alegere.';
 

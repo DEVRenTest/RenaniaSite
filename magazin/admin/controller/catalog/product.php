@@ -581,6 +581,7 @@ class ControllerCatalogProduct extends Controller {
 		$this->data['entry_dimension'] = $this->language->get('entry_dimension');
 		$this->data['entry_length'] = $this->language->get('entry_length');
     	$this->data['entry_image'] = $this->language->get('entry_image');
+    	$this->data['entry_latest'] = $this->language->get('entry_latest');
     	$this->data['entry_download'] = $this->language->get('entry_download');
     	$this->data['entry_category'] = $this->language->get('entry_category');
 		$this->data['entry_filter'] = $this->language->get('entry_filter');
@@ -597,6 +598,7 @@ class ControllerCatalogProduct extends Controller {
 		$this->data['entry_date_end'] = $this->language->get('entry_date_end');
 		$this->data['entry_priority'] = $this->language->get('entry_priority');
 		$this->data['entry_tag'] = $this->language->get('entry_tag');
+		$this->data['entry_new_product'] = $this->language->get('entry_new_product');
 		$this->data['entry_customer_group'] = $this->language->get('entry_customer_group');
 		$this->data['entry_reward'] = $this->language->get('entry_reward');
 		$this->data['entry_layout'] = $this->language->get('entry_layout');
@@ -831,6 +833,14 @@ class ControllerCatalogProduct extends Controller {
 			$this->data['location'] = $product_info['location'];
 		} else {
       		$this->data['location'] = '';
+    	}
+
+    	if (isset($this->request->post['flag'])) {
+      		$this->data['flag'] = $this->request->post['flag'];
+    	} elseif (!empty($product_info)) {
+			$this->data['flag'] = $product_info['flag'];
+		} else {
+      		$this->data['flag'] = 0;
     	}
 
 		$this->load->model('setting/store');

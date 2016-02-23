@@ -48,6 +48,11 @@
                 <td><?php echo $entry_tag; ?></td>
                 <td><input type="text" name="product_description[<?php echo $language['language_id']; ?>][tag]" value="<?php echo isset($product_description[$language['language_id']]) ? $product_description[$language['language_id']]['tag'] : ''; ?>" size="80" /></td>
               </tr>
+              <tr>
+              <td><?php echo $entry_new_product; ?></td>
+              <td>
+              <input type="checkbox" name="flag" value="1" <?php if ($flag) { ?> checked="checked"<?php } ?>></td>
+              </tr>
             </table>
           </div>
           <?php } ?>
