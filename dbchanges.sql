@@ -6,3 +6,6 @@ ALTER TABLE `oc_product` ADD `flag` TINYINT( 11 ) NOT NULL DEFAULT '0' AFTER `st
 
 -- container size for products
 ALTER TABLE `oc_product` ADD `container_size` INT( 4 ) NOT NULL DEFAULT '0' AFTER `quantity` ;
+
+-- force buy in bulk setting for customer groups
+ALTER TABLE `oc_customer_group` ADD `force_buy_bulk` TINYINT( 4 ) NOT NULL DEFAULT '0' AFTER `tax_id_required` ;
