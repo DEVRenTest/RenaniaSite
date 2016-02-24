@@ -3,3 +3,6 @@ ALTER TABLE `oc_customer` ADD `order_limit` INT( 8 ) NOT NULL DEFAULT '-1' AFTER
 
 --boolean flag for products
 ALTER TABLE `oc_product` ADD `flag` TINYINT( 11 ) NOT NULL DEFAULT '0' AFTER `stock_status_limits` ;
+
+-- container size for products
+ALTER TABLE `oc_product` ADD `container_size` INT( 4 ) NOT NULL DEFAULT '0' AFTER `quantity` ;

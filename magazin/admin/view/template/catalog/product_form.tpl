@@ -116,6 +116,10 @@
               <td><input type="text" name="quantity" value="<?php echo $quantity; ?>" size="2" /></td>
             </tr>
             <tr>
+              <td><?php echo $entry_container_size; ?><br /><span class="help"><?php echo $entry_container_help; ?></span></td>
+              <td><input type="number" name="container_size" value="<?php echo $container_size; ?>" size="3" /></td>
+            </tr>
+            <tr>
               <td><?php echo $entry_minimum; ?></td>
               <td><input type="text" name="minimum" value="<?php echo $minimum; ?>" size="2" /></td>
             </tr>

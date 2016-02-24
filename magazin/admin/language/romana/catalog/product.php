@@ -44,6 +44,8 @@ $_['entry_stock_status_limits'] = 'Limitele de text al stocului:';
 $_['entry_manufacturer']     = 'Manufacturer:<br /><span class="help">(Completare Automata)</span>';
 $_['entry_date_available']   = 'Dată Disponibilitate:';
 $_['entry_quantity']         = 'Cantitate:';
+$_['entry_container_size']   = 'Bucăţi/Pachet:';
+$_['entry_container_help']   = 'Setează câte bucăţi sunt într-un pachet, 0 pentru produsele care nu se vând la pachet';
 $_['entry_minimum']          = 'Cantitate Minimă:<br/><span class="help">Forțează o comandă minimă admisă</span>';
 $_['entry_stock_status']     = 'Statusul produselor neexistente in stoc<br/><span class="help">Status arătat atunci cînd unui produs i s-a terminat stocul</span>';
 $_['entry_price']            = 'Preț:';
