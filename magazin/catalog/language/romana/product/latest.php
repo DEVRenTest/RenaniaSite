@@ -1,5 +1,7 @@
 <?php
 $_['text_refine'] = 'Subcategorii';
+$_['text_heading'] = 'Produse noi | Renania | Lider in Echipamente de Protectie';
+$_['text_breadcrumbs'] = 'PRODUSE NOI';
 $_['text_product'] = 'Produse';
 $_['text_error'] = 'Categoria nu a fos gasita!';
 $_['text_empty'] = 'Nu sunt produse in aceasta categorie.';
@@ -27,6 +29,6 @@ $_['text_model_desc'] = 'Model (Z - A)';
 $_['text_date_added_asc'] = 'Data adaugarii ASC';
 $_['text_date_added_desc'] = 'Data adaugarii DESC';
 $_['text_limit'] = 'Produse pe pagina:';
-$_['filter_flag_entry']	= 'Produse noi';
+
 $_['button_sort_toggle']	= 'C<br />A<br />T<br />E<br />G<br />O<br />R<br />I<br />I';
 ?>

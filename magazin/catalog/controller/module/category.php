@@ -35,6 +35,8 @@ class ControllerModuleCategory extends Controller {
 
 		$categories = $this->model_catalog_category->getCategories(0);
 
+    $this->data['latest_link'] = $this->url->link('product/latest');
+
 		foreach ($categories as $category) {
 			$total = $this->model_catalog_product->getTotalProducts(array('filter_category_id' => $category['category_id']));
 

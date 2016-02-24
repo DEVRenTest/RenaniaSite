@@ -228,6 +228,10 @@ class ModelCatalogProduct extends Model {
 			}
 		}	
 
+		if (isset($data['filter_flag'])) {
+			$sql .= " AND p.flag = '" . (int)$data['filter_flag'] . "'";
+		}
+		
 		if (!empty($data['filter_name']) || !empty($data['filter_tag'])) {
 			$sql .= " AND (";
 			
@@ -291,7 +295,7 @@ class ModelCatalogProduct extends Model {
 		if (!empty($data['filter_manufacturer_id'])) {
 			$sql .= " AND p.manufacturer_id = '" . (int)$data['filter_manufacturer_id'] . "'";
 		}
-		
+
 		$sql .= " GROUP BY p.product_id";
 		
 		$sort_data = array(
@@ -649,6 +653,10 @@ class ModelCatalogProduct extends Model {
 				
 				$sql .= " AND pf.filter_id IN (" . implode(',', $implode) . ")";				
 			}
+		}
+
+		if (isset($data['filter_flag'])) {
+			$sql .= " AND p.flag = '" . (int)$data['filter_flag'] . "'";
 		}
 		
 		if (!empty($data['filter_name']) || !empty($data['filter_tag'])) {

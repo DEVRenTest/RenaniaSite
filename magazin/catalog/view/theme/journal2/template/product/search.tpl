@@ -95,7 +95,6 @@
           </div>
           <?php  ?>
           <input type="hidden" name="" id="<?= $category_id ?>" />
-          <?php  ?><?php// echo "<pre>"; print_r($categories); die(); ?>
           <ul>
               <?php foreach ($categories as $category_1) { ?>
                   <?php if ($category_1['category_id'] == $category_id) { ?>

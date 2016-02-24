@@ -3,6 +3,7 @@
 $_['heading_title']      = 'FilterPro';
 $_['text_tax']           = 'Ex Tax:';
 $_['text_price_range']   = 'Filter by price:';
+$_['text_new_product']   = 'Filter new products:';
 $_['text_manufacturers'] = 'Manufacturers:';
 $_['text_tags'] 		 = 'Tags:';
 $_['text_categories']    = 'Categories:';
