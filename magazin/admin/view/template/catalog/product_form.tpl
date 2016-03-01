@@ -14,7 +14,7 @@
       <div class="buttons"><a onclick="$('#form').submit();" class="button"><?php echo $button_save; ?></a><a href="<?php echo $cancel; ?>" class="button"><?php echo $button_cancel; ?></a></div>
     </div>
     <div class="content">
-      <div id="tabs" class="htabs"><a href="#tab-general"><?php echo $tab_general; ?></a><a href="#tab-data"><?php echo $tab_data; ?></a><a href="#tab-links"><?php echo $tab_links; ?></a><a href="#tab-attribute"><?php echo $tab_attribute; ?></a><a href="#tab-option"><?php echo $tab_option; ?></a><a href="#tab-profile"><?php echo $tab_profile; ?></a><a href="#tab-discount"><?php echo $tab_discount; ?></a><a href="#tab-special"><?php echo $tab_special; ?></a><a href="#tab-image"><?php echo $tab_image; ?></a><a href="#tab-reward"><?php echo $tab_reward; ?></a><a href="#tab-design"><?php echo $tab_design; ?></a><a href="#tab-mapping-ax_code"><?php echo $tab_mapping_ax_code; ?></a></div>
+      <div id="tabs" class="htabs"><a href="#tab-general"><?php echo $tab_general; ?></a><a href="#tab-data"><?php echo $tab_data; ?></a><a href="#tab-links"><?php echo $tab_links; ?></a><a href="#tab-attribute"><?php echo $tab_attribute; ?></a><a href="#tab-option"><?php echo $tab_option; ?></a><a href="#tab-profile"><?php echo $tab_profile; ?></a><a href="#tab-discount"><?php echo $tab_discount; ?></a><a href="#tab-special"><?php echo $tab_special; ?></a><a href="#tab-image"><?php echo $tab_image; ?></a><a href="#tab-reward"><?php echo $tab_reward; ?></a><a href="#tab-design"><?php echo $tab_design; ?></a><a href="#tab-mapping-ax_code"><?php echo $tab_mapping_ax_code; ?></a><a href="#tab-bulk-buy"><?php echo $tab_bulk_buy; ?></a></div>
       <form action="<?php echo $action; ?>" method="post" enctype="multipart/form-data" id="form">
         <div id="tab-general">
           <div id="languages" class="htabs">
@@ -881,6 +881,49 @@
                 }?>
 
             </table>
+        </div>
+
+        <div id="tab-bulk-buy">
+          <table class="list">
+            <thead>
+              <tr>
+                <td class="left"><?php echo $entry_store; ?></td>
+                <td class="left"><?php echo $entry_layout; ?></td>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td class="left"><?php echo $text_default; ?></td>
+                <td class="left"><select name="product_layout[0][layout_id]">
+                    <option value=""></option>
+                    <?php foreach ($layouts as $layout) { ?>
+                    <?php if (isset($product_layout[0]) && $product_layout[0] == $layout['layout_id']) { ?>
+                    <option value="<?php echo $layout['layout_id']; ?>" selected="selected"><?php echo $layout['name']; ?></option>
+                    <?php } else { ?>
+                    <option value="<?php echo $layout['layout_id']; ?>"><?php echo $layout['name']; ?></option>
+                    <?php } ?>
+                    <?php } ?>
+                  </select></td>
+              </tr>
+            </tbody>
+            <?php foreach ($stores as $store) { ?>
+            <tbody>
+              <tr>
+                <td class="left"><?php echo $store['name']; ?></td>
+                <td class="left"><select name="product_layout[<?php echo $store['store_id']; ?>][layout_id]">
+                    <option value=""></option>
+                    <?php foreach ($layouts as $layout) { ?>
+                    <?php if (isset($product_layout[$store['store_id']]) && $product_layout[$store['store_id']] == $layout['layout_id']) { ?>
+                    <option value="<?php echo $layout['layout_id']; ?>" selected="selected"><?php echo $layout['name']; ?></option>
+                    <?php } else { ?>
+                    <option value="<?php echo $layout['layout_id']; ?>"><?php echo $layout['name']; ?></option>
+                    <?php } ?>
+                    <?php } ?>
+                  </select></td>
+              </tr>
+            </tbody>
+            <?php } ?>
+          </table>
         </div>
 
 

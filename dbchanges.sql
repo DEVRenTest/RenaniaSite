@@ -9,3 +9,11 @@ ALTER TABLE `oc_product` ADD `container_size` INT( 4 ) NOT NULL DEFAULT '0' AFTE
 
 -- force buy in bulk setting for customer groups
 ALTER TABLE `oc_customer_group` ADD `force_buy_bulk` TINYINT( 4 ) NOT NULL DEFAULT '0' AFTER `tax_id_required` ;
+
+-- product to customer group junction table used as exception for bulk buy setting
+CREATE TABLE `oc_force_buy_bulk_override_group` (
+ `product_id` int(11) NOT NULL,
+ `customer_group_id` int(11) NOT NULL,
+ `force_buy_bulk` TINYINT( 4 ) NOT NULL DEFAULT '0',
+ PRIMARY KEY (`product_id`,`customer_group_id`)
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;

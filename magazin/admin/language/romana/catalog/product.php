@@ -24,6 +24,9 @@ $_['column_quantity']        = 'Cantitate';
 $_['column_status']          = 'Status';
 $_['column_action']          = 'Acțiune';
 
+// Tabs
+$_['tab_bulk_buy']           = 'Bulk Buy';
+
 // Entry
 $_['entry_name']             = 'Numele Produsului:';
 $_['entry_meta_keyword'] 	 = 'Meta Tag Cuvinte Cheie';

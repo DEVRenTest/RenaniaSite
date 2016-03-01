@@ -653,6 +653,7 @@ class ControllerCatalogProduct extends Controller {
 		$this->data['tab_design'] = $this->language->get('tab_design');
 		$this->data['tab_marketplace_links'] = $this->language->get('tab_marketplace_links');
 		$this->data['tab_mapping_ax_code'] = $this->language->get('tab_mapping_ax_code');
+		$this->data['tab_bulk_buy'] = $this->language->get('tab_bulk_buy');
 
 		$this->data['text_product_id'] = $this->language->get('text_product_id');
 		$this->data['text_product_code'] = $this->language->get('text_product_code');

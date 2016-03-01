@@ -24,6 +24,9 @@ $_['column_quantity']        = 'Quantity';
 $_['column_status']          = 'Status';
 $_['column_action']          = 'Action';
 
+// Tabs
+$_['tab_bulk_buy']           = 'Bulk Buy';
+
 // Entry
 $_['entry_name']             = 'Product Name:';
 $_['entry_meta_keyword'] 	 = 'Meta Tag Keywords:';
