@@ -570,6 +570,8 @@ class ControllerCatalogProduct extends Controller {
     	$this->data['entry_shipping'] = $this->language->get('entry_shipping');
     	$this->data['entry_date_available'] = $this->language->get('entry_date_available');
     	$this->data['entry_quantity'] = $this->language->get('entry_quantity');
+    	$this->data['entry_container_size'] = $this->language->get('entry_container_size');
+    	$this->data['entry_container_help'] = $this->language->get('entry_container_help');
 		$this->data['entry_stock_status'] = $this->language->get('entry_stock_status');
     	$this->data['entry_price'] = $this->language->get('entry_price');
 		$this->data['entry_tax_class'] = $this->language->get('entry_tax_class');
@@ -651,6 +653,7 @@ class ControllerCatalogProduct extends Controller {
 		$this->data['tab_design'] = $this->language->get('tab_design');
 		$this->data['tab_marketplace_links'] = $this->language->get('tab_marketplace_links');
 		$this->data['tab_mapping_ax_code'] = $this->language->get('tab_mapping_ax_code');
+		$this->data['tab_bulk_buy'] = $this->language->get('tab_bulk_buy');
 
 		$this->data['text_product_id'] = $this->language->get('text_product_id');
 		$this->data['text_product_code'] = $this->language->get('text_product_code');
@@ -937,7 +940,15 @@ class ControllerCatalogProduct extends Controller {
 			$this->data['date_available'] = date('Y-m-d', time() - 86400);
 		}
 											
-    	if (isset($this->request->post['quantity'])) {
+    	if (isset($this->request->post['container_size'])) {
+      		$this->data['container_size'] = $this->request->post['container_size'];
+    	} elseif (!empty($product_info)) {
+      		$this->data['container_size'] = $product_info['container_size'];
+    	} else {
+			$this->data['container_size'] = 0;
+		}
+
+		if (isset($this->request->post['quantity'])) {
       		$this->data['quantity'] = $this->request->post['quantity'];
     	} elseif (!empty($product_info)) {
       		$this->data['quantity'] = $product_info['quantity'];

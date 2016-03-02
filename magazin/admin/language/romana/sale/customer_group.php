@@ -18,6 +18,7 @@ $_['entry_company_id_display']  = 'Afisarea Numarului Companiei:<br /><span clas
 $_['entry_company_id_required'] = 'Numarul Companiei Obligatoriu:<br /><span class="help">Aceasta setare face ca numarul companiei sa fie camp obligatoriu in formularul de inregistrare.</span>';
 $_['entry_tax_id_display']      = 'Afisare Cod TVA.:<br /><span class="help">Aceasta setare poate afisa campul Cod TVA in formularul de inregistrare.</span>';
 $_['entry_tax_id_required']     = 'Cod TVA Obligatoriu:<br /><span class="help">Aceasta setare face campul Cod TVA obligatoriu in formularul de inregistrare.</span>';
+$_['entry_force_buy_bulk']     = 'Obligă cumpărarea la pachet:<br /><span class="help">Selectează dacă grupul de clienţi este obligat să cumpere la pachet produsele care vin la pachet.</span>';
 $_['entry_sort_order']          = 'Sortare Ordine:';
 
 // Error

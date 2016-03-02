@@ -24,6 +24,9 @@ $_['column_quantity']        = 'Quantity';
 $_['column_status']          = 'Status';
 $_['column_action']          = 'Action';
 
+// Tabs
+$_['tab_bulk_buy']           = 'Bulk Buy';
+
 // Entry
 $_['entry_name']             = 'Product Name:';
 $_['entry_meta_keyword'] 	 = 'Meta Tag Keywords:';
@@ -44,6 +47,8 @@ $_['entry_shipping']         = 'Requires Shipping:';
 $_['entry_manufacturer']     = 'Manufacturer:<br /><span class="help">(Autocomplete)</span>';
 $_['entry_date_available']   = 'Date Available:';
 $_['entry_quantity']         = 'Quantity:';
+$_['entry_container_size']   = 'Piece/container:';
+$_['entry_container_help']   = 'Set number of items in a container, 0 if product should not have this setting';
 $_['entry_minimum']          = 'Minimum Quantity:<br/><span class="help">Force a minimum ordered amount</span>';
 $_['entry_stock_status']     = 'Out Of Stock Status:<br/><span class="help">Status shown when a product is out of stock</span>';
 $_['entry_price']            = 'Price:';

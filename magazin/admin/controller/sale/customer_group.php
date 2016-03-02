@@ -274,6 +274,7 @@ class ControllerSaleCustomerGroup extends Controller {
 		$this->data['entry_company_id_required'] = $this->language->get('entry_company_id_required');
 		$this->data['entry_tax_id_display'] = $this->language->get('entry_tax_id_display');
 		$this->data['entry_tax_id_required'] = $this->language->get('entry_tax_id_required');
+		$this->data['entry_force_buy_bulk'] = $this->language->get('entry_force_buy_bulk');
 		$this->data['entry_sort_order'] = $this->language->get('entry_sort_order');
 		
 		$this->data['button_save'] = $this->language->get('button_save');
@@ -381,6 +382,14 @@ class ControllerSaleCustomerGroup extends Controller {
 			$this->data['tax_id_required'] = $customer_group_info['tax_id_required'];
 		} else {
 			$this->data['tax_id_required'] = '';
+		}
+
+		if (isset($this->request->post['force_buy_bulk'])) {
+			$this->data['force_buy_bulk'] = $this->request->post['force_buy_bulk'];
+		} elseif (!empty($customer_group_info)) {
+			$this->data['force_buy_bulk'] = $customer_group_info['force_buy_bulk'];
+		} else {
+			$this->data['force_buy_bulk'] = 0;
 		}	
 		
 		if (isset($this->request->post['sort_order'])) {
