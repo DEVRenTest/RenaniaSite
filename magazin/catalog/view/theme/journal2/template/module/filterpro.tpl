@@ -54,7 +54,6 @@
 		<?php echo $filterpro_afterload; ?>
 	}
 </script>
-
 <div class="option_box" <?php if(!$price_slider) { echo 'style="display:none"';}?>>
 <div class="option_name"><?php echo $text_price_range?></div>
 <div class="price_slider collapsible" >
@@ -66,7 +65,23 @@
 	<div id="slider-range"></div>
 </div>
 </div>
-
+<div class="option_box"<?php if($is_latest) { ?> style="display: none;" <?php } ?>>
+	<div class="option_name"><?php echo $filter_flag_entry; ?></div>
+	<div class="collapsible">
+		<table id="filter_flag">
+			<tr>
+				<td>
+					<input id="filter_new" class="filtered"
+						   type="checkbox" name="filter_flag"
+						   <?php if ($is_latest) { ?> checked="checked"<?php } ?>/>
+				</td>
+				<td>
+					<label for="filter_new"><?php echo $filter_flag_entry; ?></label>
+				</td>
+			</tr>
+		</table>
+	</div>
+</div>
 	<?php if($categories) { ?>
 <div class="option_box">
 	<div class="option_name <?php if(!$expanded_categories){echo "hided";}?>"><?php echo $text_categories; ?></div>

@@ -147,6 +147,7 @@ class ControllerProductCategory extends Controller
             $this->data['text_limit'] = $this->language->get( 'text_limit' );
             $this->data['text_price_from'] = $this->language->get( 'text_price_from' );
             $this->data['text_price_ask'] = $this->language->get( 'text_price_ask' );
+            $this->data['text_latest'] = $this->language->get( 'text_latest' );
 
             $this->data['button_cart'] = $this->language->get( 'button_cart' );
             $this->data['button_view_product'] = $this->language->get( 'button_view_product' );
@@ -154,6 +155,7 @@ class ControllerProductCategory extends Controller
             $this->data['button_compare'] = $this->language->get( 'button_compare' );
             $this->data['button_continue'] = $this->language->get( 'button_continue' );
             $this->data['button_sort_toggle'] = $this->language->get( 'button_sort_toggle' );
+
 
             // Set the last category breadcrumb		
             $url = '';
@@ -393,6 +395,18 @@ class ControllerProductCategory extends Controller
                 'href' => $this->url->link( 'product/category', 'path='.$this->request->get['path'].'&sort=p.model&order=DESC'.$url )
             );
 
+            $this->data['sorts'][] = array(
+                'text' => $this->language->get( 'text_date_added_asc' ),
+                'value' => 'p.date_added-ASC',
+                'href' => $this->url->link( 'product/category', 'path='.$this->request->get['path'].'&sort=p.date_added&order=ASC'.$url )
+            );
+
+            $this->data['sorts'][] = array(
+                'text' => $this->language->get( 'text_date_added_desc' ),
+                'value' => 'p.date_added-DESC',
+                'href' => $this->url->link( 'product/category', 'path='.$this->request->get['path'].'&sort=p.date_added&order=DESC'.$url )
+            );
+
             $url = '';
 
             if( isset( $this->request->get['filter'] ) )
@@ -446,6 +460,7 @@ class ControllerProductCategory extends Controller
             {
                 $url .= '&limit='.$this->request->get['limit'];
             }
+            $this->data['latest_link'] = $this->url->link('product/product/latest');
 
             $this->data['button_cart'] = $this->language->get('button_cart');
             

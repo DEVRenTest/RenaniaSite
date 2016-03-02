@@ -6,6 +6,11 @@
     </div>
   </div>
   <div class="Content" style="font-family: primeregular;">
+
+    <span style="background-repeat:no-repeat;">          
+        <a href="<?php echo $latest_link; ?>">Produse noi</a>
+    </span>
+
     <?php $filterProCounter = 1;?>
     <?php foreach ($categories as $category) { ?>
     <?php $jsForMenu = '';?>
