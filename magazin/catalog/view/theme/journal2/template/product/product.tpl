@@ -155,7 +155,8 @@
         <?php if ($reward) { ?>
         <span class="p-rewards"><?php echo $text_reward; ?></span> <span class="p-rewards"><?php echo $reward; ?></span><br />
         <?php } ?>
-        <span class="p-stock"><?php echo $text_stock; ?></span> <span class="journal-stock <?php echo isset($stock_status) ? $stock_status : ''; ?>"><?php echo $stock; ?></span>
+        <span class="p-stock"><?php echo $text_stock; ?></span> <span class="journal-stock <?php echo isset($stock_status) ? $stock_status : ''; ?>"><?php echo $text_limited_stock; ?> 
+        <marquee DIRECTION=RIGHT SCROLLDELAY="200" style="width: 10px;"><?php echo $text_loading; ?></marquee><?php echo $stock; ?></span>
       </div>
     <?php if($this->journal2->settings->get('product_sold')): ?>
     <div class="product-sold-count-text"><?php echo $this->journal2->settings->get('product_sold'); ?></div>
@@ -371,6 +372,7 @@
                 <span class="text-qty"><?php echo $text_qty; ?></span>
                 <input type="text" name="quantity" size="2" value=<?php echo $minimum; ?> data-min-value="<?php echo $minimum; ?>" autocomplete="off" />
             </span>
+            
           <input type="hidden" name="product_id" value="<?php echo $product_id; ?>" />
             <a id="button-cart" class="button"><span class="button-cart-text"><?php echo $button_cart; ?></span></a>
           <script>if ($('.product-info .image .label-outofstock').length) { $("#button-cart").addClass('button-disable').attr('disabled', 'disabled'); }</script>
