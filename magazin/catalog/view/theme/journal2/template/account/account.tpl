@@ -10,31 +10,13 @@
 <?php echo $column_left; ?><?php echo $column_right; ?>
 <div id="content"><?php echo $content_top; ?>
   <h1 class="heading-title"><?php echo $heading_title; ?>  <?php echo $user; ?></h1>
-
-<!--  <?php if ( $customer_B2B ) { ?>
-    (
-  <?php if ( $payment_term ) {?>
-  <?php echo $text_payment_term; ?>: <strong><?php echo $payment_term." ". $text_days; ?></strong>; 
-<?php } ?>
-  <?php echo $text_percentage; ?>: <strong><?php echo $nivel_payment_term;?></strong>;
-  <?php echo $text_credit_limit; ?>: <strong>
-     <?php if ( $credit_limit == 0 ) 
-     { 
-         echo $text_undefined;
-     }
-     else
-     {
-      echo $credit_limit;
-     }?>
-  </strong>)
-  <?php } ?>-->
-     
+ <?php $counter = 0; ?>    
 <form action="<?php echo $action; ?>" method="post" enctype="multipart/form-data">
 <table class="list" cellspacing="3">
    <thead>
       <tr>
          <td class="left" width='50%'>
-            1. <?php echo $text_contact_person; ?>
+            <?php $counter++; echo $counter . '. ' . $text_contact_person; ?>
          </td>
          <td>
             <a href="<?php echo $edit; ?>"><?php echo $text_edit; ?></a>
@@ -90,7 +72,7 @@
    <thead>
       <tr>
          <td width='50%'>
-            2. <?php echo $text_account_password; ?>
+            <?php $counter++; echo $counter . '. ' . $text_account_password; ?>
          </td>
          <td class="right">
             <a href="<?php echo $password; ?>"><?php echo $text_password; ?></a>
@@ -104,7 +86,7 @@
    <thead>
       <tr>
          <td width='50%'>
-            3. <?php echo $text_available_delivery_addresses; ?>
+           <?php $counter++; echo $counter . '. ' . $text_available_delivery_addresses; ?>
          </td>
          <td class="right">
             <!--a href="<!--?php echo $add_new_b2b_address; ?>"--><!--?php echo $text_add_new_address; ?--><!--/a-->
@@ -129,7 +111,7 @@
    <thead>
       <tr>
          <td class="left" colspan="2">
-            4. <?php echo $text_company_details; ?>
+            <?php $counter++; echo $counter . '. ' . $text_company_details; ?>
          </td>
       </tr>
       </thead>
@@ -157,7 +139,7 @@
     <thead>
       <tr>
          <td width='50%'>
-            3. <?php echo $text_available_delivery_addresses; ?>
+            <?php $counter++; echo $counter . '. ' . $text_available_delivery_addresses; ?>
          </td>       
       </tr>
     </thead>
@@ -177,7 +159,7 @@
    <thead>
       <tr>
          <td class="left" colspan="2">
-            4. <?php echo $text_company_details; ?>
+            <?php $counter++; echo $counter . '. ' . $text_company_details; ?>
          </td>
       </tr>
       </thead>
@@ -204,12 +186,11 @@
 </table> 
   
 
-
 <!--<table class="list">
    <thead>
       <tr>
          <td class="">
-            5. <?php echo $text_wishlist; ?>
+            <?php $counter++; echo $counter . '. ' .$text_wishlist; ?>
          </td>
          <td class="right">
             <a href="<?php echo $wishlist; ?>"><?php echo $text_password; ?></a>
@@ -223,7 +204,7 @@
    <thead>
       <tr>
          <td class="left">
-            5. <?php echo $text_my_orders; ?>
+            <?php $counter++; echo $counter . '. ' . $text_my_orders; ?>
          </td>
       </tr>
       </thead>
@@ -245,7 +226,7 @@
    <thead>
       <tr>
          <td class="left">
-            6. <?php echo $text_my_order_approval; ?>
+            <?php $counter++; echo $counter . '. ' . $text_my_order_approval; ?>
          </td>
       </tr>
     </thead>
@@ -262,7 +243,7 @@
    <thead>
       <tr>
          <td class="left">
-            6. <?php echo $text_me_invoices;  ?>
+            <?php $counter++; echo $counter . '. ' . $text_me_invoices;  ?>
          </td>
       </tr>
       </thead>
@@ -312,7 +293,7 @@
    <thead>
       <tr>
          <td class="left">
-            7. <?php echo $text_mailbox; ?>
+            <?php $counter++; echo $counter . '. ' . $text_mailbox; ?>
          </td>
       </tr>
       </thead>
@@ -330,7 +311,7 @@
    <thead>
       <tr>
          <td class="left">
-            8. <?php echo $text_reclamation;  ?>
+            <?php $counter++; echo $counter . '. ' . $text_reclamation;  ?>
          </td>
       </tr>
       </thead>
@@ -351,7 +332,7 @@
    <thead>
       <tr>
          <td class="left">
-            9. <!--?php echo $text_agents;  ?>
+            <?php $counter++; echo $counter . '. ' . $text_agents;  ?>
          </td>
       </tr>
       </thead>
@@ -376,7 +357,7 @@
    <thead>
       <tr>
          <td class="left">
-            9. <?php echo $text_my_newsletter; ?>
+            <?php $counter++; echo $counter . '. ' . $text_my_newsletter; ?>
          </td>
       </tr>
       </thead>
@@ -393,7 +374,7 @@
     <thead>
       <tr>
          <td class="left">
-            10. <?php echo $text_useful_documents; ?>
+            <?php $counter++; echo $counter . '. ' . $text_useful_documents; ?>
          </td>
       </tr>
       </thead>
@@ -409,7 +390,7 @@
       <thead>
       <tr>
          <td class="left">
-            11. <a href="<?php echo $black_list_link; ?>">Clienti rau platnici</a>
+           <a href="<?php $counter++; echo $counter . '. ' . $black_list_link; ?>">Clienti rau platnici</a>
          </td>
       </tr>
       </thead>
@@ -436,7 +417,7 @@
       <thead>
       <tr>
          <td class="left">
-            13. <?php echo $text_fast_order; ?>
+            <?php $counter++; echo $counter . '. ' . $text_fast_order; ?>
          </td>
       </tr>
       </thead>
