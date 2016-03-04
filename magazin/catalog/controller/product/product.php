@@ -239,6 +239,7 @@ class ControllerProductProduct extends Controller {
 			$this->data['text_points'] = $this->language->get('text_points');	
 			$this->data['text_discount'] = $this->language->get('text_discount');
 			$this->data['text_stock'] = $this->language->get('text_stock');
+			$this->data['text_views'] = $this->language->get('text_views');
 			$this->data['text_limited_stock'] = $this->language->get('text_limited_stock');
 			$this->data['text_loading'] = $this->language->get('text_loading');
 			$this->data['text_qty'] = $this->language->get('text_qty');
@@ -605,7 +606,7 @@ class ControllerProductProduct extends Controller {
 				'common/footer',
 				'common/header'
 			);
-						
+			$this->data['views'] = $product_info['viewed'];
 			$this->response->setOutput($this->render());
 		} else {
 			$url = '';

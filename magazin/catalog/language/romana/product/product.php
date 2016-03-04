@@ -9,6 +9,7 @@ $_['text_stock'] = 'Disponibilitate:';
 $_['text_loading'] = '...';
 $_['text_limited_stock'] = 'Stoc limitat';
 $_['text_instock'] = 'In stoc';
+$_['text_views'] = 'Vizualizari:';
 $_['text_price'] = 'Pret:';
 $_['text_tax'] = 'Fara TVA:';
 $_['text_tax_withvat'] = 'TVA inclus';

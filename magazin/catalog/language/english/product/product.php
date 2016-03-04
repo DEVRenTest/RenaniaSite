@@ -10,6 +10,7 @@ $_['text_stock']        = 'Availability:';
 $_['text_loading'] 		= '...';
 $_['text_limited_stock'] = 'Limited stock';
 $_['text_instock']      = 'In Stock';
+$_['text_views'] 		= 'Views:';
 $_['text_price']        = 'Price:'; 
 $_['text_tax']          = 'Ex Tax:'; 
 $_['text_discount']     = '%s or more %s';
