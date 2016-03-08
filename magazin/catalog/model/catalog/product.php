@@ -790,7 +790,7 @@ class ModelCatalogProduct extends Model {
 	    	$query = $this->db->query("SELECT container_size FROM " . DB_PREFIX . "product WHERE product_id = '" . (int)$product_id . "'");
 	    	if ($query->num_rows && $query->row['container_size']) {
 	    		// check for restriction
-    			$query = $this->db->query("SELECT COALESCE((SELECT force_buy_bulk FROM " . DB_PREFIX . "force_buy_bulk_override_customer WHERE customer_id = '" . $this->customer->getId() . "'), (SELECT force_buy_bulk FROM " . DB_PREFIX . "force_buy_bulk_override_group WHERE customer_group_id = '" . $this->customer->getCustomerGroupId() . "'), (SELECT force_buy_bulk FROM " . DB_PREFIX . "customer_group WHERE customer_group_id = '" . $this->customer->getCustomerGroupId() . "')) AS force_buy_bulk");
+    			$query = $this->db->query("SELECT COALESCE((SELECT force_buy_bulk FROM " . DB_PREFIX . "force_buy_bulk_override_customer WHERE customer_id = '" . $this->customer->getId() . "' AND product_id = '" . (int)$product_id . "'), (SELECT force_buy_bulk FROM " . DB_PREFIX . "force_buy_bulk_override_group WHERE customer_group_id = '" . $this->customer->getCustomerGroupId() . "' AND product_id = '" . (int)$product_id . "'), (SELECT force_buy_bulk FROM " . DB_PREFIX . "customer_group WHERE customer_group_id = '" . $this->customer->getCustomerGroupId() . "')) AS force_buy_bulk");
     			if ($query->row['force_buy_bulk']) {
     				$result = true;
     			}
