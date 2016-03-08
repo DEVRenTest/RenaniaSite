@@ -955,15 +955,15 @@ class ModelCatalogProduct extends Model {
 		$results = array('customer_groups' => array(), 'customers' => array());
 		$query = $this->db->query("SELECT fbbog.customer_group_id, cgd.name, fbbog.force_buy_bulk FROM " . DB_PREFIX . "force_buy_bulk_override_group fbbog LEFT JOIN " . DB_PREFIX . "customer_group_description cgd ON fbbog.customer_group_id = cgd.customer_group_id WHERE fbbog.product_id = '" . (int)$product_id . "'");
 		if ($query->num_rows) {
-			foreach ($query as $row) {
-				$results['customer_groups'][$row['customer_group_id']] = array('name' => $row['name'], 'override' => ['force_buy_bulk']);
+			foreach ($query->rows as $row) {
+				$results['customer_groups'][$row['customer_group_id']] = array('name' => $row['name'], 'override' => $row['force_buy_bulk']);
 			}
 		}
 
 		$query = $this->db->query("SELECT fbboc.customer_id, c.email, c.firstname, c.lastname, fbboc.force_buy_bulk FROM " . DB_PREFIX . "force_buy_bulk_override_customer fbboc LEFT JOIN " . DB_PREFIX . "customer c ON fbboc.customer_id = c.customer_id WHERE fbboc.product_id = '" . (int)$product_id . "'");
 		if ($query->num_rows) {
-			foreach ($query as $row) {
-				$results['customers'][$row['customer_id']] = array('name' => $row['firstname'] . ' ' . $row['lastname'], 'email' => $row['email'], 'override' => ['force_buy_bulk']);
+			foreach ($query->rows as $row) {
+				$results['customers'][$row['customer_id']] = array('name' => $row['firstname'] . ' ' . $row['lastname'], 'email' => $row['email'], 'override' => $row['force_buy_bulk']);
 			}
 		}
 		return $results;
