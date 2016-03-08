@@ -14,6 +14,9 @@ $_['text_option']            = 'Option';
 $_['text_option_value']      = 'Option Value';
 $_['text_percent']           = 'Percentage';
 $_['text_amount']            = 'Fixed Amount';
+$_['text_group_table']       = 'Override rules for customer groups';
+$_['text_customer_table']    = 'Override rules for customers';
+$_['text_bulk_buy_help']    = 'In the tables below you can create bulk buying rules for the current product which will override the general bulk buy setting of customer groups (the later being applied to all products). When buying a product the rule with the highest priority will be applied to the customer. Rules in descending order of priority: Rules for individual customers for individual products (set in the form below in the table on the right), rules for customer groups for individual products (set in the form below in the table on the left), general rule for customer groups (set in customer group editing page).';
 
 // Column
 $_['column_name']            = 'Product Name';
@@ -23,6 +26,9 @@ $_['column_price']           = 'Price';
 $_['column_quantity']        = 'Quantity';
 $_['column_status']          = 'Status';
 $_['column_action']          = 'Action';
+$_['column_group']           = 'Customer group';
+$_['column_customer']        = 'Customer - name (e-mail address)';
+$_['column_override_rule']   = 'Force buying in bulk';
 
 // Tabs
 $_['tab_bulk_buy']           = 'Bulk Buy';
@@ -96,6 +102,8 @@ $_['entry_trial_price']      = 'Trial recurring price:';
 $_['entry_trial_freq']       = 'Trial recurring frequency:';
 $_['entry_trial_cycle']      = 'Trial recurring cycles:<span class="help">How often its billed, must be 1 or more</span>';
 $_['entry_trial_length']     = 'Trial recurring length:';
+$_['entry_add_group_rule']   = 'Add rule for customer group';
+$_['entry_add_customer_rule'] = 'Add rule for customer';
 
 $_['text_length_day']        = 'Day';
 $_['text_length_week']       = 'Week';

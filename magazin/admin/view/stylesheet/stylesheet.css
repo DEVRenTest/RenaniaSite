@@ -564,3 +564,10 @@ table.form > tbody > tr > td {
     color: red;
     font-weight: bold;
 }
+td.short-cell {
+	width: 100px;
+}
+.half {
+	float: left;
+	width: 50%;
+}
