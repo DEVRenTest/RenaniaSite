@@ -165,6 +165,8 @@ class ControllerProductProduct extends Controller {
 		
 	 	$product_info = $this->model_catalog_product->getProduct($product_id);
 
+	 	$this->data['customer_forced_buy_bulk'] = $this->model_catalog_product->customerForcedBuyBulk($product_id);
+
 		if ($product_info) {
 			$url = '';
 			
@@ -243,6 +245,12 @@ class ControllerProductProduct extends Controller {
 			$this->data['text_limited_stock'] = $this->language->get('text_limited_stock');
 			$this->data['text_loading'] = $this->language->get('text_loading');
 			$this->data['text_qty'] = $this->language->get('text_qty');
+			$this->data['text_buy'] = $this->language->get('text_buy');
+			$this->data['text_piece'] = $this->language->get('text_piece');
+			$this->data['text_bulk'] = $this->language->get('text_bulk');
+			$this->data['text_products_bulk'] = $this->language->get('text_products_bulk');
+			$this->data['text_force_bulk'] = $this->language->get('text_force_bulk');
+			$this->data['text_force_piece'] = $this->language->get('text_force_piece');
 			$this->data['text_price'] = $this->language->get('text_price');
 			$this->data['text_tax'] = $this->language->get('text_tax');
 			$this->data['text_discount'] = $this->language->get('text_discount');
@@ -297,6 +305,8 @@ class ControllerProductProduct extends Controller {
 			$this->data['reward'] = $product_info['reward'];
 			$this->data['points'] = $product_info['points'];
 			
+			$this->data['container_size'] = $product_info['container_size'];
+
 			if ($product_info['quantity'] <= 0) {
 				$this->data['stock'] = $product_info['stock_status'];
 			} elseif ($this->config->get('config_stock_display')) {

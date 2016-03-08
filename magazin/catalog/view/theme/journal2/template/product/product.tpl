@@ -157,7 +157,7 @@
         <?php } ?>
         <span class="p-stock"><?php echo $text_stock; ?></span> <span class="journal-stock <?php echo isset($stock_status) ? $stock_status : ''; ?>"><?php echo $text_limited_stock; ?> 
         <marquee DIRECTION=RIGHT SCROLLDELAY="200" style="width: 10px;"><?php echo $text_loading; ?></marquee><?php echo $stock; ?></span><br />
-        <span class="p-model"><?php echo $text_views; ?></span> <span><?php echo $views;?></span>
+        <span class="p-model"><?php echo $text_views; ?></span> <span><?php echo $views;?></span><br />
       </div>
     <?php if($this->journal2->settings->get('product_sold')): ?>
     <div class="product-sold-count-text"><?php echo $this->journal2->settings->get('product_sold'); ?></div>
@@ -361,6 +361,11 @@
       </div>
       <script>Journal.enableSelectOptionAsButtonsList();</script>
       <?php } ?>
+      <?php if($container_size) { ?>
+      <div>
+        <spam><?php echo $text_products_bulk; ?></spam><?php echo $container_size; ?>
+      </div>
+      <?php } ?>
       <div class="cart <?php echo isset($labels) && is_array($labels) && isset($labels['outofstock']) ? 'outofstock' : ''; ?>">
         <?php if($this->journal2->settings->get('hide_add_to_cart_button')): ?>
         <?php foreach ($this->journal2->settings->get('additional_product_enquiry', array()) as $tab): ?>
@@ -369,11 +374,46 @@
         <input type="hidden" name="product_id" value="<?php echo $product_id; ?>" />
         <?php else: ?>
         <div>
+          <?php if($container_size == 0) { ?>
+              <span><?php echo $text_force_piece;?></span></br>
+              <span class="qty">
+                    <span class="text-qty"><?php echo $text_qty; ?></span>
+                    <input type="text" name="quantity" size="2" value=<?php echo $minimum; ?> data-min-value="<?php echo $minimum; ?>" autocomplete="off" />
+                </span>
+          <?php } else {
+          if(!$customer_forced_buy_bulk) { ?>
+            <div>
+            <span><?php echo $text_buy; ?></span></br>
+            <input type="radio" name="quantity_type" value="1" checked="checked"><span><?php echo $text_piece; ?></span></br>
+            <input type="radio" name="quantity_type" value="<?php echo $container_size; ?>"><span><?php echo $text_bulk; ?></br>
+            </div>
+            <span class="qty">
+              <input type="text" name="quantity_multiply" value=<?php echo $minimum; ?> style="width:40%;" data-min-value="<?php echo $minimum; ?>" autocomplete="off" />
+              <input type="hidden" name="quantity">
+            </span>
+          <script>
+             $(document).ready(function() {
+                $('input[name="quantity_type"], input[name="quantity_multiply"]').on('keyup change', function() {
+                  $('input[name="quantity"]').val($('input[name="quantity_multiply"]').val() * $('input[name="quantity_type"]:checked').val());
+                });
+            });
+          </script>
+            <?php } else { ?>
+            <span><?php echo $text_force_bulk;?></span></br>
             <span class="qty">
                 <span class="text-qty"><?php echo $text_qty; ?></span>
-                <input type="text" name="quantity" size="2" value=<?php echo $minimum; ?> data-min-value="<?php echo $minimum; ?>" autocomplete="off" />
+                <input type="text" name="quantity_multiply" style="width:40%;" value=<?php echo $minimum; ?> data-min-value="<?php echo $minimum; ?>" autocomplete="off" />
+                <input type="hidden" name="quantity">
             </span>
-            
+            <script>
+             $(document).ready(function() {
+                $('input[name="quantity_multiply"]').on('keyup change', function() {
+                  $('input[name="quantity"]').val($('input[name="quantity_multiply"]').val() * <?php echo $container_size; ?>);
+                });
+             });
+          </script>
+            <?php } ?>
+          <?php } ?>
           <input type="hidden" name="product_id" value="<?php echo $product_id; ?>" />
             <a id="button-cart" class="button"><span class="button-cart-text"><?php echo $button_cart; ?></span></a>
           <script>if ($('.product-info .image .label-outofstock').length) { $("#button-cart").addClass('button-disable').attr('disabled', 'disabled'); }</script>
