@@ -128,6 +128,19 @@ class ModelCatalogProduct extends Model {
 				$this->db->query("INSERT INTO `" . DB_PREFIX . "product_profile` SET `product_id` = " . (int) $product_id . ", customer_group_id = " . (int) $profile['customer_group_id'] . ", `profile_id` = " . (int) $profile['profile_id']);
 			}
 		} 
+
+		if (isset($data['bulk_buy_overrides'])) {
+			if (isset($data['bulk_buy_overrides']['customer_groups']) && !empty($data['bulk_buy_overrides']['customer_groups'])) {
+				foreach ($data['bulk_buy_overrides']['customer_groups'] as $customer_group_id => $force_buy_bulk) {
+					$this->db->query("INSERT INTO " . DB_PREFIX . "force_buy_bulk_override_group set product_id = '" . (int)$product_id . "', customer_group_id = '" . (int)$customer_group_id . "', force_buy_bulk = '" . (int)$force_buy_bulk . "'");
+				}
+			}
+			if (isset($data['bulk_buy_overrides']['customer']) && !empty($data['bulk_buy_overrides']['customer'])) {
+				foreach ($data['bulk_buy_overrides']['customer'] as $customer_id => $force_buy_bulk) {
+					$this->db->query("INSERT INTO " . DB_PREFIX . "force_buy_bulk_override_customer set product_id = '" . (int)$product_id . "', customer_id = '" . (int)$customer_id . "', force_buy_bulk = '" . (int)$force_buy_bulk . "'");
+				}
+			}
+		}
 		
 		$this->cache->delete('product');
 	}
@@ -233,6 +246,21 @@ class ModelCatalogProduct extends Model {
 			foreach ($data['product_category'] as $category_id) {
 				$this->db->query("INSERT INTO " . DB_PREFIX . "product_to_category SET product_id = '" . (int)$product_id . "', category_id = '" . (int)$category_id . "'");
 			}		
+		}
+
+		$this->db->query("DELETE FROM " . DB_PREFIX . "force_buy_bulk_override_group WHERE product_id = '" . (int)$product_id . "'");
+		$this->db->query("DELETE FROM " . DB_PREFIX . "force_buy_bulk_override_customer WHERE product_id = '" . (int)$product_id . "'");
+		if (isset($data['bulk_buy_overrides'])) {
+			if (isset($data['bulk_buy_overrides']['customer_groups']) && !empty($data['bulk_buy_overrides']['customer_groups'])) {
+				foreach ($data['bulk_buy_overrides']['customer_groups'] as $customer_group_id => $force_buy_bulk) {
+					$this->db->query("INSERT INTO " . DB_PREFIX . "force_buy_bulk_override_group set product_id = '" . (int)$product_id . "', customer_group_id = '" . (int)$customer_group_id . "', force_buy_bulk = '" . (int)$force_buy_bulk . "'");
+				}
+			}
+			if (isset($data['bulk_buy_overrides']['customer']) && !empty($data['bulk_buy_overrides']['customer'])) {
+				foreach ($data['bulk_buy_overrides']['customer'] as $customer_id => $force_buy_bulk) {
+					$this->db->query("INSERT INTO " . DB_PREFIX . "force_buy_bulk_override_customer set product_id = '" . (int)$product_id . "', customer_id = '" . (int)$customer_id . "', force_buy_bulk = '" . (int)$force_buy_bulk . "'");
+				}
+			}
 		}
 		
 		$this->db->query("DELETE FROM " . DB_PREFIX . "product_filter WHERE product_id = '" . (int)$product_id . "'");
@@ -347,6 +375,8 @@ class ModelCatalogProduct extends Model {
 		$this->db->query("DELETE FROM `" . DB_PREFIX . "product_profile` WHERE `product_id` = " . (int) $product_id);
 		$this->db->query("DELETE FROM " . DB_PREFIX . "review WHERE product_id = '" . (int)$product_id . "'");
 		$this->db->query("DELETE FROM " . DB_PREFIX . "product_complementary WHERE product_id = '" . (int) $product_id . "'");
+		$this->db->query("DELETE FROM " . DB_PREFIX . "force_buy_bulk_override_group WHERE product_id = '" . (int)$product_id . "'");
+		$this->db->query("DELETE FROM " . DB_PREFIX . "force_buy_bulk_override_customer WHERE product_id = '" . (int)$product_id . "'");
 		
 		$this->db->query("DELETE FROM " . DB_PREFIX . "url_alias WHERE query = 'product_id=" . (int)$product_id. "'");
 		
@@ -918,6 +948,25 @@ class ModelCatalogProduct extends Model {
 			}
 		}
 		return $concatenated_code;
+	}
+
+	function getProductBulkBuyOverrides($product_id)
+	{
+		$results = array('customer_groups' => array(), 'customers' => array());
+		$query = $this->db->query("SELECT fbbog.customer_group_id, cgd.name, fbbog.force_buy_bulk FROM " . DB_PREFIX . "force_buy_bulk_override_group fbbog LEFT JOIN " . DB_PREFIX . "customer_group_description cgd ON fbbog.customer_group_id = cgd.customer_group_id WHERE fbbog.product_id = '" . (int)$product_id . "'");
+		if ($query->num_rows) {
+			foreach ($query as $row) {
+				$results['customer_groups'][$row['customer_group_id']] = array('name' => $row['name'], 'override' => ['force_buy_bulk']);
+			}
+		}
+
+		$query = $this->db->query("SELECT fbboc.customer_id, c.email, c.firstname, c.lastname, fbboc.force_buy_bulk FROM " . DB_PREFIX . "force_buy_bulk_override_customer fbboc LEFT JOIN " . DB_PREFIX . "customer c ON fbboc.customer_id = c.customer_id WHERE fbboc.product_id = '" . (int)$product_id . "'");
+		if ($query->num_rows) {
+			foreach ($query as $row) {
+				$results['customers'][$row['customer_id']] = array('name' => $row['firstname'] . ' ' . $row['lastname'], 'email' => $row['email'], 'override' => ['force_buy_bulk']);
+			}
+		}
+		return $results;
 	}
 
 }
