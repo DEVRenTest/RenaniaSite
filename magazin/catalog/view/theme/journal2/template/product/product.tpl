@@ -363,7 +363,7 @@
       <?php } ?>
       <?php if($container_size) { ?>
       <div>
-        <spam><?php echo $text_products_bulk; ?></spam><?php echo $container_size; ?>
+        <span><?php echo $text_products_bulk; ?></span><?php echo $container_size; ?>
       </div>
       <?php } ?>
       <div class="cart <?php echo isset($labels) && is_array($labels) && isset($labels['outofstock']) ? 'outofstock' : ''; ?>">

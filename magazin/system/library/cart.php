@@ -341,6 +341,7 @@ class Cart
                         'download' => $download_data,
                         'quantity' => $quantity,
                         'minimum' => $product_query->row['minimum'],
+                        'container_size' => $product_query->row['container_size'],
                         'subtract' => $product_query->row['subtract'],
                         'stock' => $stock,
                         'price' => ( $B2B ? $priceB2B : ($price + $option_price) ),

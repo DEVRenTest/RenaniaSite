@@ -63,15 +63,47 @@
                 - <small><?php echo $text_payment_profile ?>: <?php echo $product['profile_name'] ?></small>
                 <?php endif; ?>
                 <?php endif; /* end v156 compatibility */ ?>
+                <?php if($product['container_size']) { ?>
+                  <div>
+                    - <span><?php echo $text_container_size; ?></span><?php echo $product['container_size']; ?>
+                  </div>
+                <?php } ?>
               </div>
               <?php if ($product['reward']) { ?>
               <small><?php echo $product['reward']; ?></small>
               <?php } ?></td>
             <td class="model"><?php echo $product['model']; ?></td>
-            <td class="quantity"><input type="text" name="quantity[<?php echo $product['key']; ?>]" value="<?php echo $product['quantity']; ?>" size="1" />
-              &nbsp;
-              <input type="image" src="catalog/view/theme/default/image/update.png" alt="<?php echo $button_update; ?>" title="<?php echo $button_update; ?>" />
-              &nbsp;<a href="<?php echo $product['remove']; ?>"><img src="catalog/view/theme/default/image/remove.png" alt="<?php echo $button_remove; ?>" title="<?php echo $button_remove; ?>" /></a></td>
+            <td class="quantity">
+              <?php if($product['container_size'] == 0) { ?>
+              <span><?php echo $text_buy_piece;?></span>
+              <input type="text" name="quantity[<?php echo $product['key']; ?>]" value="<?php echo $product['quantity']; ?>" size="1" />
+                &nbsp;
+                <input type="image" src="catalog/view/theme/default/image/update.png" alt="<?php echo $button_update; ?>" title="<?php echo $button_update; ?>" />
+                &nbsp;<a href="<?php echo $product['remove']; ?>"><img src="catalog/view/theme/default/image/remove.png" alt="<?php echo $button_remove; ?>" title="<?php echo $button_remove; ?>" /></a>
+              <?php } else { 
+                if(!$product['customer_forced_buy_bulk']) { ?>
+                <div>
+                  <?php $loose_items = $product['quantity'] % $product['container_size'];?>
+                  <input type="radio" name="radio_quantity_multiplier[<?php echo $product['key']; ?>]" value="1"<?php if ($loose_items) { ?> checked="checked"<?php } ?>><span><?php echo $text_piece; ?></span>
+                  <input type="radio" name="radio_quantity_multiplier[<?php echo $product['key']; ?>]" value="<?php echo $product['container_size']; ?>"<?php if (!$loose_items) { ?> checked="checked"<?php } ?>><span><?php echo $text_bulk; ?></span><br />
+                  <input type="hidden" name="quantity[<?php echo $product['key']; ?>]" value="<?php echo $product['quantity']; ?>" size="1" />
+                  <input type="text" name="multiply_quantity" value="<?php echo (!$loose_items ? $product['quantity']/$product['container_size'] : $product['quantity']); ?>">
+                  <span class="piece_quantity"><?php if (!$loose_items) { echo '(' . $text_buy_piece . ' ' . $product['quantity'] . ')';} ?></span>
+                  &nbsp;
+                  <input type="image" src="catalog/view/theme/default/image/update.png" alt="<?php echo $button_update; ?>" title="<?php echo $button_update; ?>" />
+                  &nbsp;<a href="<?php echo $product['remove']; ?>"><img src="catalog/view/theme/default/image/remove.png" alt="<?php echo $button_remove; ?>" title="<?php echo $button_remove; ?>" /></a>
+                </div>
+              <?php } else { ?>
+              <span><?php echo $text_buy_bulk;?></span>
+              <input type="hidden" name="quantity[<?php echo $product['key']; ?>]" value="<?php echo $product['quantity']; ?>" size="1" />
+              <input type="text" data-multiplier="<?php echo $product['container_size']; ?>" name="multiply_quantity_forced" value="<?php echo $product['quantity']/$product['container_size']; ?>"/>
+                <span>(<?php echo $text_buy_piece . ' ' . $product['quantity']; ?>)</span>
+                &nbsp;
+                <input type="image" src="catalog/view/theme/default/image/update.png" alt="<?php echo $button_update; ?>" title="<?php echo $button_update; ?>" />
+                &nbsp;<a href="<?php echo $product['remove']; ?>"><img src="catalog/view/theme/default/image/remove.png" alt="<?php echo $button_remove; ?>" title="<?php echo $button_remove; ?>" /></a>
+              <?php } ?>
+            <?php } ?>
+            </td>
             <td class="price"><?php echo $product['price']; ?></td>
             <td class="total"><?php echo $product['total']; ?></td>
           </tr>
@@ -365,5 +397,21 @@ $('select[name=\'country_id\']').bind('change', function() {
 
 $('select[name=\'country_id\']').trigger('change');
 //--></script>
+<script> 
+  $(document).ready(function() {
+    $('input[name^="radio_quantity_multiplier"], input[name="multiply_quantity"]').on('keyup change', function() {
+      $(this).closest('div').find('input[name^="quantity"]').val($(this).closest('div').find('input[name^="radio_quantity_multiplier"]:checked').val() * $(this).closest('div').find('input[name="multiply_quantity"]').val());
+      if ($(this).closest('div').find('input[name^="radio_quantity_multiplier"]:checked').val() > 1) {
+        $(this).closest('div').find('.piece_quantity').text('(<?php echo $text_buy_piece; ?>' + $(this).closest('div').find('input[name^="radio_quantity_multiplier"]:checked').val() * $(this).closest('div').find('input[name="multiply_quantity"]').val() + ')');
+      } else {
+        $(this).closest('div').find('.piece_quantity').empty();
+      }
+    });
+    $('input[name="multiply_quantity_forced"]').on('keyup change', function() {
+      $(this).prev('input[name^="quantity"]').val($(this).val() * $(this).attr('data-multiplier'));
+      $(this).next('span').text('(<?php echo $text_buy_piece; ?>' + $(this).val() * $(this).attr('data-multiplier') + ')');
+    });
+ });
+</script>
 <?php } ?>
 <?php echo $footer; ?>

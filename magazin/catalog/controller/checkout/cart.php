@@ -133,6 +133,8 @@ class ControllerCheckoutCart extends Controller
             'separator' => $this->language->get( 'text_separator' )
         );
 
+        $this->load->model('catalog/product');
+
         if( $this->cart->hasProducts() || !empty( $this->session->data['vouchers'] ) )
         {
             $points = $this->customer->getRewardPoints();
@@ -165,6 +167,12 @@ class ControllerCheckoutCart extends Controller
             $this->data['text_freq_month'] = $this->language->get( 'text_freq_month' );
             $this->data['text_freq_bi_month'] = $this->language->get( 'text_freq_bi_month' );
             $this->data['text_freq_year'] = $this->language->get( 'text_freq_year' );
+            $this->data['text_buy'] = $this->language->get( 'text_buy' );
+            $this->data['text_piece'] = $this->language->get( 'text_piece' );
+            $this->data['text_bulk'] = $this->language->get( 'text_bulk' );
+            $this->data['text_buy_piece'] = $this->language->get( 'text_buy_piece' );
+            $this->data['text_buy_bulk'] = $this->language->get( 'text_buy_bulk' );
+            $this->data['text_container_size'] = $this->language->get( 'text_container_size' );
 
             $this->data['column_image'] = $this->language->get( 'column_image' );
             $this->data['column_name'] = $this->language->get( 'column_name' );
@@ -359,6 +367,8 @@ class ControllerCheckoutCart extends Controller
                     'recurring' => $product['recurring'],
                     'profile_name' => $product['profile_name'],
                     'profile_description' => $profile_description,
+                    'customer_forced_buy_bulk' => $this->model_catalog_product->customerForcedBuyBulk($product['product_id']),
+                    'container_size' => $product['container_size'],
                 );
             }
 
