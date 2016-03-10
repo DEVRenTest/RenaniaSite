@@ -391,13 +391,17 @@
                 });
               </script>
               <?php } else { ?>
-              <label for="radio_bulk"><?php echo $text_pieces; ?></label>
-              <input name="radio_bulk_or_piece" id="radio_bulk" value="1" type="radio" checked="checked"/>
-              <label for="radio_piece"><?php echo $text_packages; ?></label>
-              <input name="radio_bulk_or_piece" id="radio_piece" value="<?php echo $container_size; ?>"  type="radio"/>
-              <input type="hidden" name="quantity" value=<?php echo $minimum; ?> data-min-value="<?php echo $minimum; ?>" autocomplete="off" />
-              <input type="text" id="fake_quantity" size="3"/>
-              <span class="piece-count"></span>
+              <div class="vertical-centered">
+                <input name="radio_bulk_or_piece" id="radio_bulk" value="1" type="radio" checked="checked"/>
+                <label for="radio_bulk"><?php echo $text_pieces; ?></label><br />
+                <input name="radio_bulk_or_piece" id="radio_piece" value="<?php echo $container_size; ?>"  type="radio"/>
+                <label for="radio_piece"><?php echo $text_packages; ?></label>
+              </div>
+              <div class="vertical-centered">
+                <input type="hidden" name="quantity" value=<?php echo $minimum; ?> data-min-value="<?php echo $minimum; ?>" autocomplete="off" />
+                <input type="text" id="fake_quantity" size="3"/>
+                <span class="piece-count"></span>
+              </div>
               <script type="text/javascript">
                 $('input[name^="radio_bulk_or_piece"], #fake_quantity').on('change keyup', function(){
                   $('input[name="quantity"]').val($('input[name^="radio_bulk_or_piece"]:checked').val() * $('#fake_quantity').val());

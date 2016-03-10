@@ -13,3 +13,7 @@
 .product-info .right .cart div input[name="quantity"] {
 	line-height: 1;
 }
+.vertical-centered {
+	display: inline-block;
+	vertical-align: middle;
+}
