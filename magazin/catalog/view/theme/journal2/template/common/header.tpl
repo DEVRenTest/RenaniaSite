@@ -83,6 +83,7 @@
     if ($this->journal2->settings->get('responsive_design')) {
         $this->journal2->minifier->addStyle('catalog/view/theme/journal2/css/responsive.css');
     }
+    $this->journal2->minifier->addStyle('catalog/view/theme/journal2/css/adjust.css');
 ?>
 <?php echo $this->journal2->minifier->css(); ?>
 <?php if ($this->journal2->cache->getDeveloperMode() || !$this->journal2->minifier->getMinifyCss()): ?>

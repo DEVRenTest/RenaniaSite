@@ -158,6 +158,9 @@
         <span class="p-stock"><?php echo $text_stock; ?></span> <span class="journal-stock <?php echo isset($stock_status) ? $stock_status : ''; ?>"><?php echo $text_limited_stock; ?> 
         <marquee DIRECTION=RIGHT SCROLLDELAY="200" style="width: 10px;"><?php echo $text_loading; ?></marquee><?php echo $stock; ?></span><br />
         <span class="p-model"><?php echo $text_views; ?></span> <span><?php echo $views;?></span><br />
+        <?php if ($container_size) { ?>
+        <span class="p-model"><?php echo $text_pieces_per_package; ?></span> <span><?php echo $container_size; ?></span>
+        <?php } ?>
       </div>
     <?php if($this->journal2->settings->get('product_sold')): ?>
     <div class="product-sold-count-text"><?php echo $this->journal2->settings->get('product_sold'); ?></div>
@@ -168,6 +171,7 @@
       <?php endif; ?>
       <?php if ($price) { ?>
       <div class="price" itemprop="offers" itemscope itemtype="http://schema.org/Offer">
+        <span class="price_per_piece"><?php echo $text_price_per_piece; ?></span>
         <meta itemprop="priceCurrency" content="<?php echo $this->journal2->settings->get('product_price_currency'); ?>" />
         <?php if ($this->journal2->settings->get('product_in_stock') === 'yes'): ?>
         <link itemprop="availability"  href="http://schema.org/InStock" />
@@ -361,11 +365,6 @@
       </div>
       <script>Journal.enableSelectOptionAsButtonsList();</script>
       <?php } ?>
-      <?php if($container_size) { ?>
-      <div>
-        <span><?php echo $text_products_bulk; ?></span><?php echo $container_size; ?>
-      </div>
-      <?php } ?>
       <div class="cart <?php echo isset($labels) && is_array($labels) && isset($labels['outofstock']) ? 'outofstock' : ''; ?>">
         <?php if($this->journal2->settings->get('hide_add_to_cart_button')): ?>
         <?php foreach ($this->journal2->settings->get('additional_product_enquiry', array()) as $tab): ?>
@@ -374,48 +373,50 @@
         <input type="hidden" name="product_id" value="<?php echo $product_id; ?>" />
         <?php else: ?>
         <div>
-          <?php if($container_size == 0) { ?>
-              <span><?php echo $text_force_piece;?></span></br>
-              <span class="qty">
-                    <span class="text-qty"><?php echo $text_qty; ?></span>
-                    <input type="text" name="quantity" size="2" value=<?php echo $minimum; ?> data-min-value="<?php echo $minimum; ?>" autocomplete="off" />
-                </span>
-          <?php } else {
-          if(!$customer_forced_buy_bulk) { ?>
-            <div>
-            <span><?php echo $text_buy; ?></span></br>
-            <input type="radio" name="quantity_type" value="1" checked="checked"><span><?php echo $text_piece; ?></span></br>
-            <input type="radio" name="quantity_type" value="<?php echo $container_size; ?>"><span><?php echo $text_bulk; ?></br>
-            </div>
-            <span class="qty">
-              <input type="text" name="quantity_multiply" value=<?php echo $minimum; ?> style="width:40%;" data-min-value="<?php echo $minimum; ?>" autocomplete="off" />
-              <input type="hidden" name="quantity">
-            </span>
-          <script>
-             $(document).ready(function() {
-                $('input[name="quantity_type"], input[name="quantity_multiply"]').on('keyup change', function() {
-                  $('input[name="quantity"]').val($('input[name="quantity_multiply"]').val() * $('input[name="quantity_type"]:checked').val());
+          <div id="product-quantity">
+            <p class="text-qty"><?php echo $text_qty; ?></p>
+            <?php if (!$container_size) { ?>
+            <label for="real-quantity"><?php echo $text_pieces; ?>&colon; </label>
+            <input type="text" id="real-quantity" name="quantity" size="3" value=<?php echo $minimum; ?> data-min-value="<?php echo $minimum; ?>" autocomplete="off" />
+            <?php } else { 
+              if ($customer_forced_buy_bulk) { ?>
+              <label for="fake_quantity"><?php echo $text_packages; ?>&colon; </label>
+              <input type="hidden" name="quantity" value=<?php echo $minimum; ?> data-min-value="<?php echo $minimum; ?>" autocomplete="off" />
+              <input type="text" id="fake_quantity" size="3"/>
+              <span class="piece-count"></span>
+              <script type="text/javascript">
+                $('#fake_quantity').on('change keyup', function(){
+                  $('input[name="quantity"]').val($(this).val() * <?php echo $container_size; ?>);
+                  $('.piece-count').text('(<?php echo $text_pieces; ?>: ' + $(this).val() * <?php echo $container_size; ?> + ')');
                 });
-            });
-          </script>
-            <?php } else { ?>
-            <span><?php echo $text_force_bulk;?></span></br>
-            <span class="qty">
-                <span class="text-qty"><?php echo $text_qty; ?></span>
-                <input type="text" name="quantity_multiply" style="width:40%;" value=<?php echo $minimum; ?> data-min-value="<?php echo $minimum; ?>" autocomplete="off" />
-                <input type="hidden" name="quantity">
-            </span>
-            <script>
-             $(document).ready(function() {
-                $('input[name="quantity_multiply"]').on('keyup change', function() {
-                  $('input[name="quantity"]').val($('input[name="quantity_multiply"]').val() * <?php echo $container_size; ?>);
+              </script>
+              <?php } else { ?>
+              <label for="radio_bulk"><?php echo $text_pieces; ?></label>
+              <input name="radio_bulk_or_piece" id="radio_bulk" value="1" type="radio" checked="checked"/>
+              <label for="radio_piece"><?php echo $text_packages; ?></label>
+              <input name="radio_bulk_or_piece" id="radio_piece" value="<?php echo $container_size; ?>"  type="radio"/>
+              <input type="hidden" name="quantity" value=<?php echo $minimum; ?> data-min-value="<?php echo $minimum; ?>" autocomplete="off" />
+              <input type="text" id="fake_quantity" size="3"/>
+              <span class="piece-count"></span>
+              <script type="text/javascript">
+                $('input[name^="radio_bulk_or_piece"], #fake_quantity').on('change keyup', function(){
+                  $('input[name="quantity"]').val($('input[name^="radio_bulk_or_piece"]:checked').val() * $('#fake_quantity').val());
+                  if ($('input[name^="radio_bulk_or_piece"]:checked').val() != 1) {
+                    $('.piece-count').text('(<?php echo $text_pieces; ?>: ' + $('#fake_quantity').val() * <?php echo $container_size; ?> + ')');
+                  } else {
+                    if ($('#fake_quantity').val() % <?php echo $container_size; ?> != 0) {
+                      $('.piece-count').empty();
+                    } else {
+                      $('.piece-count').text('(<?php echo $text_packages; ?>: ' + $('#fake_quantity').val() / <?php echo $container_size; ?> + ')');
+                    }
+                  }
                 });
-             });
-          </script>
-            <?php } ?>
-          <?php } ?>
+              </script>
+              <?php } 
+            } ?>
+          </div>
           <input type="hidden" name="product_id" value="<?php echo $product_id; ?>" />
-            <a id="button-cart" class="button"><span class="button-cart-text"><?php echo $button_cart; ?></span></a>
+          <a id="button-cart" class="button"><span class="button-cart-text"><?php echo $button_cart; ?></span></a>
           <script>if ($('.product-info .image .label-outofstock').length) { $("#button-cart").addClass('button-disable').attr('disabled', 'disabled'); }</script>
         </div>
           <script>

@@ -245,12 +245,6 @@ class ControllerProductProduct extends Controller {
 			$this->data['text_limited_stock'] = $this->language->get('text_limited_stock');
 			$this->data['text_loading'] = $this->language->get('text_loading');
 			$this->data['text_qty'] = $this->language->get('text_qty');
-			$this->data['text_buy'] = $this->language->get('text_buy');
-			$this->data['text_piece'] = $this->language->get('text_piece');
-			$this->data['text_bulk'] = $this->language->get('text_bulk');
-			$this->data['text_products_bulk'] = $this->language->get('text_products_bulk');
-			$this->data['text_force_bulk'] = $this->language->get('text_force_bulk');
-			$this->data['text_force_piece'] = $this->language->get('text_force_piece');
 			$this->data['text_price'] = $this->language->get('text_price');
 			$this->data['text_tax'] = $this->language->get('text_tax');
 			$this->data['text_discount'] = $this->language->get('text_discount');
@@ -263,6 +257,11 @@ class ControllerProductProduct extends Controller {
 			$this->data['text_wait'] = $this->language->get('text_wait');
 			$this->data['text_tags'] = $this->language->get('text_tags');
             $this->data['text_no_stock'] = $this->language->get('text_no_stock');
+
+            $this->data['text_pieces_per_package'] = $this->language->get('text_pieces_per_package');
+            $this->data['text_price_per_piece'] = $this->language->get('text_price_per_piece');
+            $this->data['text_pieces'] = $this->language->get('text_pieces');
+            $this->data['text_packages'] = $this->language->get('text_packages');
       
             $this->data['text_free_delivery'] = $this->language->get('text_free_delivery');
             $this->data['text_return_guarantee'] = $this->language->get('text_return_guarantee');

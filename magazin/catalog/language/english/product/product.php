@@ -12,12 +12,6 @@ $_['text_limited_stock'] = 'Limited stock';
 $_['text_instock']      = 'In Stock';
 $_['text_views'] 		= 'Views:';
 $_['text_price']        = 'Price:'; 
-$_['text_buy'] 			= 'Buy:';
-$_['text_piece'] 		= 'Piece';
-$_['text_bulk'] 		= 'Package';
-$_['text_products_bulk'] = 'Products/package: ';
-$_['text_force_bulk'] 	= 'Packages:';
-$_['text_force_piece']	 = 'Pieces:';
 $_['text_tax']          = 'Ex Tax:'; 
 $_['text_discount']     = '%s or more %s';
 $_['text_option']       = 'Available Options';
@@ -36,6 +30,11 @@ $_['text_wait']         = 'Please Wait!';
 $_['text_tags']         = 'Tags:';
 $_['text_error']        = 'Product not found!';
 $_['text_payment_profile'] = 'Payment Profiles';
+
+$_['text_pieces_per_package']  = 'Pieces/package:';
+$_['text_price_per_piece']     = 'Price/piece:';
+$_['text_pieces']              = 'Pieces';
+$_['text_packages']            = 'Packages';
 
 $_['text_trial_description'] = '%s every %d %s(s) for %d payment(s) then';
 $_['text_payment_description'] = '%s every %d %s(s) for %d payment(s)';
