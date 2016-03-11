@@ -7,8 +7,9 @@
   </div>
   <div class="Content" style="font-family: primeregular;">
 
-    <span style="background-repeat:no-repeat;">          
-        <a href="<?php echo $latest_link; ?>">Produse noi</a>
+    <span style="background-repeat:no-repeat;">
+      <div class="label-latest" style="float: left; height: 30px !important; width: 30px !important; margin: 10px 0 0 10px;"></div>
+      <a href="<?php echo $latest_link; ?>"><?php echo $text_product_new; ?></a>
     </span>
 
     <?php $filterProCounter = 1;?>
