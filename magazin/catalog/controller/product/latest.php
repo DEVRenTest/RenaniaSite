@@ -174,7 +174,8 @@ class ControllerProductLatest extends Controller
                 'rating' => $result['rating'],
                 'reviews' => sprintf( $this->language->get( 'text_reviews' ), ( int ) $result['reviews'] ),
                 'href' => $this->url->link( 'product/product', '&product_id=' . $result['product_id']),
-                'product_option_quantity' =>    sizeof( $options )
+                'product_option_quantity' =>    sizeof( $options ),
+                'product_new' => $result['product_new'],
   
             );
         }

@@ -175,6 +175,7 @@ class ModelCatalogProduct extends Model {
 				'date_modified'    => $query->row['date_modified'],
 				'viewed'           => $query->row['viewed'],
 				'container_size'   => $query->row['container_size'],
+				'product_new'      => $query->row['flag'],
 			);
       
 		} else {

@@ -17,6 +17,9 @@
     <div class="left">
       <?php if ($thumb) { ?>
       <div class="image">
+          <?php if ($product_new) { ?>
+              <span class="label-latest"></span>
+          <?php } ?>   
           <?php if (isset($labels) && is_array($labels)): ?>
           <?php foreach ($labels as $label => $name): ?>
           <?php if ($label === 'outofstock'): ?>
@@ -607,6 +610,9 @@
             <div class="product-wrapper">
                 <?php if ($product['thumb']) { ?>
                 <div class="image">
+                  <?php if ($product['product_new']) { ?>
+                      <span class="label-latest"></span>
+                  <?php } ?>
                     <a href="<?php echo $product['href']; ?>" <?php if(isset($product['thumb2']) && $product['thumb2']): ?> class="has-second-image" style="background: url('<?php echo $product['thumb2']; ?>') no-repeat;" <?php endif; ?>>
                         <img class="first-image" src="<?php echo $product['thumb']; ?>" title="<?php echo $product['name']; ?>" alt="<?php echo $product['name']; ?>" />
                     </a>
@@ -626,6 +632,9 @@
                 </div>
                 <?php } else { ?>
                 <div class="image">
+                    <?php if ($product['product_new']) { ?>
+                        <span class="label-latest"></span>
+                    <?php } ?>
                     <a href="<?php echo $product['href']; ?>" <?php if(isset($product['thumb2']) && $product['thumb2']): ?> class="has-second-image" style="background: url('<?php echo $product['thumb2']; ?>') no-repeat;" <?php endif; ?>>
                     <img class="first-image" src="<?php echo $this->journal2->settings->get('product_no_image'); ?>" title="<?php echo $product['name']; ?>" alt="<?php echo $product['name']; ?>" />
                     </a>

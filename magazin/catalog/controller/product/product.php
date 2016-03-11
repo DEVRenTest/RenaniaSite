@@ -315,6 +315,7 @@ class ControllerProductProduct extends Controller {
 			}
       
       $this->data['quantity'] = $product_info['quantity'];
+      $this->data['product_new'] = $product_info['product_new'];
       // if the logged customer is B2B or Gallery + B2B
       $B2B = false;
       if( $this->customer->getCustomerGroupId() == 3 || $this->customer->getCustomerGroupId() == 4 )
@@ -526,7 +527,8 @@ class ControllerProductProduct extends Controller {
 					'special' 	 => $special,
 					'rating'     => $rating,
 					'reviews'    => sprintf($this->language->get('text_reviews'), (int)$result['reviews']),
-					'href'    	 => $this->url->link('product/product', 'product_id=' . $result['product_id'])
+					'href'    	 => $this->url->link('product/product', 'product_id=' . $result['product_id']),
+					'product_new' => $result['product_new'],
 				);
         
 			}

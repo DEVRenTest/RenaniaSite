@@ -319,8 +319,8 @@ class ControllerProductCategory extends Controller
                     'rating' => $result['rating'],
                     'reviews' => sprintf( $this->language->get( 'text_reviews' ), ( int ) $result['reviews'] ),
                     'href' => $this->url->link( 'product/product', 'path='.$this->request->get['path'].'&product_id='.$result['product_id'].$url ),
-                    'product_option_quantity' => 	sizeof( $options )
-      
+                    'product_option_quantity' =>    sizeof( $options ),   
+                    'product_new' => $result['product_new'],   
                 );
             }
 
