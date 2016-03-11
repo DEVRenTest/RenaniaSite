@@ -6,6 +6,7 @@ class ControllerModuleCategory extends Controller {
     $this->data['heading_title'] = $this->language->get('heading_title');
 		$this->data['text_yes'] = $this->language->get('text_yes');
 		$this->data['text_no'] = $this->language->get('text_no');
+    $this->data['text_product_new'] = $this->language->get('text_product_new');
     
 		if (isset($this->request->get['path'])) {
 			$parts = explode('_', (string)$this->request->get['path']);
