@@ -1650,7 +1650,7 @@ $(document).ready(function(){
 
     $('.sort ul li a').on('click', function(){
 
-        var selected_sort = $(this).attr('id');
+        var selected_sort = $(this).attr('data-sort');
 
         $('.sort ul li a').each(function() {
             $(this).removeClass('selected');
@@ -1661,7 +1661,6 @@ $(document).ready(function(){
         $(".sort > select > option").each(function() {
             $(this).removeAttr('selected');
         });
-        console.log('soort cli '+selected_sort);
         $('.sort > select > option[value$="'+selected_sort+'"]').prop('selected', true);
         //$('.sort select option[value$="' + sort + "&" + order +'"]').attr('selected', 'selected');
     });
