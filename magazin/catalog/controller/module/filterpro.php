@@ -574,9 +574,10 @@ class ControllerModuleFilterPro extends Controller
             'limit' => $limit,
             'sort' => $sort,
             'order' => $order,
-            'filter_flag' => $this->request->post['filter_flag'],
-
         );
+        if (isset($this->request->post['filter_flag']) && $this->request->post['filter_flag'] == 1) {
+            $data['filter_flag'] = 1;
+        }
 
         if( isset( $this->request->post['manufacturer_id'] ) || ($filterpro_setting['display_manufacturer'] == 'none') )
         {
