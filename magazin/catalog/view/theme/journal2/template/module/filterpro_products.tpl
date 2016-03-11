@@ -1,9 +1,17 @@
     <?php foreach ($products as $product) { ?>
     <div>
-      <?php if ($product['thumb']) { ?>
-      <div class="image"><a href="<?php echo $product['href']; ?>"><img src="<?php echo $product['thumb']; ?>" title="<?php echo $product['name']; ?>" alt="<?php echo $product['name']; ?>" /></a></div>
+      <?php if ($product['thumb']) { ?> 
+      <div class="image">
+          <?php if ($product['product_new']) { ?>
+              <span class="label-latest"></span>
+          <?php } ?>   
+      <a href="<?php echo $product['href']; ?>"><img src="<?php echo $product['thumb']; ?>" title="<?php echo $product['name']; ?>" alt="<?php echo $product['name']; ?>" /></a></div>
       <?php } else { ?>
-      <div class="image"><a href="<?php echo $product['href']; ?>"><img src="catalog/view/theme/default/image/nophoto.png" title="<?php echo $product['name']; ?>" alt="<?php echo $product['name']; ?>" /></a></div>      
+      <div class="image">
+        <?php if ($product['product_new']) { ?>
+          <span class="label-latest"></span>
+        <?php } ?>
+      <a href="<?php echo $product['href']; ?>"><img src="catalog/view/theme/default/image/nophoto.png" title="<?php echo $product['name']; ?>" alt="<?php echo $product['name']; ?>" /></a></div>      
       <?php } ?>
       <div class="name"><a href="<?php echo $product['href']; ?>"><?php echo $product['name']; ?></a></div>
       <div class="description"><?php echo $product['description']; ?></div>

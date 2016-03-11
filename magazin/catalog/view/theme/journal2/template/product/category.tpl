@@ -144,6 +144,9 @@
     <div class=" <?php echo isset($product['labels']) && is_array($product['labels']) && isset($product['labels']['outofstock']) ? 'outofstock' : ''; ?>">
       <?php if ($product['thumb']) { ?>
         <div class="image">
+        <?php if ($product['product_new']) { ?>
+        <span class="label-latest"></span>
+        <?php } ?>
             <a href="<?php echo $product['href']; ?>" <?php if(isset($product['thumb2']) && $product['thumb2']): ?> class="has-second-image" style="background: url('<?php echo $product['thumb2']; ?>') no-repeat;" <?php endif; ?>>
                 <img class="lazy first-image" width="<?php echo $this->journal2->settings->get('config_image_width'); ?>" height="<?php echo $this->journal2->settings->get('config_image_height'); ?>" src="<?php echo $this->journal2->settings->get('product_dummy_image'); ?>" data-src="<?php echo $product['thumb']; ?>" title="<?php echo $product['name']; ?>" alt="<?php echo $product['name']; ?>" />
             </a>
@@ -163,6 +166,9 @@
         </div>
       <?php } else { ?>
         <div class="image">
+          <?php if ($product['product_new']) { ?>
+            <span class="label-latest"></span>
+          <?php } ?>
             <a href="<?php echo $product['href']; ?>">
                 <img class="first-image" width="<?php echo $this->journal2->settings->get('config_image_width'); ?>" height="<?php echo $this->journal2->settings->get('config_image_height'); ?>" src="<?php echo $this->journal2->settings->get('product_no_image'); ?>" title="<?php echo $product['name']; ?>" alt="<?php echo $product['name']; ?>" />
             </a>
