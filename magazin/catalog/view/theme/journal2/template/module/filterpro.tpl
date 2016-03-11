@@ -181,7 +181,8 @@
   <?php $attr_group = '1';?>
 	<?php if($attr_group) { ?>
 	<div class="option_box">
-		<div class="attribute_group_name"><?php echo $attribute['name']; ?></div>
+		<div class="attribute_group_name option_name hided"><?php echo $attribute['name']; ?></div>
+		<div class="collapsible" style="display:none">
 	<?php } ?>
 
 		<?php foreach($attribute['attribute_values'] as $attribute_value_id => $attribute_value) { ?>
@@ -280,6 +281,7 @@
 		</div>
 		<?php } ?>
         <?php if($attr_group) { ?>
+        		</div>
             </div>
         <?php } ?>
 		<?php } ?>
