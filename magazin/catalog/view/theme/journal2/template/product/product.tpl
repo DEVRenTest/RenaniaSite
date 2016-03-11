@@ -488,17 +488,6 @@
           </div>
       </div>
       <?php endif; ?>
-      <?php foreach ($this->journal2->settings->get('additional_product_description_bottom', array()) as $tab): ?>
-      <div class="journal-custom-tab">
-          <?php if ($tab['has_icon']): ?>
-          <div class="block-icon block-icon-left" style="<?php echo $tab['icon_css']; ?>"><?php echo $tab['icon']; ?></div>
-          <?php endif; ?>
-          <?php if ($tab['name']): ?>
-          <h3><?php echo $tab['name']; ?></h3>
-          <?php endif; ?>
-          <?php echo $tab['content']; ?>
-      </div>
-      <?php endforeach; ?>
   </div>
   </div>
   </div>

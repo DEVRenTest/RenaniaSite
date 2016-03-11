@@ -88,16 +88,27 @@
                     <!--<div class="arrow-down">&#9660;</div>-->
                 </div>
                 <div class="sort"><?php /* ?><b><?php echo $text_sort; ?></b><?php */ ?>
-                    <!-- <div id="sort_heading"><?php echo $text_sort; ?></div> -->
-                    <select onchange="location = this.value;">
-                        <?php foreach ($sorts as $sorts) { ?>
-                        <?php if ($sorts['value'] == $sort . '-' . $order) { ?>
-                        <option value="<?php echo $sorts['href']; ?>" selected="selected"><?php echo $text_sort; ?></option>
+                    <div id="sort_heading"><?php echo $text_sort; ?></div>
+                    <ul style="display: none">
+                        <?php foreach ($sorts as $srt) { ?>
+                            <?php if ($srt['value'] == $sort . '-' . $order) { ?>
+                            <li><a data-sort="<?php echo $srt['href']; ?>" class="selected"><?php echo $srt['text']; ?></a></li>
+                            <?php } else { ?>
+                            <li><a data-sort="<?php echo $srt['href']; ?>"><?php echo $srt['text']; ?></a></li>
+                            <?php } ?>
+                        <?php } ?>
+                    </ul>
+                    <?php  ?>
+                    <select id="actual-sort" style="display: none;">
+                        <?php foreach ($sorts as $srt) { ?>
+                        <?php if ($srt['value'] == $sort . '-' . $order) { ?>
+                        <option value="<?php echo $srt['href']; ?>" selected="selected"><?php echo $text_sort; ?></option>
                         <?php } else { ?>
-                        <option value="<?php echo $sorts['href']; ?>"><?php echo $sorts['text']; ?></option>
+                        <option value="<?php echo $srt['href']; ?>"><?php echo $srt['text']; ?></option>
                         <?php } ?>
                         <?php } ?>
                     </select>
+                    <?php  ?>
                 </div>
             </div>
             <div class="product-filter">
