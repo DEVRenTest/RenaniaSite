@@ -55,8 +55,8 @@
 	}
 </script>
 <div class="option_box" <?php if(!$price_slider) { echo 'style="display:none"';}?>>
-<div class="option_name"><?php echo $text_price_range?></div>
-<div class="price_slider collapsible" >
+<div class="option_name hided"><?php echo $text_price_range?></div>
+<div class="price_slider collapsible" style="display: none;">
 	<?php if($symbol_left){ echo "<label>". $symbol_left  . "</label>";}?>
 	<input type="text" id="min_price" value="-1" name="min_price" readonly class="price_limit">
 	<label> - </label>
@@ -66,8 +66,8 @@
 </div>
 </div>
 <div class="option_box"<?php if($is_latest) { ?> style="display: none;" <?php } ?>>
-	<div class="option_name"><?php echo $filter_flag_entry; ?></div>
-	<div class="collapsible">
+	<div class="option_name hided"><?php echo $filter_flag_entry; ?></div>
+	<div class="collapsible" style="display: none;">
 		<table id="filter_flag">
 			<tr>
 				<td>
