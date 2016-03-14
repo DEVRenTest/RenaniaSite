@@ -5,6 +5,7 @@ class ControllerProductUpdateStoc extends Controller
 
     public function index()
     {
+        $script_started = time();
         //die('alma');
         $updating_stock_at_0 = 0;
         if ( $updating_stock_at_0 == 0 )
@@ -67,10 +68,22 @@ class ControllerProductUpdateStoc extends Controller
                 //print "Codul concatenat ".$data['concatenat']." nu figureaza in tabeleul ax_code!<br>";
             }
         }
-        
+        $script_ended = time();
+        $handle = fopen(DIR_LOGS . 'ax_import.txt', 'a');
+        fwrite($handle, '[' . date(DATE_ATOM, $script_started) . '] script started' . PHP_EOL);
+        fwrite($handle, print_r($_SERVER, true) . PHP_EOL);
+        fwrite($handle, '[' . date(DATE_ATOM, $script_ended) . '] script ended, executed in: ' . $this->secondsToTime($script_ended - $script_started) . PHP_EOL);
+        fwrite($handle, PHP_EOL . str_repeat(str_repeat('=', 60) . PHP_EOL, 2) . PHP_EOL);
+        fclose($handle);
         print "OK";
         
     }
+
+        public function secondsToTime($seconds) {
+            $dtF = new DateTime("@0");
+            $dtT = new DateTime("@$seconds");
+            return $dtF->diff($dtT)->format('%a days, %h hours, %i minutes and %s seconds');
+        }
 
 }
 
