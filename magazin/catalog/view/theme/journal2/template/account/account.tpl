@@ -96,12 +96,9 @@
       <tbody>
           <?php foreach ($b2b_addresses as $result) { ?>
          <tr>
-            <td class="left">
+            <td class="left" colspan="2">
                <?php echo $result['b2b_address']; ?>
-            </td>     
-            <td class="right">
-               <a href="<?php echo $result['b2b_update']; ?>"><?php echo $button_edit;?></a> / <a class="confirm" href="<?php echo $result['b2b_delete']; ?>"><?php echo $button_delete; ?></a>
-            </td>     
+            </td>
          </tr>
            <?php } ?>
       </tbody>
