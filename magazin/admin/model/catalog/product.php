@@ -377,6 +377,7 @@ class ModelCatalogProduct extends Model {
 		$this->db->query("DELETE FROM " . DB_PREFIX . "product_complementary WHERE product_id = '" . (int) $product_id . "'");
 		$this->db->query("DELETE FROM " . DB_PREFIX . "force_buy_bulk_override_group WHERE product_id = '" . (int)$product_id . "'");
 		$this->db->query("DELETE FROM " . DB_PREFIX . "force_buy_bulk_override_customer WHERE product_id = '" . (int)$product_id . "'");
+		$this->db->query("DELETE FROM " . DB_PREFIX . "product_to_customer WHERE product_id = '" . (int)$product_id . "'");
 		
 		$this->db->query("DELETE FROM " . DB_PREFIX . "url_alias WHERE query = 'product_id=" . (int)$product_id. "'");
 		
@@ -416,6 +417,17 @@ class ModelCatalogProduct extends Model {
 		
 		if (isset($data['filter_status']) && !is_null($data['filter_status'])) {
 			$sql .= " AND p.status = '" . (int)$data['filter_status'] . "'";
+		}
+
+		if (isset($data['filter_array']) && is_array($data['filter_array']) && !empty($data['filter_array'])) {
+			$comma_delimited_array = implode(", ", array_filter(array_map(function($item) {
+				if (is_numeric($item)) {
+					return (int)$item;
+				}
+			}, $data['filter_array'])));
+			if ($comma_delimited_array) {
+				$sql .= " AND p.product_id IN (" . $comma_delimited_array . ")";
+			}
 		}
 		
 		$sql .= " GROUP BY p.product_id";

@@ -18,7 +18,9 @@
         <?php if ($customer_id) { ?>
         <a href="#tab-history"><?php echo $tab_history; ?></a><a href="#tab-transaction"><?php echo $tab_transaction; ?></a><a href="#tab-reward"><?php echo $tab_reward; ?></a>
         <?php } ?>
-        <a href="#tab-ip"><?php echo $tab_ip; ?></a></div>
+        <a href="#tab-ip"><?php echo $tab_ip; ?></a>
+        <a href="#tab-products"><?php echo $tab_products; ?></a>
+      </div>
       <form action="<?php echo $action; ?>" method="post" enctype="multipart/form-data" id="form">
         <div id="tab-general">
           <div id="vtabs" class="vtabs"><a href="#tab-customer"><?php echo $tab_general; ?></a>
@@ -316,6 +318,36 @@
                 <td class="center" colspan="4"><?php echo $text_no_results; ?></td>
               </tr>
               <?php } ?>
+            </tbody>
+          </table>
+        </div>
+        <div id="tab-products">
+          <table class="list" style="width: auto;">
+            <thead>
+              <tr>
+                <td class="center" style="width: 50px;"><?php echo $column_product_id; ?></td>
+                <td class="center" style="width: 250px;"><?php echo $column_product_name; ?></td>
+                <td class="center" style="width: 70px;"></td>
+              </tr>
+            </thead>
+            <tbody>
+              <?php if ($products) {
+              foreach ($products as $product) { ?>
+              <tr>
+                <input type="hidden" name="products[]" value="<?php echo $product['product_id']; ?>"/>
+                <td class="center" style="width: 50px;"><?php echo $product['product_id']; ?></td>
+                <td class="center" style="width: 250px;"><?php echo $product['name']; ?></td>
+                <td class="center" style="width: 70px;"><a class="button purge-parent"><?php echo $button_remove; ?></td>
+              </tr>
+              <?php }
+              } ?>
+              <tr>
+                <td class="left" colspan="3">
+                  <?php echo $entry_product; ?>
+                  <input id="product-autocomplete-input" type="text" data-id=""/>
+                  <a class="button" id="add-product"><?php echo $button_insert; ?></a>
+                </td>
+              </tr>
             </tbody>
           </table>
         </div>
@@ -675,6 +707,45 @@ function removeBanIP(ip) {
 		}
 	});	
 };
+$('#product-autocomplete-input').autocomplete({
+    delay: 0,
+    source: function(request, response) {
+        $.ajax({
+            url: 'index.php?route=catalog/product/autocomplete&token=<?php echo $token; ?>&filter_name=' +  encodeURIComponent(request.term),
+            dataType: 'json',
+            type: 'POST',
+            data: 'filter_name=' +  encodeURIComponent(request.term),
+            success: function(json) {
+                response($.map(json, function(item) {
+                    return {
+                        label: item.name,
+                        value: item.product_id
+                    }
+                }));
+            }
+        });
+    },
+    select: function(event, ui) {
+      $(this).val(ui.item.label);
+      $(this).attr('data-id', ui.item.value);
+      return false;
+    }
+});
+$('#add-product').on('click', function(){
+  if ($(this).prev('#product-autocomplete-input').val() != '' && $(this).prev('#product-autocomplete-input').attr('data-id') != '') {
+    $(this).closest('tr').before(
+      '<tr>' +
+        '<input type="hidden" name="products[]" value="' + $(this).prev('#product-autocomplete-input').attr('data-id') + '"/>' +
+        '<td class="center" style="width: 50px;">' + $(this).prev('#product-autocomplete-input').attr('data-id') + '</td>' +
+        '<td class="center" style="width: 250px;">' + $(this).prev('#product-autocomplete-input').val() + '</td>' +
+        '<td class="center" style="width: 70px;"><a class="button purge-parent"><?php echo $button_remove; ?></td>' +
+      '</tr>'
+    );
+  }
+});
+$('#tab-products').on('click', '.purge-parent', function(){
+  $(this).closest('tr').remove();
+});
 document
 //--></script> 
 <script type="text/javascript"><!--

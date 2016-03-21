@@ -16,6 +16,12 @@ class ModelSaleCustomer extends Model {
 				}
 			}
 		}
+
+		if (isset($data['products'])) {
+			foreach (array_unique($data['products']) as $product_id) {
+				$this->db->query("INSERT INTO " . DB_PREFIX . "product_to_customer SET customer_id = '" . (int)$customer_id . "', product_id = '" . (int)$product_id . "'");
+			}
+		}
 	}
 	
 	public function editCustomer($customer_id, $data) {
@@ -49,6 +55,12 @@ class ModelSaleCustomer extends Model {
 				}
 			}
 		}
+		$this->db->query("DELETE FROM " . DB_PREFIX . "product_to_customer WHERE customer_id = '" . $customer_id . "'");
+		if (isset($data['products'])) {
+			foreach (array_unique($data['products']) as $product_id) {
+				$this->db->query("INSERT INTO " . DB_PREFIX . "product_to_customer SET customer_id = '" . (int)$customer_id . "', product_id = '" . (int)$product_id . "'");
+			}
+		}
 	}
 
 	public function editToken($customer_id, $token) {
@@ -62,6 +74,7 @@ class ModelSaleCustomer extends Model {
 		$this->db->query("DELETE FROM " . DB_PREFIX . "customer_ip WHERE customer_id = '" . (int)$customer_id . "'");
 		$this->db->query("DELETE FROM " . DB_PREFIX . "address WHERE customer_id = '" . (int)$customer_id . "'");
 		$this->db->query("DELETE FROM " . DB_PREFIX . "force_buy_bulk_override_customer WHERE customer_id = '" . (int)$customer_id . "'");
+		$this->db->query("DELETE FROM " . DB_PREFIX . "product_to_customer WHERE customer_id = '" . (int)$customer_id . "'");
 	}
 	
 	public function getCustomer($customer_id) {
@@ -541,5 +554,15 @@ class ModelSaleCustomer extends Model {
 				 
 		return $query->row['total'];
 	}	
+
+	public function getCustomerProducts($customer_id)
+	{
+		$query = $this->db->query("SELECT pd.product_id, pd.name FROM " . DB_PREFIX . "product_description pd LEFT JOIN " . DB_PREFIX . "product_to_customer ptc ON ptc.product_id = pd.product_id WHERE ptc.customer_id = '" . (int)$customer_id . "' AND pd.language_id = '" . (int)$this->config->get('config_language_id') . "' ORDER BY pd.name ASC");
+		if ($query->num_rows) {
+			return $query->rows;
+		} else {
+			return array();
+		}
+	}
 }
 ?>

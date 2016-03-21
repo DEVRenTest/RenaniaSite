@@ -27,6 +27,8 @@ $_['column_points']         = 'Puncte';
 $_['column_ip']             = 'IP';
 $_['column_total']          = 'Totalul Conturilor';
 $_['column_action']         = 'Acțiune';
+$_['column_product_id']     = 'Id produs';
+$_['column_product_name']   = 'Nume produs';
 
 // Entry
 $_['entry_firstname']       = 'Prenume:';
@@ -58,6 +60,7 @@ $_['entry_description']     = 'Descriere:';
 $_['entry_amount']          = 'Cantitate:';
 $_['entry_points']          = 'Puncte:<br /><span class="help">Use minus to remove points</span>';
 $_['entry_order_limit']     = 'Limită comenzi:';
+$_['entry_product']         = 'Produs: ';
 
 // Error
 $_['error_warning']         = 'Atenție: Vă rugăm verificați formularul pentru erori!';

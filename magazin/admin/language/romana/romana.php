@@ -107,6 +107,7 @@ $_['tab_total']               = 'Total';
 $_['tab_transaction']         = 'Tranzacţii';
 $_['tab_voucher']             = 'Vouchere';
 $_['tab_voucher_history']     = 'Istoric Vouchere';
+$_['tab_products']            = 'Produse';
 
 // Error
 $_['error_upload_1']          = 'Avertizare: Fişierul uploadat depăşeşte limita maximă din directiva upload_max_filesize din php.ini!';

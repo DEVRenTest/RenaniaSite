@@ -25,3 +25,10 @@ CREATE TABLE `oc_force_buy_bulk_override_customer` (
  `force_buy_bulk` TINYINT(4) NOT NULL DEFAULT '0',
  PRIMARY KEY (`product_id`,`customer_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+-- product to customer junction table 
+CREATE TABLE `oc_product_to_customer` (
+ `customer_id` int(11) NOT NULL,
+ `product_id` int(11) NOT NULL,
+ UNIQUE KEY `product_to_customer` (`customer_id`,`product_id`)
+) ENGINE=InnoDB DEFAULT CHARSET=latin1

@@ -736,6 +736,7 @@ class ControllerSaleCustomer extends Controller
 
     protected function getForm()
     {
+        $this->load->model('catalog/product');
         $this->data['heading_title'] = $this->language->get( 'heading_title' );
 
         $this->data['text_enabled'] = $this->language->get( 'text_enabled' );
@@ -752,6 +753,8 @@ class ControllerSaleCustomer extends Controller
         $this->data['column_total'] = $this->language->get( 'column_total' );
         $this->data['column_date_added'] = $this->language->get( 'column_date_added' );
         $this->data['column_action'] = $this->language->get( 'column_action' );
+        $this->data['column_product_id'] = $this->language->get('column_product_id');
+        $this->data['column_product_name'] = $this->language->get('column_product_name');
 
         $this->data['entry_firstname'] = $this->language->get('entry_firstname');
         
@@ -788,6 +791,7 @@ class ControllerSaleCustomer extends Controller
         $this->data['entry_amount'] = $this->language->get( 'entry_amount' );
         $this->data['entry_points'] = $this->language->get( 'entry_points' );
         $this->data['entry_order_limit'] = $this->language->get( 'entry_order_limit' );
+        $this->data['entry_product'] = $this->language->get('entry_product');
         
         $this->data['button_save'] = $this->language->get( 'button_save' );
         $this->data['button_cancel'] = $this->language->get( 'button_cancel' );
@@ -796,6 +800,7 @@ class ControllerSaleCustomer extends Controller
         $this->data['button_add_transaction'] = $this->language->get( 'button_add_transaction' );
         $this->data['button_add_reward'] = $this->language->get( 'button_add_reward' );
         $this->data['button_remove'] = $this->language->get( 'button_remove' );
+        $this->data['button_insert'] = $this->language->get('button_insert');
 
         $this->data['tab_general'] = $this->language->get( 'tab_general' );
         $this->data['tab_address'] = $this->language->get( 'tab_address' );
@@ -803,6 +808,7 @@ class ControllerSaleCustomer extends Controller
         $this->data['tab_transaction'] = $this->language->get( 'tab_transaction' );
         $this->data['tab_reward'] = $this->language->get( 'tab_reward' );
         $this->data['tab_ip'] = $this->language->get( 'tab_ip' );
+        $this->data['tab_products'] = $this->language->get('tab_products');
 
         $this->data['token'] = $this->session->data['token'];
 
@@ -1238,6 +1244,14 @@ class ControllerSaleCustomer extends Controller
         else
         {
             $this->data['address_id'] = '';
+        }
+
+        if (isset($this->request->post['products'])) {
+            $this->data['products'] = $this->model_catalog_product->getProducts(array('filter_array' => $this->request->post['products']));
+        } elseif (isset($this->request->get['customer_id'])) {
+            $this->data['products'] = $this->model_sale_customer->getCustomerProducts($this->request->get['customer_id']);
+        } else {
+            $this->data['products'] = array();
         }
 
         $this->data['ips'] = array( );

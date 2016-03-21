@@ -27,6 +27,8 @@ $_['column_points']         = 'Points';
 $_['column_ip']             = 'IP';
 $_['column_total']          = 'Total Accounts';
 $_['column_action']         = 'Action';
+$_['column_product_id']     = 'Product id';
+$_['column_product_name']   = 'Product name';
 
 // Entry
 $_['entry_firstname']       = 'First Name:';
@@ -54,6 +56,7 @@ $_['entry_description']     = 'Description:';
 $_['entry_amount']          = 'Amount:';
 $_['entry_points']          = 'Points:<br /><span class="help">Use minus to remove points</span>';
 $_['entry_order_limit']     = 'Order limit:';
+$_['entry_product']         = 'Product: ';
 
 // Error
 $_['error_warning']         = 'Warning: Please check the form carefully for errors!';
