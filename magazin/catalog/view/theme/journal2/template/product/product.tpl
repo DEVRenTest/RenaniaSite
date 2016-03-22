@@ -161,6 +161,27 @@
         <span class="p-stock"><?php echo $text_stock; ?></span> <span class="journal-stock <?php echo isset($stock_status) ? $stock_status : ''; ?>"><?php echo $text_limited_stock; ?> 
         <marquee DIRECTION=RIGHT SCROLLDELAY="200" style="width: 10px;"><?php echo $text_loading; ?></marquee><?php echo $stock; ?></span><br />
         <span class="p-model"><?php echo $text_views; ?></span> <span><?php echo $views;?></span><br />
+        <span><?php echo $visitors_online; ?></span><br />
+        <script>
+            function reloadVisitorCounter(){
+			    $.ajax({
+					url: 'index.php?route=product/visitors',
+					type: 'get',
+					data: 'page_hash=<?php echo $page_hash; ?>',
+					dataType: 'json',
+					success: function(json) {
+						if (json['viewcount']) {
+							$('#visitors_count').text(json['viewcount']);
+						} else if (json['error']) {
+							console.log(json['error']);
+						}
+					}
+				});
+            }
+            setInterval(function(){
+              reloadVisitorCounter()
+            }, 5000);
+        </script>
         <?php if ($container_size) { ?>
         <span class="p-model"><?php echo $text_pieces_per_package; ?></span> <span><?php echo $container_size; ?></span>
         <?php } ?>

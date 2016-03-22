@@ -30,6 +30,8 @@ $_['text_wait']         = 'Please Wait!';
 $_['text_tags']         = 'Tags:';
 $_['text_error']        = 'Product not found!';
 $_['text_payment_profile'] = 'Payment Profiles';
+$_['visitors_online'] 	= 'Page is being viewed by <span id="visitors_count">%s</span> more clients.';
+
 
 $_['text_pieces_per_package']  = 'Pieces/package:';
 $_['text_price_per_piece']     = 'Price/piece:';

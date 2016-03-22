@@ -162,6 +162,14 @@ class ControllerProductProduct extends Controller {
 		}
     		
 		$this->load->model('catalog/product');
+
+		$this->load->model('catalog/visitors');
+
+		$this->model_catalog_visitors->addVisitors();
+
+		$this->data['page_hash'] = md5($_SERVER['REQUEST_URI']);
+
+		$this->data['visitors_online'] = sprintf($this->language->get('visitors_online'), $this->model_catalog_visitors->getVisitors($this->data['page_hash']));
 		
 	 	$product_info = $this->model_catalog_product->getProduct($product_id);
 
@@ -316,6 +324,7 @@ class ControllerProductProduct extends Controller {
       
       $this->data['quantity'] = $product_info['quantity'];
       $this->data['product_new'] = $product_info['product_new'];
+      
       // if the logged customer is B2B or Gallery + B2B
       $B2B = false;
       if( $this->customer->getCustomerGroupId() == 3 || $this->customer->getCustomerGroupId() == 4 )
