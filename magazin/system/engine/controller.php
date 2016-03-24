@@ -25,6 +25,11 @@ abstract class Controller {
 	}
 
 	protected function redirect($url, $status = 302) {
+		if ($_SERVER['HTTP_HOST'] == 'zentiva.renania.ro') {
+	        $handle = fopen(DIR_LOGS . 'redirect_log_' . microtime(true) . '.txt', 'a');
+	        fwrite($handle, print_r(debug_backtrace(), true) . PHP_EOL);
+	        fclose($handle);
+		}
 		header('Status: ' . $status);
 		header('Location: ' . str_replace(array('&amp;', "\n", "\r"), array('&', '', ''), $url));
 		exit();				
