@@ -182,6 +182,7 @@
               reloadVisitorCounter()
             }, 5000);
         </script>
+        <span><?php echo $text_last_purchased?></span><br />
         <?php if ($container_size) { ?>
         <span class="p-model"><?php echo $text_pieces_per_package; ?></span> <span><?php echo $container_size; ?></span>
         <?php } ?>

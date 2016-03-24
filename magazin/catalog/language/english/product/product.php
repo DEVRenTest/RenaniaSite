@@ -31,6 +31,21 @@ $_['text_tags']         = 'Tags:';
 $_['text_error']        = 'Product not found!';
 $_['text_payment_profile'] = 'Payment Profiles';
 $_['visitors_online'] 	= 'Page is being viewed by <span id="visitors_count">%s</span> more clients.';
+$_['text_last_purchased'] = 'This product was bought %s %s ago';
+$_['text_second_single'] = 'second';
+$_['text_second_multiple'] = 'seconds';
+$_['text_minute_single'] = 'minute';
+$_['text_minute_multiple'] = 'minutes';
+$_['text_hour_single'] = 'hour';
+$_['text_hour_multiple'] = 'hours';
+$_['text_day_single'] = 'day';
+$_['text_day_multiple'] = 'days';
+$_['text_week_single'] = 'week';
+$_['text_week_multiple'] = 'weeks';
+$_['text_month_single'] = 'month';
+$_['text_month_multiple'] = 'months';
+$_['text_year_single'] = 'year';
+$_['text_year_multiple'] = 'years';
 
 
 $_['text_pieces_per_package']  = 'Pieces/package:';
