@@ -85,7 +85,7 @@
                 <div>
                   <?php $loose_items = $product['quantity'] % $product['container_size'];?>
                   <input type="radio" name="radio_quantity_multiplier[<?php echo $product['key']; ?>]" value="1"<?php if ($loose_items) { ?> checked="checked"<?php } ?>><span><?php echo $text_piece; ?></span>
-                  <input type="radio" name="radio_quantity_multiplier[<?php echo $product['key']; ?>]" value="<?php echo $product['container_size']; ?>"<?php if (!$loose_items) { ?> checked="checked"<?php } ?>><span><?php echo $text_bulk; ?></span><br />
+                  <input type="radio" name="radio_quantity_multiplier[<?php echo $product['key']; ?>]" value="<?php echo $product['container_size']; ?>"<?php if (!$loose_items) { ?> checked="checked"<?php } ?>><span id="packages"><?php echo $text_bulk; ?></span><br />
                   <input type="hidden" name="quantity[<?php echo $product['key']; ?>]" value="<?php echo $product['quantity']; ?>" size="1" />
                   <input type="text" name="multiply_quantity" value="<?php echo (!$loose_items ? $product['quantity']/$product['container_size'] : $product['quantity']); ?>">
                   <span class="piece_quantity"><?php if (!$loose_items) { echo '(' . $text_buy_piece . ' ' . $product['quantity'] . ')';} ?></span>
@@ -94,7 +94,7 @@
                   &nbsp;<a href="<?php echo $product['remove']; ?>"><img src="catalog/view/theme/default/image/remove.png" alt="<?php echo $button_remove; ?>" title="<?php echo $button_remove; ?>" /></a>
                 </div>
               <?php } else { ?>
-              <span><?php echo $text_buy_bulk;?></span>
+              <span id="packages"><?php echo $text_buy_bulk;?></span>
               <input type="hidden" name="quantity[<?php echo $product['key']; ?>]" value="<?php echo $product['quantity']; ?>" size="1" />
               <input type="text" data-multiplier="<?php echo $product['container_size']; ?>" name="multiply_quantity_forced" value="<?php echo $product['quantity']/$product['container_size']; ?>"/>
                 <span>(<?php echo $text_buy_piece . ' ' . $product['quantity']; ?>)</span>

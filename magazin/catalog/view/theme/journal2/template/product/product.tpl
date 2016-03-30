@@ -160,19 +160,30 @@
         <?php } ?>
         <span class="p-stock"><?php echo $text_stock; ?></span> <span class="journal-stock <?php echo isset($stock_status) ? $stock_status : ''; ?>"><?php echo $text_limited_stock; ?> 
         <marquee DIRECTION=RIGHT SCROLLDELAY="200" style="width: 10px;"><?php echo $text_loading; ?></marquee><?php echo $stock; ?></span><br />
-        <span class="p-model"><?php echo $text_views; ?></span> <span><?php echo $views;?></span><br />
-        <span><?php echo $visitors_online; ?></span><br />
+        <?php if ($views != 0) { ?>
+        	<span class="p-model"><?php echo $text_views; ?></span> <span><?php echo $views;?></span><br />
+        <?php } ?>
+        <div id="hide_visitors_on_mobile">
+       	<span id="visitors_online" <?php if($visitors == 0) { ?>style="display:none"<?php } ?>><?php echo $visitors_online; ?><br /></span>
+       	</div>
         <script>
             function reloadVisitorCounter(){
 			    $.ajax({
-					url: 'index.php?route=product/visitors',
+					url: 'index.php?route=product/statistics/currentVisitors',
 					type: 'get',
 					data: 'page_hash=<?php echo $page_hash; ?>',
 					dataType: 'json',
 					success: function(json) {
-						if (json['viewcount']) {
+						if (json.hasOwnProperty('viewcount')) {
 							$('#visitors_count').text(json['viewcount']);
-						} else if (json['error']) {
+							
+							if (json['viewcount'] == 0) {
+								$('#visitors_online').hide();
+							} else {
+								$('#visitors_online').show();
+							}
+
+						} else if (json.hasOwnProperty('error')) {
 							console.log(json['error']);
 						}
 					}
@@ -405,7 +416,7 @@
             <input type="text" id="real-quantity" name="quantity" size="3" value=<?php echo $minimum; ?> data-min-value="<?php echo $minimum; ?>" autocomplete="off" />
             <?php } else { 
               if ($customer_forced_buy_bulk) { ?>
-              <label for="fake_quantity"><?php echo $text_packages; ?>&colon; </label>
+              <label id="packages" for="fake_quantity"><?php echo $text_packages; ?>&colon; </label>
               <input type="hidden" name="quantity" value=<?php echo $minimum; ?> data-min-value="<?php echo $minimum; ?>" autocomplete="off" />
               <input type="text" id="fake_quantity" size="3"/>
               <span class="piece-count"></span>
@@ -420,7 +431,7 @@
                 <input name="radio_bulk_or_piece" id="radio_bulk" value="1" type="radio" checked="checked"/>
                 <label for="radio_bulk"><?php echo $text_pieces; ?></label><br />
                 <input name="radio_bulk_or_piece" id="radio_piece" value="<?php echo $container_size; ?>"  type="radio"/>
-                <label for="radio_piece"><?php echo $text_packages; ?></label>
+                <label id="packages" for="radio_piece"><?php echo $text_packages; ?></label>
               </div>
               <div class="vertical-centered">
                 <input type="hidden" name="quantity" value=<?php echo $minimum; ?> data-min-value="<?php echo $minimum; ?>" autocomplete="off" />

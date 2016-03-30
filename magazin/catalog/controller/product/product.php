@@ -165,20 +165,23 @@ class ControllerProductProduct extends Controller {
 
 		$this->load->model('catalog/visitors');
 
+		$this->model_catalog_visitors->deleteVisitors();
+
 		$this->model_catalog_visitors->addVisitors();
 
 		$this->data['page_hash'] = md5($_SERVER['REQUEST_URI']);
 
 		$this->data['visitors_online'] = sprintf($this->language->get('visitors_online'), $this->model_catalog_visitors->getVisitors($this->data['page_hash']));
 		
-	 	$product_info = $this->model_catalog_product->getProduct($product_id);
+		$this->data['visitors'] = $this->model_catalog_visitors->getVisitors($this->data['page_hash']);
 
+	 	$product_info = $this->model_catalog_product->getProduct($product_id);
+	 	
 	 	$this->data['text_last_purchased'] = '';
 
 	 	$lastOrder = $this->model_catalog_product->lastOrderDate($product_id);
 
 	 	if ($lastOrder) {
-
 	 		$lastOrderAgo = $this->timeAgo((time() - $lastOrder));
 	 		if ($lastOrderAgo) {
 	 	 		$periods = array(

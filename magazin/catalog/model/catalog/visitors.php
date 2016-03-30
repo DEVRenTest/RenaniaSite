@@ -3,7 +3,7 @@ class ModelCatalogVisitors extends Model {
 
 	public function deleteVisitors(){
 
-		$query = $this->db->query("DELETE FROM `" . DB_PREFIX . "visitor_counter` WHERE `date` < UNIX_TIMESTAMP() - 120");
+		$query = $this->db->query("DELETE FROM `" . DB_PREFIX . "visitor_counter` WHERE `date` < UNIX_TIMESTAMP() - 600");
 	}
 
 	public function addVisitors(){
@@ -13,7 +13,7 @@ class ModelCatalogVisitors extends Model {
 
 	public function getVisitors($hashed_url) {
 
-		$query = $this->db->query("SELECT * FROM `" . DB_PREFIX . "visitor_counter` WHERE url = '" . $this->db->escape($hashed_url) . "' AND session_id != '" . $this->db->escape(session_id()) . "' AND `date` > UNIX_TIMESTAMP() - 120");
+		$query = $this->db->query("SELECT * FROM `" . DB_PREFIX . "visitor_counter` WHERE url = '" . $this->db->escape($hashed_url) . "' AND session_id != '" . $this->db->escape(session_id()) . "' AND `date` > UNIX_TIMESTAMP() - 300");
 
 		if ($query->num_rows) {
 			return $query->num_rows;
