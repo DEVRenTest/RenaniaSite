@@ -25,3 +25,11 @@ CREATE TABLE `oc_force_buy_bulk_override_customer` (
  `force_buy_bulk` TINYINT(4) NOT NULL DEFAULT '0',
  PRIMARY KEY (`product_id`,`customer_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+-- visitor counter table 
+CREATE TABLE `oc_visitor_counter` (
+ `url` varchar(50) NOT NULL,
+ `session_id` varchar(30) NOT NULL,
+ `date` int(5) NOT NULL,
+ UNIQUE KEY `url_ip` (`url`,`session_id`)
+) ENGINE=InnoDB DEFAULT CHARSET=latin1
