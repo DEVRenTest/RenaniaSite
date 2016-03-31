@@ -161,10 +161,10 @@
         <span class="p-stock"><?php echo $text_stock; ?></span> <span class="journal-stock <?php echo isset($stock_status) ? $stock_status : ''; ?>"><?php echo $text_limited_stock; ?> 
         <marquee DIRECTION=RIGHT SCROLLDELAY="200" style="width: 10px;"><?php echo $text_loading; ?></marquee><?php echo $stock; ?></span><br />
         <?php if ($views != 0) { ?>
-        	<span class="p-model"><?php echo $text_views; ?></span> <span><?php echo $views;?></span><br />
+        	<span class="p-model"><font color="red"><?php echo $text_views; ?></span> <span><?php echo $views;?></font></span><br />
         <?php } ?>
         <div id="hide_visitors_on_mobile">
-       	<span id="visitors_online" <?php if($visitors == 0) { ?>style="display:none"<?php } ?>><?php echo $visitors_online; ?><br /></span>
+       	<span id="visitors_online" <?php if($visitors == 0) { ?>style="display:none"<?php } ?>><font color="red"><?php echo $visitors_online; ?></font><br /></span>
        	</div>
         <script>
             function reloadVisitorCounter(){
@@ -193,7 +193,7 @@
               reloadVisitorCounter()
             }, 5000);
         </script>
-        <span><?php echo $text_last_purchased?></span><br />
+        <span><font color="red"><?php echo $text_last_purchased?></font></span><br />
         <?php if ($container_size) { ?>
         <span class="p-model"><?php echo $text_pieces_per_package; ?></span> <span><?php echo $container_size; ?></span>
         <?php } ?>

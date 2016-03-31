@@ -16,7 +16,7 @@ class ModelCatalogVisitors extends Model {
 		$query = $this->db->query("SELECT * FROM `" . DB_PREFIX . "visitor_counter` WHERE url = '" . $this->db->escape($hashed_url) . "' AND session_id != '" . $this->db->escape(session_id()) . "' AND `date` > UNIX_TIMESTAMP() - 300");
 
 		if ($query->num_rows) {
-			return $query->num_rows;
+			return $query->num_rows -1;
 		} else {
 			return 0;
 		}
