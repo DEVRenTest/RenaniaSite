@@ -3,7 +3,18 @@ class ControllerCheckoutSuccess extends Controller {
 	public function index() { 	
 		if (isset($this->session->data['order_id'])) {
 			$this->cart->clear();
-
+			/*if($_SERVER['REMOTE_ADDR'] == "81.12.228.226"){ 
+				print 'ok';
+				print '<pre>';
+				var_dump($this->session->data);
+				print '</pre>';
+				
+				print 'CART: ';
+				print '<pre>';
+				var_dump($this->cart);
+				print '</pre>';
+			}*/
+		
 			unset($this->session->data['shipping_method']);
 			unset($this->session->data['shipping_methods']);
 			unset($this->session->data['payment_method']);

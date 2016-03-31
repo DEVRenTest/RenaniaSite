@@ -1703,7 +1703,7 @@ class ControllerModuleQuickcheckout extends Controller
 
             $product_data[] = array(
                 'product_id' => $product['product_id'],
-                'name' => $product['name'],
+                'name' => $product['name'].$option_data['value'],
                 'model' => $product['model'],
                 'option' => $option_data,
                 'download' => $product['download'],

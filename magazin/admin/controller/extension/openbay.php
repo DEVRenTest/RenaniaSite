@@ -1855,6 +1855,14 @@ class ControllerExtensionOpenbay extends Controller {
         else if( $this->request->get['status_id'] == 7 ) // canceled
         {
             $mail_content = $this->language->get( 'canceled_mail_comment' ); 
+        }else if( $this->request->get['status_id'] == 5 ) // canceled
+        {
+	    $date = new DateTime(date("Y-m-d"));
+	    $date->modify('+1 day');
+	    $tomorrowDATE = $date->format('d-m-Y');
+	    $text = str_replace( "PRET", $total, $this->language->get( 'complete_mail_comment' ) );
+	    $text = str_replace( "DATA", $tomorrowDATE , $text );
+	    $mail_content = $text;
         }
 
         print $mail_content;
