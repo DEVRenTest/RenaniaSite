@@ -1846,7 +1846,11 @@ class ControllerExtensionOpenbay extends Controller {
         }
         else if( $this->request->get['status_id'] == 3 ) // shipped
         {
+			$date = new DateTime(date("Y-m-d"));
+			$date->modify('+1 day');
+			$tomorrowDATE = $date->format('d-m-Y');
             $text = str_replace( "PRET", $total, $this->language->get( 'shipped_mail_comment' ) );
+			$text = str_replace( "DATA", $tomorrowDATE , $text );
            // $text = str_replace( "METODA_DE_LIVRARE", $delivery_method, $text );
             //$text = str_replace( "DATA", "23.06.2014", $text );
 
@@ -1857,12 +1861,12 @@ class ControllerExtensionOpenbay extends Controller {
             $mail_content = $this->language->get( 'canceled_mail_comment' ); 
         }else if( $this->request->get['status_id'] == 5 ) // complete
         {
-	    $date = new DateTime(date("Y-m-d"));
-	    $date->modify('+1 day');
-	    $tomorrowDATE = $date->format('d-m-Y');
-	    $text = str_replace( "PRET", $total, $this->language->get( 'complete_mail_comment' ) );
-	    $text = str_replace( "DATA", $tomorrowDATE , $text );
-	    $mail_content = $text;
+			$date = new DateTime(date("Y-m-d"));
+			$date->modify('+1 day');
+			$tomorrowDATE = $date->format('d-m-Y');
+			$text = str_replace( "PRET", $total, $this->language->get( 'complete_mail_comment' ) );
+			$text = str_replace( "DATA", $tomorrowDATE , $text );
+			$mail_content = $text;
         }
 
         print $mail_content;
