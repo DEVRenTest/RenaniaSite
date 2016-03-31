@@ -1855,7 +1855,7 @@ class ControllerExtensionOpenbay extends Controller {
         else if( $this->request->get['status_id'] == 7 ) // canceled
         {
             $mail_content = $this->language->get( 'canceled_mail_comment' ); 
-        }else if( $this->request->get['status_id'] == 5 ) // canceled
+        }else if( $this->request->get['status_id'] == 5 ) // complete
         {
 	    $date = new DateTime(date("Y-m-d"));
 	    $date->modify('+1 day');
