@@ -801,12 +801,17 @@ class ModelCatalogProduct extends Model {
     	return $result;
     }
 
-  	public function lastOrderDate($product_id)
+  	public function lastOrderDate($product_id, $min_time_elapsed = 0, $max_time_elapsed = 0)
   	{
+  		$now = time();
   		$result = false;
   		$query = $this->db->query("SELECT UNIX_TIMESTAMP(o.date_added) as date_added FROM " . DB_PREFIX . "order o LEFT JOIN " . DB_PREFIX . "order_product op ON o.order_id = op.order_id WHERE op.product_id = '" . (int)$product_id . "' AND o.order_status_id != 0 AND o.store_id = '" . (int)$this->config->get('config_store_id') . "' ORDER BY o.date_added DESC LIMIT 1");
   		if ($query->num_rows) {
   			$result = $query->row['date_added'];
+  			if (($min_time_elapsed && $min_time_elapsed > 0 && $now - $min_time_elapsed <= $query->row['date_added'])
+  			 || ($max_time_elapsed && $max_time_elapsed > 0 && $now - $max_time_elapsed > $query->row['date_added'])) {
+  				$result = false;
+  			}
   		}
   		return $result;
   	}
