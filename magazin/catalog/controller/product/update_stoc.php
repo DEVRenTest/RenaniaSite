@@ -5,6 +5,11 @@ class ControllerProductUpdateStoc extends Controller
 
     public function index()
     {
+        if (($_SERVER['SERVER_ADDR'] != $_SERVER['REMOTE_ADDR'])
+            || (!isset($this->request->get['banana']) || !$this->config->get('config_encryption') || $this->request->get['banana'] != $this->config->get('config_encryption'))) {
+            http_response_code(404);
+            exit();
+        }
         //die('alma');
         // $updating_stock_at_0 = 0;
         // if ( $updating_stock_at_0 == 0 )
