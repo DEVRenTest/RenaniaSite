@@ -32,4 +32,7 @@ CREATE TABLE `oc_visitor_counter` (
  `session_id` varchar(30) NOT NULL,
  `date` int(5) NOT NULL,
  UNIQUE KEY `url_ip` (`url`,`session_id`)
-) ENGINE=InnoDB DEFAULT CHARSET=latin1
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+-- package discount for products
+ALTER TABLE `oc_product` ADD `package_discount` DOUBLE NOT NULL AFTER `container_size`;

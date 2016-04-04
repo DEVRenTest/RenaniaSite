@@ -74,7 +74,11 @@ class ControllerMyocLivePriceUpdate extends Controller
             $product_info['special'] = false;
         }
 
-        $verbosePrice = $this->currency->format( $taxOfOneProduct )." (".$this->language->get( 'text_withouth_vat' )." ".$this->currency->format( $product_info['price'] )." ".")";
+        if($product_info['container_size']) {
+       		$verbosePrice = $this->currency->format( $taxOfOneProduct )." (".$this->language->get( 'text_withouth_vat' )." ".$this->currency->format( $product_info['price'] )." ".")" ."<br>". $this->language->get( 'text_price_per_package' ) ." ". $this->currency->format( ($taxOfOneProduct * $product_info['container_size']) - (($taxOfOneProduct * $product_info['container_size'] * $product_info['package_discount']) / 100) );
+    	} else {
+    		$verbosePrice = $this->currency->format( $taxOfOneProduct )." (".$this->language->get( 'text_withouth_vat' )." ".$this->currency->format( $product_info['price'] )." ".")";
+    	}
 //    $verbosePrice = $this->currency->format( $finalPrice );
 
         /*if($_SERVER['REMOTE_ADDR'] == '5.2.202.87'){
@@ -207,7 +211,7 @@ class ControllerMyocLivePriceUpdate extends Controller
 
             $json['have_b2b_price'] = $have_b2b_price;
             $json['price'] = ( $B2B ? $pr : $finalValue ); // $finalValue;
-            $json['price'] = substr_replace($json['price'], ' <span class="price_currency">', strcspn($json['price'], 'ABCDEFGHJIJKLMNOPQRSTUVWXYZ'), 0).'</span>';
+            $json['price'] = substr_replace($json['price'], ' <span class="price_currency">', strcspn($json['price'], 'ABCDEFGHJIJKLMNOPQRSTUVWXYZ'), 0). '</span>';
             //$newstr = substr_replace($oldstr, $str_to_insert, $pos, 0);
             //$json['special'] = $this->currency->format( $this->cart->getTotal() );
             $json['special'] = $product_info['special'];

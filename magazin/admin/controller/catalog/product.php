@@ -574,7 +574,9 @@ class ControllerCatalogProduct extends Controller {
     	$this->data['entry_date_available'] = $this->language->get('entry_date_available');
     	$this->data['entry_quantity'] = $this->language->get('entry_quantity');
     	$this->data['entry_container_size'] = $this->language->get('entry_container_size');
+    	$this->data['entry_package_discount'] = $this->language->get('entry_package_discount');
     	$this->data['entry_container_help'] = $this->language->get('entry_container_help');
+    	$this->data['entry_package_discount_help'] = $this->language->get('entry_package_discount_help');
 		$this->data['entry_stock_status'] = $this->language->get('entry_stock_status');
     	$this->data['entry_price'] = $this->language->get('entry_price');
 		$this->data['entry_tax_class'] = $this->language->get('entry_tax_class');
@@ -956,6 +958,14 @@ class ControllerCatalogProduct extends Controller {
       		$this->data['container_size'] = $product_info['container_size'];
     	} else {
 			$this->data['container_size'] = 0;
+		}
+
+		if (isset($this->request->post['package_discount'])) {
+      		$this->data['package_discount'] = $this->request->post['package_discount'];
+    	} elseif (!empty($product_info)) {
+      		$this->data['package_discount'] = $product_info['package_discount'];
+    	} else {
+			$this->data['package_discount'] = 0;
 		}
 
 		if (isset($this->request->post['quantity'])) {

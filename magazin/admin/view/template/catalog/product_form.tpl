@@ -120,6 +120,10 @@
               <td><input type="number" name="container_size" value="<?php echo $container_size; ?>" size="3" /></td>
             </tr>
             <tr>
+              <td><?php echo $entry_package_discount; ?><br /><span class="help"><?php echo $entry_package_discount_help; ?></span></td>
+              <td><input type="number" name="package_discount" value="<?php echo $package_discount; ?>" size="3" /></td>
+            </tr>
+            <tr>
               <td><?php echo $entry_minimum; ?></td>
               <td><input type="text" name="minimum" value="<?php echo $minimum; ?>" size="2" /></td>
             </tr>

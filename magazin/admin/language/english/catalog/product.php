@@ -48,13 +48,15 @@ $_['entry_jan']              = 'JAN:<br/><span class="help">Japanese Article Num
 $_['entry_isbn']             = 'ISBN:<br/><span class="help">International Standard Book Number</span>';
 $_['entry_mpn']              = 'MPN:<br/><span class="help">Manufacturer Part Number</span>';
 $_['entry_location']         = 'Location:';
-$_['entry_stock_status_limits'] = 'Limits of stock status texts:';
+$_['entry_stock_status_limits']	= 'Limits of stock status texts:';
 $_['entry_shipping']         = 'Requires Shipping:'; 
 $_['entry_manufacturer']     = 'Manufacturer:<br /><span class="help">(Autocomplete)</span>';
 $_['entry_date_available']   = 'Date Available:';
 $_['entry_quantity']         = 'Quantity:';
 $_['entry_container_size']   = 'Piece/container:';
+$_['entry_package_discount'] = 'Discount/package';
 $_['entry_container_help']   = 'Set number of items in a container, 0 if product should not have this setting';
+$_['entry_package_discount_help'] = 'Set discount of package, 0 if package should not have discount';
 $_['entry_minimum']          = 'Minimum Quantity:<br/><span class="help">Force a minimum ordered amount</span>';
 $_['entry_stock_status']     = 'Out Of Stock Status:<br/><span class="help">Status shown when a product is out of stock</span>';
 $_['entry_price']            = 'Price:';
