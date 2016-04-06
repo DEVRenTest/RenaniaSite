@@ -14,7 +14,7 @@
 
 			<search position="before"><![CDATA[
 
-                data[$key] = array(
+                // xml ide szur
 
 			]]></search>
 

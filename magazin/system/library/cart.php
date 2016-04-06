@@ -328,8 +328,19 @@ class Cart
                         $priceB2B = $this->calculatePriceB2B( $product_query->row['product_id'], $option_data );
                     }
 
-
                     // xml ide szur
+
+                    $final_price = ( $B2B ? $priceB2B : ($price + $option_price) );
+
+                    $final_total_price = ( $B2B ? $priceB2B * $quantity : ($price + $option_price) * $quantity );
+
+                    if($product_query->row['container_size'] && $product_query->row['package_discount'] && ((int)$quantity % (int)$product_query->row['container_size']) == 0) {
+
+                        $final_price = $final_price - (($final_price * $product_query->row['package_discount']) / 100);
+
+                        $final_total_price = $final_total_price - (($final_total_price * $product_query->row['package_discount']) / 100);
+                    } 
+                    
                     $this->data[$key] = array(
                         'key' => $key,
                         'product_id' => $product_query->row['product_id'],
@@ -344,8 +355,8 @@ class Cart
                         'container_size' => $product_query->row['container_size'],
                         'subtract' => $product_query->row['subtract'],
                         'stock' => $stock,
-                        'price' => ( $B2B ? $priceB2B : ($price + $option_price) ),
-                        'total' => ( $B2B ? $priceB2B * $quantity : ($price + $option_price) * $quantity ),
+                        'price' => $final_price,
+                        'total' => $final_total_price,
                         'reward' => $reward * $quantity,
                         'points' => ($product_query->row['points'] ? ($product_query->row['points'] + $option_points) * $quantity : 0),
                         'tax_class_id' => $product_query->row['tax_class_id'],
