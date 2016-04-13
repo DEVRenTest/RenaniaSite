@@ -166,33 +166,6 @@
         <div id="hide_visitors_on_mobile">
        	<span id="visitors_online" <?php if($visitors == 0) { ?>style="display:none"<?php } ?>><font color="red"><?php echo $visitors_online; ?></font><br /></span>
        	</div>
-        <script>
-            function reloadVisitorCounter(){
-			    $.ajax({
-					url: 'index.php?route=product/statistics/currentVisitors',
-					type: 'get',
-					data: 'page_hash=<?php echo $page_hash; ?>',
-					dataType: 'json',
-					success: function(json) {
-						if (json.hasOwnProperty('viewcount')) {
-							$('#visitors_count').text(json['viewcount']);
-							
-							if (json['viewcount'] == 0) {
-								$('#visitors_online').hide();
-							} else {
-								$('#visitors_online').show();
-							}
-
-						} else if (json.hasOwnProperty('error')) {
-							console.log(json['error']);
-						}
-					}
-				});
-            }
-            setInterval(function(){
-              reloadVisitorCounter()
-            }, 5000);
-        </script>
         <span><font color="red"><?php echo $text_last_purchased?></font></span><br />
         <?php if ($container_size) { ?>
         <span class="p-model"><?php echo $text_pieces_per_package; ?></span> <span><?php echo $container_size; ?></span>
