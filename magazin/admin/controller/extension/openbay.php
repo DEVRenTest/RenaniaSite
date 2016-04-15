@@ -1867,7 +1867,16 @@ class ControllerExtensionOpenbay extends Controller {
 			$text = str_replace( "PRET", $total, $this->language->get( 'complete_mail_comment' ) );
 			$text = str_replace( "DATA", $tomorrowDATE , $text );
 			$mail_content = $text;
+        }else if( $this->request->get['status_id'] == 18 ) // expediat auto
+        {
+			$date = new DateTime(date("Y-m-d"));
+			$date->modify('+1 day');
+			$tomorrowDATE = $date->format('d-m-Y');
+			$text = str_replace( "PRET", $total, $this->language->get( 'expediatAuto_mail_comment' ) );
+			$text = str_replace( "DATA", $tomorrowDATE , $text );
+			$mail_content = $text;
         }
+
 
         print $mail_content;
         die();
