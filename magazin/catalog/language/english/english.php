@@ -74,5 +74,6 @@ $_['button_get_info']       = 'Cere info';
 $_['text_high_stock'] = "In stoc";
 $_['text_medium_stock'] = "In stoc";
 $_['text_low_stock'] = "Stoc limitat";
-$_['text_no_stock'] = "Nu este in stock";
+$_['text_no_stock'] = "Not in stock";
+$_['text_in_stock']	= "In stock";
 ?>

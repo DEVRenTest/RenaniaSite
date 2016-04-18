@@ -212,7 +212,19 @@ class ControllerMyocLivePriceUpdate extends Controller
             //$json['special'] = $this->currency->format( $this->cart->getTotal() );
             $json['special'] = $product_info['special'];
             $json['extax'] = $this->currency->format( $this->cart->getSubTotal() );
-            $json['stock'] = ($B2B ? $b2b_product_stoc : $product_info['stock_status']);
+            //$json['stock'] = ($B2B ? $b2b_product_stoc : $product_info['stock_status']);
+            if ($B2B)
+            {
+                $json['stock'] = $b2b_product_stoc;
+            }
+            else if ($b2b_product_stoc == 0)
+            {
+                $json['stock'] = $this->language->get('text_no_stock');
+            } 
+            else 
+            {
+                $json['stock'] = $this->language->get('text_in_stock');
+            }
             //$json['stock'] = $product_info['stock_status']; //$product_info['product_option_quantity'];//$product_info['stock_status'];
             // $json['stock'] = $product_info['quantity'];
             $json['text_qty'] =  $this->language->get('text_qty');// '  CODE='.$concatenated_code. " ** "

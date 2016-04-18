@@ -64,6 +64,7 @@ $_['text_high_stock']   = "In stoc";
 $_['text_medium_stock'] = "In stoc";
 $_['text_low_stock']    = "Stoc limitat";
 $_['text_no_stock']     = "Nu este in stoc";
+$_['text_in_stock']		= "In stoc";
 $_['text_price_from']   = 'De la';
 $_['text_price_ask']    = 'Pret la cerere';
 $_['text_withouth_vat'] = 'Fara TVA:';
