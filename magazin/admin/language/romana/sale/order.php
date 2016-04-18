@@ -225,6 +225,21 @@ Comanda a fost procesata, iar mai jos gasiti detalii:
 
 
  Pentru detalii, va rugam sa apelati numarul de telefon 0372-700300. ';
+$_['expediatAuto_mail_comment']               = 'Stimate partener,
+
+Va multumim pentru ca ati utilizat platforma B2B.
+
+Comanda a fost procesata, iar mai jos gasiti detalii:
+
+
+ Livrare la Dvs: DATA 
+
+ Firma de curierat: Auto Renania
+
+ Detalii si istoric comenzi: https://b2b.renania.ro/index.php?route=account/order
+
+
+ Pentru detalii, va rugam sa apelati numarul de telefon 0372-700300. ';
 
 $_['canceled_mail_comment']             = 'Stimate Domnule / Doamna,
 
