@@ -176,14 +176,14 @@ class ControllerProductProduct extends Controller {
 		$this->data['visitors'] = $this->model_catalog_visitors->getVisitors($this->data['page_hash']);
 
 	 	$product_info = $this->model_catalog_product->getProduct($product_id);
-	 	
+
 	 	$this->data['text_last_purchased'] = '';
 
 	 	$lastOrder = $this->model_catalog_product->lastOrderDate($product_id);
 
 	 	if ($lastOrder) {
-	 		$lastOrderAgo = $this->timeAgo((time() - $lastOrder));
-	 		if ($lastOrderAgo) {
+	 		$lastOrderAgo = $this->timeAgo(time() - $lastOrder);
+	 		if ($lastOrderAgo ) {
 	 	 		$periods = array(
 	 				'sec' => array('single' => $this->language->get('text_second_single'), 'multiple' => $this->language->get('text_second_multiple')),
 	 				'min' => array('single' => $this->language->get('text_minute_single'), 'multiple' => $this->language->get('text_minute_multiple')),
@@ -338,6 +338,8 @@ class ControllerProductProduct extends Controller {
 			$this->data['points'] = $product_info['points'];
 			
 			$this->data['container_size'] = $product_info['container_size'];
+
+			$this->data['package_discount'] = $product_info['package_discount'];
 
 			if ($product_info['quantity'] <= 0) {
 				$this->data['stock'] = $product_info['stock_status'];

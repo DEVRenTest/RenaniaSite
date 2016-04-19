@@ -37,6 +37,7 @@ $_['text_week']              = 'week';
 $_['text_semi_month']        = 'half-month';
 $_['text_month']             = 'month';
 $_['text_year']              = 'year';
+$_['product_name_package']   = '%s (package)';
 
 // Column
 $_['column_image']           = 'Image';

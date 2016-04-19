@@ -7,9 +7,11 @@ class Cart
     private $db;
     private $data = array( );
     private $data_recurring = array( );
+    public $registry;
 
     public function __construct( $registry )
     {
+        $this->registry = $registry;
         $this->config = $registry->get( 'config' );
         $this->customer = $registry->get( 'customer' );
         $this->session = $registry->get( 'session' );
@@ -23,10 +25,15 @@ class Cart
         }
     }
 
+    public function __get($key) {
+        return $this->registry->get($key);
+    }
+
     public function getProducts()
     {
         if( !$this->data )
         {
+            krsort($this->session->data['cart']);
             foreach( $this->session->data['cart'] as $key => $quantity )
             {                
                 $product = explode( ':', $key );
@@ -52,6 +59,11 @@ class Cart
                 else
                 {
                     $profile_id = 0;
+                }
+
+                $piece_or_package = 0;
+                if (!empty($product[3])) {
+                    $piece_or_package = $product[3];
                 }
 
                 $product_query = $this->db->query( "SELECT * FROM ".DB_PREFIX."product p LEFT JOIN ".DB_PREFIX."product_description pd ON (p.product_id = pd.product_id) WHERE p.product_id = '".( int ) $product_id."' AND pd.language_id = '".( int ) $this->config->get( 'config_language_id' )."' AND p.date_available <= NOW() AND p.status = '1'" );
@@ -327,6 +339,13 @@ class Cart
                         $B2B = true;
                         $priceB2B = $this->calculatePriceB2B( $product_query->row['product_id'], $option_data );
                     }
+                    
+                    $final_price = ( $B2B ? $priceB2B : ($price + $option_price) );
+                    $final_total_price = ( $B2B ? $priceB2B * $quantity : ($price + $option_price) * $quantity );
+                    if($product_query->row['container_size'] && $product_query->row['package_discount'] && $piece_or_package == 1) {
+                        $final_price = $final_price - (($final_price * $product_query->row['package_discount']) / 100);
+                        $final_total_price = $final_total_price - (($final_total_price * $product_query->row['package_discount']) / 100);
+                    } 
 
 
                     // xml ide szur
@@ -342,10 +361,11 @@ class Cart
                         'quantity' => $quantity,
                         'minimum' => $product_query->row['minimum'],
                         'container_size' => $product_query->row['container_size'],
+                        'piece_or_package' => $piece_or_package,
                         'subtract' => $product_query->row['subtract'],
                         'stock' => $stock,
-                        'price' => ( $B2B ? $priceB2B : ($price + $option_price) ),
-                        'total' => ( $B2B ? $priceB2B * $quantity : ($price + $option_price) * $quantity ),
+                        'price' => $final_price,
+                        'total' => $final_total_price,
                         'reward' => $reward * $quantity,
                         'points' => ($product_query->row['points'] ? ($product_query->row['points'] + $option_points) * $quantity : 0),
                         'tax_class_id' => $product_query->row['tax_class_id'],
@@ -883,17 +903,7 @@ class Cart
             $key .= ( int ) $profile_id;
         }
 
-        if( ( int ) $qty && (( int ) $qty > 0) )
-        {
-            if( !isset( $this->session->data['cart'][$key] ) )
-            {
-                $this->session->data['cart'][$key] = ( int ) $qty;
-            }
-            else
-            {
-                $this->session->data['cart'][$key] += ( int ) $qty;
-            }
-        }
+        $this->splitQuantity($product_id, $key, $qty);
 
         $this->data = array( );
     }
@@ -902,7 +912,23 @@ class Cart
     {
         if( ( int ) $qty && (( int ) $qty > 0) )
         {
-            $this->session->data['cart'][$key] = ( int ) $qty;
+            $parts = explode(':', $key);
+            if (count($parts) == 4) {
+                $product_id = $parts[0];
+                $piece_or_package_identifier = array_pop($parts);
+                $key_without_piece_or_package_identifier = implode(':', $parts);
+                if ($piece_or_package_identifier == 1) {
+                    // package quantity should be replaced normally
+                    $this->session->data['cart'][$key] = $qty;
+                } else {
+                    // piece quantity might exceed piece/package size and must be split between piece quantity and package quantity
+                    if (isset($this->session->data['cart'][$key_without_piece_or_package_identifier . ':1'])) {
+                        // if package quantity present, must be added to the total quantity
+                        $qty += $this->session->data['cart'][$key_without_piece_or_package_identifier . ':1'];
+                    }
+                    $this->splitQuantity($product_id, $key_without_piece_or_package_identifier, $qty, false);
+                }
+            }
         }
         else
         {
@@ -1077,6 +1103,34 @@ class Cart
         ;
     }
 
-}
+    public function splitQuantity($product_id, $key, $qty, $increment_quantity = true)
+    {
+        if((int)$qty && (int)$qty > 0) {
+            $this->load->model('catalog/product');
+            $container_size = $this->model_catalog_product->getProductContainerSize($product_id);
 
+            if ($increment_quantity && isset($this->session->data['cart'][$key . ':0'])) {
+                $qty += $this->session->data['cart'][$key . ':0'];
+            }
+            if ($increment_quantity && isset($this->session->data['cart'][$key . ':1'])) {
+                $qty += $this->session->data['cart'][$key . ':1'];
+            }
+
+            $this->remove($key . ':0');
+            $this->remove($key . ':1');
+            
+            if (!$container_size) {
+                $this->session->data['cart'][$key . ':0'] = $qty;
+            } else {
+                if ($qty % $container_size) {
+                    $this->session->data['cart'][$key . ':0'] = $qty % $container_size;
+                }
+                if ((int)($qty / $container_size)) {
+                    $this->session->data['cart'][$key . ':1'] = (int)($qty / $container_size) * $container_size;
+                }
+            }
+        }
+        $this->data = array( ); // ??
+    }
+}
 ?>

@@ -175,6 +175,7 @@ class ModelCatalogProduct extends Model {
 				'date_modified'    => $query->row['date_modified'],
 				'viewed'           => $query->row['viewed'],
 				'container_size'   => $query->row['container_size'],
+				'package_discount' => $query->row['package_discount'],
 				'product_new'      => $query->row['flag'],
 			);
       
@@ -800,7 +801,17 @@ class ModelCatalogProduct extends Model {
 
     	return $result;
     }
-
+    public function getPackageDiscount($product_id)
+    {
+    	$result = false;
+    	if ($this->customer->isLogged()) {
+    		$query = $this->db->query("SELECT package_discount FROM " . DB_PREFIX . "product WHERE product_id = '" . (int)$product_id . "'");
+    		if($query->num_rows) {
+    			$result = $query->row['package_discount'];
+    		}
+    	}
+    	return $result;
+    }
   	public function lastOrderDate($product_id, $min_time_elapsed = 0, $max_time_elapsed = 0)
   	{
   		$now = time();
@@ -814,6 +825,14 @@ class ModelCatalogProduct extends Model {
   			}
   		}
   		return $result;
+  	}
+  	public function getProductContainerSize($product_id)
+  	{
+  		$query = $this->db->query("SELECT container_size FROM " . DB_PREFIX . "product WHERE product_id = '" . (int)$product_id . "'");
+  		if ($query->num_rows) {
+  			return (int)$query->row['container_size'];
+  		}
+  		return 0;
   	}
 }
 ?>

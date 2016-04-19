@@ -207,14 +207,14 @@ class ControllerModuleQuickcheckout extends Controller
         }
         
         //Session 
-        if( !empty( $this->request->post['cart'] ) )
-        {
-            foreach( $this->request->post['cart'] as $key => $value )
-            {
-                $this->cart->update( $key, $value );
-            }
-            unset( $this->request->post['cart'] );
-        }
+        // if( !empty( $this->request->post['cart'] ) )
+        // {
+        //     foreach( $this->request->post['cart'] as $key => $value )
+        //     {
+        //         $this->cart->update( $key, $value );
+        //     }
+        //     unset( $this->request->post['cart'] );
+        // }
 
         if( isset( $this->session->data ) )
         {
@@ -1159,7 +1159,7 @@ class ControllerModuleQuickcheckout extends Controller
     }
 
     /*
-     * 	Get cart view
+     *  Get cart view
      */
 
     private function get_cart_view()
@@ -1167,6 +1167,7 @@ class ControllerModuleQuickcheckout extends Controller
         if( $this->cart->getProducts() )
         {
             $this->get_total_data( $total_data, $total, $taxes );
+            $this->load->model('catalog/product');
 
             $points = $this->customer->getRewardPoints();
 
@@ -1194,6 +1195,8 @@ class ControllerModuleQuickcheckout extends Controller
             $this->data['text_use_coupon'] = $this->language->get( 'text_use_coupon' );
             $this->data['text_use_voucher'] = $this->language->get( 'text_use_voucher' );
             $this->data['text_use_reward'] = sprintf( $this->language->get( 'text_use_reward' ), $points );
+            $this->data['text_buy_piece'] = $this->language->get('text_buy_piece');
+            $this->data['text_container_size'] = $this->language->get('text_container_size');
             $this->data['coupon_status'] = ( $this->settings['option'][$this->checkout['account']]['cart']['option']['coupon']['display'] && $this->config->get( 'coupon_status' ));
             $this->data['voucher_status'] = ( $this->settings['option'][$this->checkout['account']]['cart']['option']['voucher']['display'] && $this->config->get( 'voucher_status' ));
             $this->data['reward_status'] = ( $this->settings['option'][$this->checkout['account']]['cart']['option']['reward']['display'] && $points && $points_total && $this->config->get( 'reward_status' ));
@@ -1251,10 +1254,13 @@ class ControllerModuleQuickcheckout extends Controller
                 $this->data['products'][] = array(
                     'product_id' => $product['key'],
                     'thumb' => $image,
-                    'name' => $product['name'],
+                    'name' => $product['piece_or_package'] ? sprintf($this->language->get('product_name_package'), $product['name']) : $product['name'],
                     'model' => $product['model'],
                     'option' => $option_data,
                     'quantity' => $product['quantity'],
+                    'container_size' => $product['container_size'],
+                    'customer_must_buy_bulk' => $this->model_catalog_product->customerForcedBuyBulk($product['product_id']),
+                    'piece_or_package' => $product['piece_or_package'],
                     'stock' => $product['stock'] ? true : !(!$this->config->get( 'config_stock_checkout' ) || $this->config->get( 'config_stock_warning' )),
                     'subtract' => $product['subtract'],
                     'price' => $this->currency->format( $this->tax->calculate( $product['price'], $product['tax_class_id'], $this->config->get( 'config_tax' ) ) ),

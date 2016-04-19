@@ -20,6 +20,7 @@ $_['text_separator']        = ' &raquo; ';
 $_['text_price_from']       = 'From';
 $_['text_price_ask']        = 'Ask after price';
 $_['text_withouth_vat']     = 'Without VAT:';
+$_['text_price_per_package'] = 'Price/package:';
 
 // Buttons
 $_['button_add_address']    = 'Add Address';

@@ -71,5 +71,6 @@ $_['text_withouth_vat'] = 'Fara TVA:';
 $_['text_high_stock']   = "In stoc";
 $_['text_out_of_stock']   = "Epuizat";
 $_['text_please_select_desired_options']   = "Va rugam selectati optiunile dorite";
+$_['text_price_per_package'] = 'Pret/pachet:';
 
 ?>
