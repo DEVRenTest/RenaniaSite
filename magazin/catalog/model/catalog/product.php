@@ -823,5 +823,14 @@ class ModelCatalogProduct extends Model {
   		}
   		return $result;
   	}
+
+  	public function getProductContainerSize($product_id)
+  	{
+  		$query = $this->db->query("SELECT container_size FROM " . DB_PREFIX . "product WHERE product_id = '" . (int)$product_id . "'");
+  		if ($query->num_rows) {
+  			return (int)$query->row['container_size'];
+  		}
+  		return 0;
+  	}
 }
 ?>

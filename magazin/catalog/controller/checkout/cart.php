@@ -354,10 +354,12 @@ class ControllerCheckoutCart extends Controller
                 $this->data['products'][] = array(
                     'key' => $product['key'],
                     'thumb' => $image,
-                    'name' => $product['name'],
+                    'name' => $product['piece_or_package'] ? sprintf($this->language->get('product_name_package'), $product['name']) : $product['name'],
                     'model' => $product['model'],
                     'option' => $option_data,
                     'quantity' => $product['quantity'],
+                    'container_size' => $product['container_size'],
+                    'piece_or_package' => $product['piece_or_package'],
                     'stock' => $product['stock'] ? true : !(!$this->config->get( 'config_stock_checkout' ) || $this->config->get( 'config_stock_warning' )),
                     'reward' => ($product['reward'] ? sprintf( $this->language->get( 'text_points' ), $product['reward'] ) : ''),
                     'price' => $price,
@@ -368,7 +370,6 @@ class ControllerCheckoutCart extends Controller
                     'profile_name' => $product['profile_name'],
                     'profile_description' => $profile_description,
                     'customer_forced_buy_bulk' => $this->model_catalog_product->customerForcedBuyBulk($product['product_id']),
-                    'container_size' => $product['container_size'],
                 );
             }
 

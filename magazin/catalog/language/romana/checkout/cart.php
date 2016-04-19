@@ -25,6 +25,7 @@ $_['text_buy_bulk'] = 'Pachete:';
 $_['text_piece'] = 'Bucata';
 $_['text_bulk'] = 'Pachet';
 $_['text_container_size'] = 'Produse/pachet: ';
+$_['product_name_package'] = '%s (pachet)';
 $_['column_image'] = 'Imagine';
 $_['column_name'] = 'Numele produsului';
 $_['column_model'] = 'Model';

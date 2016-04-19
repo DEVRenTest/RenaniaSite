@@ -24,11 +24,28 @@
           <td class="name  <?php echo (!$data['columns']['name'])?  'hide' : '' ?> "><a href="<?php echo $product['href']; ?>"> <img src="<?php echo $product['thumb']; ?>" class="hide <?php echo (!$data['columns']['image'])?  '' : 'show' ?>"/> <?php echo $product['name']; ?> <?php echo (!$product['stock'])? '<span class="out-of-stock">***</span>' : '' ?></a>
             <?php foreach ($product['option'] as $option) { ?>
             <div> &nbsp;<small> - <?php echo $option['name']; ?>: <?php echo $option['value']; ?></small> </div>
-            <?php } ?></td>
+            <?php } ?>
+            <?php if($product['container_size']) { ?>
+            <div>
+              &dash; <span><?php echo $text_container_size; ?></span><?php echo $product['container_size']; ?>
+            </div>
+            <?php } ?>
+          </td>
           <td class="model  <?php echo (!$data['columns']['model'])?  'hide' : '' ?> "><?php echo $product['model']; ?></td>
-          <td class="quantity  <?php echo (!$data['columns']['quantity'])?  'hide' : '' ?> "><i class="icon-small-minus decrease" data-product="<?php echo $product['product_id']; ?>"></i>
+          <?php if (!$product['piece_or_package']) { ?>
+            <td class="quantity  <?php echo (!$data['columns']['quantity'])?  'hide' : '' ?> "><i class="icon-small-minus decrease" data-product="<?php echo $product['product_id']; ?>"></i>
             <input type="text" value="<?php echo $product['quantity']; ?>" class="product-qantity" name="cart[<?php echo $product['product_id']; ?>]"  data-refresh="3"/>
             <i class="icon-small-plus increase" data-product="<?php echo $product['product_id']; ?>"></i></td>
+          <?php } else { ?>
+            <td class="quantity  <?php echo (!$data['columns']['quantity'])?  'hide' : '' ?> ">
+              <i class="icon-small-minus decrease" data-product="<?php echo $product['product_id']; ?>"></i>
+              <input type="hidden" value="<?php echo $product['quantity']; ?>" class="product-qantity" name="cart[<?php echo $product['product_id']; ?>]"  data-refresh="3"/>
+              <input type="text" value="<?php echo $product['quantity']/$product['container_size']; ?>" class="product-qantity quantity-multiplier" data-refresh="3" data-multiplier="<?php echo $product['container_size']; ?>"/>
+              <i class="icon-small-plus increase" data-product="<?php echo $product['product_id']; ?>"></i>
+              <br />
+              &lpar;<?php echo $text_buy_piece; ?><span class="package_equals_pieces"><?php echo $product['quantity']; ?></span>&rpar;
+            </td>
+          <?php } ?>
           <td class="price <?php echo (!$data['columns']['price'] || ($this->config->get('config_customer_price') && !$this->customer->isLogged()))?  'hide' : ''; ?> "><?php echo $product['price']; ?></td>
           <td class="total <?php echo (!$data['columns']['total'] || ($this->config->get('config_customer_price') && !$this->customer->isLogged()))?  'hide' : ''; ?> "><?php echo $product['total']; ?></td>
         </tr>

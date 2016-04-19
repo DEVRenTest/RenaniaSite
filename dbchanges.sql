@@ -35,4 +35,4 @@ CREATE TABLE `oc_visitor_counter` (
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 -- package discount for products
-ALTER TABLE `oc_product` ADD `package_discount` DOUBLE NOT NULL AFTER `container_size`;
+ALTER TABLE `oc_product` ADD `package_discount` INT( 4 ) NOT NULL DEFAULT '0' AFTER `container_size`;
