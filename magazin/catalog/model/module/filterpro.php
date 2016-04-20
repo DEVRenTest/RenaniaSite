@@ -388,6 +388,10 @@ class ModelModuleFilterPro extends Model
             $sql .= " AND pf.filter_id IN (".implode( ",", $data['filter'] ).")";
         }
 
+        if (isset($data['filter_flag'])) {
+            $sql .= " AND p.flag = '" . (int)$data['filter_flag'] . "'";
+        }
+
         $sql .= " AND p.status = '1' AND p.date_available <= NOW( ) AND p2s.store_id = ".( int ) $this->config->get( 'config_store_id' );
         $sql .= ") as innertable WHERE 1 ";
         if( $data['min_price'] >= 0 )
@@ -1304,6 +1308,10 @@ class ModelModuleFilterPro extends Model
         if( $data['instock'] )
         {
             $sql .= " AND p.quantity > 0 AND (pov.quantity is null OR pov.quantity > 0)";
+        }
+
+        if (isset($data['filter_flag'])) {
+            $sql .= " AND p.flag = '" . (int)$data['filter_flag'] . "'";
         }
 
         if( $data['categories'] )

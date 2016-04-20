@@ -8,16 +8,6 @@
 </div>
 <?php echo $column_left; ?><?php echo $column_right; ?>
     <div id="content"><?php /* ?><h1 class="heading-title"><?php echo $heading_title; ?></h1><?php */ ?><?php echo $content_top; ?>
-  <?php if ($thumb || $description) { ?>
-  <div class="category-info">
-    <?php if ($thumb) { ?>
-    <div class="image"><img width="<?php echo $this->journal2->settings->get('config_image_width'); ?>" height="<?php echo $this->journal2->settings->get('config_image_height'); ?>" src="<?php echo $thumb; ?>" alt="<?php echo $heading_title; ?>" /></div>
-    <?php } ?>
-    <?php if ($description) { ?>
-    <?php echo $description; ?>
-    <?php } ?>
-  </div>
-  <?php } ?>
   <?php if($this->journal2->settings->get('refine_category') === 'grid'): ?>
   <div class="refine-images">
       <?php foreach ($this->journal2->settings->get('refine_category_images', array()) as $category): ?>
@@ -144,9 +134,9 @@
     <div class=" <?php echo isset($product['labels']) && is_array($product['labels']) && isset($product['labels']['outofstock']) ? 'outofstock' : ''; ?>">
       <?php if ($product['thumb']) { ?>
         <div class="image">
-        <?php if ($product['product_new']) { ?>
-        <span class="label-latest"></span>
-        <?php } ?>
+          <?php if ($product['product_new']) { ?>
+            <span class="label-latest"></span>
+          <?php } ?>
             <a href="<?php echo $product['href']; ?>" <?php if(isset($product['thumb2']) && $product['thumb2']): ?> class="has-second-image" style="background: url('<?php echo $product['thumb2']; ?>') no-repeat;" <?php endif; ?>>
                 <img class="lazy first-image" width="<?php echo $this->journal2->settings->get('config_image_width'); ?>" height="<?php echo $this->journal2->settings->get('config_image_height'); ?>" src="<?php echo $this->journal2->settings->get('product_dummy_image'); ?>" data-src="<?php echo $product['thumb']; ?>" title="<?php echo $product['name']; ?>" alt="<?php echo $product['name']; ?>" />
             </a>
@@ -166,7 +156,7 @@
         </div>
       <?php } else { ?>
         <div class="image">
-          <?php if ($product['product_new']) { ?>
+          <?php if ($product['product_new']) { ?>  
             <span class="label-latest"></span>
           <?php } ?>
             <a href="<?php echo $product['href']; ?>">
@@ -225,42 +215,37 @@
     <?php } ?>
   <div class="pagination"><?php echo $pagination; ?></div>
   <?php } ?>
-  <?php if (!$categories && !$products) { ?>
-  <div class="content"><p class="text-empty"><?php echo $text_empty; ?></p></div>
-  <div class="buttons">
-    <div class="right"><a href="<?php echo $continue; ?>" class="button"><?php echo $button_continue; ?></a></div>
-  </div>
-  <?php } ?>
+  
   <?php echo $content_bottom; ?></div>
 <script type="text/javascript"><!--
 function display(view) {
-	if (view == 'list') {
-		$('.main-products.product-grid').attr('class', 'main-products product-list');
+  if (view == 'list') {
+    $('.main-products.product-grid').attr('class', 'main-products product-list');
         $('.display a.grid-view').removeClass('active');
         $('.display a.list-view').addClass('active');
 
-		$('.main-products.product-list > div').each(function(index, element) {
+    $('.main-products.product-list > div').each(function(index, element) {
             if ($(this).hasClass('sf-loader')) return;
             $(this).attr('class','product-list-item xs-100 sm-100 md-100 lg-100 xl-100' + ($(this).hasClass('outofstock') ? ' outofstock' : '')).attr('data-respond','start: 150px; end: 300px; interval: 10px;');
 
             var html = '';
 
-			html += '<div class="left">';
+      html += '<div class="left">';
 
-			var image = $(element).find('.image').html();
+      var image = $(element).find('.image').html();
 
-			if (image != null) {
-				html += '<div class="image">' + image + '</div>';
-			}
+      if (image != null) {
+        html += '<div class="image">' + image + '</div>';
+      }
             html += '  <div class="name">' + $(element).find('.name').html() + '</div>';
 
-			var price = $(element).find('.price').html();
+      var price = $(element).find('.price').html();
 
-			if (price != null) {
-				html += '<div class="price">' + price  + '</div>';
-			}
+      if (price != null) {
+        html += '<div class="price">' + price  + '</div>';
+      }
 
-			html += '  <div class="description">' + $(element).find('.description').html() + '</div>';
+      html += '  <div class="description">' + $(element).find('.description').html() + '</div>';
 
             var rating = $(element).find('.rating').html();
 
@@ -276,55 +261,55 @@ function display(view) {
             html += '  <div class="compare">' + $(element).find('.compare').html() + '</div>';
             html += '</div>';
 
-			$(element).html(html);
-		});
+      $(element).html(html);
+    });
 
-		$.totalStorage('display', 'list');
-	} else {
-		$('.main-products.product-list').attr('class', 'main-products product-grid');
+    $.totalStorage('display', 'list');
+  } else {
+    $('.main-products.product-list').attr('class', 'main-products product-grid');
         $('.display a.grid-view').addClass('active');
         $('.display a.list-view').removeClass('active');
 
-		$('.main-products.product-grid > div').each(function(index, element) {
+    $('.main-products.product-grid > div').each(function(index, element) {
             if ($(this).hasClass('sf-loader')) return;
             $(this).attr('class',"product-grid-item <?php echo $this->journal2->settings->get('product_grid_classes'); ?> display-<?php echo $this->journal2->settings->get('product_grid_wishlist_icon_display'); ?> <?php echo $this->journal2->settings->get('product_grid_button_block_button'); ?>"  + ($(this).hasClass('outofstock') ? ' outofstock' : ''));
 
             var html = '';
 
-			var image = $(element).find('.image').html();
+      var image = $(element).find('.image').html();
 
-			if (image != null) {
-				html += '<div class="image">' + image + '</div>';
-			}
+      if (image != null) {
+        html += '<div class="image">' + image + '</div>';
+      }
 
             html += '<div class="product-details">';
-			html += '<div class="name">' + $(element).find('.name').html() + '</div>';
-			html += '<div class="description">' + $(element).find('.description').html() + '</div>';
+      html += '<div class="name">' + $(element).find('.name').html() + '</div>';
+      html += '<div class="description">' + $(element).find('.description').html() + '</div>';
 
-			var price = $(element).find('.price').html();
+      var price = $(element).find('.price').html();
 
-			if (typeof price != 'undefined') {
-				html += '<div class="price">' + price  + '</div>';
-			}
+      if (typeof price != 'undefined') {
+        html += '<div class="price">' + price  + '</div>';
+      }
             //console.log('pp1 '+price);
 
-			var rating = $(element).find('.rating').html();
+      var rating = $(element).find('.rating').html();
 
-			if (rating != null) {
-				html += '<div class="rating">' + rating + '</div>';
-			}
+      if (rating != null) {
+        html += '<div class="rating">' + rating + '</div>';
+      }
             html += '<hr>';
-			html += '<div class="' + $(element).find('.cart').attr('class') + '">' + $(element).find('.cart').html() + '</div>';
-			html += '<div class="wishlist">' + $(element).find('.cart + .wishlist').html() + '</div>';
-			html += '<div class="compare">' + $(element).find('.cart + .wishlist + .compare').html() + '</div>';
+      html += '<div class="' + $(element).find('.cart').attr('class') + '">' + $(element).find('.cart').html() + '</div>';
+      html += '<div class="wishlist">' + $(element).find('.cart + .wishlist').html() + '</div>';
+      html += '<div class="compare">' + $(element).find('.cart + .wishlist + .compare').html() + '</div>';
 
             html += '</div>';
 
             $(element).html('<div class="product-wrapper knockout-around">'+html+'</div>');
-		});
+    });
 
-		$.totalStorage('display', 'grid');
-	}
+    $.totalStorage('display', 'grid');
+  }
 
     $(window).trigger('list_grid_change');
     Journal.itemsEqualHeight();
@@ -360,9 +345,9 @@ function display(view) {
 view = $.totalStorage('display');
 
 if (view) {
-	display(view);
+  display(view);
 } else {
-	display('<?php echo $this->journal2->settings->get("product_view", "grid"); ?>');
+  display('<?php echo $this->journal2->settings->get("product_view", "grid"); ?>');
 }
 //--></script>
 </div>

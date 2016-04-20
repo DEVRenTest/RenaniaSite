@@ -14,6 +14,9 @@ $_['text_option']            = 'Option';
 $_['text_option_value']      = 'Option Value';
 $_['text_percent']           = 'Percentage';
 $_['text_amount']            = 'Fixed Amount';
+$_['text_group_table']       = 'Override rules for customer groups';
+$_['text_customer_table']    = 'Override rules for customers';
+$_['text_bulk_buy_help']    = 'In the tables below you can create bulk buying rules for the current product which will override the general bulk buy setting of customer groups (the later being applied to all products). When buying a product the rule with the highest priority will be applied to the customer. Rules in descending order of priority: Rules for individual customers for individual products (set in the form below in the table on the right), rules for customer groups for individual products (set in the form below in the table on the left), general rule for customer groups (set in customer group editing page).';
 
 // Column
 $_['column_name']            = 'Product Name';
@@ -23,6 +26,12 @@ $_['column_price']           = 'Price';
 $_['column_quantity']        = 'Quantity';
 $_['column_status']          = 'Status';
 $_['column_action']          = 'Action';
+$_['column_group']           = 'Customer group';
+$_['column_customer']        = 'Customer - name (e-mail address)';
+$_['column_override_rule']   = 'Force buying in bulk';
+
+// Tabs
+$_['tab_bulk_buy']           = 'Bulk Buy';
 
 // Entry
 $_['entry_name']             = 'Product Name:';
@@ -39,11 +48,15 @@ $_['entry_jan']              = 'JAN:<br/><span class="help">Japanese Article Num
 $_['entry_isbn']             = 'ISBN:<br/><span class="help">International Standard Book Number</span>';
 $_['entry_mpn']              = 'MPN:<br/><span class="help">Manufacturer Part Number</span>';
 $_['entry_location']         = 'Location:';
-$_['entry_stock_status_limits'] = 'Limits of stock status texts:';
+$_['entry_stock_status_limits']	= 'Limits of stock status texts:';
 $_['entry_shipping']         = 'Requires Shipping:'; 
 $_['entry_manufacturer']     = 'Manufacturer:<br /><span class="help">(Autocomplete)</span>';
 $_['entry_date_available']   = 'Date Available:';
 $_['entry_quantity']         = 'Quantity:';
+$_['entry_container_size']   = 'Piece/container:';
+$_['entry_package_discount'] = 'Discount/package';
+$_['entry_container_help']   = 'Set number of items in a container, 0 if product should not have this setting';
+$_['entry_package_discount_help'] = 'Set discount of package, 0 if package should not have discount';
 $_['entry_minimum']          = 'Minimum Quantity:<br/><span class="help">Force a minimum ordered amount</span>';
 $_['entry_stock_status']     = 'Out Of Stock Status:<br/><span class="help">Status shown when a product is out of stock</span>';
 $_['entry_price']            = 'Price:';
@@ -73,6 +86,7 @@ $_['entry_filter']           = 'Filters:<br /><span class="help">(Autocomplete)<
 $_['entry_download']         = 'Downloads:<br /><span class="help">(Autocomplete)</span>';
 $_['entry_related']          = 'Related Products:<br /><span class="help">(Autocomplete)</span>';
 $_['entry_tag']          	 = 'Product Tags:<br /><span class="help">comma separated</span>';
+$_['entry_new_product']		 = 'New Product:<br /><span class="help">Set as new product</span>';
 $_['entry_reward']           = 'Reward Points:';
 $_['entry_layout']           = 'Layout Override:';
 $_['entry_profile']          = 'Profile:';
@@ -90,6 +104,8 @@ $_['entry_trial_price']      = 'Trial recurring price:';
 $_['entry_trial_freq']       = 'Trial recurring frequency:';
 $_['entry_trial_cycle']      = 'Trial recurring cycles:<span class="help">How often its billed, must be 1 or more</span>';
 $_['entry_trial_length']     = 'Trial recurring length:';
+$_['entry_add_group_rule']   = 'Add rule for customer group';
+$_['entry_add_customer_rule'] = 'Add rule for customer';
 
 $_['text_length_day']        = 'Day';
 $_['text_length_week']       = 'Week';

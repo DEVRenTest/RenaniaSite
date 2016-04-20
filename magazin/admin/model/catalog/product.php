@@ -1,7 +1,7 @@
 <?php
 class ModelCatalogProduct extends Model {
 	public function addProduct($data) {
-		$this->db->query("INSERT INTO " . DB_PREFIX . "product SET model = '" . $this->db->escape($data['model']) . "', sku = '" . $this->db->escape($data['sku']) . "', upc = '" . $this->db->escape($data['upc']) . "', ean = '" . $this->db->escape($data['ean']) . "', jan = '" . $this->db->escape($data['jan']) . "', isbn = '" . $this->db->escape($data['isbn']) . "', mpn = '" . $this->db->escape($data['mpn']) . "', location = '" . $this->db->escape($data['location']) . "', quantity = '" . (int)$data['quantity'] . "', minimum = '" . (int)$data['minimum'] . "', subtract = '" . (int)$data['subtract'] . "', stock_status_id = '" . (int)$data['stock_status_id'] . "', date_available = '" . $this->db->escape($data['date_available']) . "', manufacturer_id = '" . (int)$data['manufacturer_id'] . "', shipping = '" . (int)$data['shipping'] . "', price = '" . (float)$data['price'] . "', points = '" . (int)$data['points'] . "', weight = '" . (float)$data['weight'] . "', weight_class_id = '" . (int)$data['weight_class_id'] . "', length = '" . (float)$data['length'] . "', width = '" . (float)$data['width'] . "', height = '" . (float)$data['height'] . "', length_class_id = '" . (int)$data['length_class_id'] . "', status = '" . (int)$data['status'] . "', tax_class_id = '" . $this->db->escape($data['tax_class_id']) . "', sort_order = '" . (int)$data['sort_order'] . "', date_added = NOW()");
+		$this->db->query("INSERT INTO " . DB_PREFIX . "product SET model = '" . $this->db->escape($data['model']) . "', sku = '" . $this->db->escape($data['sku']) . "', upc = '" . $this->db->escape($data['upc']) . "', ean = '" . $this->db->escape($data['ean']) . "', jan = '" . $this->db->escape($data['jan']) . "', isbn = '" . $this->db->escape($data['isbn']) . "', mpn = '" . $this->db->escape($data['mpn']) . "', location = '" . $this->db->escape($data['location']) . "', quantity = '" . (int)$data['quantity'] . "', container_size = '" . (int)$data['container_size'] . "', package_discount = '" . (double)$data['package_discount'] . "', minimum = '" . (int)$data['minimum'] . "', subtract = '" . (int)$data['subtract'] . "', stock_status_id = '" . (int)$data['stock_status_id'] . "', date_available = '" . $this->db->escape($data['date_available']) . "', manufacturer_id = '" . (int)$data['manufacturer_id'] . "', shipping = '" . (int)$data['shipping'] . "', price = '" . (float)$data['price'] . "', points = '" . (int)$data['points'] . "', weight = '" . (float)$data['weight'] . "', weight_class_id = '" . (int)$data['weight_class_id'] . "', length = '" . (float)$data['length'] . "', width = '" . (float)$data['width'] . "', height = '" . (float)$data['height'] . "', length_class_id = '" . (int)$data['length_class_id'] . "', status = '" . (int)$data['status'] . "', tax_class_id = '" . $this->db->escape($data['tax_class_id']) . "', sort_order = '" . (int)$data['sort_order'] . "', flag = '" . (int)$data['flag'] . "', date_added = NOW()");
 		
 		$product_id = $this->db->getLastId();
 		
@@ -128,6 +128,19 @@ class ModelCatalogProduct extends Model {
 				$this->db->query("INSERT INTO `" . DB_PREFIX . "product_profile` SET `product_id` = " . (int) $product_id . ", customer_group_id = " . (int) $profile['customer_group_id'] . ", `profile_id` = " . (int) $profile['profile_id']);
 			}
 		} 
+
+		if (isset($data['bulk_buy_overrides'])) {
+			if (isset($data['bulk_buy_overrides']['customer_groups']) && !empty($data['bulk_buy_overrides']['customer_groups'])) {
+				foreach ($data['bulk_buy_overrides']['customer_groups'] as $customer_group_id => $force_buy_bulk) {
+					$this->db->query("INSERT INTO " . DB_PREFIX . "force_buy_bulk_override_group set product_id = '" . (int)$product_id . "', customer_group_id = '" . (int)$customer_group_id . "', force_buy_bulk = '" . (int)$force_buy_bulk . "'");
+				}
+			}
+			if (isset($data['bulk_buy_overrides']['customer']) && !empty($data['bulk_buy_overrides']['customer'])) {
+				foreach ($data['bulk_buy_overrides']['customer'] as $customer_id => $force_buy_bulk) {
+					$this->db->query("INSERT INTO " . DB_PREFIX . "force_buy_bulk_override_customer set product_id = '" . (int)$product_id . "', customer_id = '" . (int)$customer_id . "', force_buy_bulk = '" . (int)$force_buy_bulk . "'");
+				}
+			}
+		}
 		
 		$this->cache->delete('product');
 	}
@@ -138,7 +151,7 @@ class ModelCatalogProduct extends Model {
     {
         $stock_status_limit = json_encode( $data["stock_status_limit"] );
     }
-		$this->db->query("UPDATE " . DB_PREFIX . "product SET `stock_status_limits` = '".$stock_status_limit."', model = '" . $this->db->escape($data['model']) . "', sku = '" . $this->db->escape($data['sku']) . "', upc = '" . $this->db->escape($data['upc']) . "', ean = '" . $this->db->escape($data['ean']) . "', jan = '" . $this->db->escape($data['jan']) . "', isbn = '" . $this->db->escape($data['isbn']) . "', mpn = '" . $this->db->escape($data['mpn']) . "', location = '" . $this->db->escape($data['location']) . "', quantity = '" . (int)$data['quantity'] . "', minimum = '" . (int)$data['minimum'] . "', subtract = '" . (int)$data['subtract'] . "', stock_status_id = '" . (int)$data['stock_status_id'] . "', date_available = '" . $this->db->escape($data['date_available']) . "', manufacturer_id = '" . (int)$data['manufacturer_id'] . "', shipping = '" . (int)$data['shipping'] . "', price = '" . (float)$data['price'] . "', points = '" . (int)$data['points'] . "', weight = '" . (float)$data['weight'] . "', weight_class_id = '" . (int)$data['weight_class_id'] . "', length = '" . (float)$data['length'] . "', width = '" . (float)$data['width'] . "', height = '" . (float)$data['height'] . "', length_class_id = '" . (int)$data['length_class_id'] . "', status = '" . (int)$data['status'] . "', tax_class_id = '" . $this->db->escape($data['tax_class_id']) . "', sort_order = '" . (int)$data['sort_order'] . "', date_modified = NOW() WHERE product_id = '" . (int)$product_id . "'");
+		$this->db->query("UPDATE " . DB_PREFIX . "product SET `stock_status_limits` = '".$stock_status_limit."', model = '" . $this->db->escape($data['model']) . "', sku = '" . $this->db->escape($data['sku']) . "', upc = '" . $this->db->escape($data['upc']) . "', ean = '" . $this->db->escape($data['ean']) . "', jan = '" . $this->db->escape($data['jan']) . "', isbn = '" . $this->db->escape($data['isbn']) . "', mpn = '" . $this->db->escape($data['mpn']) . "', location = '" . $this->db->escape($data['location']) . "', quantity = '" . (int)$data['quantity'] . "', container_size = '" . (int)$data['container_size'] . "', package_discount = '" . (double)$data['package_discount'] . "', minimum = '" . (int)$data['minimum'] . "', subtract = '" . (int)$data['subtract'] . "', stock_status_id = '" . (int)$data['stock_status_id'] . "', date_available = '" . $this->db->escape($data['date_available']) . "', manufacturer_id = '" . (int)$data['manufacturer_id'] . "', shipping = '" . (int)$data['shipping'] . "', price = '" . (float)$data['price'] . "', points = '" . (int)$data['points'] . "', weight = '" . (float)$data['weight'] . "', weight_class_id = '" . (int)$data['weight_class_id'] . "', length = '" . (float)$data['length'] . "', width = '" . (float)$data['width'] . "', height = '" . (float)$data['height'] . "', length_class_id = '" . (int)$data['length_class_id'] . "', status = '" . (int)$data['status'] . "', tax_class_id = '" . $this->db->escape($data['tax_class_id']) . "', sort_order = '" . (int)$data['sort_order'] . "', shipping = '" . (int)$data['shipping'] . "', flag = '" . (int)$data['flag'] . "', date_modified = NOW() WHERE product_id = '" . (int)$product_id . "'");
 
 		if (isset($data['image'])) {
 			$this->db->query("UPDATE " . DB_PREFIX . "product SET image = '" . $this->db->escape(html_entity_decode($data['image'], ENT_QUOTES, 'UTF-8')) . "' WHERE product_id = '" . (int)$product_id . "'");
@@ -233,6 +246,21 @@ class ModelCatalogProduct extends Model {
 			foreach ($data['product_category'] as $category_id) {
 				$this->db->query("INSERT INTO " . DB_PREFIX . "product_to_category SET product_id = '" . (int)$product_id . "', category_id = '" . (int)$category_id . "'");
 			}		
+		}
+
+		$this->db->query("DELETE FROM " . DB_PREFIX . "force_buy_bulk_override_group WHERE product_id = '" . (int)$product_id . "'");
+		$this->db->query("DELETE FROM " . DB_PREFIX . "force_buy_bulk_override_customer WHERE product_id = '" . (int)$product_id . "'");
+		if (isset($data['bulk_buy_overrides'])) {
+			if (isset($data['bulk_buy_overrides']['customer_groups']) && !empty($data['bulk_buy_overrides']['customer_groups'])) {
+				foreach ($data['bulk_buy_overrides']['customer_groups'] as $customer_group_id => $force_buy_bulk) {
+					$this->db->query("INSERT INTO " . DB_PREFIX . "force_buy_bulk_override_group set product_id = '" . (int)$product_id . "', customer_group_id = '" . (int)$customer_group_id . "', force_buy_bulk = '" . (int)$force_buy_bulk . "'");
+				}
+			}
+			if (isset($data['bulk_buy_overrides']['customer']) && !empty($data['bulk_buy_overrides']['customer'])) {
+				foreach ($data['bulk_buy_overrides']['customer'] as $customer_id => $force_buy_bulk) {
+					$this->db->query("INSERT INTO " . DB_PREFIX . "force_buy_bulk_override_customer set product_id = '" . (int)$product_id . "', customer_id = '" . (int)$customer_id . "', force_buy_bulk = '" . (int)$force_buy_bulk . "'");
+				}
+			}
 		}
 		
 		$this->db->query("DELETE FROM " . DB_PREFIX . "product_filter WHERE product_id = '" . (int)$product_id . "'");
@@ -347,6 +375,8 @@ class ModelCatalogProduct extends Model {
 		$this->db->query("DELETE FROM `" . DB_PREFIX . "product_profile` WHERE `product_id` = " . (int) $product_id);
 		$this->db->query("DELETE FROM " . DB_PREFIX . "review WHERE product_id = '" . (int)$product_id . "'");
 		$this->db->query("DELETE FROM " . DB_PREFIX . "product_complementary WHERE product_id = '" . (int) $product_id . "'");
+		$this->db->query("DELETE FROM " . DB_PREFIX . "force_buy_bulk_override_group WHERE product_id = '" . (int)$product_id . "'");
+		$this->db->query("DELETE FROM " . DB_PREFIX . "force_buy_bulk_override_customer WHERE product_id = '" . (int)$product_id . "'");
 		
 		$this->db->query("DELETE FROM " . DB_PREFIX . "url_alias WHERE query = 'product_id=" . (int)$product_id. "'");
 		
@@ -918,6 +948,25 @@ class ModelCatalogProduct extends Model {
 			}
 		}
 		return $concatenated_code;
+	}
+
+	function getProductBulkBuyOverrides($product_id)
+	{
+		$results = array('customer_groups' => array(), 'customers' => array());
+		$query = $this->db->query("SELECT fbbog.customer_group_id, cgd.name, fbbog.force_buy_bulk FROM " . DB_PREFIX . "force_buy_bulk_override_group fbbog LEFT JOIN " . DB_PREFIX . "customer_group_description cgd ON fbbog.customer_group_id = cgd.customer_group_id WHERE fbbog.product_id = '" . (int)$product_id . "'");
+		if ($query->num_rows) {
+			foreach ($query->rows as $row) {
+				$results['customer_groups'][$row['customer_group_id']] = array('name' => $row['name'], 'override' => $row['force_buy_bulk']);
+			}
+		}
+
+		$query = $this->db->query("SELECT fbboc.customer_id, c.email, c.firstname, c.lastname, fbboc.force_buy_bulk FROM " . DB_PREFIX . "force_buy_bulk_override_customer fbboc LEFT JOIN " . DB_PREFIX . "customer c ON fbboc.customer_id = c.customer_id WHERE fbboc.product_id = '" . (int)$product_id . "'");
+		if ($query->num_rows) {
+			foreach ($query->rows as $row) {
+				$results['customers'][$row['customer_id']] = array('name' => $row['firstname'] . ' ' . $row['lastname'], 'email' => $row['email'], 'override' => $row['force_buy_bulk']);
+			}
+		}
+		return $results;
 	}
 
 }

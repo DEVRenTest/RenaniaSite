@@ -1,0 +1,19 @@
+#product-quantity {
+	margin-bottom: 15px;
+}
+#product-quantity label {
+	padding-right: 5px;
+}
+.product-info .right .cart div .button,
+.product-info .right .cart div input[name="quantity"],
+#fake_quantity {
+	width: auto;
+	float: none;
+}
+.product-info .right .cart div input[name="quantity"] {
+	line-height: 1;
+}
+.vertical-centered {
+	display: inline-block;
+	vertical-align: middle;
+}

@@ -5,21 +5,29 @@ class ControllerProductUpdateStoc extends Controller
 
     public function index()
     {
-        //die('alma');
-        $updating_stock_at_0 = 0;
-        if ( $updating_stock_at_0 == 0 )
-        {
-            // updated product quantity at 0 in oc_product table
-            $this->db->query( "UPDATE oc_product SET quantity = 0;" );
-
-            // updated product quantity at 0 in oc_product_option_value table
-            $this->db->query( "UPDATE oc_product_option_value SET quantity = 0;" );
-
-            // updated product quantity at 0 in oc_product_option_value table
-            $this->db->query( "UPDATE oc_product_option_combination SET stock = 0;" );
-
-            $updating_stock_at_0++;
+        if (($_SERVER['SERVER_ADDR'] != $_SERVER['REMOTE_ADDR'])
+            || (!isset($this->request->get['banana']) || !$this->config->get('config_encryption') || $this->request->get['banana'] != $this->config->get('config_encryption'))) {
+            http_response_code(404);
+            exit();
         }
+        //die('alma');
+        // $updating_stock_at_0 = 0;
+        // if ( $updating_stock_at_0 == 0 )
+        // {
+        //     // updated product quantity at 0 in oc_product table
+        //     $this->db->query( "UPDATE oc_product SET quantity = 666;" );
+
+        //     // updated product quantity at 0 in oc_product_option_value table
+        //     $this->db->query( "UPDATE oc_product_option_value SET quantity = 666;" );
+
+        //     // updated product quantity at 0 in oc_product_option_value table
+        //     $this->db->query( "UPDATE oc_product_option_combination SET stock = 666;" );
+
+        //     $updating_stock_at_0++;
+        // }
+        $this->db->query("UPDATE " . DB_PREFIX . "product p LEFT JOIN (SELECT axc.id FROM _ax_stoc axs INNER JOIN ax_code axc ON axs.concatenat = axc.ax_code WHERE axc.type = '1') AS ax ON p.product_id = ax.id SET p.quantity = '0' WHERE ax.id IS NULL");
+        $this->db->query("UPDATE " . DB_PREFIX . "product_option_value pov LEFT JOIN (SELECT axc.id FROM _ax_stoc axs INNER JOIN ax_code axc ON axs.concatenat = axc.ax_code WHERE axc.type = '2') AS ax ON pov.product_option_value_id = ax.id SET pov.quantity = '0' WHERE ax.id IS NULL");
+        $this->db->query("UPDATE " . DB_PREFIX . "product_option_combination poc LEFT JOIN (SELECT axc.id FROM _ax_stoc axs INNER JOIN ax_code axc ON axs.concatenat = axc.ax_code WHERE axc.type = '3') AS ax ON poc.product_option_combination_id = ax.id SET poc.stock = '0' WHERE ax.id IS NULL");
 
         $query = $this->db->query( "SELECT * FROM _AX_STOC" );
         if( $query->num_rows > 0 )
@@ -29,6 +37,7 @@ class ControllerProductUpdateStoc extends Controller
                 $data_stoc[] = array(
                     'concatenat' => $result['concatenat'],
                     'stoc' => ( int ) $result['stoc'],
+                    // 'stoc' => 8008135,
                 );
             }
         }
@@ -67,6 +76,7 @@ class ControllerProductUpdateStoc extends Controller
                 //print "Codul concatenat ".$data['concatenat']." nu figureaza in tabeleul ax_code!<br>";
             }
         }
+
         
         print "OK";
         

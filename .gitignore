@@ -101,3 +101,5 @@ magazin/xmls/
 magazin/system/library/kint/
 magazin/catalog/controller/common/test.php
 magazin/admin/controller/common/test.php
+deployment/
+deploy/

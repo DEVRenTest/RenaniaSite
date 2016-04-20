@@ -162,8 +162,43 @@ class ControllerProductProduct extends Controller {
 		}
     		
 		$this->load->model('catalog/product');
+
+		$this->load->model('catalog/visitors');
+
+		$this->model_catalog_visitors->deleteVisitors();
+
+		$this->model_catalog_visitors->addVisitors();
+
+		$this->data['page_hash'] = md5($_SERVER['REQUEST_URI']);
+
+		$this->data['visitors_online'] = sprintf($this->language->get('visitors_online'), $this->model_catalog_visitors->getVisitors($this->data['page_hash']));
 		
+		$this->data['visitors'] = $this->model_catalog_visitors->getVisitors($this->data['page_hash']);
+
 	 	$product_info = $this->model_catalog_product->getProduct($product_id);
+
+	 	$this->data['text_last_purchased'] = '';
+
+	 	$lastOrder = $this->model_catalog_product->lastOrderDate($product_id);
+
+	 	if ($lastOrder) {
+	 		$lastOrderAgo = $this->timeAgo(time() - $lastOrder);
+	 		if ($lastOrderAgo ) {
+	 	 		$periods = array(
+	 				'sec' => array('single' => $this->language->get('text_second_single'), 'multiple' => $this->language->get('text_second_multiple')),
+	 				'min' => array('single' => $this->language->get('text_minute_single'), 'multiple' => $this->language->get('text_minute_multiple')),
+	 				'hour' => array('single' => $this->language->get('text_hour_single'), 'multiple' => $this->language->get('text_hour_multiple')),
+	 				'day' => array('single' => $this->language->get('text_day_single'), 'multiple' => $this->language->get('text_day_multiple')),
+	 				'week' => array('single' => $this->language->get('text_week_single'), 'multiple' => $this->language->get('text_week_multiple')),
+	 				'month' => array('single' => $this->language->get('text_month_single'), 'multiple' => $this->language->get('text_month_multiple')),
+	 				'year' => array('single' => $this->language->get('text_year_single'), 'multiple' => $this->language->get('text_year_multiple'))
+	 			);
+	 	 		$period_form = $lastOrderAgo['amount'] == 1 ? 'single' : 'multiple';
+	 			$this->data['text_last_purchased'] = sprintf($this->language->get('text_last_purchased'), $lastOrderAgo['amount'], $periods[$lastOrderAgo['period']][$period_form]);
+	 		}
+	 	}
+
+	 	$this->data['customer_forced_buy_bulk'] = $this->model_catalog_product->customerForcedBuyBulk($product_id);
 
 		if ($product_info) {
 			$url = '';
@@ -239,6 +274,9 @@ class ControllerProductProduct extends Controller {
 			$this->data['text_points'] = $this->language->get('text_points');	
 			$this->data['text_discount'] = $this->language->get('text_discount');
 			$this->data['text_stock'] = $this->language->get('text_stock');
+			$this->data['text_views'] = $this->language->get('text_views');
+			$this->data['text_limited_stock'] = $this->language->get('text_limited_stock');
+			$this->data['text_loading'] = $this->language->get('text_loading');
 			$this->data['text_qty'] = $this->language->get('text_qty');
 			$this->data['text_price'] = $this->language->get('text_price');
 			$this->data['text_tax'] = $this->language->get('text_tax');
@@ -252,6 +290,11 @@ class ControllerProductProduct extends Controller {
 			$this->data['text_wait'] = $this->language->get('text_wait');
 			$this->data['text_tags'] = $this->language->get('text_tags');
             $this->data['text_no_stock'] = $this->language->get('text_no_stock');
+
+            $this->data['text_pieces_per_package'] = $this->language->get('text_pieces_per_package');
+            $this->data['text_price_per_piece'] = $this->language->get('text_price_per_piece');
+            $this->data['text_pieces'] = $this->language->get('text_pieces');
+            $this->data['text_packages'] = $this->language->get('text_packages');
       
             $this->data['text_free_delivery'] = $this->language->get('text_free_delivery');
             $this->data['text_return_guarantee'] = $this->language->get('text_return_guarantee');
@@ -294,6 +337,10 @@ class ControllerProductProduct extends Controller {
 			$this->data['reward'] = $product_info['reward'];
 			$this->data['points'] = $product_info['points'];
 			
+			$this->data['container_size'] = $product_info['container_size'];
+
+			$this->data['package_discount'] = $product_info['package_discount'];
+
 			if ($product_info['quantity'] <= 0) {
 				$this->data['stock'] = $product_info['stock_status'];
 			} elseif ($this->config->get('config_stock_display')) {
@@ -303,6 +350,8 @@ class ControllerProductProduct extends Controller {
 			}
       
       $this->data['quantity'] = $product_info['quantity'];
+      $this->data['product_new'] = $product_info['product_new'];
+      
       // if the logged customer is B2B or Gallery + B2B
       $B2B = false;
       if( $this->customer->getCustomerGroupId() == 3 || $this->customer->getCustomerGroupId() == 4 )
@@ -514,7 +563,8 @@ class ControllerProductProduct extends Controller {
 					'special' 	 => $special,
 					'rating'     => $rating,
 					'reviews'    => sprintf($this->language->get('text_reviews'), (int)$result['reviews']),
-					'href'    	 => $this->url->link('product/product', 'product_id=' . $result['product_id'])
+					'href'    	 => $this->url->link('product/product', 'product_id=' . $result['product_id']),
+					'product_new' => $result['product_new'],
 				);
         
 			}
@@ -603,7 +653,7 @@ class ControllerProductProduct extends Controller {
 				'common/footer',
 				'common/header'
 			);
-						
+			$this->data['views'] = $product_info['viewed'];
 			$this->response->setOutput($this->render());
 		} else {
 			$url = '';
@@ -901,5 +951,26 @@ class ControllerProductProduct extends Controller {
 		
 		$this->response->setOutput(json_encode($json));		
 	}
+
+	private function timeAgo($seconds)
+    {
+	    if(!is_numeric($seconds))
+        {
+            if(!is_numeric($seconds))
+            {
+                return "";
+            }
+        }
+        $periods = array("sec","min","hour","day","week","month","year");
+        $lengths = array("60","60","24","7","4.35","12","10");
+
+        for($j=0; $seconds>=$lengths[$j] && $j<7; $j++)
+        {
+            $seconds /= $lengths[$j];
+        }
+        $seconds = round($seconds);
+
+        return array('amount' => $seconds, 'period' => $periods[$j]);
+    }
 }
 ?>

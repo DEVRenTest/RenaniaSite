@@ -17,6 +17,9 @@
     <div class="left">
       <?php if ($thumb) { ?>
       <div class="image">
+          <?php if ($product_new) { ?>
+              <span class="label-latest"></span>
+          <?php } ?>   
           <?php if (isset($labels) && is_array($labels)): ?>
           <?php foreach ($labels as $label => $name): ?>
           <?php if ($label === 'outofstock'): ?>
@@ -155,7 +158,18 @@
         <?php if ($reward) { ?>
         <span class="p-rewards"><?php echo $text_reward; ?></span> <span class="p-rewards"><?php echo $reward; ?></span><br />
         <?php } ?>
-        <span class="p-stock"><?php echo $text_stock; ?></span> <span class="journal-stock <?php echo isset($stock_status) ? $stock_status : ''; ?>"><?php echo $stock; ?></span>
+        <span class="p-stock"><?php echo $text_stock; ?></span> <span class="journal-stock <?php echo isset($stock_status) ? $stock_status : ''; ?>"><?php echo $text_limited_stock; ?> 
+        <marquee DIRECTION=RIGHT SCROLLDELAY="200" style="width: 10px;"><?php echo $text_loading; ?></marquee><?php echo $stock; ?></span><br />
+        <?php if ($views != 0) { ?>
+        	<span class="p-model"><font color="red"><?php echo $text_views; ?></span> <span><?php echo $views;?></font></span><br />
+        <?php } ?>
+        <div id="hide_visitors_on_mobile">
+       	<span id="visitors_online" <?php if($visitors == 0) { ?>style="display:none"<?php } ?>><font color="red"><?php echo $visitors_online; ?></font><br /></span>
+       	</div>
+        <span><font color="red"><?php echo $text_last_purchased?></font></span><br />
+        <?php if ($container_size) { ?>
+        <span class="p-model"><?php echo $text_pieces_per_package; ?></span> <span><?php echo $container_size; ?></span>
+        <?php } ?>
       </div>
     <?php if($this->journal2->settings->get('product_sold')): ?>
     <div class="product-sold-count-text"><?php echo $this->journal2->settings->get('product_sold'); ?></div>
@@ -166,6 +180,7 @@
       <?php endif; ?>
       <?php if ($price) { ?>
       <div class="price" itemprop="offers" itemscope itemtype="http://schema.org/Offer">
+        <span class="price_per_piece"><?php echo $text_price_per_piece; ?></span>
         <meta itemprop="priceCurrency" content="<?php echo $this->journal2->settings->get('product_price_currency'); ?>" />
         <?php if ($this->journal2->settings->get('product_in_stock') === 'yes'): ?>
         <link itemprop="availability"  href="http://schema.org/InStock" />
@@ -367,12 +382,54 @@
         <input type="hidden" name="product_id" value="<?php echo $product_id; ?>" />
         <?php else: ?>
         <div>
-            <span class="qty">
-                <span class="text-qty"><?php echo $text_qty; ?></span>
-                <input type="text" name="quantity" size="2" value=<?php echo $minimum; ?> data-min-value="<?php echo $minimum; ?>" autocomplete="off" />
-            </span>
+          <div id="product-quantity">
+            <p class="text-qty"><?php echo $text_qty; ?></p>
+            <?php if (!$container_size) { ?>
+            <label for="real-quantity"><?php echo $text_pieces; ?>&colon; </label>
+            <input type="text" id="real-quantity" name="quantity" size="3" value=<?php echo $minimum; ?> data-min-value="<?php echo $minimum; ?>" autocomplete="off" />
+            <?php } else { 
+              if ($customer_forced_buy_bulk) { ?>
+              <label id="packages" for="fake_quantity"><?php echo $text_packages; ?>&colon; </label>
+              <input type="hidden" name="quantity" value=<?php echo $minimum; ?> data-min-value="<?php echo $minimum; ?>" autocomplete="off" />
+              <input type="text" id="fake_quantity" size="3"/>
+              <span class="piece-count"></span>
+              <script type="text/javascript">
+                $('#fake_quantity').on('change keyup', function(){
+                  $('input[name="quantity"]').val($(this).val() * <?php echo $container_size; ?>);
+                  $('.piece-count').text('(<?php echo $text_pieces; ?>: ' + $(this).val() * <?php echo $container_size; ?> + ')');
+                });
+              </script>
+              <?php } else { ?>
+              <div class="vertical-centered">
+                <input name="radio_bulk_or_piece" id="radio_bulk" value="1" type="radio" checked="checked"/>
+                <label for="radio_bulk"><?php echo $text_pieces; ?></label><br />
+                <input name="radio_bulk_or_piece" id="radio_piece" value="<?php echo $container_size; ?>"  type="radio"/>
+                <label id="packages" for="radio_piece"><?php echo $text_packages; ?></label>
+              </div>
+              <div class="vertical-centered">
+                <input type="hidden" name="quantity" value=<?php echo $minimum; ?> data-min-value="<?php echo $minimum; ?>" autocomplete="off" />
+                <input type="text" id="fake_quantity" size="3"/>
+                <span class="piece-count"></span>
+              </div>
+              <script type="text/javascript">
+                $('input[name^="radio_bulk_or_piece"], #fake_quantity').on('change keyup', function(){
+                  $('input[name="quantity"]').val($('input[name^="radio_bulk_or_piece"]:checked').val() * $('#fake_quantity').val());
+                  if ($('input[name^="radio_bulk_or_piece"]:checked').val() != 1) {
+                    $('.piece-count').text('(<?php echo $text_pieces; ?>: ' + $('#fake_quantity').val() * <?php echo $container_size; ?> + ')');
+                  } else {
+                    if ($('#fake_quantity').val() % <?php echo $container_size; ?> != 0) {
+                      $('.piece-count').empty();
+                    } else {
+                      $('.piece-count').text('(<?php echo $text_packages; ?>: ' + $('#fake_quantity').val() / <?php echo $container_size; ?> + ')');
+                    }
+                  }
+                });
+              </script>
+              <?php } 
+            } ?>
+          </div>
           <input type="hidden" name="product_id" value="<?php echo $product_id; ?>" />
-            <a id="button-cart" class="button"><span class="button-cart-text"><?php echo $button_cart; ?></span></a>
+          <a id="button-cart" class="button"><span class="button-cart-text"><?php echo $button_cart; ?></span></a>
           <script>if ($('.product-info .image .label-outofstock').length) { $("#button-cart").addClass('button-disable').attr('disabled', 'disabled'); }</script>
         </div>
           <script>
@@ -437,17 +494,6 @@
           </div>
       </div>
       <?php endif; ?>
-      <?php foreach ($this->journal2->settings->get('additional_product_description_bottom', array()) as $tab): ?>
-      <div class="journal-custom-tab">
-          <?php if ($tab['has_icon']): ?>
-          <div class="block-icon block-icon-left" style="<?php echo $tab['icon_css']; ?>"><?php echo $tab['icon']; ?></div>
-          <?php endif; ?>
-          <?php if ($tab['name']): ?>
-          <h3><?php echo $tab['name']; ?></h3>
-          <?php endif; ?>
-          <?php echo $tab['content']; ?>
-      </div>
-      <?php endforeach; ?>
   </div>
   </div>
   </div>
@@ -490,23 +536,15 @@
   <?php if ($attribute_groups) { ?>
   <div id="tab-attribute" class="tab-content">
     <table class="attribute">
-      <?php foreach ($attribute_groups as $attribute_group) { ?>
-      <thead>
-        <tr>
-            <td><?php echo $attribute_group['name']; ?></td>
-            <td><?php echo $attribute_group['attribute'][0]['name']; ?></td>
-        </tr>
-      </thead>
-        <?php /* ?>
+      <?php foreach ($attribute_groups as $attribute_group) { ?>     
       <tbody>
         <?php foreach ($attribute_group['attribute'] as $attribute) { ?>
         <tr>
+          <td><?php echo $attribute_group['name']; ?></td>
           <td><?php echo $attribute['name']; ?></td>
-          <td><?php echo $attribute['text']; ?></td>
         </tr>
         <?php } ?>
       </tbody>
-        <?php */ ?>
       <?php } ?>
     </table>
   </div>
@@ -566,6 +604,9 @@
             <div class="product-wrapper">
                 <?php if ($product['thumb']) { ?>
                 <div class="image">
+                  <?php if ($product['product_new']) { ?>
+                      <span class="label-latest"></span>
+                  <?php } ?>
                     <a href="<?php echo $product['href']; ?>" <?php if(isset($product['thumb2']) && $product['thumb2']): ?> class="has-second-image" style="background: url('<?php echo $product['thumb2']; ?>') no-repeat;" <?php endif; ?>>
                         <img class="first-image" src="<?php echo $product['thumb']; ?>" title="<?php echo $product['name']; ?>" alt="<?php echo $product['name']; ?>" />
                     </a>
@@ -585,6 +626,9 @@
                 </div>
                 <?php } else { ?>
                 <div class="image">
+                    <?php if ($product['product_new']) { ?>
+                        <span class="label-latest"></span>
+                    <?php } ?>
                     <a href="<?php echo $product['href']; ?>" <?php if(isset($product['thumb2']) && $product['thumb2']): ?> class="has-second-image" style="background: url('<?php echo $product['thumb2']; ?>') no-repeat;" <?php endif; ?>>
                     <img class="first-image" src="<?php echo $this->journal2->settings->get('product_no_image'); ?>" title="<?php echo $product['name']; ?>" alt="<?php echo $product['name']; ?>" />
                     </a>

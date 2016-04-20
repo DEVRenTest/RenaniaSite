@@ -20,6 +20,7 @@ $_['text_separator']        = ' &raquo; ';
 $_['text_price_from']       = 'From';
 $_['text_price_ask']        = 'Ask after price';
 $_['text_withouth_vat']     = 'Without VAT:';
+$_['text_price_per_package'] = 'Price/package:';
 
 // Buttons
 $_['button_add_address']    = 'Add Address';
@@ -74,5 +75,6 @@ $_['button_get_info']       = 'Cere info';
 $_['text_high_stock'] = "In stoc";
 $_['text_medium_stock'] = "In stoc";
 $_['text_low_stock'] = "Stoc limitat";
-$_['text_no_stock'] = "Nu este in stock";
+$_['text_no_stock'] = "Not in stock";
+$_['text_in_stock']	= "In stock";
 ?>

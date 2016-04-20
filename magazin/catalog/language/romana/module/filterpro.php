@@ -3,6 +3,7 @@
 $_['heading_title']      = 'FilterPro';
 $_['text_tax']           = 'Ex Tax:';
 $_['text_price_range']   = 'Filtrare dupa pret:';
+$_['text_new_product']   = 'Filtrare produse noi:';
 $_['text_manufacturers'] = 'Producator:';
 $_['text_tags'] 		 = 'Tag-uri:';
 $_['text_categories']    = 'Categorii:';

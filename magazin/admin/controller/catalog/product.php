@@ -550,6 +550,9 @@ class ControllerCatalogProduct extends Controller {
 		$this->data['text_none'] = $this->language->get('text_none');
 		$this->data['text_percent'] = $this->language->get('text_percent');
 		$this->data['text_amount'] = $this->language->get('text_amount');
+		$this->data['text_group_table'] = $this->language->get('text_group_table');
+		$this->data['text_customer_table'] = $this->language->get('text_customer_table');
+		$this->data['text_bulk_buy_help'] = $this->language->get('text_bulk_buy_help');
 
 		$this->data['entry_name'] = $this->language->get('entry_name');
 		$this->data['entry_meta_description'] = $this->language->get('entry_meta_description');
@@ -570,6 +573,10 @@ class ControllerCatalogProduct extends Controller {
     	$this->data['entry_shipping'] = $this->language->get('entry_shipping');
     	$this->data['entry_date_available'] = $this->language->get('entry_date_available');
     	$this->data['entry_quantity'] = $this->language->get('entry_quantity');
+    	$this->data['entry_container_size'] = $this->language->get('entry_container_size');
+    	$this->data['entry_package_discount'] = $this->language->get('entry_package_discount');
+    	$this->data['entry_container_help'] = $this->language->get('entry_container_help');
+    	$this->data['entry_package_discount_help'] = $this->language->get('entry_package_discount_help');
 		$this->data['entry_stock_status'] = $this->language->get('entry_stock_status');
     	$this->data['entry_price'] = $this->language->get('entry_price');
 		$this->data['entry_tax_class'] = $this->language->get('entry_tax_class');
@@ -581,6 +588,7 @@ class ControllerCatalogProduct extends Controller {
 		$this->data['entry_dimension'] = $this->language->get('entry_dimension');
 		$this->data['entry_length'] = $this->language->get('entry_length');
     	$this->data['entry_image'] = $this->language->get('entry_image');
+    	$this->data['entry_latest'] = $this->language->get('entry_latest');
     	$this->data['entry_download'] = $this->language->get('entry_download');
     	$this->data['entry_category'] = $this->language->get('entry_category');
 		$this->data['entry_filter'] = $this->language->get('entry_filter');
@@ -597,11 +605,18 @@ class ControllerCatalogProduct extends Controller {
 		$this->data['entry_date_end'] = $this->language->get('entry_date_end');
 		$this->data['entry_priority'] = $this->language->get('entry_priority');
 		$this->data['entry_tag'] = $this->language->get('entry_tag');
+		$this->data['entry_new_product'] = $this->language->get('entry_new_product');
 		$this->data['entry_customer_group'] = $this->language->get('entry_customer_group');
 		$this->data['entry_reward'] = $this->language->get('entry_reward');
 		$this->data['entry_layout'] = $this->language->get('entry_layout');
 		$this->data['entry_profile'] = $this->language->get('entry_profile');
 		$this->data['entry_complementary'] = $this->language->get('entry_complementary');
+		$this->data['entry_add_group_rule'] = $this->language->get('entry_add_group_rule');
+		$this->data['entry_add_customer_rule'] = $this->language->get('entry_add_customer_rule');
+		
+		$this->data['column_group'] = $this->language->get('column_group');
+		$this->data['column_customer'] = $this->language->get('column_customer');
+		$this->data['column_override_rule'] = $this->language->get('column_override_rule');
     
 		$this->data['entry_stock_status_limits'] = $this->language->get('entry_stock_status_limits');
 
@@ -633,6 +648,7 @@ class ControllerCatalogProduct extends Controller {
 		$this->data['button_add_discount'] = $this->language->get('button_add_discount');
 		$this->data['button_add_special'] = $this->language->get('button_add_special');
 		$this->data['button_add_image'] = $this->language->get('button_add_image');
+		$this->data['button_insert'] = $this->language->get('button_insert');
 		$this->data['button_remove'] = $this->language->get('button_remove');
 		$this->data['button_add_profile'] = $this->language->get('button_add_profile');
 		
@@ -649,6 +665,7 @@ class ControllerCatalogProduct extends Controller {
 		$this->data['tab_design'] = $this->language->get('tab_design');
 		$this->data['tab_marketplace_links'] = $this->language->get('tab_marketplace_links');
 		$this->data['tab_mapping_ax_code'] = $this->language->get('tab_mapping_ax_code');
+		$this->data['tab_bulk_buy'] = $this->language->get('tab_bulk_buy');
 
 		$this->data['text_product_id'] = $this->language->get('text_product_id');
 		$this->data['text_product_code'] = $this->language->get('text_product_code');
@@ -833,6 +850,14 @@ class ControllerCatalogProduct extends Controller {
       		$this->data['location'] = '';
     	}
 
+    	if (isset($this->request->post['flag'])) {
+      		$this->data['flag'] = $this->request->post['flag'];
+    	} elseif (!empty($product_info)) {
+			$this->data['flag'] = $product_info['flag'];
+		} else {
+      		$this->data['flag'] = 0;
+    	}
+
 		$this->load->model('setting/store');
 		
 		$this->data['stores'] = $this->model_setting_store->getStores();
@@ -927,7 +952,23 @@ class ControllerCatalogProduct extends Controller {
 			$this->data['date_available'] = date('Y-m-d', time() - 86400);
 		}
 											
-    	if (isset($this->request->post['quantity'])) {
+    	if (isset($this->request->post['container_size'])) {
+      		$this->data['container_size'] = $this->request->post['container_size'];
+    	} elseif (!empty($product_info)) {
+      		$this->data['container_size'] = $product_info['container_size'];
+    	} else {
+			$this->data['container_size'] = 0;
+		}
+
+		if (isset($this->request->post['package_discount'])) {
+      		$this->data['package_discount'] = $this->request->post['package_discount'];
+    	} elseif (!empty($product_info)) {
+      		$this->data['package_discount'] = $product_info['package_discount'];
+    	} else {
+			$this->data['package_discount'] = 0;
+		}
+
+		if (isset($this->request->post['quantity'])) {
       		$this->data['quantity'] = $this->request->post['quantity'];
     	} elseif (!empty($product_info)) {
       		$this->data['quantity'] = $product_info['quantity'];
@@ -1332,6 +1373,13 @@ class ControllerCatalogProduct extends Controller {
 			$this->data['product_layout'] = array();
 		}
 
+		if (isset($this->request->post['bulk_buy_overrides'])) {
+			$this->data['bulk_buy_overrides'] = $this->request->post['bulk_buy_overrides'];
+		} elseif (isset($this->request->get['product_id'])) {
+			$this->data['bulk_buy_overrides'] = $this->model_catalog_product->getProductBulkBuyOverrides($this->request->get['product_id']);
+		} else {
+			$this->data['bulk_buy_overrides'] = array('customer_groups' => array(), 'customers' => array());
+		}
 		$this->load->model('design/layout');
 		
 		$this->data['layouts'] = $this->model_design_layout->getLayouts();
