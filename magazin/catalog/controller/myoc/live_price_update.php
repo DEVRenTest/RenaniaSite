@@ -135,7 +135,7 @@ class ControllerMyocLivePriceUpdate extends Controller
 
                     $message .= $this->language->get('text_not_yet_been_defined_special_price');
         
-                    $this->sendAlertMail( $subject, $message );
+                    //$this->sendAlertMail( $subject, $message );
                     
                 }
                 else if( $priceB2B == 0 && $optionNr >0 && sizeof( $option ) > 0 )
@@ -181,7 +181,7 @@ class ControllerMyocLivePriceUpdate extends Controller
 
                         $message .= $this->language->get('text_not_yet_been_defined_special_price');                       
 
-                       $this->sendAlertMail( $subject, $message );      
+                       //$this->sendAlertMail( $subject, $message );      
                     }
 
                 }
@@ -215,7 +215,8 @@ class ControllerMyocLivePriceUpdate extends Controller
                     $have_b2b_price = 1;
                 }                                 
             }
-
+            $product_ax_code = $this->cart->getProductAxCode( $product_id, $option_data );
+            $b2b_product_stoc = $this->getB2BProductStock( $product_ax_code );
 
             $json['have_b2b_price'] = $have_b2b_price;
             $json['price'] = ( $B2B ? $pr : $finalValue ); // $finalValue;
