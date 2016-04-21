@@ -166,7 +166,9 @@
         <div id="hide_visitors_on_mobile">
        	<span id="visitors_online" <?php if($visitors == 0) { ?>style="display:none"<?php } ?>><font color="red"><?php echo $visitors_online; ?></font><br /></span>
        	</div>
-        <span><font color="red"><?php echo $text_last_purchased?></font></span><br />
+        <?php if ($text_last_purchased) { ?>
+          <span><font color="red"><?php echo $text_last_purchased?></font></span><br />
+        <?php } ?>
         <?php if ($container_size) { ?>
         <span class="p-model"><?php echo $text_pieces_per_package; ?></span> <span><?php echo $container_size; ?></span>
         <?php } ?>
