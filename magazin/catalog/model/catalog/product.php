@@ -816,7 +816,7 @@ class ModelCatalogProduct extends Model {
   	{
   		$now = time();
   		$result = false;
-  		$query = $this->db->query("SELECT UNIX_TIMESTAMP(o.date_added) as date_added FROM " . DB_PREFIX . "order o LEFT JOIN " . DB_PREFIX . "order_product op ON o.order_id = op.order_id WHERE op.product_id = '" . (int)$product_id . "' AND o.order_status_id != 0 AND o.store_id = '" . (int)$this->config->get('config_store_id') . "' ORDER BY o.date_added DESC LIMIT 1");
+  		$query = $this->db->query("SELECT UNIX_TIMESTAMP(o.date_added) as date_added FROM " . DB_PREFIX . "order o LEFT JOIN " . DB_PREFIX . "order_product op ON o.order_id = op.order_id WHERE op.product_id = '" . (int)$product_id . "' AND o.order_status_id != 0 ORDER BY o.date_added DESC LIMIT 1");
   		if ($query->num_rows) {
   			$result = $query->row['date_added'];
   			if (($min_time_elapsed && $min_time_elapsed > 0 && $now - $min_time_elapsed <= $query->row['date_added'])
