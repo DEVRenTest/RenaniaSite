@@ -75,7 +75,7 @@ class ControllerMyocLivePriceUpdate extends Controller
         }
 
         if($product_info['container_size']) {
-       		$verbosePrice = $this->currency->format( $taxOfOneProduct )." (".$this->language->get( 'text_withouth_vat' )." ".$this->currency->format( $product_info['price'] )." ".")" ."<br>". $this->language->get( 'text_price_per_package' ) ." ". $this->currency->format( ($taxOfOneProduct * $product_info['container_size']) - (($taxOfOneProduct * $product_info['container_size'] * $product_info['package_discount']) / 100) );
+       		$verbosePrice = $this->currency->format( $taxOfOneProduct )." (".$this->language->get( 'text_withouth_vat' )." ".$this->currency->format( $product_info['price'] )." ".")" ."<br>". $this->language->get( 'text_price_per_package' ) ." ". $this->currency->format( ($taxOfOneProduct * $product_info['container_size']) - (($taxOfOneProduct * $product_info['container_size'] * $product_info['package_discount']) / 100) ) ." (".$this->language->get( 'text_withouth_vat' )." ".$this->currency->format(($product_info['price'] * $product_info['container_size']) - (($product_info['price'] * $product_info['container_size'] * $product_info['package_discount']) / 100) )." ".")";
     	} else {
     		$verbosePrice = $this->currency->format( $taxOfOneProduct )." (".$this->language->get( 'text_withouth_vat' )." ".$this->currency->format( $product_info['price'] )." ".")";
     	}
@@ -196,6 +196,14 @@ class ControllerMyocLivePriceUpdate extends Controller
 
                     $pr = $this->currency->format( $taxOfOneProductB2B ) ." (".$this->language->get( 'text_withouth_vat' )." "
                     .$this->currency->format( $priceB2B )." ".")";
+
+                    if ($product_info['container_size']) {
+                        $pr .= "<br>"
+                            . $this->language->get('text_price_per_package') 
+                            . " "
+                            . $this->currency->format($taxOfOneProductB2B * $product_info['container_size'] * (100 - $product_info['package_discount']) / 100)
+                            . " (" . $this->language->get('text_withouth_vat') . " " . $this->currency->format($priceB2B * $product_info['container_size'] * (100 - $product_info['package_discount']) / 100) . " )";
+                    }
                     
                     $concatenated_code = $this->cart->getProductAxCode( $product_id, $option_data );
                     
