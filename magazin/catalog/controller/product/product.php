@@ -179,7 +179,7 @@ class ControllerProductProduct extends Controller {
 
 	 	$this->data['text_last_purchased'] = '';
 
-	 	$lastOrder = $this->model_catalog_product->lastOrderDate($product_id);
+	 	$lastOrder = $this->model_catalog_product->lastOrderDate($product_id, 60, 3 * 24 * 3600);
 
 	 	if ($lastOrder) {
 	 		$lastOrderAgo = $this->timeAgo(time() - $lastOrder);
