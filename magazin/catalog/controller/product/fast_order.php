@@ -4,14 +4,6 @@
 */
 class ControllerProductFastOrder extends Controller
 {
-	private $log;
-
-	public function __construct($registry)
-	{
-		$this->log = new Log('fast_order.txt');
-        parent::__construct($registry);
-    }
-
     public function index()
     {
         if(!$this->customer->isLogged()) {
