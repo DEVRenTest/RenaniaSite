@@ -108,7 +108,7 @@
 								$('#input-packages').attr('data-multiplier', data.container_size);
 								$('input[name="package-size"]').val(data.container_size);
 								$('input[name="package-discount"]').val(data.package_discount);
-								if (data.customer_forced_buy_bulk) {
+								if (!data.customer_forced_buy_bulk) {
 									$('#input-pieces').prop('disabled', false);
 								}
 							} else {
