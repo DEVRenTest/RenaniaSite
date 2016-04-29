@@ -1316,7 +1316,7 @@ class ModelModuleFilterPro extends Model
 
         if( $data['categories'] )
         {
-            $sql .= " AND p2c.category_id IN (".implode( ",", $data['categories'] ).")";
+            $sql .= " AND p2c.category_id IN " . $this->secureArray($data['categories']);
         }
 
         $option_filters = array( );
@@ -1324,7 +1324,7 @@ class ModelModuleFilterPro extends Model
         {
             foreach( $data['option_value'] as $option_value )
             {
-                $option_filters[] = "option_value_id IN(".implode( ",", $option_value ).")";
+                $option_filters[] = "option_value_id IN " . $this->secureArray($option_value);
             }
         }
 
@@ -1346,7 +1346,7 @@ class ModelModuleFilterPro extends Model
 
         if( $data['manufacturer'] )
         {
-            $sql .= " AND p.manufacturer_id IN(".implode( ", ", $data['manufacturer'] ).")";
+            $sql .= " AND p.manufacturer_id IN " . $this->secureArray($data['manufacturer']);
         }
 
         if( $data['tags'] )
@@ -1409,17 +1409,17 @@ class ModelModuleFilterPro extends Model
                 if( !isset( $values['min'] ) )
                 {
                     $sql .= " AND EXISTS (select 1 FROM ".DB_PREFIX."product_attribute p2a".$i." WHERE p2a".$i.".product_id = p2a.product_id AND p2a".$i.".attribute_id = ".( int ) $attribute_id." AND ".
-                            "(p2a".$i.".text * 1 <= ".$values['max'].")) ";
+                            "(p2a".$i.".text * 1 <= ".(int)$values['max'].")) ";
                 }
                 elseif( !isset( $values['max'] ) )
                 {
                     $sql .= " AND EXISTS (select 1 FROM ".DB_PREFIX."product_attribute p2a".$i." WHERE p2a".$i.".product_id = p2a.product_id AND p2a".$i.".attribute_id = ".( int ) $attribute_id." AND ".
-                            "(p2a".$i.".text * 1 >= ".$values['min'].")) ";
+                            "(p2a".$i.".text * 1 >= ".(int)$values['min'].")) ";
                 }
                 else
                 {
                     $sql .= " AND EXISTS (select 1 FROM ".DB_PREFIX."product_attribute p2a".$i." WHERE p2a".$i.".product_id = p2a.product_id AND p2a".$i.".attribute_id = ".( int ) $attribute_id." AND ".
-                            "(p2a".$i.".text * 1 BETWEEN ".$values['min']." AND ".$values['max'].")) ";
+                            "(p2a".$i.".text * 1 BETWEEN ".(int)$values['min']." AND ".(int)$values['max'].")) ";
                 }
                 $i++;
             }
@@ -1433,7 +1433,7 @@ class ModelModuleFilterPro extends Model
 
         if( $data['filter'] )
         {
-            $sql .= " AND pf.filter_id IN (".implode( ",", $data['filter'] ).")";
+            $sql .= " AND pf.filter_id IN " . $this->secureArray($data['filter']);
         }
 
         $sql .= " AND pd.language_id = '".( int ) $this->config->get( 'config_language_id' )."' AND p.status = '1' AND p.date_available <= NOW( ) AND p2s.store_id = ".( int ) $this->config->get( 'config_store_id' );
@@ -1525,4 +1525,8 @@ class ModelModuleFilterPro extends Model
         return $query->rows;
     }
 
+    private function secureArray($data = array())
+    {
+        return "(" . implode(", ", array_filter(array_map(function($item){ return (int)$item; }, $data))) . ")";
+    }
 }
