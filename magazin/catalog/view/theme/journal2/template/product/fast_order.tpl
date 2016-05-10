@@ -53,26 +53,28 @@
 		</div>
 		<div id="product-info" class="xs-100 sm-100 md-40 lg-40 xl-40">
 		</div>
-		<div class="xs-100 sm-100 md-100 lg-100 xl-100" style="margin-top: 30px;">
-			<form method="post" action="<?php echo $action; ?>">
-				<table class="list">
-					<thead>
-						<tr>
-							<td><?php echo $column_product; ?></td>
-							<td style="width: 100px;"><?php echo $column_quantity; ?></td>
-							<td><?php echo $text_price; ?></td>
-							<td><?php echo $column_total; ?></td>
-							<td style="width: 90px;"></td>
-						</tr>
-					</thead>
-					<tbody>
-					</tbody>
-				</table>
-				<div>
-					<input type="submit" class="button" value="<?php echo $button_cart; ?>"/>
+		<form method="post" action="<?php echo $action; ?>">
+			<div class="xs-100 sm-100 md-100 lg-100 xl-100 hide-overflow">
+				<div class="mobile-horizontal-scroll">
+					<table class="list">
+						<thead>
+							<tr>
+								<td><?php echo $column_product; ?></td>
+								<td style="width: 100px;"><?php echo $column_quantity; ?></td>
+								<td><?php echo $text_price; ?></td>
+								<td><?php echo $column_total; ?></td>
+								<td style="width: 90px;"></td>
+							</tr>
+						</thead>
+						<tbody>
+						</tbody>
+					</table>
 				</div>
-			</form>
-		</div>
+			</div>
+			<div class="xs-100 sm-100 md-100 lg-100 xl-100">
+				<input type="submit" class="button" value="<?php echo $button_cart; ?>"/>
+			</div>
+		</form>
 	</div>
 </div>
 <script type="text/javascript">

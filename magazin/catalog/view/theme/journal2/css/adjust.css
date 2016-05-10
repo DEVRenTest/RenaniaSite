@@ -17,3 +17,18 @@
 	display: inline-block;
 	vertical-align: middle;
 }
+.hide-overflow {
+	overflow: scroll;
+}
+.mobile-horizontal-scroll {
+	margin: 30px 0;
+	width: 800px;
+}
+@media all and (min-width: 700px) {
+	.hide-overflow {
+	overflow: hidden;
+}
+	.mobile-horizontal-scroll {
+		width: auto;
+	}
+}
