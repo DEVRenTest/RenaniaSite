@@ -26,8 +26,8 @@
 }
 @media all and (min-width: 700px) {
 	.hide-overflow {
-	overflow: hidden;
-}
+		overflow: hidden;
+	}
 	.mobile-horizontal-scroll {
 		width: auto;
 	}
