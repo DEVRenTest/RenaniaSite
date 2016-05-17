@@ -867,6 +867,16 @@ class ControllerCheckoutCart extends Controller
         $this->response->setOutput( json_encode( $json ) );
     }
 
+    public function addMultiple()
+    {
+        if (isset($this->request->post['products'])) {
+            foreach ($this->request->post['products'] as $product) {
+                $this->cart->add($product['id'], $product['quantity'], $product['option'], 0);
+            }
+        }
+        $this->redirect($this->url->link('checkout/cart', '', 'SSL'));
+    }
+
     public function quote()
     {
         $this->language->load( 'checkout/cart' );

@@ -50,6 +50,7 @@ $_['text_year_multiple'] = 'years';
 
 $_['text_pieces_per_package']  = 'Pieces/package:';
 $_['text_price_per_piece']     = 'Price/piece:';
+$_['text_price_per_package']     = 'Price/package:';
 $_['text_pieces']              = 'Pieces';
 $_['text_packages']            = 'Packages';
 

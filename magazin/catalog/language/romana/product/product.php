@@ -60,6 +60,7 @@ $_['text_see_corresponding_size'] = "Vezi corespondenta marimi";
 $_['tab_complementary'] = ' Produse complementare';
 $_['text_pieces_per_package'] = 'Bucăţi/pachet:';
 $_['text_price_per_piece'] = 'Preţ/bucată:';
+$_['text_price_per_package'] = 'Preţ/pachet:';
 $_['text_pieces'] = 'Bucăţi';
 $_['text_packages'] = 'Pachete';
 $_['visitors_online'] 	= 'Pagina este vizualizata de inca <span id="visitors_count">%s</span> clienti';

@@ -249,6 +249,8 @@ class ControllerMyocLivePriceUpdate extends Controller
             $json['text_out_of_stock'] = $this->language->get('text_out_of_stock');
             $json['text_delivery'] = $this->language->get('text_delivery');
             $json['text_please_select_desired_options'] = $this->language->get('text_please_select_desired_options');
+            $json['raw_price_data'] = array('base_price' => round((($B2B && $priceB2B) ? $priceB2B : $product_info['price']), 2));
+            $json['raw_price_data']['vat_price'] = round($this->tax->calculate($json['raw_price_data']['base_price'], $product_info['tax_class_id'], TRUE), 2);
         }
 
         $this->cart->clear();

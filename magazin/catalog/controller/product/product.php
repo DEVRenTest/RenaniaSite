@@ -293,6 +293,7 @@ class ControllerProductProduct extends Controller {
 
             $this->data['text_pieces_per_package'] = $this->language->get('text_pieces_per_package');
             $this->data['text_price_per_piece'] = $this->language->get('text_price_per_piece');
+            $this->data['text_price_per_package'] = $this->language->get('text_price_per_package');
             $this->data['text_pieces'] = $this->language->get('text_pieces');
             $this->data['text_packages'] = $this->language->get('text_packages');
       
@@ -638,6 +639,12 @@ class ControllerProductProduct extends Controller {
 
             $product_size_chart = $this->model_catalog_product->getProductSizeChart( $this->request->get['product_id'] );
             $this->data['product_size_chart'] = $product_size_chart;
+
+            if (isset($this->request->get['ajax'])) {
+            	$this->response->setOutput(json_encode($this->data));
+            	$this->response->output();
+            	exit();
+            }
 			
 			if (file_exists(DIR_TEMPLATE . $this->config->get('config_template') . '/template/product/product.tpl')) {
 				$this->template = $this->config->get('config_template') . '/template/product/product.tpl';
