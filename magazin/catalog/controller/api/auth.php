@@ -34,7 +34,7 @@ class ControllerApiAuth extends Controller
                 exit;
             }
             $token = $this->model_account_customer->setupLoginToken($customer['customer_id']);
-            $this->data['login_url'] = $this->url->link('api/auth/login', '&id=' . md5($customer['customer_id']) . '&token=' . $token, 'SSL');
+            $this->data['login_url'] = $this->config->get('config_ssl') . 'magazin/index.php?route=api/auth/login&amp;id=' . md5($customer['customer_id']) . '&amp;token=' . $token;
 
             if (file_exists(DIR_TEMPLATE . $this->config->get('config_template') . '/template/api/auth_setup_response.php')) {
                 $this->template = $this->config->get('config_template') . '/template/api/auth_setup_response.php';
