@@ -63,6 +63,7 @@ $_['entry_image_compare']       = 'Mărimea Imaginilor produselor in pagina de c
 $_['entry_image_wishlist']      = 'Mărimea imaginilor in wishlist:';
 $_['entry_image_cart']          = 'Mărimea Imaginilor produselor in cosul de cumparaturi:';
 $_['entry_secure']             = 'Folosește SSL:<br /><span class="help">Ca să folosești SSL verifică cu serviciul tău de găzduire dacă un certificat SSL este instalat.</span>';
+$_['entry_auto_login']			= 'Auto login token';
 
 // Error
 $_['error_warning']             = 'Atenție: Vă rugăm verificați formularul pentru erori!';

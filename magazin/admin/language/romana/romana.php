@@ -91,6 +91,7 @@ $_['tab_log']                 = 'Log';
 $_['tab_image']               = 'Imagini';
 $_['tab_option']              = 'Opţiuni';
 $_['tab_server']              = 'Server';
+$_['tab_auto_login']     	  = 'Auto login token';
 $_['tab_store']               = 'Magazin';
 $_['tab_special']             = 'Preţ Special';
 $_['tab_local']               = 'Localizare';
