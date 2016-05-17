@@ -130,6 +130,7 @@ class ControllerSettingSetting extends Controller {
 		$this->data['entry_fraud_score'] = $this->language->get('entry_fraud_score');
 		$this->data['entry_fraud_status'] = $this->language->get('entry_fraud_status');
 		$this->data['entry_secure'] = $this->language->get('entry_secure');
+		$this->data['entry_auto_login'] = $this->language->get('entry_auto_login');
 		$this->data['entry_shared'] = $this->language->get('entry_shared');
 		$this->data['entry_robots'] = $this->language->get('entry_robots');
 		$this->data['entry_file_extension_allowed'] = $this->language->get('entry_file_extension_allowed');
@@ -156,6 +157,7 @@ class ControllerSettingSetting extends Controller {
 		$this->data['tab_mail'] = $this->language->get('tab_mail');
 		$this->data['tab_fraud'] = $this->language->get('tab_fraud');
 		$this->data['tab_server'] = $this->language->get('tab_server');
+		$this->data['tab_auto_login'] = $this->language->get('tab_auto_login');
 
  		if (isset($this->error['warning'])) {
 			$this->data['error_warning'] = $this->error['warning'];
@@ -1065,6 +1067,12 @@ class ControllerSettingSetting extends Controller {
 			$this->data['config_google_analytics'] = $this->request->post['config_google_analytics']; 
 		} else {
 			$this->data['config_google_analytics'] = $this->config->get('config_google_analytics');
+		}
+
+		if (isset($this->request->post['config_auto_login'])) {
+			$this->data['config_auto_login'] = $this->request->post['config_auto_login']; 
+		} else {
+			$this->data['config_auto_login'] = $this->config->get('config_auto_login');
 		}
 						
 		$this->template = 'setting/setting.tpl';

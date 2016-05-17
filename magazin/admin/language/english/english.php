@@ -91,6 +91,7 @@ $_['tab_log']                       = 'Log';
 $_['tab_image']                     = 'Image';
 $_['tab_option']                    = 'Option';
 $_['tab_server']                    = 'Server';
+$_['tab_auto_login']     			= 'Auto login token';
 $_['tab_store']                     = 'Store';
 $_['tab_special']                   = 'Special';
 $_['tab_local']                     = 'Local';
