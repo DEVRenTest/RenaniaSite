@@ -345,5 +345,28 @@ class ModelAccountCustomer extends Model {
 			return false;
 		}
 	}
+
+	public function setupLoginToken($customer_id)
+	{
+		$hash = bin2hex(mcrypt_create_iv(16, MCRYPT_DEV_URANDOM));
+		$query = $this->db->query("SELECT * FROM " . DB_PREFIX . "autologin WHERE token = '" . $hash . "'");
+		if (!$query->num_rows) {
+			$this->db->query("INSERT INTO " . DB_PREFIX . "autologin SET customer_id = '" . (int)$customer_id . "', token = '" . $hash . "'");
+			return $hash;
+		} else {
+			$this->setupLoginToken($customer_id);
+		}
+	}
+
+	public function validateLoginToken($customer_id, $token, $expire_interval = 1800)
+	{
+		$now = time();
+		$sql = "DELETE FROM " . DB_PREFIX . "autologin WHERE customer_id = '" . (int)$customer_id . "' AND token = '" . $this->db->escape($token) . "'";
+		if ($expire_interval) {
+			$sql .= " AND " . ($now - (int)$expire_interval) . " < UNIX_TIMESTAMP(date_added)";
+		}
+		$this->db->query($sql);
+		return !!$this->db->countAffected();
+	}
 }
 ?>

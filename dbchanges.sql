@@ -36,3 +36,13 @@ CREATE TABLE `oc_visitor_counter` (
 
 -- package discount for products
 ALTER TABLE `oc_product` ADD `package_discount` INT( 4 ) NOT NULL DEFAULT '0' AFTER `container_size`;
+
+-- autologin table
+CREATE TABLE `oc_autologin` (
+ `autologin_id` int(11) NOT NULL AUTO_INCREMENT,
+ `customer_id` int(11) NOT NULL,
+ `token` varchar(32) NOT NULL,
+ `date_added` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
+ PRIMARY KEY (`autologin_id`),
+ UNIQUE KEY `token` (`token`)
+) ENGINE=InnoDB DEFAULT CHARSET=latin1
