@@ -358,15 +358,20 @@ class ModelAccountCustomer extends Model {
 		}
 	}
 
-	public function validateLoginToken($customer_id, $token, $expire_interval = 1800)
+	public function validateLoginToken($hashed_customer_id, $token, $expire_interval = 1800)
 	{
 		$now = time();
-		$sql = "DELETE FROM " . DB_PREFIX . "autologin WHERE customer_id = '" . (int)$customer_id . "' AND token = '" . $this->db->escape($token) . "'";
+		$sql = "SELECT autologin_id, customer_id FROM " . DB_PREFIX . "autologin WHERE MD5(customer_id) = '" . $this->db->escape($hashed_customer_id) . "' AND token = '" . $this->db->escape($token) . "'";
 		if ($expire_interval) {
 			$sql .= " AND " . ($now - (int)$expire_interval) . " < UNIX_TIMESTAMP(date_added)";
 		}
-		$this->db->query($sql);
-		return !!$this->db->countAffected();
+		$query = $this->db->query($sql);
+		if ($query->num_rows) {
+			$this->db->query("DELETE FROM " . DB_PREFIX . "autologin WHERE autologin_id = '" . $query->row['autologin_id'] . "'");
+			return $query->row['customer_id'];
+		} else {
+			return 0;
+		}
 	}
 }
 ?>

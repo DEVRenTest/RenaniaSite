@@ -34,7 +34,7 @@ class ControllerApiAuth extends Controller
                 exit;
             }
             $token = $this->model_account_customer->setupLoginToken($customer['customer_id']);
-            $this->data['login_url'] = $this->url->link('api/auth/login', '&id=' . $customer['customer_id'] . '&token=' . $token, 'SSL');
+            $this->data['login_url'] = $this->url->link('api/auth/login', '&id=' . md5($customer['customer_id']) . '&token=' . $token, 'SSL');
 
             if (file_exists(DIR_TEMPLATE . $this->config->get('config_template') . '/template/api/auth_setup_response.php')) {
                 $this->template = $this->config->get('config_template') . '/template/api/auth_setup_response.php';
@@ -52,9 +52,9 @@ class ControllerApiAuth extends Controller
         $authenticated = false;
         $this->load->model('account/customer');
         if (isset($this->request->get['id'])
-            && isset($this->request->get['token'])
-            && $this->model_account_customer->validateLoginToken($this->request->get['id'], $this->request->get['token'])) {
-            $customer = $this->model_account_customer->getCustomer($this->request->get['id']);
+            && isset($this->request->get['token'])) {
+            $customer_id = $this->model_account_customer->validateLoginToken($this->request->get['id'], $this->request->get['token']);
+            $customer = $this->model_account_customer->getCustomer($customer_id);
             if ($customer) {
                 $authenticated = $this->customer->login($customer['email'], '', true);
             }
