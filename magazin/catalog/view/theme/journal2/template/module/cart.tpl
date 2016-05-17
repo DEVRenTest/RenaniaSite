@@ -1,7 +1,8 @@
 <div id="cart">
 
   <div class="heading" >
-    <a><span id="cart-total"><?php echo $text_items; ?></span><i></i></a>
+    <!-- <a><span id="cart-total"><?php echo $text_items; ?></span><i></i></a> -->
+    <a><i></i></a>
   </div>
   <div class="content">
     <div class="cart-wrapper">
