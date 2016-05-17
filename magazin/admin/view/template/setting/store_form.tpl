@@ -36,7 +36,7 @@
 
     <div class="content">
 
-      <div id="tabs" class="htabs"><a href="#tab-general"><?php echo $tab_general; ?></a><a href="#tab-store"><?php echo $tab_store; ?></a><a href="#tab-local"><?php echo $tab_local; ?></a><a href="#tab-option"><?php echo $tab_option; ?></a><a href="#tab-image"><?php echo $tab_image; ?></a><a href="#tab-server"><?php echo $tab_server; ?></a><a href="#tab-auto-login"><?php echo $tab_auto_login; ?></a></div>
+      <div id="tabs" class="htabs"><a href="#tab-general"><?php echo $tab_general; ?></a><a href="#tab-store"><?php echo $tab_store; ?></a><a href="#tab-local"><?php echo $tab_local; ?></a><a href="#tab-option"><?php echo $tab_option; ?></a><a href="#tab-image"><?php echo $tab_image; ?></a><a href="#tab-server"><?php echo $tab_server; ?></a><a href="#tab-auto-login"><?php echo $tab_auto_login; ?></a><a href="#tab-api-auto-login"><?php echo $tab_api_auto_login; ?></a></div>
 
       <form action="<?php echo $action; ?>" method="post" enctype="multipart/form-data" id="form">
 
@@ -989,6 +989,22 @@
               <td><?php echo $entry_auto_login; ?></td>
 
               <td><input type="text" name="config_auto_login" value="<?php echo $config_auto_login; ?>" size="30" /></td>
+
+            </tr>
+
+          </table>
+
+        </div>
+
+        <div id="tab-api-auto-login">
+
+          <table class="form">
+
+            <tr>
+
+              <td><?php echo $entry_api_auto_login; ?></td>
+
+              <td><input type="text" name="config_api_auto_login" value="<?php echo $config_api_auto_login; ?>" size="30" /></td>
 
             </tr>
 

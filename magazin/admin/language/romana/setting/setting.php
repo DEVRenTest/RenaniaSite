@@ -120,6 +120,7 @@ $_['entry_error_log']           = 'Jurnal De Erori:';
 $_['entry_error_filename']      = 'Numele Fisierului Jurnal De Erori:';
 $_['entry_google_analytics']    = 'Codul Google Analytics:<br /><span class="help">Autentificați-vă la <a onclick="window.open(\'http://www.google.com/analytics/\');"><u>Google Analytics</u></a> și dupa creați un profil al magazinului dvs. online. Copiați și lipiți codul analytics în acest câmp.</span>';
 $_['entry_auto_login']			= 'Auto login token';
+$_['entry_api_auto_login']		= 'API auto login';
 
 // Error
 $_['error_warning']             = 'Atenție: Vă rugăm verificați formularul pentru erori!';
