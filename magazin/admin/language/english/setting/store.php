@@ -64,6 +64,7 @@ $_['entry_image_wishlist']         = 'Wish List Image Size:';
 $_['entry_image_cart']             = 'Cart Image Size:';
 $_['entry_secure']                 = 'Use SSL:<br /><span class="help">To use SSL check with your host if a SSL certificate is installed.</span>';
 $_['entry_auto_login']			   = 'Auto login token';
+$_['entry_api_auto_login']	       = 'API auto login token';
 
 // Error
 $_['error_warning']                = 'Warning: Please check the form carefully for errors!';

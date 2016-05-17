@@ -92,6 +92,7 @@ $_['tab_image']                     = 'Image';
 $_['tab_option']                    = 'Option';
 $_['tab_server']                    = 'Server';
 $_['tab_auto_login']     			= 'Auto login token';
+$_['tab_api_auto_login']	  		= 'API auto login token';
 $_['tab_store']                     = 'Store';
 $_['tab_special']                   = 'Special';
 $_['tab_local']                     = 'Local';

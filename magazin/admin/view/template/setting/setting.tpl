@@ -17,7 +17,7 @@
       <div class="buttons"><a onclick="$('#form').submit();" class="button"><?php echo $button_save; ?></a><a href="<?php echo $cancel; ?>" class="button"><?php echo $button_cancel; ?></a></div>
     </div>
     <div class="content">
-      <div id="tabs" class="htabs"><a href="#tab-general"><?php echo $tab_general; ?></a><a href="#tab-store"><?php echo $tab_store; ?></a><a href="#tab-local"><?php echo $tab_local; ?></a><a href="#tab-option"><?php echo $tab_option; ?></a><a href="#tab-image"><?php echo $tab_image; ?></a><a href="#tab-ftp"><?php echo $tab_ftp; ?></a><a href="#tab-mail"><?php echo $tab_mail; ?></a><a href="#tab-fraud"><?php echo $tab_fraud; ?></a><a href="#tab-server"><?php echo $tab_server; ?></a><a href="#tab-auto-login"><?php echo $tab_auto_login; ?></a></div>
+      <div id="tabs" class="htabs"><a href="#tab-general"><?php echo $tab_general; ?></a><a href="#tab-store"><?php echo $tab_store; ?></a><a href="#tab-local"><?php echo $tab_local; ?></a><a href="#tab-option"><?php echo $tab_option; ?></a><a href="#tab-image"><?php echo $tab_image; ?></a><a href="#tab-ftp"><?php echo $tab_ftp; ?></a><a href="#tab-mail"><?php echo $tab_mail; ?></a><a href="#tab-fraud"><?php echo $tab_fraud; ?></a><a href="#tab-server"><?php echo $tab_server; ?></a><a href="#tab-auto-login"><?php echo $tab_auto_login; ?></a><a href="#tab-api-auto-login"><?php echo $tab_api_auto_login; ?></a></div>
       <form action="<?php echo $action; ?>" method="post" enctype="multipart/form-data" id="form">
         <div id="tab-general">
           <table class="form">
@@ -1041,6 +1041,14 @@
             <tr>
               <td><?php echo $entry_auto_login; ?></td>
               <td><input type="text" name="config_auto_login" value="<?php echo $config_auto_login; ?>" /></td>
+            </tr>
+          </table>
+        </div>
+        <div id="tab-api-auto-login">
+          <table class="form">
+            <tr>
+              <td><?php echo $entry_api_auto_login; ?></td>
+              <td><input type="text" name="config_api_auto_login" value="<?php echo $config_api_auto_login; ?>" /></td>
             </tr>
           </table>
         </div>
