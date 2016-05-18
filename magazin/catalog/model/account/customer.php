@@ -361,9 +361,9 @@ class ModelAccountCustomer extends Model {
 	public function validateLoginToken($hashed_customer_id, $token, $expire_interval = 1800)
 	{
 		$now = time();
-		$sql = "SELECT autologin_id, customer_id FROM " . DB_PREFIX . "autologin WHERE MD5(customer_id) = '" . $this->db->escape($hashed_customer_id) . "' AND token = '" . $this->db->escape($token) . "'";
+		$sql = "SELECT a.autologin_id, a.customer_id FROM " . DB_PREFIX . "autologin a LEFT JOIN " . DB_PREFIX . "customer c ON a.customer_id = c.customer_id WHERE MD5(a.customer_id) = '" . $this->db->escape($hashed_customer_id) . "' AND a.token = '" . $this->db->escape($token) . "' AND c.store_id = '" . (int)$this->config->get('config_store_id') . "'";
 		if ($expire_interval) {
-			$sql .= " AND " . ($now - (int)$expire_interval) . " < UNIX_TIMESTAMP(date_added)";
+			$sql .= " AND " . ($now - (int)$expire_interval) . " < UNIX_TIMESTAMP(a.date_added)";
 		}
 		$query = $this->db->query($sql);
 		if ($query->num_rows) {
