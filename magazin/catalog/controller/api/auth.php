@@ -29,7 +29,7 @@ class ControllerApiAuth extends Controller
         } else {
             $this->load->model('account/customer');
             $customer = $this->model_account_customer->getCustomerByEmail((string)$xml_object->Request->PunchOutSetupRequest->Contact->Email);
-            if (!$customer) {
+            if (!$customer || $this->config->get('config_store_id') != $customer['store_id']) {
                 header('HTTP/1.0 204 No Content');
                 exit;
             }
