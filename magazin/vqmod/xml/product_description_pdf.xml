@@ -358,12 +358,12 @@
 		<operation>
 			<search position="replace">
 			<![CDATA[
-			<a href="#tab-mapping-ax_code"><?php echo $tab_mapping_ax_code; ?></a></div>
+			<a href="#tab-mapping-ax_code"><?php echo $tab_mapping_ax_code; ?></a>
 			]]>
 			</search>
 			<add>
 			<![CDATA[
-			<a href="#tab-mapping-ax_code"><?php echo $tab_mapping_ax_code; ?></a><a href="#tab-download-pdf"><?php echo $tab_download_pdf; ?></a></div>
+			<a href="#tab-mapping-ax_code"><?php echo $tab_mapping_ax_code; ?></a><a href="#tab-download-pdf"><?php echo $tab_download_pdf; ?></a>
 			]]>
 			</add>
 		</operation>
