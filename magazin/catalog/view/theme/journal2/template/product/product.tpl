@@ -525,6 +525,9 @@
     <?php if ($products) { ?>
     <a href="#tab-related" class="tab-related"><?php echo $tab_related; ?> (<?php echo count($products); ?>)</a>
     <?php } ?>
+    <?php if(is_array($product_doc)) { ?>
+    <a href="#tab-download" style="display: inline;" class="selected">Download</a>
+    <?php } ?>
     <?php $index = 0; foreach ($this->journal2->settings->get('additional_product_tabs', array()) as $tab): $index++; ?>
     <a href="#additional-product-tab-<?php echo $index; ?>"><?php echo $tab['name']; ?></a>
     <?php endforeach; ?>
@@ -535,6 +538,35 @@
   <?php if (!$this->journal2->settings->get('hide_product_description')) { ?>
   <div id="tab-description" class="tab-content" itemprop="description"><?php echo $description; ?></div>
   <?php } ?>
+  <?php if(is_array($product_doc)) { ?>
+  <div id="tab-download" class="tab-content">
+    <div class="download_description">
+      <span><?php //echo '<pre>'; print_r($product_doc); ?></span>
+      <table>
+        <thead>
+          <tr>
+            <td>Nume document</td>
+            <td>Tip document</td>
+            <td>Descriere document</td>
+            <td>Descarcare</td>
+          </tr>
+        </thead>
+        <tbody>
+          <?foreach ($product_doc as $doc) { ?>
+          <tr>
+            <td><?= $doc['name'] ?></td>
+            <td><?= $doc['type'] ?></td>
+            <td><?= $doc['description'] ?></td>
+            <td>
+              <a class="button" href="<?php echo $doc['href']; ?>">Descarcare</a><br>
+            </td>
+          </tr>
+          <?php } ?>
+        </tbody>
+      </table>
+    </div>
+  </div>
+  <?php /*echo "<pre>"; print_r($product_doc);*/ } ?>
   <?php if ($attribute_groups) { ?>
   <div id="tab-attribute" class="tab-content">
     <table class="attribute">
