@@ -51,3 +51,9 @@ CREATE TABLE `oc_autologin` (
 ALTER TABLE `oc_customer` ADD `company_name` VARCHAR( 64 ) NULL ,
 ADD `CUI` VARCHAR( 64 ) NULL ,
 ADD `CIF` VARCHAR( 64 ) NULL ;
+
+-- customer table secret_code
+ALTER TABLE `oc_customer` ADD `secret_code` VARCHAR( 32 ) NULL ,
+ADD UNIQUE (
+`secret_code`
+);
