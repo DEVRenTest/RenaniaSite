@@ -28,10 +28,8 @@ class ControllerApiAuth extends Controller
             exit;
         } else {
             $this->load->model('account/customer');
-            $customer = $this->model_account_customer->getCustomerByEmail((string)$xml_object->Request->PunchOutSetupRequest->Contact->Email);
-            if (!$customer
-                || $this->config->get('config_store_id') != $customer['store_id']
-                || $customer['secret_code'] != (string)$xml_object->Header->Sender->Credential->SharedSecret) {
+            $customer = $this->model_account_customer->getCustomerBySecretCode((string)$xml_object->Header->Sender->Credential->SharedSecret);
+            if (!$customer || $this->config->get('config_store_id') != $customer['store_id']) {
                 header('HTTP/1.0 204 No Content');
                 exit;
             }

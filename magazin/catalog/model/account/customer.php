@@ -373,5 +373,14 @@ class ModelAccountCustomer extends Model {
 			return 0;
 		}
 	}
+
+	public function getCustomerBySecretCode($code)
+	{
+		$query = $this->db->query("SELECT * FROM " . DB_PREFIX . "customer WHERE secret_code = '" . $this->db->escape($code) . "'");
+		if ($query->num_rows) {
+			return $query->row;
+		}
+		return false;
+	}
 }
 ?>
