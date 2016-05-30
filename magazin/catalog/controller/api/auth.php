@@ -22,14 +22,16 @@ class ControllerApiAuth extends Controller
             exit;
         }
         $xml_object = simplexml_load_file('php://input');
-        $valid_request = $xml_object !== false && $xml_object->xpath('Request/PunchOutSetupRequest/Contact/Email');
+        $valid_request = $xml_object !== false && $xml_object->xpath('Request/PunchOutSetupRequest/Contact/Email') && $xml_object->xpath('Header/Sender/Credential/SharedSecret');
         if (!$valid_request) {
             header('HTTP/1.0 400 Bad Request');
             exit;
         } else {
             $this->load->model('account/customer');
             $customer = $this->model_account_customer->getCustomerByEmail((string)$xml_object->Request->PunchOutSetupRequest->Contact->Email);
-            if (!$customer || $this->config->get('config_store_id') != $customer['store_id']) {
+            if (!$customer
+                || $this->config->get('config_store_id') != $customer['store_id']
+                || $customer['secret_code'] != (string)$xml_object->Header->Sender->Credential->SharedSecret) {
                 header('HTTP/1.0 204 No Content');
                 exit;
             }
