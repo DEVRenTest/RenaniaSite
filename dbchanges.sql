@@ -57,3 +57,6 @@ ALTER TABLE `oc_customer` ADD `secret_code` VARCHAR( 32 ) NULL ,
 ADD UNIQUE (
 `secret_code`
 );
+
+-- customer autologin table changes
+ALTER TABLE `oc_autologin` ADD `url` VARCHAR( 64 ) NULL ;

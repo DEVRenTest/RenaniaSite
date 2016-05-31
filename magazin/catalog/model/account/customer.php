@@ -346,12 +346,12 @@ class ModelAccountCustomer extends Model {
 		}
 	}
 
-	public function setupLoginToken($customer_id)
+	public function setupLoginToken($customer_id, $url)
 	{
 		$hash = bin2hex(mcrypt_create_iv(16, MCRYPT_DEV_URANDOM));
 		$query = $this->db->query("SELECT * FROM " . DB_PREFIX . "autologin WHERE token = '" . $hash . "'");
 		if (!$query->num_rows) {
-			$this->db->query("INSERT INTO " . DB_PREFIX . "autologin SET customer_id = '" . (int)$customer_id . "', token = '" . $hash . "'");
+			$this->db->query("INSERT INTO " . DB_PREFIX . "autologin SET customer_id = '" . (int)$customer_id . "', token = '" . $hash . "', url = '" . $this->db->escape($url) . "'");
 			return $hash;
 		} else {
 			$this->setupLoginToken($customer_id);
@@ -361,16 +361,16 @@ class ModelAccountCustomer extends Model {
 	public function validateLoginToken($hashed_customer_id, $token, $expire_interval = 1800)
 	{
 		$now = time();
-		$sql = "SELECT a.autologin_id, a.customer_id FROM " . DB_PREFIX . "autologin a LEFT JOIN " . DB_PREFIX . "customer c ON a.customer_id = c.customer_id WHERE MD5(a.customer_id) = '" . $this->db->escape($hashed_customer_id) . "' AND a.token = '" . $this->db->escape($token) . "' AND c.store_id = '" . (int)$this->config->get('config_store_id') . "'";
+		$sql = "SELECT a.autologin_id, a.customer_id, a.url FROM " . DB_PREFIX . "autologin a LEFT JOIN " . DB_PREFIX . "customer c ON a.customer_id = c.customer_id WHERE MD5(a.customer_id) = '" . $this->db->escape($hashed_customer_id) . "' AND a.token = '" . $this->db->escape($token) . "' AND c.store_id = '" . (int)$this->config->get('config_store_id') . "'";
 		if ($expire_interval) {
 			$sql .= " AND " . ($now - (int)$expire_interval) . " < UNIX_TIMESTAMP(a.date_added)";
 		}
 		$query = $this->db->query($sql);
 		if ($query->num_rows) {
 			$this->db->query("DELETE FROM " . DB_PREFIX . "autologin WHERE autologin_id = '" . $query->row['autologin_id'] . "'");
-			return $query->row['customer_id'];
+			return $query->row;
 		} else {
-			return 0;
+			return ['autologin_id' => 0, 'customer_id' => 0, 'url' => ''];
 		}
 	}
 

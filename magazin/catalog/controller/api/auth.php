@@ -22,7 +22,7 @@ class ControllerApiAuth extends Controller
             exit;
         }
         $xml_object = simplexml_load_file('php://input');
-        $valid_request = $xml_object !== false && $xml_object->xpath('Request/PunchOutSetupRequest/Contact/Email') && $xml_object->xpath('Header/Sender/Credential/SharedSecret');
+        $valid_request = $xml_object !== false && $xml_object->xpath('Request/PunchOutSetupRequest/Contact/Email') && $xml_object->xpath('Header/Sender/Credential/SharedSecret') && $xml_object->xpath('Request/PunchOutSetupRequest/BrowserFormPost/URL');
         if (!$valid_request) {
             header('HTTP/1.0 400 Bad Request');
             exit;
@@ -33,7 +33,7 @@ class ControllerApiAuth extends Controller
                 header('HTTP/1.0 204 No Content');
                 exit;
             }
-            $token = $this->model_account_customer->setupLoginToken($customer['customer_id']);
+            $token = $this->model_account_customer->setupLoginToken($customer['customer_id'], (string)$xml_object->Request->PunchOutSetupRequest->BrowserFormPost->URL);
             $this->data['login_url'] = $this->url->link('api/auth/login', '&id=' . md5($customer['customer_id']) . '&token=' . $token, 'SSL');
 
             if (file_exists(DIR_TEMPLATE . $this->config->get('config_template') . '/template/api/auth_setup_response.php')) {
@@ -53,13 +53,14 @@ class ControllerApiAuth extends Controller
         $this->load->model('account/customer');
         if (isset($this->request->get['id'])
             && isset($this->request->get['token'])) {
-            $customer_id = $this->model_account_customer->validateLoginToken($this->request->get['id'], $this->request->get['token']);
-            $customer = $this->model_account_customer->getCustomer($customer_id);
+            $login_data = $this->model_account_customer->validateLoginToken($this->request->get['id'], $this->request->get['token']);
+            $customer = $this->model_account_customer->getCustomer($login_data['customer_id']);
             if ($customer) {
                 $authenticated = $this->customer->login($customer['email'], '', true);
             }
         }
         if ($authenticated) {
+            $this->session->data['remote_order_url'] = $login_data['url'];
             $this->redirect($this->url->link('common/home', '', 'SSL'));
         } else {
             $this->redirect($this->url->link('account/login', '', 'SSL'));
