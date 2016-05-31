@@ -58,3 +58,5 @@ ADD UNIQUE (
 `secret_code`
 );
 
+-- customer autologin table changes
+ALTER TABLE `oc_autologin` ADD `url` VARCHAR( 64 ) NULL ;
