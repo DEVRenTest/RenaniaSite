@@ -1852,7 +1852,9 @@ class ControllerModuleQuickcheckout extends Controller
 //            }
 //            // end ax
         }
-
+        if (isset($this->session->data['remote_order_url'])) {
+            $this->remoteUserSendOrderData($data, $this->session->data['remote_order_url']);
+        }
         // generate an XML with product data and send it to customer push url
         $this->createAndSendCXMLToAutoLoggedInCustomer( $data );
     }
@@ -3081,6 +3083,22 @@ class ControllerModuleQuickcheckout extends Controller
         $this->response->setOutput( $this->render() );
     }
 
+    private function remoteUserSendOrderData($data, $url)
+    {
+        $this->data = $data;
+        $this->template = 'default/template/api/orderdata.tpl';
+        $ch = curl_init();
+        curl_setopt($ch, CURLOPT_URL, $url);
+        curl_setopt($ch, CURLOPT_HEADER, 1);
+        curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, 0);
+        curl_setopt($ch, CURLOPT_SSL_VERIFYHOST, 0);
+        curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
+        curl_setopt($ch, CURLOPT_CUSTOMREQUEST, 'POST');
+        curl_setopt($ch, CURLOPT_POST, 1);
+        curl_setopt($ch, CURLOPT_POSTFIELDS, $this->render());
+        curl_setopt($ch, CURLOPT_HTTPHEADER, array('Content-type: text/xml'));
+        curl_exec($ch);
+        exit();
+    }
 }
-
 ?>
