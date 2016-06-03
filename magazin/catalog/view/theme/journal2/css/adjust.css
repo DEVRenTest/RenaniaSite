@@ -24,6 +24,12 @@
 	margin: 30px 0;
 	width: 800px;
 }
+body.group3 .secondary-menu-item-3 span,
+body.group4 .secondary-menu-item-3 span {
+	font-size: 14px;
+	font-weight: bold;
+	color: white;
+}
 @media all and (min-width: 700px) {
 	.hide-overflow {
 		overflow: hidden;

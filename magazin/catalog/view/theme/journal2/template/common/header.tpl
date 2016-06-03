@@ -116,7 +116,7 @@ $('body').prepend('<iframe src="<?php echo $store; ?>" style="display: none;"></
     Journal.NOTIFICATION_BUTTONS = '<?php echo $this->journal2->settings->get('notification_buttons'); ?>';
 </script>
 </head>
-<body>
+<body<?php if ($this->customer->isLogged()) echo ' class="group' . $this->customer->getCustomerGroupId() . '"'; ?>>
 <!--[if lt IE 9]>
 <div class="old-browser"><?php echo $this->journal2->settings->get('old_browser_message', 'You are using an old browser. Please <a href="http://windows.microsoft.com/en-us/internet-explorer/download-ie">upgrade to a newer version</a> or <a href="http://browsehappy.com/">try a different browser</a>.'); ?></div>
 <![endif]-->
