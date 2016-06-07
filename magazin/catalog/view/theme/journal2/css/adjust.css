@@ -38,3 +38,32 @@ body.group4 .secondary-menu-item-3 span {
 		width: auto;
 	}
 }
+#cc-notification #cc-notification-wrapper h2 {
+	margin-right: 0px !important;
+}
+@media all and (max-width: 720px) {
+	#cc-notification #cc-notification-wrapper .cc-notification-buttons li a {
+		margin-top: 22px !important;
+	}
+	#cc-notification #cc-notification-wrapper {
+		padding: 0px !important;
+	}
+}
+@media all and (max-width: 360px) {
+	#cc-notification #cc-notification-wrapper .cc-notification-buttons li a {
+		padding: 1px 3px !important;
+		margin-top: 32px !important;
+	}
+}
+.text_welcome_b2b {
+	float: right;
+	color: white;
+	margin-left: 20px;
+	margin-top: 10px;
+	font-weight: bold;
+}
+@media all and (max-width: 1279px) {
+	.text_welcome_b2b {
+		visibility: hidden;
+	}
+}

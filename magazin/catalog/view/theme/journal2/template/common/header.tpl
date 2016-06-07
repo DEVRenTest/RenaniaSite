@@ -83,7 +83,6 @@
     if ($this->journal2->settings->get('responsive_design')) {
         $this->journal2->minifier->addStyle('catalog/view/theme/journal2/css/responsive.css');
     }
-    $this->journal2->minifier->addStyle('catalog/view/theme/journal2/css/adjust.css');
 ?>
 <?php echo $this->journal2->minifier->css(); ?>
 <?php if ($this->journal2->cache->getDeveloperMode() || !$this->journal2->minifier->getMinifyCss()): ?>
@@ -115,6 +114,7 @@ $('body').prepend('<iframe src="<?php echo $store; ?>" style="display: none;"></
     <?php endif; ?>
     Journal.NOTIFICATION_BUTTONS = '<?php echo $this->journal2->settings->get('notification_buttons'); ?>';
 </script>
+<link rel="stylesheet" type="text/css" href="catalog/view/theme/journal2/css/adjust.css"/>
 </head>
 <body<?php if ($this->customer->isLogged()) echo ' class="group' . $this->customer->getCustomerGroupId() . '"'; ?>>
 <!--[if lt IE 9]>

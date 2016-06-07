@@ -1832,7 +1832,7 @@ Header Cart
 @media only screen and (max-width: 1000px) {
 
     header {
-        position: fixed!important;
+        /*position: fixed!important;*/
     }
 
     .extended-container {
