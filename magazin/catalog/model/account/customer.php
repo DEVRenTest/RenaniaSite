@@ -370,7 +370,7 @@ class ModelAccountCustomer extends Model {
 			$this->db->query("DELETE FROM " . DB_PREFIX . "autologin WHERE autologin_id = '" . $query->row['autologin_id'] . "'");
 			return $query->row;
 		} else {
-			return ['autologin_id' => 0, 'customer_id' => 0, 'url' => ''];
+			return array('autologin_id' => 0, 'customer_id' => 0, 'url' => '');
 		}
 	}
 
