@@ -10,6 +10,7 @@ $_['text_wait']             = 'Please Wait!';
 $_['text_balance']          = 'Balance:';
 $_['text_add_ban_ip']       = 'Add Ban IP';
 $_['text_remove_ban_ip']    = 'Remove Ban IP';
+$_['text_unlimited']        = 'Unlimited';
 
 // Column
 $_['column_name']           = 'Customer Name';
@@ -52,6 +53,7 @@ $_['entry_comment']         = 'Comment:';
 $_['entry_description']     = 'Description:';
 $_['entry_amount']          = 'Amount:';
 $_['entry_points']          = 'Points:<br /><span class="help">Use minus to remove points</span>';
+$_['entry_order_limit']     = 'Order limit:';
 
 // Error
 $_['error_warning']         = 'Warning: Please check the form carefully for errors!';
@@ -71,4 +73,5 @@ $_['error_city']            = 'City must be between 2 and 128 characters!';
 $_['error_postcode']        = 'Postcode must be between 2 and 10 characters for this country!';
 $_['error_country']         = 'Please select a country!';
 $_['error_zone']            = 'Please select a region / state!';
+$_['error_order_limit']     = 'Invalid order limit!';
 ?>

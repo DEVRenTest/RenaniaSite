@@ -24,5 +24,9 @@ $_['text_rating_asc'] = 'Nota (Cea mai mare)';
 $_['text_rating_desc'] = 'Nota (Cea mai mica)';
 $_['text_model_asc'] = 'Model (A - Z)';
 $_['text_model_desc'] = 'Model (Z - A)';
+$_['text_date_added_asc'] = 'Data adaugarii ASC';
+$_['text_date_added_desc'] = 'Data adaugarii DESC';
 $_['text_limit'] = 'Produse pe pagina:';
+$_['filter_flag_entry']	= 'Produse noi';
+$_['button_sort_toggle']	= 'C<br />A<br />T<br />E<br />G<br />O<br />R<br />I<br />I';
 ?>

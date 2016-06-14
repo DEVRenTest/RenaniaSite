@@ -18,7 +18,7 @@
     <table>
       <tr>
         <td><?php echo $result['address']; ?></td>
-        <td><a href="<?php echo $result['update']; ?>" class="button"><?php echo $button_edit; ?></a><a href="<?php echo $result['delete']; ?>" class="button"><?php echo $button_delete; ?></a></td>
+        <td></td>
       </tr>
     </table>
   </div>

@@ -53,9 +53,9 @@ echo $settings['general']['checkout_style'];
         <?php $i++;
         } ?>
       </div>
-      <div class="aqc-column aqc-column-1" style="width:<?php echo $settings['general']['column_width'][1]; ?>%"></div>
-      <div class="aqc-column aqc-column-2" style="width:<?php echo $settings['general']['column_width'][2]; ?>%"></div>
-      <div class="aqc-column aqc-column-3" style="width:<?php echo $settings['general']['column_width'][3]; ?>%"></div>
+      <div class="aqc-column aqc-column-1"></div>
+      <div class="aqc-column aqc-column-2"></div>
+      <div class="aqc-column aqc-column-3"></div>
       <br class="clear" />
     </div>
 	<div id="debug_block"></div>
@@ -213,7 +213,7 @@ function refreshStep(step_number, func){
 	$.ajax({
 		url: 'index.php?route=module/quickcheckout/refresh_step'+step_number,
 		type: 'post',
-		data: $('#quickcheckout input[type=\'text\'], #quickcheckout input[type=\'password\'], #quickcheckout input[type=\'checkbox\'], #quickcheckout input[type=\'radio\']:checked, #quickcheckout select, #quickcheckout textarea'),
+		data: $('#quickcheckout input[type=\'text\'], #quickcheckout input[type=\'hidden\'], #quickcheckout input[type=\'password\'], #quickcheckout input[type=\'checkbox\'], #quickcheckout input[type=\'radio\']:checked, #quickcheckout select, #quickcheckout textarea'),
 		dataType: 'html',
 		beforeSend: function() {
 
@@ -235,7 +235,7 @@ function refreshAllSteps(func){
 	$.ajax({
 		url: 'index.php?route=module/quickcheckout/refresh',
 		type: 'post',
-		data: $('#quickcheckout input[type=\'text\'], #quickcheckout input[type=\'password\'], #quickcheckout input[type=\'checkbox\']:checked, #quickcheckout input[type=\'radio\']:checked, #quickcheckout select,  #quickcheckout textarea'),
+		data: $('#quickcheckout input[type=\'text\'], #quickcheckout input[type=\'hidden\'], #quickcheckout input[type=\'password\'], #quickcheckout input[type=\'checkbox\']:checked, #quickcheckout input[type=\'radio\']:checked, #quickcheckout select,  #quickcheckout textarea'),
 		dataType: 'html',
 		beforeSend: function() {
 
@@ -527,10 +527,11 @@ $('#quickcheckout input[type=text], #quickcheckout input[type=password], #quickc
 
 $('#quickcheckout .quantity i').live('click', function(event){
     if($(this).hasClass('increase')){
-   		$(this).parent().children('input').val(parseInt($(this).parent().children('input').val())+1)
+   		$(this).parent().children('input[type="text"]').val(parseInt($(this).parent().children('input[type="text"]').val())+1)
     }else{
-    	$(this).parent().children('input').val(parseInt($(this).parent().children('input').val())-1)
+    	$(this).parent().children('input[type="text"]').val(parseInt($(this).parent().children('input[type="text"]').val())-1)
     }
+    $(this).parent().children('input[type="text"]').trigger('change');
 	refreshCheckout(1)
 	event.stopImmediatePropagation()
 })
@@ -707,6 +708,9 @@ $('#quickcheckout .button-toggle').live('click', function(event){
 	event.stopImmediatePropagation()
 })
 
-
+$('#container').on('change keyup', '.quantity-multiplier', function(){
+	// alert($(this).val() * $(this).attr('data-multiplier'));
+	$(this).prev('input[name^="cart"]').val($(this).val() * $(this).attr('data-multiplier'));
+});
 
 //--></script>

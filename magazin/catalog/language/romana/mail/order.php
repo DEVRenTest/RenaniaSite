@@ -33,4 +33,6 @@ $_['text_update_order_status'] = 'Comanda Dvs. a fost actualizata cu urmatorul s
 $_['text_update_comment'] = 'Comentariile pentru comanda Dvs. sunt:';
 $_['text_update_link'] = 'Pentru a viziona comanda Dvs., dati click pe urmatorul link:';
 $_['text_update_footer'] = 'Va rugam sa raspundeti la acest e-mail daca aveti vreo intrebare.';
+$_['text_order_approved_subject'] = '%s - Comanda in asteptare de aprobare %s';
+$_['text_order_approved_text'] = 'Pentru a aproba/refuza comanda sau mai multe detalii legate de comanda, puteti intra <a href="%s">aici</a>.';
 ?>

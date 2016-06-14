@@ -237,6 +237,8 @@ class ControllerSettingStore extends Controller {
 		$this->data['entry_image_wishlist'] = $this->language->get('entry_image_wishlist');
 		$this->data['entry_image_cart'] = $this->language->get('entry_image_cart');
 		$this->data['entry_secure'] = $this->language->get('entry_secure');
+		$this->data['entry_auto_login'] = $this->language->get('entry_auto_login');
+		$this->data['entry_api_auto_login'] = $this->language->get('entry_api_auto_login');
 				
 		$this->data['button_save'] = $this->language->get('button_save');
 		$this->data['button_cancel'] = $this->language->get('button_cancel');
@@ -247,6 +249,8 @@ class ControllerSettingStore extends Controller {
 		$this->data['tab_option'] = $this->language->get('tab_option');
 		$this->data['tab_image'] = $this->language->get('tab_image');
 		$this->data['tab_server'] = $this->language->get('tab_server');
+		$this->data['tab_auto_login'] = $this->language->get('tab_auto_login');
+		$this->data['tab_api_auto_login'] = $this->language->get('tab_api_auto_login');
 		
  		if (isset($this->error['warning'])) {
 			$this->data['error_warning'] = $this->error['warning'];
@@ -655,6 +659,14 @@ class ControllerSettingStore extends Controller {
 		} else {
 			$this->data['config_order_status_id'] = '';
 		}
+
+		if (isset($this->request->post['config_unapproved_order_status_id'])) {
+			$this->data['config_unapproved_order_status_id'] = $this->request->post['config_unapproved_order_status_id'];
+		} elseif (isset($store_info['config_unapproved_order_status_id'])) {
+			$this->data['config_unapproved_order_status_id'] = $store_info['config_unapproved_order_status_id'];		
+		} else {
+			$this->data['config_unapproved_order_status_id'] = '';
+		}
 		
 		$this->load->model('localisation/order_status');
 		
@@ -858,6 +870,22 @@ class ControllerSettingStore extends Controller {
 			$this->data['config_secure'] = $store_info['config_secure'];
 		} else {
 			$this->data['config_secure'] = '';
+		}
+
+		if (isset($this->request->post['config_auto_login'])) {
+			$this->data['config_auto_login'] = $this->request->post['config_auto_login'];
+		} elseif (isset($store_info['config_auto_login'])) {
+			$this->data['config_auto_login'] = $store_info['config_auto_login'];
+		} else {
+			$this->data['config_auto_login'] = '';
+		}
+
+		if (isset($this->request->post['config_api_auto_login'])) {
+			$this->data['config_api_auto_login'] = $this->request->post['config_api_auto_login'];
+		} elseif (isset($store_info['config_api_auto_login'])) {
+			$this->data['config_api_auto_login'] = $store_info['config_api_auto_login'];
+		} else {
+			$this->data['config_api_auto_login'] = '';
 		}
 
 		$this->template = 'setting/store_form.tpl';

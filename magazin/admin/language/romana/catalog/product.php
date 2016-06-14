@@ -14,6 +14,9 @@ $_['text_option']            = 'Opțiuni';
 $_['text_option_value']      = 'Valoarea Opțiunii';
 $_['text_percent']           = 'Procent';
 $_['text_amount']            = 'Sumă fixă';
+$_['text_group_table']       = 'Reguli specifice pentru grupuri de clienţi';
+$_['text_customer_table']    = 'Reguli specifice pentru clienţi';
+$_['text_bulk_buy_help']     = 'În tabelele de mai jos se pot creea reguli de achiziţie en-gros pentru produsul curent care suprascrie setarea de bază a grupurilor de clienţi (cel din urmă fiind aplicat la toate produsele). În momentul cumpărării produsului clientului i se aplică regula cu cea mai mare prioritate. Regulile în ordinea descrescătoare a priorităţii: reguli specifice pt. clienţi pe produs (setat în tabela de mai jos din dreapta), reguli specifice pt. grupuri de clienţi pe produs (la fel setat în tabela de mai jos din stânga), regula generală pentru grupuri de  clienţi (setat pe pagina de editare a clienţilor).';
 
 // Column
 $_['column_name']            = 'Numele Produsului';
@@ -23,6 +26,12 @@ $_['column_price']           = 'Preț';
 $_['column_quantity']        = 'Cantitate';
 $_['column_status']          = 'Status';
 $_['column_action']          = 'Acțiune';
+$_['column_group']           = 'Grup clienţi';
+$_['column_customer']        = 'Client - nume (adresă e-mail)';
+$_['column_override_rule']   = 'Obligă cumpărare en-gros';
+
+// Tabs
+$_['tab_bulk_buy']           = 'Vânzări en-gros';
 
 // Entry
 $_['entry_name']             = 'Numele Produsului:';
@@ -44,6 +53,10 @@ $_['entry_stock_status_limits'] = 'Limitele de text al stocului:';
 $_['entry_manufacturer']     = 'Manufacturer:<br /><span class="help">(Completare Automata)</span>';
 $_['entry_date_available']   = 'Dată Disponibilitate:';
 $_['entry_quantity']         = 'Cantitate:';
+$_['entry_container_size']   = 'Bucăţi/Pachet:';
+$_['entry_package_discount'] = 'Discount/Pachet';
+$_['entry_container_help']   = 'Setează câte bucăţi sunt într-un pachet, 0 pentru produsele care nu se vând la pachet';
+$_['entry_package_discount_help'] = 'Setează discountul la pachet, 0 pentru pachetele care nu au discount';
 $_['entry_minimum']          = 'Cantitate Minimă:<br/><span class="help">Forțează o comandă minimă admisă</span>';
 $_['entry_stock_status']     = 'Statusul produselor neexistente in stoc<br/><span class="help">Status arătat atunci cînd unui produs i s-a terminat stocul</span>';
 $_['entry_price']            = 'Preț:';
@@ -73,8 +86,11 @@ $_['entry_filter']           = 'Filtre:<br /><span class="help">(Completare Auto
 $_['entry_download']         = 'Descarcari:<br /><span class="help">(Completare Automata)</span>';
 $_['entry_related']          = 'Produse Asemănătoare:<br /><span class="help">(Completare Automata)</span>';
 $_['entry_tag']          	 = 'Etichete Produs:<br /><span class="help">separate prin virgula</span>';
+$_['entry_new_product']		 = 'Produs nou:<br /><span class="help">Setare ca produs nou</span>';
 $_['entry_reward']           = 'Puncte Recompensă:';
 $_['entry_layout']           = 'Treci Peste Aspect:<br/><span class="help">Implicit, un produs afiseaza in pagina modulele care sunt asociate aspectului Produs.Aici puteti seta ca acest produs sa afiseze modulele asociate altui aspect la alegere.';
+$_['entry_add_group_rule']   = 'Adaugă regulă pentru grup de clienţi';
+$_['entry_add_customer_rule'] = 'Adaugă regulă pentru client';
 
 // Error
 $_['error_warning']          = 'Atenție: Vă rugăm verificați formularul pentru greșeli!';

@@ -746,6 +746,7 @@ class ControllerSaleCustomer extends Controller
         $this->data['text_no_results'] = $this->language->get( 'text_no_results' );
         $this->data['text_add_ban_ip'] = $this->language->get( 'text_add_ban_ip' );
         $this->data['text_remove_ban_ip'] = $this->language->get( 'text_remove_ban_ip' );
+        $this->data['text_unlimited'] = $this->language->get( 'text_unlimited' );
 
         $this->data['column_ip'] = $this->language->get( 'column_ip' );
         $this->data['column_total'] = $this->language->get( 'column_total' );
@@ -786,6 +787,7 @@ class ControllerSaleCustomer extends Controller
         $this->data['entry_description'] = $this->language->get( 'entry_description' );
         $this->data['entry_amount'] = $this->language->get( 'entry_amount' );
         $this->data['entry_points'] = $this->language->get( 'entry_points' );
+        $this->data['entry_order_limit'] = $this->language->get( 'entry_order_limit' );
         
         $this->data['button_save'] = $this->language->get( 'button_save' );
         $this->data['button_cancel'] = $this->language->get( 'button_cancel' );
@@ -944,6 +946,12 @@ class ControllerSaleCustomer extends Controller
         else
         {
             $this->data['error_address_zone'] = '';
+        }
+
+        if (isset($this->error['error_order_limit'])) {
+            $this->data['error_order_limit'] = $this->error['error_order_limit'];
+        } else {
+            $this->data['error_order_limit'] = '';
         }
 
         $url = '';
@@ -1112,6 +1120,19 @@ class ControllerSaleCustomer extends Controller
         else
         {
             $this->data['permission'] = '';
+        }
+
+        if( isset( $this->request->post['order_limit'] ) )
+        {
+            $this->data['order_limit'] = $this->request->post['order_limit'];
+        }
+        elseif( !empty( $customer_info ) )
+        {
+            $this->data['order_limit'] = $customer_info['order_limit'];
+        }
+        else
+        {
+            $this->data['order_limit'] = -1;
         }
         
         
@@ -1360,6 +1381,9 @@ class ControllerSaleCustomer extends Controller
                     $this->error['address_zone'][$key] = $this->language->get( 'error_zone' );
                 }
             }
+        }
+        if (!isset($this->request->post['order_limit']) || !is_numeric($this->request->post['order_limit']) || $this->request->post['order_limit'] < -1) {
+            $this->error['error_order_limit'] = $this->language->get('error_order_limit');
         }
 
         if( $this->error && !isset( $this->error['warning'] ) )

@@ -62,6 +62,9 @@ $_['entry_checkout']            = 'Termenii pentru Finalizare Comanda:<br /><spa
 $_['entry_order_edit']          = 'Editare comenzi:<br /><span class="help">Numarul maxim de zile in care se poate modifica o comanda. Necesar deoarece preturile si discounturile se pot schimba in timp, si pot corupe comanda daca este editata.</span>';
 $_['entry_invoice_prefix']      = 'Prefixul Facturii:<br /><span class="help"> Seteaza prefxul Facturii (ex. INV-2011-00). ID-ul Facturii va incepe cu 1 pentru fiecare prefix unic</span>';
 $_['entry_order_status']        = 'Statusul Comenzii:<br /><span class="help">Setează statusul implicit al comenzii dupa ce a fost plasata.</span>';
+$_['entry_order_unapproved_status'] = 'Statusul Comenzii Neaprobate:<br /><span class="help">Setează statusul in cazul in care competenta utilizatorului depaseste valoarea comenzii pana in momentul in care va fi aprobata de unul din useri cu competenta nelimitata.</span>';
+$_['entry_order_customer_approved_status'] = 'Statusul comenzii aprobate de clienți:<br /><span class="help">Setează statusul pentru comenzi aprobate de clienti.</span>';
+$_['entry_order_customer_refused_status'] = 'Statusul comenzii refuzate de clienți:<br /><span class="help">Setează statusul pentru comenzi refuzate de clienti.</span>';
 $_['entry_complete_status']     = 'Stasul Comenzii Finalizate:<br /><span class="help">Statusul pe care o comanda trebuie sa il atingă înainte sa ofere acces la produsele care se pot descărca și la voucherele cadou.</span>';
 $_['entry_stock_display']       = 'Afișează Stocul:<br /><span class="help">Afișează cantitatea stocului pe pagina produsului.</span>';
 $_['entry_stock_warning']       = 'Afișează Atenționarea Stoc Terminat:<br /><span class="help">Afișează mesajul stoc terminat pe pagina coșului de cumpărături dacă un produs nu se mai află în stoc atunci cand se permite cumpararea produselor care nu sunt in stoc. (Atentionare va aparea mereu daca nu se permite cumpararea produselor care nu sunt in stock.)</span>';
@@ -116,6 +119,8 @@ $_['entry_error_display']       = 'Afișează Erorile:';
 $_['entry_error_log']           = 'Jurnal De Erori:';
 $_['entry_error_filename']      = 'Numele Fisierului Jurnal De Erori:';
 $_['entry_google_analytics']    = 'Codul Google Analytics:<br /><span class="help">Autentificați-vă la <a onclick="window.open(\'http://www.google.com/analytics/\');"><u>Google Analytics</u></a> și dupa creați un profil al magazinului dvs. online. Copiați și lipiți codul analytics în acest câmp.</span>';
+$_['entry_auto_login']			= 'Auto login token';
+$_['entry_api_auto_login']		= 'API auto login';
 
 // Error
 $_['error_warning']             = 'Atenție: Vă rugăm verificați formularul pentru erori!';

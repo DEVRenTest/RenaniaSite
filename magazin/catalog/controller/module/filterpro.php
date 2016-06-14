@@ -7,6 +7,9 @@ class ControllerModuleFilterPro extends Controller
 
     protected function index( $setting )
     {
+        $this->data['is_latest'] = 'product/latest' == $this->request->get['route'];
+        $this->data['filter_flag_entry'] = $this->language->get('filter_flag_entry');
+
         if( $setting['type'] == 1 )
         {
             $this->language->load( 'product/filter' );
@@ -153,6 +156,7 @@ class ControllerModuleFilterPro extends Controller
             $this->data['button_wishlist'] = $this->language->get( 'button_wishlist' );
             $this->data['button_compare'] = $this->language->get( 'button_compare' );
             $this->data['text_price_range'] = $this->language->get( 'text_price_range' );
+            $this->data['text_new_product'] = $this->language->get( 'text_new_product' );
             $this->data['text_manufacturers'] = $this->language->get( 'text_manufacturers' );
             $this->data['text_tags'] = $this->language->get( 'text_tags' );
             $this->data['text_categories'] = $this->language->get( 'text_categories' );
@@ -569,8 +573,11 @@ class ControllerModuleFilterPro extends Controller
             'start' => ($page - 1) * $limit,
             'limit' => $limit,
             'sort' => $sort,
-            'order' => $order
+            'order' => $order,
         );
+        if (isset($this->request->post['filter_flag']) && $this->request->post['filter_flag'] == 1) {
+            $data['filter_flag'] = 1;
+        }
 
         if( isset( $this->request->post['manufacturer_id'] ) || ($filterpro_setting['display_manufacturer'] == 'none') )
         {
@@ -753,7 +760,8 @@ class ControllerModuleFilterPro extends Controller
                 'tax' => $tax,
                 'rating' => $result['rating'],
                 'reviews' => sprintf( $this->language->get( 'text_reviews' ), ( int ) $result['reviews'] ),
-                'href' => $this->url->link( 'product/product', 'path='.$this->request->get['path'].'&product_id='.$result['product_id'] )
+                'href' => $this->url->link( 'product/product', 'path='.$this->request->get['path'].'&product_id='.$result['product_id'] ),
+                'product_new' => $result['product_new'],
             );
 			/*if($_SERVER['REMOTE_ADDR'] == '5.15.59.107') {
 				echo json_encode($this->data['products']);

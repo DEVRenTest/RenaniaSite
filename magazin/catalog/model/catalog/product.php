@@ -173,7 +173,10 @@ class ModelCatalogProduct extends Model {
 				'status'           => $query->row['status'],
 				'date_added'       => $query->row['date_added'],
 				'date_modified'    => $query->row['date_modified'],
-				'viewed'           => $query->row['viewed']
+				'viewed'           => $query->row['viewed'],
+				'container_size'   => $query->row['container_size'],
+				'package_discount' => $query->row['package_discount'],
+				'product_new'      => $query->row['flag'],
 			);
       
 		} else {
@@ -228,6 +231,10 @@ class ModelCatalogProduct extends Model {
 			}
 		}	
 
+		if (isset($data['filter_flag'])) {
+			$sql .= " AND p.flag = '" . (int)$data['filter_flag'] . "'";
+		}
+		
 		if (!empty($data['filter_name']) || !empty($data['filter_tag'])) {
 			$sql .= " AND (";
 			
@@ -291,7 +298,7 @@ class ModelCatalogProduct extends Model {
 		if (!empty($data['filter_manufacturer_id'])) {
 			$sql .= " AND p.manufacturer_id = '" . (int)$data['filter_manufacturer_id'] . "'";
 		}
-		
+
 		$sql .= " GROUP BY p.product_id";
 		
 		$sort_data = array(
@@ -650,6 +657,10 @@ class ModelCatalogProduct extends Model {
 				$sql .= " AND pf.filter_id IN (" . implode(',', $implode) . ")";				
 			}
 		}
+
+		if (isset($data['filter_flag'])) {
+			$sql .= " AND p.flag = '" . (int)$data['filter_flag'] . "'";
+		}
 		
 		if (!empty($data['filter_name']) || !empty($data['filter_tag'])) {
 			$sql .= " AND (";
@@ -773,7 +784,55 @@ class ModelCatalogProduct extends Model {
         return $size_chart_name;
     }
   
+    public function customerForcedBuyBulk($product_id)
+    {
+    	$result = false;
+    	if ($this->customer->isLogged()) {
+    		// check if product has container size
+	    	$query = $this->db->query("SELECT container_size FROM " . DB_PREFIX . "product WHERE product_id = '" . (int)$product_id . "'");
+	    	if ($query->num_rows && $query->row['container_size']) {
+	    		// check for restriction
+    			$query = $this->db->query("SELECT COALESCE((SELECT force_buy_bulk FROM " . DB_PREFIX . "force_buy_bulk_override_customer WHERE customer_id = '" . $this->customer->getId() . "' AND product_id = '" . (int)$product_id . "'), (SELECT force_buy_bulk FROM " . DB_PREFIX . "force_buy_bulk_override_group WHERE customer_group_id = '" . $this->customer->getCustomerGroupId() . "' AND product_id = '" . (int)$product_id . "'), (SELECT force_buy_bulk FROM " . DB_PREFIX . "customer_group WHERE customer_group_id = '" . $this->customer->getCustomerGroupId() . "')) AS force_buy_bulk");
+    			if ($query->row['force_buy_bulk']) {
+    				$result = true;
+    			}
+	    	}
+    	}
 
-  
+    	return $result;
+    }
+    public function getPackageDiscount($product_id)
+    {
+    	$result = false;
+    	if ($this->customer->isLogged()) {
+    		$query = $this->db->query("SELECT package_discount FROM " . DB_PREFIX . "product WHERE product_id = '" . (int)$product_id . "'");
+    		if($query->num_rows) {
+    			$result = $query->row['package_discount'];
+    		}
+    	}
+    	return $result;
+    }
+  	public function lastOrderDate($product_id, $min_time_elapsed = 0, $max_time_elapsed = 0)
+  	{
+  		$now = time();
+  		$result = false;
+  		$query = $this->db->query("SELECT UNIX_TIMESTAMP(o.date_added) as date_added FROM " . DB_PREFIX . "order o LEFT JOIN " . DB_PREFIX . "order_product op ON o.order_id = op.order_id WHERE op.product_id = '" . (int)$product_id . "' AND o.order_status_id != 0 ORDER BY o.date_added DESC LIMIT 1");
+  		if ($query->num_rows) {
+  			$result = $query->row['date_added'];
+  			if (($min_time_elapsed && $min_time_elapsed > 0 && $now - $min_time_elapsed <= $query->row['date_added'])
+  			 || ($max_time_elapsed && $max_time_elapsed > 0 && $now - $max_time_elapsed > $query->row['date_added'])) {
+  				$result = false;
+  			}
+  		}
+  		return $result;
+  	}
+  	public function getProductContainerSize($product_id)
+  	{
+  		$query = $this->db->query("SELECT container_size FROM " . DB_PREFIX . "product WHERE product_id = '" . (int)$product_id . "'");
+  		if ($query->num_rows) {
+  			return (int)$query->row['container_size'];
+  		}
+  		return 0;
+  	}
 }
 ?>

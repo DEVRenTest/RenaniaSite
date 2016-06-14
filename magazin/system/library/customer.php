@@ -10,7 +10,8 @@ class Customer {
 	private $customer_group_id;
 	private $address_id;
 	private $ax_code;  
-	private $permission; 
+	private $permission;
+	private $order_limit;
   
   private $middlename; 
   private $identity_card_number;  
@@ -38,6 +39,7 @@ class Customer {
 				$this->address_id = $customer_query->row['address_id'];
         $this->ax_code = $customer_query->row['ax_code'];
         $this->permission = $customer_query->row['permission'];
+        $this->order_limit = $customer_query->row['order_limit'];
 //        $this->payment_term = $customer_query->row['payment_term'];
 							
         $this->db->query("UPDATE " . DB_PREFIX . "customer SET cart = '" . $this->db->escape(isset($this->session->data['cart']) ? serialize($this->session->data['cart']) : '') . "', wishlist = '" . $this->db->escape(isset($this->session->data['wishlist']) ? serialize($this->session->data['wishlist']) : '') . "', ip = '" . $this->db->escape($this->request->server['REMOTE_ADDR']) . "' WHERE customer_id = '" . (int)$this->customer_id . "'");
@@ -68,11 +70,7 @@ class Customer {
 				$cart = unserialize($customer_query->row['cart']);
 				
 				foreach ($cart as $key => $value) {
-					if (!array_key_exists($key, $this->session->data['cart'])) {
-						$this->session->data['cart'][$key] = $value;
-					} else {
-						$this->session->data['cart'][$key] += $value;
-					}
+					$this->session->data['cart'][$key] = $value;
 				}			
 			}
 
@@ -115,6 +113,7 @@ class Customer {
 		$this->db->query("UPDATE " . DB_PREFIX . "customer SET cart = '" . $this->db->escape(isset($this->session->data['cart']) ? serialize($this->session->data['cart']) : '') . "', wishlist = '" . $this->db->escape(isset($this->session->data['wishlist']) ? serialize($this->session->data['wishlist']) : '') . "' WHERE customer_id = '" . (int)$this->customer_id . "'");
 		
 		unset($this->session->data['customer_id']);
+		unset($this->session->data['remote_order_url']);
 
 		$this->customer_id = '';
 		$this->firstname = '';
@@ -210,6 +209,10 @@ class Customer {
     public function getPermission() {
         return $this->permission;
   	}
+
+  	public function getOrderLimit() {
+        return $this->order_limit;
+  	}
     
 //    public function getPaymentTerm() {
 //        return $this->payment_term;
@@ -226,6 +229,6 @@ class Customer {
 	
 		return $query->row['total'];	
   	}	
-    
+
 }
 ?>

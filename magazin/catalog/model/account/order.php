@@ -1,7 +1,12 @@
 <?php
 class ModelAccountOrder extends Model {
-	public function getOrder($order_id) {
-		$order_query = $this->db->query("SELECT * FROM `" . DB_PREFIX . "order` WHERE order_id = '" . (int)$order_id . "' AND customer_id = '" . (int)$this->customer->getId() . "' AND order_status_id > '0'");
+	public function getOrder($order_id, $any_customer = false) {
+		$sql = "SELECT * FROM `" . DB_PREFIX . "order` WHERE order_id = '" . (int)$order_id . "' AND order_status_id > '0'";
+		if (!$any_customer) {
+			$sql .= " AND customer_id = '" . (int)$this->customer->getId() . "'";
+		}
+
+		$order_query = $this->db->query($sql);
 
 		if ($order_query->num_rows) {
 			$country_query = $this->db->query("SELECT * FROM `" . DB_PREFIX . "country` WHERE country_id = '" . (int)$order_query->row['payment_country_id'] . "'");
@@ -208,6 +213,13 @@ class ModelAccountOrder extends Model {
 		
 		return $query->row['total'];
 	}	
+
+	public function getOrderStatusId($order_id)
+	{
+		$q = $this->db->query("SELECT order_status_id FROM " . DB_PREFIX . "order WHERE order_id = '" . (int)$order_id . "'");
+
+		return $q->row['order_status_id'];
+	}
 	
 }
 ?>

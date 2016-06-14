@@ -48,20 +48,63 @@
         </tr>
       </table>
     </div>
-    <h2 class="secondary-title"><?php echo $text_your_address; ?></h2>
+    <h2 class="secondary-title"><?php echo $entry_account_type; ?></h2>
     <div class="content">
       <table class="form">
-         <tr id="tax-id-display">
-          <td><?php echo $entry_tax_id; ?></td>
-          <td><input type="text" name="tax_id" value="<?php echo $tax_id; ?>" />
-            <?php if ($error_tax_id) { ?>
-            <span class="error"><?php echo $error_tax_id; ?></span>
-            <?php } ?></td>
+        <tr>
+          <td><?php echo $entry_account_type; ?></td>
+          <td>
+            <input id="radio_account_type_private" type="radio" name="account_type" value="0"<?php if (!$account_type) { ?> checked="checked"<?php } ?>/>
+            <label for="radio_account_type_private"><?php echo $radio_button_private; ?></label>
+            <input id="radio_account_type_company" type="radio" name="account_type" value="1"<?php if ($account_type) { ?> checked="checked"<?php } ?>/>
+            <label for="radio_account_type_company"><?php echo $radio_button_company; ?></label>
+          </td>
         </tr>
-        <tr id="company-display">
-          <td><?php echo $entry_company; ?></td>
-          <td><input type="text" name="company" value="<?php echo $company; ?>" /></td>
-        </tr>        
+        <tr class="hide-private-account"<?php if (!$account_type) { ?> style="display: none;"<?php } ?>>
+          <td><span class="required">*</span> <?php echo $entry_company; ?></td>
+          <td>
+            <input type="text" name="company_name" value="<?php echo $company_name; ?>"<?php if ($account_type) { ?> required="required"<?php } else { ?> disabled="disabled"<?php } ?>/>
+            <?php if ($error_company_name) { ?>
+            <span class="error"><?php echo $error_company_name; ?></span>
+            <?php } ?>
+          </td>
+        </tr>
+        <tr class="hide-private-account"<?php if (!$account_type) { ?> style="display: none;"<?php } ?>>
+          <td><span class="required">*</span> <?php echo $entry_CUI; ?></td>
+          <td>
+            <input type="text" name="CUI" value="<?php echo $CUI; ?>"<?php if ($account_type) { ?> required="required"<?php } else { ?> disabled="disabled"<?php } ?>/>
+            <?php if ($error_CUI) { ?>
+            <span class="error"><?php echo $error_CUI; ?></span>
+            <?php } ?>
+          </td>
+        </tr>
+        <tr class="hide-private-account"<?php if (!$account_type) { ?> style="display: none;"<?php } ?>>
+          <td><span class="required">*</span> <?php echo $entry_CIF; ?></td>
+          <td>
+            <input type="text" name="CIF" value="<?php echo $CIF; ?>"<?php if ($account_type) { ?> required="required"<?php } else { ?> disabled="disabled"<?php } ?>/>
+            <?php if ($error_CIF) { ?>
+            <span class="error"><?php echo $error_CIF; ?></span>
+            <?php } ?>
+          </td>
+        </tr>
+      </table>
+    </div>
+    <script>
+      $(document).ready(function(){
+        $('input[name="account_type"]').on('change', function() {
+          attributes = ['disabled', 'required'];
+          if ($(this).val() == 0) {
+            attributes.reverse();
+          }
+          $('input[name="company_name"], input[name="CUI"], input[name="CIF"]').removeAttr(attributes[0]);
+          $('input[name="company_name"], input[name="CUI"], input[name="CIF"]').attr(attributes[1], attributes[1]);
+          $('.hide-private-account').slideToggle('slow');
+        });
+      });
+    </script>
+    <h2 class="secondary-title"><?php echo $text_your_address; ?></h2>
+    <div class="content">
+      <table class="form">       
         <tr style="display: <?php echo (count($customer_groups) > 1 ? 'table-row' : 'none'); ?>;">
           <td><?php echo $entry_customer_group; ?></td>
           <td><?php foreach ($customer_groups as $customer_group) { ?>
@@ -76,20 +119,6 @@
             <?php } ?>
             <?php } ?></td>
         </tr>      
-        <tr id="company-id-display">
-          <td><span id="company-id-required" class="required">*</span> <?php echo $entry_company_id; ?></td>
-          <td><input type="text" name="company_id" value="<?php echo $company_id; ?>" />
-            <?php if ($error_company_id) { ?>
-            <span class="error"><?php echo $error_company_id; ?></span>
-            <?php } ?></td>
-        </tr>
-        <tr id="tax-id-display">
-          <td><span id="tax-id-required" class="required">*</span> <?php echo $entry_tax_id; ?></td>
-          <td><input type="text" name="tax_id" value="<?php echo $tax_id; ?>" />
-            <?php if ($error_tax_id) { ?>
-            <span class="error"><?php echo $error_tax_id; ?></span>
-            <?php } ?></td>
-        </tr>
         <tr>
           <td><span class="required">*</span> <?php echo $entry_address_1; ?></td>
           <td><input type="text" name="address_1" value="<?php echo $address_1; ?>" />

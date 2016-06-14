@@ -1,4 +1,6 @@
 <?php echo $header; ?>
+<div class="category">
+<button class="button order_status" id="sort_toggle"><?php echo $button_sort_toggle; ?></button>
 <div class="breadcrumb" xmlns="http://www.w3.org/1999/html">
     <?php foreach ($breadcrumbs as $breadcrumb) { ?>
     <span itemscope itemtype="http://data-vocabulary.org/Breadcrumb"><?php echo $breadcrumb['separator']; ?><a href="<?php echo $breadcrumb['href']; ?>" itemprop="url"><span itemprop="title"><?php echo $breadcrumb['text']; ?></span></a></span>
@@ -88,25 +90,25 @@
                 <div class="sort"><?php /* ?><b><?php echo $text_sort; ?></b><?php */ ?>
                     <div id="sort_heading"><?php echo $text_sort; ?></div>
                     <ul style="display: none">
-                        <?php foreach ($sorts as $sorts) { ?>
-                            <?php if ($sorts['value'] == $sort . '-' . $order) { ?>
-                            <li><a href="<?php echo $sorts['href']; ?>" class="selected"><?php echo $sorts['text']; ?></a></li>
+                        <?php foreach ($sorts as $srt) { ?>
+                            <?php if ($srt['value'] == $sort . '-' . $order) { ?>
+                            <li><a data-sort="<?php echo $srt['href']; ?>" class="selected"><?php echo $srt['text']; ?></a></li>
                             <?php } else { ?>
-                            <li><a href="<?php echo $sorts['href']; ?>"><?php echo $sorts['text']; ?></a></li>
+                            <li><a data-sort="<?php echo $srt['href']; ?>"><?php echo $srt['text']; ?></a></li>
                             <?php } ?>
                         <?php } ?>
                     </ul>
-                    <?php /* ?>
-                    <select onchange="location = this.value;">
-                        <?php foreach ($sorts as $sorts) { ?>
-                        <?php if ($sorts['value'] == $sort . '-' . $order) { ?>
-                        <option value="<?php echo $sorts['href']; ?>" selected="selected"><?php echo $text_sort; ?></option>
+                    <?php  ?>
+                    <select id="actual-sort" style="display: none;">
+                        <?php foreach ($sorts as $srt) { ?>
+                        <?php if ($srt['value'] == $sort . '-' . $order) { ?>
+                        <option value="<?php echo $srt['href']; ?>" selected="selected"><?php echo $text_sort; ?></option>
                         <?php } else { ?>
-                        <option value="<?php echo $sorts['href']; ?>"><?php echo $sorts['text']; ?></option>
+                        <option value="<?php echo $srt['href']; ?>"><?php echo $srt['text']; ?></option>
                         <?php } ?>
                         <?php } ?>
                     </select>
-                    <?php */ ?>
+                    <?php  ?>
                 </div>
             </div>
             <div class="product-filter">
@@ -142,6 +144,9 @@
     <div class=" <?php echo isset($product['labels']) && is_array($product['labels']) && isset($product['labels']['outofstock']) ? 'outofstock' : ''; ?>">
       <?php if ($product['thumb']) { ?>
         <div class="image">
+        <?php if ($product['product_new']) { ?>
+        <span class="label-latest"></span>
+        <?php } ?>
             <a href="<?php echo $product['href']; ?>" <?php if(isset($product['thumb2']) && $product['thumb2']): ?> class="has-second-image" style="background: url('<?php echo $product['thumb2']; ?>') no-repeat;" <?php endif; ?>>
                 <img class="lazy first-image" width="<?php echo $this->journal2->settings->get('config_image_width'); ?>" height="<?php echo $this->journal2->settings->get('config_image_height'); ?>" src="<?php echo $this->journal2->settings->get('product_dummy_image'); ?>" data-src="<?php echo $product['thumb']; ?>" title="<?php echo $product['name']; ?>" alt="<?php echo $product['name']; ?>" />
             </a>
@@ -161,6 +166,9 @@
         </div>
       <?php } else { ?>
         <div class="image">
+          <?php if ($product['product_new']) { ?>
+            <span class="label-latest"></span>
+          <?php } ?>
             <a href="<?php echo $product['href']; ?>">
                 <img class="first-image" width="<?php echo $this->journal2->settings->get('config_image_width'); ?>" height="<?php echo $this->journal2->settings->get('config_image_height'); ?>" src="<?php echo $this->journal2->settings->get('product_no_image'); ?>" title="<?php echo $product['name']; ?>" alt="<?php echo $product['name']; ?>" />
             </a>
@@ -357,4 +365,10 @@ if (view) {
 	display('<?php echo $this->journal2->settings->get("product_view", "grid"); ?>');
 }
 //--></script>
+</div>
 <?php echo $footer; ?>
+<script>
+$( "#sort_toggle" ).click(function() {
+    $('#category_toggle').toggle("swing");
+});
+</script>

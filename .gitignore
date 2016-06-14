@@ -65,3 +65,41 @@ $RECYCLE.BIN/
 
 # Windows shortcuts
 *.lnk
+
+# Editor/IDE
+# =========================
+
+# cache files for sublime text
+*.tmlanguage.cache
+*.tmPreferences.cache
+*.stTheme.cache
+
+# workspace files are user-specific
+*.sublime-workspace
+
+# project files should be checked into the repository, unless a significant
+# proportion of contributors will probably not be using SublimeText
+*.sublime-project
+
+# sftp configuration file
+sftp-config.json
+
+# Opencart
+# =========================
+
+magazin/config.php
+magazin/admin/config.php
+magazin/download/
+magazin/system/cache/
+magazin/system/logs/
+magazin/image/cache/
+magazin/image/data/
+magazin/vqmod/logs/
+magazin/vqmod/vqcache/
+magazin/vqmod/mods.cache
+magazin/xmls/
+magazin/system/library/kint/
+magazin/catalog/controller/common/test.php
+magazin/admin/controller/common/test.php
+deployment/
+deploy/

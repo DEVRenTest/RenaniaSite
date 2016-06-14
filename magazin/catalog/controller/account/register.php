@@ -88,6 +88,12 @@ class ControllerAccountRegister extends Controller {
 		$this->data['entry_newsletter'] = $this->language->get('entry_newsletter');
     	$this->data['entry_password'] = $this->language->get('entry_password');
     	$this->data['entry_confirm'] = $this->language->get('entry_confirm');
+    	$this->data['entry_CUI'] = $this->language->get('entry_CUI');
+    	$this->data['entry_CIF'] = $this->language->get('entry_CIF');
+    	$this->data['entry_account_type'] = $this->language->get('entry_account_type');
+    	$this->data['radio_button_private'] = $this->language->get('radio_button_private');
+    	$this->data['radio_button_company'] = $this->language->get('radio_button_company');
+
 
 		$this->data['button_continue'] = $this->language->get('button_continue');
     
@@ -137,6 +143,24 @@ class ControllerAccountRegister extends Controller {
 			$this->data['error_company_id'] = $this->error['company_id'];
 		} else {
 			$this->data['error_company_id'] = '';
+		}
+
+		if (isset($this->error['company_name'])) {
+			$this->data['error_company_name'] = $this->error['company_name'];
+		} else {
+			$this->data['error_company_name'] = '';
+		}
+
+		if (isset($this->error['CIF'])) {
+			$this->data['error_CIF'] = $this->error['CIF'];
+		} else {
+			$this->data['error_CIF'] = '';
+		}
+
+		if (isset($this->error['CUI'])) {
+			$this->data['error_CUI'] = $this->error['CUI'];
+		} else {
+			$this->data['error_CUI'] = '';
 		}
 		
     /*  balazs */
@@ -356,6 +380,30 @@ class ControllerAccountRegister extends Controller {
 		} else {
 			$this->data['agree'] = false;
 		}
+
+		if (isset($this->request->post['account_type'])) {
+			$this->data['account_type'] = $this->request->post['account_type'];
+		} else {
+			$this->data['account_type'] = 0;
+		}
+
+		if (isset($this->request->post['company_name'])) {
+			$this->data['company_name'] = $this->request->post['company_name'];
+		} else {
+			$this->data['company_name'] = '';
+		}
+
+		if (isset($this->request->post['CUI'])) {
+			$this->data['CUI'] = $this->request->post['CUI'];
+		} else {
+			$this->data['CUI'] = '';
+		}
+
+		if (isset($this->request->post['CIF'])) {
+			$this->data['CIF'] = $this->request->post['CIF'];
+		} else {
+			$this->data['CIF'] = '';
+		}
 		
 		if (file_exists(DIR_TEMPLATE . $this->config->get('config_template') . '/template/account/register.tpl')) {
 			$this->template = $this->config->get('config_template') . '/template/account/register.tpl';
@@ -469,6 +517,18 @@ class ControllerAccountRegister extends Controller {
 			
 			if ($information_info && !isset($this->request->post['agree'])) {
       			$this->error['warning'] = sprintf($this->language->get('error_agree'), $information_info['title']);
+			}
+		}
+
+		if (isset($this->request->post['account_type']) && $this->request->post['account_type'] == 1) { // ['account_type'] = 0 (person) | 1 (company)
+			if (!isset($this->request->post['company_name']) || $this->request->post['company_name'] == '') {
+				$this->error['company_name'] = $this->language->get('error_company_name');
+			}
+			if (!isset($this->request->post['CUI']) || $this->request->post['CUI'] == '') {
+				$this->error['CUI'] = $this->language->get('error_CUI');
+			}
+			if (!isset($this->request->post['CIF']) || $this->request->post['CIF'] == '') {
+				$this->error['CIF'] = $this->language->get('error_CIF');
 			}
 		}
 		

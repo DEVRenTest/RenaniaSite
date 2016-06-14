@@ -74,7 +74,11 @@ class ControllerMyocLivePriceUpdate extends Controller
             $product_info['special'] = false;
         }
 
-        $verbosePrice = $this->currency->format( $taxOfOneProduct )." (".$this->language->get( 'text_withouth_vat' )." ".$this->currency->format( $product_info['price'] )." ".")";
+        if($product_info['container_size']) {
+       		$verbosePrice = $this->currency->format( $taxOfOneProduct )." (".$this->language->get( 'text_withouth_vat' )." ".$this->currency->format( $product_info['price'] )." ".")" ."<br>". $this->language->get( 'text_price_per_package' ) ." ". $this->currency->format( ($taxOfOneProduct * $product_info['container_size']) - (($taxOfOneProduct * $product_info['container_size'] * $product_info['package_discount']) / 100) ) ." (".$this->language->get( 'text_withouth_vat' )." ".$this->currency->format(($product_info['price'] * $product_info['container_size']) - (($product_info['price'] * $product_info['container_size'] * $product_info['package_discount']) / 100) )." ".")";
+    	} else {
+    		$verbosePrice = $this->currency->format( $taxOfOneProduct )." (".$this->language->get( 'text_withouth_vat' )." ".$this->currency->format( $product_info['price'] )." ".")";
+    	}
 //    $verbosePrice = $this->currency->format( $finalPrice );
 
         /*if($_SERVER['REMOTE_ADDR'] == '5.2.202.87'){
@@ -131,7 +135,7 @@ class ControllerMyocLivePriceUpdate extends Controller
 
                     $message .= $this->language->get('text_not_yet_been_defined_special_price');
         
-                    $this->sendAlertMail( $subject, $message );
+                    //$this->sendAlertMail( $subject, $message );
                     
                 }
                 else if( $priceB2B == 0 && $optionNr >0 && sizeof( $option ) > 0 )
@@ -177,7 +181,7 @@ class ControllerMyocLivePriceUpdate extends Controller
 
                         $message .= $this->language->get('text_not_yet_been_defined_special_price');                       
 
-                       $this->sendAlertMail( $subject, $message );      
+                       //$this->sendAlertMail( $subject, $message );      
                     }
 
                 }
@@ -192,6 +196,14 @@ class ControllerMyocLivePriceUpdate extends Controller
 
                     $pr = $this->currency->format( $taxOfOneProductB2B ) ." (".$this->language->get( 'text_withouth_vat' )." "
                     .$this->currency->format( $priceB2B )." ".")";
+
+                    if ($product_info['container_size']) {
+                        $pr .= "<br>"
+                            . $this->language->get('text_price_per_package') 
+                            . " "
+                            . $this->currency->format($taxOfOneProductB2B * $product_info['container_size'] * (100 - $product_info['package_discount']) / 100)
+                            . " (" . $this->language->get('text_withouth_vat') . " " . $this->currency->format($priceB2B * $product_info['container_size'] * (100 - $product_info['package_discount']) / 100) . " )";
+                    }
                     
                     $concatenated_code = $this->cart->getProductAxCode( $product_id, $option_data );
                     
@@ -203,16 +215,29 @@ class ControllerMyocLivePriceUpdate extends Controller
                     $have_b2b_price = 1;
                 }                                 
             }
-
+            $product_ax_code = $this->cart->getProductAxCode( $product_id, $option_data );
+            $b2b_product_stoc = $this->getB2BProductStock( $product_ax_code );
 
             $json['have_b2b_price'] = $have_b2b_price;
             $json['price'] = ( $B2B ? $pr : $finalValue ); // $finalValue;
-            $json['price'] = substr_replace($json['price'], ' <span class="price_currency">', strcspn($json['price'], 'ABCDEFGHJIJKLMNOPQRSTUVWXYZ'), 0).'</span>';
+            $json['price'] = substr_replace($json['price'], ' <span class="price_currency">', strcspn($json['price'], 'ABCDEFGHJIJKLMNOPQRSTUVWXYZ'), 0). '</span>';
             //$newstr = substr_replace($oldstr, $str_to_insert, $pos, 0);
             //$json['special'] = $this->currency->format( $this->cart->getTotal() );
             $json['special'] = $product_info['special'];
             $json['extax'] = $this->currency->format( $this->cart->getSubTotal() );
-            $json['stock'] = ($B2B ? $b2b_product_stoc : $product_info['stock_status']);
+            //$json['stock'] = ($B2B ? $b2b_product_stoc : $product_info['stock_status']);
+            if ($B2B)
+            {
+                $json['stock'] = $b2b_product_stoc;
+            }
+            else if ($b2b_product_stoc == 0)
+            {
+                $json['stock'] = $this->language->get('text_no_stock');
+            } 
+            else 
+            {
+                $json['stock'] = $this->language->get('text_in_stock');
+            }
             //$json['stock'] = $product_info['stock_status']; //$product_info['product_option_quantity'];//$product_info['stock_status'];
             // $json['stock'] = $product_info['quantity'];
             $json['text_qty'] =  $this->language->get('text_qty');// '  CODE='.$concatenated_code. " ** "
@@ -224,6 +249,8 @@ class ControllerMyocLivePriceUpdate extends Controller
             $json['text_out_of_stock'] = $this->language->get('text_out_of_stock');
             $json['text_delivery'] = $this->language->get('text_delivery');
             $json['text_please_select_desired_options'] = $this->language->get('text_please_select_desired_options');
+            $json['raw_price_data'] = array('base_price' => round((($B2B && $priceB2B) ? $priceB2B : $product_info['price']), 2));
+            $json['raw_price_data']['vat_price'] = round($this->tax->calculate($json['raw_price_data']['base_price'], $product_info['tax_class_id'], TRUE), 2);
         }
 
         $this->cart->clear();

@@ -160,6 +160,13 @@ class ModelCheckoutOrder extends Model {
 		$order_info = $this->getOrder($order_id);
 		 
 		if ($order_info && !$order_info['order_status_id']) {
+			$this->load->model('account/customer');
+
+			// check if allocated budget is exceedded
+			if ($this->model_account_customer->exceedsBudget($order_info['customer_id']) && $this->config->get('config_unapproved_order_status_id')) {
+				$order_status_id = $this->config->get('config_unapproved_order_status_id');
+			}
+
 			// Fraud Detection
 			if ($this->config->get('config_fraud_detection')) {
 				$this->load->model('checkout/fraud');
@@ -174,7 +181,6 @@ class ModelCheckoutOrder extends Model {
 			// Ban IP
 			$status = false;
 			
-			$this->load->model('account/customer');
 			
 			if ($order_info['customer_id']) {
 				$results = $this->model_account_customer->getIps($order_info['customer_id']);
@@ -192,7 +198,11 @@ class ModelCheckoutOrder extends Model {
 			
 			if ($status) {
 				$order_status_id = $this->config->get('config_order_status_id');
-			}		
+			}
+
+			if ($order_status_id == $this->config->get('config_unapproved_order_status_id')) {
+				$this->mailToSuperior($order_id);
+			}
 				
 			$this->db->query("UPDATE `" . DB_PREFIX . "order` SET order_status_id = '" . (int)$order_status_id . "', date_modified = NOW() WHERE order_id = '" . (int)$order_id . "'");
 
@@ -675,6 +685,53 @@ class ModelCheckoutOrder extends Model {
 				$mail->send();
 			}
 		}
+	}
+
+	public function mailToSuperior($order_id)
+	{
+		$order_info = $this->getOrder($order_id);
+		$send = false;
+		$order_customer_query = $this->db->query("SELECT c.ax_code FROM " . DB_PREFIX . "order o LEFT JOIN " . DB_PREFIX . "customer c ON c.customer_id = o.customer_id  WHERE o.order_id = '" . (int)$order_id . "'");
+		if ($order_customer_query->num_rows && $order_customer_query->row['ax_code']) {
+			$order_email_query = $this->db->query("SELECT email FROM " . DB_PREFIX . "customer WHERE ax_code = '" . $this->db->escape($order_customer_query->row['ax_code']) . "' AND order_limit = -1");
+			if ($order_email_query->num_rows) {
+				$supervisors = $order_email_query->rows;
+				$send = true;
+			}
+		}
+
+		if ($send) {
+			$language = new Language($order_info['language_directory']);
+			$language->load($order_info['language_filename']);
+			$language->load('mail/order');
+
+			$subject = sprintf($language->get('text_order_approved_subject'), html_entity_decode($order_info['store_name'], ENT_QUOTES, 'UTF-8'), $order_id);
+			$message = sprintf($language->get('text_order_approved_text'), $this->url->link( 'account/orderapproval/info', '&order_id=' . $order_id));
+
+			$mail = new Mail(); 
+			$mail->protocol = $this->config->get('config_mail_protocol');
+			$mail->parameter = $this->config->get('config_mail_parameter');
+			$mail->hostname = $this->config->get('config_smtp_host');
+			$mail->username = $this->config->get('config_smtp_username');
+			$mail->password = $this->config->get('config_smtp_password');
+			$mail->port = $this->config->get('config_smtp_port');
+			$mail->timeout = $this->config->get('config_smtp_timeout');
+			$mail->setFrom($this->config->get('config_email'));
+			$mail->setSender($this->config->get('config_name'));
+			$mail->setSubject(html_entity_decode($subject, ENT_QUOTES, 'UTF-8'));
+			$mail->setHtml(html_entity_decode($message, ENT_QUOTES, 'UTF-8'));
+
+			foreach ($supervisors as $supervisor) {
+
+				$mail->setTo($supervisor);
+				$mail->send();
+
+			}
+			return true;
+		} else {
+			return false;
+		}
+
 	}
 }
 ?>

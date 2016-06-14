@@ -288,7 +288,7 @@
 
 			<add><![CDATA[
 
-				if ((utf8_strlen($this->request->post['middlename']) > 32)) {
+				if (isset($this->request->post['middlename']) && (utf8_strlen($this->request->post['middlename']) > 32)) {
 
 					$this->error['middlename'] = $this->language->get('error_middlename');
 

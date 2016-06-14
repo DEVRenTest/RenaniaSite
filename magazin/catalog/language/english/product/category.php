@@ -25,5 +25,8 @@ $_['text_rating_asc']   = 'Rating (Lowest)';
 $_['text_rating_desc']  = 'Rating (Highest)';
 $_['text_model_asc']    = 'Model (A - Z)';
 $_['text_model_desc']   = 'Model (Z - A)';
+$_['text_date_added_asc'] = 'Date added ASC';
+$_['text_date_added_desc'] = 'Date added DESC';
 $_['text_limit']        = 'Show:';
+$_['filter_flag_entry']	= 'New products';
 ?>

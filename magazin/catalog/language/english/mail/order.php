@@ -34,4 +34,6 @@ $_['text_update_order_status']  = 'Your order has been updated to the following 
 $_['text_update_comment']       = 'The comments for your order are:';
 $_['text_update_link']          = 'To view your order click on the link below:';
 $_['text_update_footer']        = 'Please reply to this email if you have any questions.';
+$_['text_order_approved_subject'] = '%s - Order pending approval %s';
+$_['text_order_approved_text'] = 'To approve/reject order or further details about the order, click <a href="%s">here</a>.';
 ?>
