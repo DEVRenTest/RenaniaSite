@@ -66,7 +66,7 @@ class ControllerProductSearch extends Controller {
 		}
 		
 		if (isset($this->request->get['search'])) {
-			$this->document->setTitle($this->language->get('heading_title') .  ' - ' . $this->request->get['search']);
+			$this->document->setTitle($this->request->get['search'].$this->language->get('heading_title'));
 		} else {
 			$this->document->setTitle($this->language->get('heading_title'));
 		}
@@ -126,7 +126,7 @@ class ControllerProductSearch extends Controller {
    		);
 		
 		if (isset($this->request->get['search'])) {
-    		$this->data['heading_title'] = $this->language->get('heading_title') .  ' - ' . $this->request->get['search'];
+    		$this->data['heading_title'] =  $this->request->get['search'].$this->language->get('heading_title');
 		} else {
 			$this->data['heading_title'] = $this->language->get('heading_title');
 		}

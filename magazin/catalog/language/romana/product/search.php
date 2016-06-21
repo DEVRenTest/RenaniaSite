@@ -1,5 +1,5 @@
 <?php
-$_['heading_title'] = 'Cautare';
+$_['heading_title'] = ' | Renania | Lider in Echipamente de Protectie ';  
 $_['text_search'] = 'Produse ce indeplinesc cerintele';
 $_['text_keyword'] = 'Cuvinte cheie';
 $_['text_category'] = 'Toate categoriile';
