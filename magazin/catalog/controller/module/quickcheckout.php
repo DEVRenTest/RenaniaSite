@@ -2414,6 +2414,10 @@ class ControllerModuleQuickcheckout extends Controller
         $this->load->model( 'setting/setting' );
         $setting_info_free = $this->model_setting_setting->getSetting('free', $this->config->get( 'config_store_id' ));
 
+        if (!$setting_info_free) {
+            $setting_info_free = $this->model_setting_setting->getSetting('free');
+        }
+
         foreach( $results as $result )
         {
             if( $this->config->get( $result['code'].'_status' ) )

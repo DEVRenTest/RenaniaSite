@@ -977,6 +977,9 @@ class ControllerCheckoutCart extends Controller
 			// se citeste valoarea de la care taxa de transpot este gratuita
 			$this->load->model( 'setting/setting' );
 			$setting_info_free = $this->model_setting_setting->getSetting('free', $this->config->get( 'config_store_id' ));
+            if (!$setting_info_free) {
+                $setting_info_free = $this->model_setting_setting->getSetting('free');
+            }
 /*			print_r( $results );
 			die();*/
 
