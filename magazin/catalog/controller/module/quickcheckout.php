@@ -2434,7 +2434,7 @@ class ControllerModuleQuickcheckout extends Controller
                         {
                             $this->settings['step']['shipping_method']['default_option'] = 'free';
 
-							if ( $result['code'] == 'free' || $result['code'] == 'pickup' )
+							if ( $result['code'] == 'free' || $result['code'] == 'pickup' || $result['code'] == 'pickup2' || $result['code'] == 'pickup3')
 							{
 								$quote_data[$result['code']] = array(
 									'title' => $quote['title'],
@@ -2461,7 +2461,7 @@ class ControllerModuleQuickcheckout extends Controller
                         {
                             $this->settings['step']['shipping_method']['default_option'] = 'free';
 
-							if ( $result['code'] == 'free' || $result['code'] == 'pickup'  )
+							if ( $result['code'] == 'free' || $result['code'] == 'pickup' || $result['code'] == 'pickup2' || $result['code'] == 'pickup3')
 							{
 								$quote_data[$result['code']] = array(
 									'title' => $quote['title'],
@@ -2472,7 +2472,7 @@ class ControllerModuleQuickcheckout extends Controller
 							}
                         }
                         else
-                        if ( $result['code'] == 'courier' || $result['code'] == 'pickup' )
+                        if ( $result['code'] == 'courier' || $result['code'] == 'pickup' || $result['code'] == 'pickup2' || $result['code'] == 'pickup3')
                         {
 //                            $quote_data['courier'] = array(
 //                                'title' => $quote['title'],
