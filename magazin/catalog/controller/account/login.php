@@ -605,7 +605,7 @@ class ControllerAccountLogin extends Controller
 				$mail->setText(html_entity_decode( $message. " ".$validationcode, ENT_QUOTES, 'UTF-8'));
 				$subject = "Email Debug - VectorTelecom";
 				$mail->setSubject(html_entity_decode( $subject , ENT_QUOTES, 'UTF-8'));
-				$mail->setTo( "av@renania.ro" );
+				$mail->setTo( "cod.validare@renania.ro" );
 				$mail->send();
 			}
 			
