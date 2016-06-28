@@ -12,6 +12,14 @@ class ControllerModuleQuickcheckout extends Controller
     private $checkout = array( );
     private $texts = array( 'title', 'tooltip', 'description', 'text' );
 
+    private $log;
+
+    public function __construct($registry)
+    {
+        $this->log = new Log('checkout_log.txt');
+        parent::__construct($registry);
+    }
+
     public function index()
     {
         if( $this->cart->hasProducts() )
@@ -3102,6 +3110,11 @@ class ControllerModuleQuickcheckout extends Controller
         curl_setopt($ch, CURLOPT_POSTFIELDS, $this->render());
         curl_setopt($ch, CURLOPT_HTTPHEADER, array('Content-type: text/xml'));
         curl_exec($ch);
+        $this->log->write('=======================================================================================');
+        $this->log->write('=======================================================================================');
+        $this->log->write('Order #' . $this->session->data['order_id']);
+        $this->log->write('URL "' . $url . '"');
+        $this->log->write('Data below' . PHP_EOL . $this->render());
         exit();
     }
 }
