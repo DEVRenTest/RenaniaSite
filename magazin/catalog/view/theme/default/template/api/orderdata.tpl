@@ -20,7 +20,7 @@
   </Header>
   <Message>
     <PunchOutOrderMessage>
-      <BuyerCookie></BuyerCookie>
+      <BuyerCookie><?php echo $remote_cookie; ?></BuyerCookie>
       <PunchOutOrderMessageHeader operationAllowed="edit">
         <Total>
           <Money currency="<?php echo $currency_code; ?>"><?php echo $total; ?></Money>

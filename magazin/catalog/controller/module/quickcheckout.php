@@ -3098,6 +3098,7 @@ class ControllerModuleQuickcheckout extends Controller
     private function remoteUserSendOrderData($data, $url)
     {
         $this->data = $data;
+        $this->data['remote_cookie'] = $this->session->data['remote_cookie'];
         $this->template = 'default/template/api/orderdata.tpl';
         $ch = curl_init();
         curl_setopt($ch, CURLOPT_URL, $url);

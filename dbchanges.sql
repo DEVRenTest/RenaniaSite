@@ -59,4 +59,7 @@ ADD UNIQUE (
 );
 
 -- customer autologin table changes
-ALTER TABLE `oc_autologin` ADD `url` VARCHAR( 64 ) NULL ;
+ALTER TABLE `oc_autologin` ADD `url` VARCHAR( 512 ) NULL ;
+
+-- customer autologin table cookie
+ALTER TABLE `oc_autologin` ADD `cookie` VARCHAR( 512 ) NULL DEFAULT NULL ;
