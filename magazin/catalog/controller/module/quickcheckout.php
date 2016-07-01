@@ -3099,6 +3099,7 @@ class ControllerModuleQuickcheckout extends Controller
     {
         $this->data = $data;
         $this->data['remote_cookie'] = $this->session->data['remote_cookie'];
+        $this->data['order_id'] = $this->session->data['order_id'];
         $this->template = 'default/template/api/orderdata.tpl';
         $ch = curl_init();
         curl_setopt($ch, CURLOPT_URL, $url);
