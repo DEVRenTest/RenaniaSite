@@ -67,3 +67,38 @@ body.group4 .secondary-menu-item-3 span {
 		visibility: hidden;
 	}
 }
+
+#cc-notification {
+	display: inline !important;
+}
+
+.list .bad_row td {
+	background-color: rgba(255, 0, 0, 0.3);
+}
+.list .bad_color {
+	background-color: rgba(0, 255, 0, 0.3);
+}
+.list .bad_size {
+	background-color: rgba(0, 0, 255, 0.3);
+}
+
+.model_error_color {
+	background-color: rgba(255, 0, 0, 0.3);
+	color:white;
+	padding-right:15px;
+	padding-left: 15px;
+}
+
+.color_error_color {
+	background-color: rgba(0, 255, 0, 0.3);
+	color:white;
+	padding-right:15px;
+	padding-left: 15px;
+}
+
+.size_error_color {
+	background-color: rgba(0, 0, 255, 0.3);
+	color:white;
+	padding-right:15px;
+	padding-left: 15px;
+}
