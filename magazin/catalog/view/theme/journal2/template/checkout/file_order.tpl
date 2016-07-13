@@ -16,7 +16,7 @@
         <td><h4><?php echo $text_file_upload ?></h4></td>
         <td width="80%">
           <form method="post" enctype="multipart/form-data">
-            <input type="file" name="file" id="file" accept=".csv"/>
+            <input type="file" name="file" id="file" />
             <input type="submit" name="submit" value='<?php echo $upload_order_button ?>' class="button" style="float: right" />
           </form>
         </td>

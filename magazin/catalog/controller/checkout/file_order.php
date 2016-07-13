@@ -10,13 +10,13 @@ class ControllerCheckoutFileOrder extends Controller {
         $this->data['invalid_model'] = array();
         $this->data['invalid_color'] = array();
         $this->data['invalid_size'] = array();
-        if (isset($this->request->files['file'])) {
+        if (isset($this->request->files['file']) && $this->request->files['file']['type'] == 'text/csv') {
             $products = array();
             if (($fhandler = fopen($this->request->files['file']['tmp_name'], 'r')) !== FALSE) {
                 while (($row = fgetcsv($fhandler, 1000, ',')) !== FALSE) {
                     $products[] = array_combine(array('model', 'color', 'size', 'config', 'quantity'), array_map(function($item) { return trim($item);}, $row));
                 }
-                fclose($fhandler);
+                fclose($fhandler);               
             }
             array_shift($products);
             $this->data['input_products'] = $products;
@@ -90,7 +90,6 @@ class ControllerCheckoutFileOrder extends Controller {
 
             $this->load->model('catalog/product');
         }
-
         $this->language->load('checkout/file_order');
 
         $this->document->setTitle($this->language->get('heading_title'));
