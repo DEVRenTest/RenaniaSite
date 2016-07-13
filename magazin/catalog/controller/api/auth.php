@@ -22,7 +22,11 @@ class ControllerApiAuth extends Controller
             exit;
         }
         $xml_object = simplexml_load_file('php://input');
-        $valid_request = $xml_object !== false && $xml_object->xpath('Request/PunchOutSetupRequest/Contact/Email') && $xml_object->xpath('Header/Sender/Credential/SharedSecret') && $xml_object->xpath('Request/PunchOutSetupRequest/BrowserFormPost/URL');
+        $valid_request = $xml_object !== false
+            && $xml_object->xpath('Request/PunchOutSetupRequest/Contact/Email')
+            && $xml_object->xpath('Header/Sender/Credential/SharedSecret')
+            && $xml_object->xpath('Request/PunchOutSetupRequest/BrowserFormPost/URL')
+            && $xml_object->xpath('Request/PunchOutSetupRequest/BuyerCookie');
         if (!$valid_request) {
             header('HTTP/1.0 400 Bad Request');
             exit;
@@ -33,7 +37,11 @@ class ControllerApiAuth extends Controller
                 header('HTTP/1.0 204 No Content');
                 exit;
             }
-            $token = $this->model_account_customer->setupLoginToken($customer['customer_id'], (string)$xml_object->Request->PunchOutSetupRequest->BrowserFormPost->URL);
+            $token = $this->model_account_customer->setupLoginToken(
+                $customer['customer_id'],
+                (string)$xml_object->Request->PunchOutSetupRequest->BrowserFormPost->URL,
+                (string)$xml_object->Request->PunchOutSetupRequest->BuyerCookie
+            );
             $this->data['login_url'] = $this->url->link('api/auth/login', '&id=' . md5($customer['customer_id']) . '&token=' . $token, 'SSL');
 
             if (file_exists(DIR_TEMPLATE . $this->config->get('config_template') . '/template/api/auth_setup_response.php')) {
@@ -61,6 +69,7 @@ class ControllerApiAuth extends Controller
         }
         if ($authenticated) {
             $this->session->data['remote_order_url'] = $login_data['url'];
+            $this->session->data['remote_cookie'] = $login_data['cookie'];
             $this->redirect($this->url->link('common/home', '', 'SSL'));
         } else {
             $this->redirect($this->url->link('account/login', '', 'SSL'));

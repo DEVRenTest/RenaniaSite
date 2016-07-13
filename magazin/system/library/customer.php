@@ -114,6 +114,7 @@ class Customer {
 		
 		unset($this->session->data['customer_id']);
 		unset($this->session->data['remote_order_url']);
+		unset($this->session->data['remote_cookie']);
 
 		$this->customer_id = '';
 		$this->firstname = '';

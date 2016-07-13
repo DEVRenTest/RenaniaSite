@@ -1,26 +1,27 @@
+<?php echo '<?xml version="1.0" encoding="UTF-8"?>'; ?>
 <!DOCTYPE cXML SYSTEM "http://xml.cxml.org/schemas/cXML/1.2.014/cXML.dtd">
-<cXML payloadID="" xml:lang="en-US" timestamp="<?php echo date('c'); ?>" version="1.2.0.14">
+<cXML payloadID="<?php echo $order_id . '@renania.ro'; ?>" xml:lang="en-US" timestamp="<?php echo date('c'); ?>" version="1.2.0.14">
   <Header>
     <From>
-      <Credential domain="NetworkID"> 
-        <Identity/>
+      <Credential domain="Renania.ro"> 
+        <Identity>Renania Trade<Identity/>
       </Credential>
     </From>
     <To>
-      <Credential domain="NetworkId"> 
-        <Identity></Identity>
+      <Credential domain="Renania.ro"> 
+        <Identity>Renania Trade<Identity/>
       </Credential>
     </To>
     <Sender>
-      <Credential domain="NetworkID"> 
-        <Identity/>
+      <Credential domain="Renania.ro"> 
+        <Identity>Renania Trade<Identity/>
       </Credential>
       <UserAgent/>
     </Sender>
   </Header>
   <Message>
     <PunchOutOrderMessage>
-      <BuyerCookie></BuyerCookie>
+      <BuyerCookie><?php echo $remote_cookie; ?></BuyerCookie>
       <PunchOutOrderMessageHeader operationAllowed="edit">
         <Total>
           <Money currency="<?php echo $currency_code; ?>"><?php echo $total; ?></Money>
