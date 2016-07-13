@@ -130,7 +130,7 @@ class ControllerCheckoutFileOrder extends Controller {
 
         $this->data['file_order'] = $this->url->link('checkout/file_order', '', 'SSL');
 
-        $this->data['order_model_download_link'] = 'download/Template_plasare_comanda.csv';
+        $this->data['order_model_download_link'] = 'document/Template_plasare_comanda.csv';
 
         if (file_exists(DIR_TEMPLATE . $this->config->get('config_template') . '/template/checkout/file_order.tpl')) {
             $this->template = $this->config->get('config_template') . '/template/checkout/file_order.tpl';
