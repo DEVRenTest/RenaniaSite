@@ -11,6 +11,7 @@ class ControllerCheckoutFileOrder extends Controller {
         $this->data['invalid_color'] = array();
         $this->data['invalid_size'] = array();
         if (isset($this->request->files['file']) && $this->request->files['file']['type'] == 'text/csv') {
+            $this->load->model('catalog/product');
             $products = array();
             if (($fhandler = fopen($this->request->files['file']['tmp_name'], 'r')) !== FALSE) {
                 while (($row = fgetcsv($fhandler, 1000, ',')) !== FALSE) {
@@ -44,29 +45,34 @@ class ControllerCheckoutFileOrder extends Controller {
                     }
                     $product_options_assotiative_array[$option['name']]['option_value'] = $option_values;
                 }
-                if (isset($product_options_assotiative_array['Culori'])) {
-                    if ($product_options_assotiative_array['Culori']['required'] && !$product['color']) {
-                        $invalid_color[] = $counter;
-                    }
-                    if ($product['color'] && isset($product_options_assotiative_array['Culori']['option_value'][$product['color']])) {
-                        $order_options['option'][$product_options_assotiative_array['Culori']['product_option_id']] = $product_options_assotiative_array['Culori']['option_value'][$product['color']]['product_option_value_id'];
-                    } else {
-                        $invalid_color[] = $counter;
-                        $input_valid_item = false;
-                    }
-                }
                 if (isset($product_options_assotiative_array['Marimi'])) {
                     if ($product_options_assotiative_array['Marimi']['required'] && !$product['size']) {
                         $invalid_size[] = $counter;
                     }
                     if ($product['size'] && isset($product_options_assotiative_array['Marimi']['option_value'][$product['size']])) {
-                        $order_options['option'][$product_options_assotiative_array['Marimi']['product_option_id']] = $product_options_assotiative_array['Marimi']['option_value'][$product['size']]['product_option_value_id'];
+                        $order_options[$product_options_assotiative_array['Marimi']['product_option_id']] = $product_options_assotiative_array['Marimi']['option_value'][$product['size']]['product_option_value_id'];
                     } else {
                         $invalid_size[] = $counter;
                         $input_valid_item = false;
                     }
                 }
+                if (isset($product_options_assotiative_array['Culori'])) {
+                    if ($product_options_assotiative_array['Culori']['required'] && !$product['color']) {
+                        $invalid_color[] = $counter;
+                    }
+                    if ($product['color'] && isset($product_options_assotiative_array['Culori']['option_value'][$product['color']])) {
+                        $order_options[$product_options_assotiative_array['Culori']['product_option_id']] = $product_options_assotiative_array['Culori']['option_value'][$product['color']]['product_option_value_id'];
+                    } else {
+                        $invalid_color[] = $counter;
+                        $input_valid_item = false;
+                    }
+                }
                 if ($input_valid_item) {
+                    $customer_forced_buy_bulk = $this->model_catalog_product->customerForcedBuyBulk($product_id);
+                    $container_size = $this->model_catalog_product->getProductContainerSize($product_id);
+                    if ($container_size && $customer_forced_buy_bulk) {
+                        $product['quantity'] *= $container_size;
+                    }
                     $product_to_cart[] = array(
                         'product_id'    =>  $product_id,
                         'quantity'      =>  $product['quantity'],
@@ -76,6 +82,8 @@ class ControllerCheckoutFileOrder extends Controller {
                     $counter++;
                 }
             }
+
+
             if (sizeof($product_to_cart) == sizeof($products)) {
                 foreach ($product_to_cart as $prod) {
                     $this->cart->add($prod['product_id'], $prod['quantity'], $prod['order_options'], $prod['config']);
