@@ -76,10 +76,10 @@ body.group4 .secondary-menu-item-3 span {
 	background-color: rgba(255, 0, 0, 0.3);
 }
 .list .bad_color {
-	background-color: rgba(0, 255, 0, 0.3);
+	background-color: rgb(255, 221, 0);
 }
 .list .bad_size {
-	background-color: rgba(0, 0, 255, 0.3);
+	background-color: rgb(255, 221, 0);
 }
 
 .model_error_color {
@@ -90,14 +90,14 @@ body.group4 .secondary-menu-item-3 span {
 }
 
 .color_error_color {
-	background-color: rgba(0, 255, 0, 0.3);
+	background-color: rgb(255, 221, 0);
 	color:white;
 	padding-right:15px;
 	padding-left: 15px;
 }
 
 .size_error_color {
-	background-color: rgba(0, 0, 255, 0.3);
+	background-color: rgb(255, 221, 0);
 	color:white;
 	padding-right:15px;
 	padding-left: 15px;

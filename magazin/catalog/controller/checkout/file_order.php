@@ -67,6 +67,7 @@ class ControllerCheckoutFileOrder extends Controller {
                         $input_valid_item = false;
                     }
                 }
+                
                 if ($input_valid_item) {
                     $customer_forced_buy_bulk = $this->model_catalog_product->customerForcedBuyBulk($product_id);
                     $container_size = $this->model_catalog_product->getProductContainerSize($product_id);
@@ -79,8 +80,8 @@ class ControllerCheckoutFileOrder extends Controller {
                         'order_options' =>  $order_options,
                         'config'        =>  $product['config']
                     );
-                    $counter++;
                 }
+                $counter++;
             }
 
 
