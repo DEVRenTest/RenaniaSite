@@ -42,6 +42,11 @@ class ControllerSaleOrder extends Controller
                 $url .= '&filter_customer='.urlencode( html_entity_decode( $this->request->get['filter_customer'], ENT_QUOTES, 'UTF-8' ) );
             }
 
+            if( isset( $this->request->get['filter_ax_code']) )
+            {
+                $url .= '&filter_ax_code='.$this->request->get['filter_ax_code'];
+            }
+
             if( isset( $this->request->get['filter_order_status_id'] ) )
             {
                 $url .= '&filter_order_status_id='.$this->request->get['filter_order_status_id'];
@@ -107,6 +112,11 @@ class ControllerSaleOrder extends Controller
             if( isset( $this->request->get['filter_customer'] ) )
             {
                 $url .= '&filter_customer='.urlencode( html_entity_decode( $this->request->get['filter_customer'], ENT_QUOTES, 'UTF-8' ) );
+            }
+
+            if( isset( $this->request->get['filter_ax_code']) )
+            {
+                $url .= '&filter_ax_code='.$this->request->get['filter_ax_code'];
             }
 
             if( isset( $this->request->get['filter_order_status_id'] ) )
@@ -180,6 +190,11 @@ class ControllerSaleOrder extends Controller
                 $url .= '&filter_customer='.urlencode( html_entity_decode( $this->request->get['filter_customer'], ENT_QUOTES, 'UTF-8' ) );
             }
 
+            if( isset( $this->request->get['filter_ax_code']) )
+            {
+                $url .= '&filter_ax_code='.$this->request->get['filter_ax_code'];
+            }
+
             if( isset( $this->request->get['filter_order_status_id'] ) )
             {
                 $url .= '&filter_order_status_id='.$this->request->get['filter_order_status_id'];
@@ -239,6 +254,15 @@ class ControllerSaleOrder extends Controller
         else
         {
             $filter_customer = null;
+        }
+
+        if( isset( $this->request->get['filter_ax_code'] ) )
+        {
+            $filter_ax_code = $this->request->get['filter_ax_code'];
+        }
+        else
+        {
+            $filter_ax_code = null;
         }
 
         if( isset( $this->request->get['filter_order_status_id'] ) )
@@ -316,6 +340,11 @@ class ControllerSaleOrder extends Controller
             $url .= '&filter_customer='.urlencode( html_entity_decode( $this->request->get['filter_customer'], ENT_QUOTES, 'UTF-8' ) );
         }
 
+        if( isset( $this->request->get['filter_ax_code']) )
+        {
+            $url .= '&filter_ax_code='.$this->request->get['filter_ax_code'];
+        }
+
         if( isset( $this->request->get['filter_order_status_id'] ) )
         {
             $url .= '&filter_order_status_id='.$this->request->get['filter_order_status_id'];
@@ -374,6 +403,7 @@ class ControllerSaleOrder extends Controller
         $data = array(
             'filter_order_id' => $filter_order_id,
             'filter_customer' => $filter_customer,
+            'filter_ax_code'  => $filter_ax_code,
             'filter_order_status_id' => $filter_order_status_id,
             'filter_total' => $filter_total,
             'filter_date_added' => $filter_date_added,
@@ -405,10 +435,11 @@ class ControllerSaleOrder extends Controller
                 );
             }
 
-            $this->data['orders'][] = array(
+            $order = $this->data['orders'][] = array(
                 'order_id' => $result['order_id'],
                 'customer_group_id' => $result['customer_group_id'],
                 'customer' => $result['customer'],
+                'ax_code' => $result['ax_code'],
                 'status' => $result['status'],
                 'total' => $this->currency->format( $result['total'], $result['currency_code'], $result['currency_value'] ),
                 'date_added' => date( $this->language->get( 'date_format_short' ), strtotime( $result['date_added'] ) ),
@@ -470,6 +501,11 @@ class ControllerSaleOrder extends Controller
             $url .= '&filter_customer='.urlencode( html_entity_decode( $this->request->get['filter_customer'], ENT_QUOTES, 'UTF-8' ) );
         }
 
+        if( isset( $this->request->get['filter_ax_code']) )
+        {
+            $url .= '&filter_ax_code='.$this->request->get['filter_ax_code'];
+        }
+
         if( isset( $this->request->get['filter_order_status_id'] ) )
         {
             $url .= '&filter_order_status_id='.$this->request->get['filter_order_status_id'];
@@ -507,6 +543,7 @@ class ControllerSaleOrder extends Controller
         $this->data['sort_order'] = $this->url->link( 'sale/order', 'token='.$this->session->data['token'].'&sort=o.order_id'.$url, 'SSL' );
         $this->data['sort_customer'] = $this->url->link( 'sale/order', 'token='.$this->session->data['token'].'&sort=customer'.$url, 'SSL' );
         $this->data['sort_status'] = $this->url->link( 'sale/order', 'token='.$this->session->data['token'].'&sort=status'.$url, 'SSL' );
+        $this->data['sort_ax_code'] = $this->url->link( 'sale/order', 'token='.$this->session->data['token'].'&sort=ax_code'.$url, 'SSL' );
         $this->data['sort_total'] = $this->url->link( 'sale/order', 'token='.$this->session->data['token'].'&sort=o.total'.$url, 'SSL' );
         $this->data['sort_date_added'] = $this->url->link( 'sale/order', 'token='.$this->session->data['token'].'&sort=o.date_added'.$url, 'SSL' );
         $this->data['sort_date_modified'] = $this->url->link( 'sale/order', 'token='.$this->session->data['token'].'&sort=o.date_modified'.$url, 'SSL' );
@@ -521,6 +558,11 @@ class ControllerSaleOrder extends Controller
         if( isset( $this->request->get['filter_customer'] ) )
         {
             $url .= '&filter_customer='.urlencode( html_entity_decode( $this->request->get['filter_customer'], ENT_QUOTES, 'UTF-8' ) );
+        }
+
+        if( isset( $this->request->get['filter_ax_code']) )
+        {
+            $url .= '&filter_ax_code='.$this->request->get['filter_ax_code'];
         }
 
         if( isset( $this->request->get['filter_order_status_id'] ) )
@@ -564,6 +606,7 @@ class ControllerSaleOrder extends Controller
 
         $this->data['filter_order_id'] = $filter_order_id;
         $this->data['filter_customer'] = $filter_customer;
+        $this->data['filter_ax_code'] = $filter_ax_code;
         $this->data['filter_order_status_id'] = $filter_order_status_id;
         $this->data['filter_total'] = $filter_total;
         $this->data['filter_date_added'] = $filter_date_added;
@@ -868,6 +911,11 @@ class ControllerSaleOrder extends Controller
         if( isset( $this->request->get['filter_customer'] ) )
         {
             $url .= '&filter_customer='.urlencode( html_entity_decode( $this->request->get['filter_customer'], ENT_QUOTES, 'UTF-8' ) );
+        }
+
+        if( isset( $this->request->get['filter_ax_code']) )
+        {
+            $url .= '&filter_ax_code='.$this->request->get['filter_ax_code'];
         }
 
         if( isset( $this->request->get['filter_order_status_id'] ) )
@@ -1935,6 +1983,11 @@ class ControllerSaleOrder extends Controller
             if( isset( $this->request->get['filter_customer'] ) )
             {
                 $url .= '&filter_customer='.urlencode( html_entity_decode( $this->request->get['filter_customer'], ENT_QUOTES, 'UTF-8' ) );
+            }
+
+            if( isset( $this->request->get['filter_ax_code']) )
+            {
+                $url .= '&filter_ax_code='.$this->request->get['filter_ax_code'];
             }
 
             if( isset( $this->request->get['filter_order_status_id'] ) )

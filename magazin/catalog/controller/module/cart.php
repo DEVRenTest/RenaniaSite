@@ -54,6 +54,7 @@ class ControllerModuleCart extends Controller {
 		$this->data['text_cart'] = $this->language->get('text_cart');
 		$this->data['text_checkout'] = $this->language->get('text_checkout');
 		$this->data['text_payment_profile'] = $this->language->get('text_payment_profile');
+		$this->data['text_file_order'] = $this->language->get('text_file_order');
 		
 		$this->data['button_remove'] = $this->language->get('button_remove');
 		
@@ -131,7 +132,9 @@ class ControllerModuleCart extends Controller {
 		$this->data['cart'] = $this->url->link('checkout/cart', '', 'SSL');
 						
 		$this->data['checkout'] = $this->url->link('checkout/checkout', '', 'SSL');
-	
+
+		$this->data['file_order'] = $this->url->link('checkout/file_order', '', 'SSL');
+
 		if (file_exists(DIR_TEMPLATE . $this->config->get('config_template') . '/template/module/cart.tpl')) {
 			$this->template = $this->config->get('config_template') . '/template/module/cart.tpl';
 		} else {

@@ -490,7 +490,7 @@ class ModelSaleOrder extends Model {
 	}
 	
 	public function getOrders($data = array()) {
-		$sql = "SELECT o.order_id, CONCAT(o.firstname, ' ', o.lastname) AS customer, o.customer_group_id, (SELECT os.name FROM " . DB_PREFIX . "order_status os WHERE os.order_status_id = o.order_status_id AND os.language_id = '" . (int)$this->config->get('config_language_id') . "') AS status, o.total, o.currency_code, o.currency_value, o.date_added, o.date_modified FROM `" . DB_PREFIX . "order` o";
+		$sql = "SELECT o.order_id, CONCAT(o.firstname, ' ', o.lastname) AS customer, c.ax_code, o.customer_group_id, (SELECT os.name FROM " . DB_PREFIX . "order_status os WHERE os.order_status_id = o.order_status_id AND os.language_id = '" . (int)$this->config->get('config_language_id') . "') AS status, o.total, o.currency_code, o.currency_value, o.date_added, o.date_modified FROM `" . DB_PREFIX . "order` o LEFT JOIN " . DB_PREFIX . "customer c ON o.customer_id = c.customer_id";
 
 		if (isset($data['filter_order_status_id']) && !is_null($data['filter_order_status_id'])) {
 			$sql .= " WHERE o.order_status_id = '" . (int)$data['filter_order_status_id'] . "'";
@@ -517,7 +517,9 @@ class ModelSaleOrder extends Model {
 		if (!empty($data['filter_total'])) {
 			$sql .= " AND o.total = '" . (float)$data['filter_total'] . "'";
 		}
-
+		if (!empty($data['filter_ax_code'])) {
+			$sql .= " AND c.ax_code = '" . $this->db->escape($data['filter_ax_code']) . "'";
+		}
 		$sort_data = array(
 			'o.order_id',
 			'customer',
@@ -525,7 +527,8 @@ class ModelSaleOrder extends Model {
 			'status',
 			'o.date_added',
 			'o.date_modified',
-			'o.total'
+			'o.total',
+			'c.ax_code'
 		);
 
 		if (isset($data['sort']) && in_array($data['sort'], $sort_data)) {
