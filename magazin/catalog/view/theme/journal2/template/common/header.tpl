@@ -117,6 +117,15 @@ $('body').prepend('<iframe src="<?php echo $store; ?>" style="display: none;"></
 <link rel="stylesheet" type="text/css" href="catalog/view/theme/journal2/css/adjust.css"/>
 </head>
 <body<?php if ($this->customer->isLogged()) echo ' class="group' . $this->customer->getCustomerGroupId() . '"'; ?>>
+<!-- Google Tag Manager -->
+<noscript><iframe src="//www.googletagmanager.com/ns.html?id=GTM-WLK3KG"
+height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
+<script>(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
+new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
+j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
+'//www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
+})(window,document,'script','dataLayer','GTM-WLK3KG');</script>
+<!-- End Google Tag Manager -->
 <!--[if lt IE 9]>
 <div class="old-browser"><?php echo $this->journal2->settings->get('old_browser_message', 'You are using an old browser. Please <a href="http://windows.microsoft.com/en-us/internet-explorer/download-ie">upgrade to a newer version</a> or <a href="http://browsehappy.com/">try a different browser</a>.'); ?></div>
 <![endif]-->
