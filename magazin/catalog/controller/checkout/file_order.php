@@ -10,7 +10,7 @@ class ControllerCheckoutFileOrder extends Controller {
         $this->data['invalid_model'] = array();
         $this->data['invalid_color'] = array();
         $this->data['invalid_size'] = array();
-        if (isset($this->request->files['file']) && $this->request->files['file']['type'] == 'text/csv') {
+        if (isset($this->request->files['file']) && in_array($this->request->files['file']['type'], array('text/csv', 'application/vnd.ms-excel'))) {
             $this->load->model('catalog/product');
             $products = array();
             if (($fhandler = fopen($this->request->files['file']['tmp_name'], 'r')) !== FALSE) {
