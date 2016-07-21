@@ -17,6 +17,7 @@ $_['text_currency']                    = 'Monede';
 $_['text_customer']                    = 'Clienți';
 $_['text_customer_group']              = 'Grupuri de Clienți';
 $_['text_customer_ban_ip']        	   = 'IP-uri banate';
+$_['text_customer_settings']           = 'Setari clienti';
 $_['text_custom_field']                = 'Câmpuri Personalizate';
 $_['text_dashboard']                   = 'Panou de Administrare';
 $_['text_design']                      = 'Design';
