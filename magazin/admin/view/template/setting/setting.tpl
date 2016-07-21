@@ -1042,10 +1042,6 @@
               <td><?php echo $entry_auto_login; ?></td>
               <td><input type="text" name="config_auto_login" value="<?php echo $config_auto_login; ?>" /></td>
             </tr>
-          </table>
-        </div>
-        <div id="tab-api-auto-login">
-          <table class="form">
             <tr>
               <td><?php echo $entry_api_auto_login; ?></td>
               <td><input type="text" name="config_api_auto_login" value="<?php echo $config_api_auto_login; ?>" /></td>

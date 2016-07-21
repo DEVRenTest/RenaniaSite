@@ -992,14 +992,6 @@
 
             </tr>
 
-          </table>
-
-        </div>
-
-        <div id="tab-api-auto-login">
-
-          <table class="form">
-
             <tr>
 
               <td><?php echo $entry_api_auto_login; ?></td>
