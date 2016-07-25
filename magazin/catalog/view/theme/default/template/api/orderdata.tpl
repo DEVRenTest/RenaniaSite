@@ -24,14 +24,14 @@
       <BuyerCookie><?php echo $remote_cookie; ?></BuyerCookie>
       <PunchOutOrderMessageHeader operationAllowed="edit">
         <Total>
-          <Money currency="<?php echo $currency_code; ?>"><?php echo $total; ?></Money>
+          <Money currency="<?php echo $currency_code; ?>"><?php echo round($total, 2); ?></Money>
         </Total>
         <Shipping>
-          <Money currency="<?php echo $currency_code; ?>"><?php foreach ($totals as $total) { if ($total['code'] == 'shipping') { echo $total['value']; break; }} ?></Money>
+          <Money currency="<?php echo $currency_code; ?>"><?php foreach ($totals as $total) { if ($total['code'] == 'shipping') { echo round($total['value'], 2); break; }} ?></Money>
           <Description xml:lang="en-US"><?php echo $shipping_method; ?></Description>
         </Shipping>
         <Tax>
-          <Money currency="<?php echo $currency_code; ?>"><?php foreach ($totals as $total) { if ($total['code'] == 'tax') { echo $total['value']; break; }} ?></Money>
+          <Money currency="<?php echo $currency_code; ?>"><?php foreach ($totals as $total) { if ($total['code'] == 'tax') { echo round($total['value'], 2); break; }} ?></Money>
           <Description xml:lang="en-US"><?php foreach ($totals as $total) { if ($total['code'] == 'tax') { echo $total['title']; break; }} ?></Description>
         </Tax>
       </PunchOutOrderMessageHeader>
@@ -43,7 +43,7 @@
         </ItemID>
         <ItemDetail>
           <UnitPrice>
-            <Money currency="<?php echo $currency_code; ?>"><?php echo $product['price']; ?></Money>
+            <Money currency="<?php echo $currency_code; ?>"><?php echo round($product['price'], 2); ?></Money>
           </UnitPrice>
           <Description xml:lang="en-US"><?php echo $product['name']; ?></Description>
           <UnitOfMeasure>EA</UnitOfMeasure>
