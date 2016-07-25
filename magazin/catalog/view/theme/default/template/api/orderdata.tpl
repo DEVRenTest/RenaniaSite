@@ -1,4 +1,4 @@
-<?php echo '<?xml version="1.0" encoding="UTF-8"?>'; ?>
+<?php echo '<?xml version="1.0" encoding="UTF-8"?>' . PHP_EOL; ?>
 <!DOCTYPE cXML SYSTEM "http://xml.cxml.org/schemas/cXML/1.2.014/cXML.dtd">
 <cXML payloadID="<?php echo $order_id . '@renania.ro'; ?>" xml:lang="en-US" timestamp="<?php echo date('c'); ?>" version="1.2.0.14">
   <Header>

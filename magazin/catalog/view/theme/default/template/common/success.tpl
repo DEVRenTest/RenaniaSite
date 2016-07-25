@@ -89,6 +89,14 @@
   }
   ?>
   <div class="buttons">
+    <?php if ($coupa_url) { ?>
+    <div class="right" style="margin-left: 10px;">
+        <form id="coupa-form" method="POST" action="<?php echo $coupa_url; ?>">
+            <input name="cxml-urlencoded" type="hidden" value="<?php echo $cxml; ?>"/>
+            <a class="button" onclick="$('#coupa-form').submit();"><?php echo $button_coupa; ?></a>
+        </form>
+    </div>
+    <?php } ?>
     <div class="right"><a href="<?php echo $continue; ?>" class="button"><?php echo $button_continue; ?></a></div>
   </div>
   <?php echo $content_bottom; ?></div>
