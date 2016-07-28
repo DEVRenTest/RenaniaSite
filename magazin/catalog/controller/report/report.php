@@ -151,6 +151,9 @@ class ControllerReportReport extends Controller
         $this->data['text_view_report'] = $this->language->get('text_view_report');
         $this->data['text_empty_report'] = $this->language->get('text_empty_report');
         $this->data['button_view_report'] = $this->language->get( 'button_view_report' );
+        $this->data['button_back_upload_report'] = $this->language->get( 'button_back_upload_report' );
+
+        $this->data['continue'] = $this->url->link( 'report/report/upload_report', '', 'SSL' );
 
         if(isset($this->request->get['page']))
         {

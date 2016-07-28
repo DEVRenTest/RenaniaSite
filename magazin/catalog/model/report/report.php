@@ -16,7 +16,7 @@ class ModelReportReport extends Model
             	(int)$report_id,
             	$this->db->escape($entry['customer_name']),
             	$this->db->escape($entry['work_address']),
-            	(int)$entry['CUI'],
+            	$this->db->escape($entry['CUI']),
             	$this->db->escape($entry['product_code']),
             	$this->db->escape($entry['product_name']),
             	(float)$entry['buy_price'],
@@ -42,7 +42,7 @@ class ModelReportReport extends Model
 
 	public function getTotalReports( $customer_id )
 	{
-		$query = $this->db->query( "SELECT COUNT(DISTINCT(report_id)) AS total FROM " . DB_PREFIX . "report WHERE customer_id = '".$customer_id."'" );
+		$query = $this->db->query( "SELECT COUNT(DISTINCT(report_id)) AS total FROM " . DB_PREFIX . "report WHERE customer_id = '".(int)$customer_id."'" );
 		return $query->row['total'];
 	}
 
@@ -68,7 +68,7 @@ class ModelReportReport extends Model
 
 	public function getReportEntries($report_id, $customer_id = 0)
 	{
-		$sql = "SELECT * FROM " . DB_PREFIX . "report_entry re";
+		$sql = "SELECT report_entry_id, re.report_id, customer_name, work_address, CUI, product_code, product_name, round(buy_price,2) as buy_price, round(net_sale_price,2) as net_sale_price, product_quantity, sale_agent_name, month FROM " . DB_PREFIX . "report_entry re";
 
 		if ($customer_id) {
 			$sql .= " LEFT JOIN " . DB_PREFIX . "report r ON re.report_id = r.report_id";

@@ -29,6 +29,7 @@ $_['template_download_button'] = 'Descarca template';
 $_['upload_report_button'] = 'Trimite';
 $_['button_back_report_list'] = 'Inapoi la rapoarte';
 $_['button_view_report'] = 'Vezi raportul';
+$_['button_back_upload_report'] = 'Incarca raport';
 
 $_['error_report'] = 'Raportul este complectat gresit!';
 

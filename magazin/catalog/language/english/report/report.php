@@ -29,6 +29,7 @@ $_['template_download_button'] = 'Download template';
 $_['upload_report_button'] = 'Send';
 $_['button_back_report_list'] = 'Back to reports';
 $_['button_view_report'] = 'View report';
+$_['button_back_upload_report'] = 'Upload report';
 
 $_['error_report'] = 'Report filled out wrong!';
 ?>

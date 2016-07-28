@@ -30,7 +30,9 @@
 	    	<?php } ?>
 	    </tbody>
 	</table>
-
+	<div class="buttons">
+      <div class="right"><a href="<?php echo $continue; ?>" class="button"><?php echo $button_back_upload_report; ?></a></div>
+   </div>
 	<div class="pagination"><?php echo $pagination; ?></div>
 	<?php } else { ?>
 	<div class="content"><?php echo $text_empty_report; ?></div>
