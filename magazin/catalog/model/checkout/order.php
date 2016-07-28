@@ -499,21 +499,23 @@ class ModelCheckoutOrder extends Model {
 
                 $text .= $language->get('text_new_footer') . "\n\n";
 
-                $mail = new Mail();
-                $mail->protocol = $this->config->get('config_mail_protocol');
-                $mail->parameter = $this->config->get('config_mail_parameter');
-                $mail->hostname = $this->config->get('config_smtp_host');
-                $mail->username = $this->config->get('config_smtp_username');
-                $mail->password = $this->config->get('config_smtp_password');
-                $mail->port = $this->config->get('config_smtp_port');
-                $mail->timeout = $this->config->get('config_smtp_timeout');
-                $mail->setTo($order_info['email']);
-                $mail->setFrom($this->config->get('config_email'));
-                $mail->setSender($order_info['store_name']);
-                $mail->setSubject(html_entity_decode($subject, ENT_QUOTES, 'UTF-8'));
-                $mail->setHtml($html);
-                $mail->setText(html_entity_decode($text, ENT_QUOTES, 'UTF-8'));
-                $mail->send();
+                if ($this->customer->isLogged() && !$this->config->get('config_customer_no_mail')) {
+	                $mail = new Mail();
+	                $mail->protocol = $this->config->get('config_mail_protocol');
+	                $mail->parameter = $this->config->get('config_mail_parameter');
+	                $mail->hostname = $this->config->get('config_smtp_host');
+	                $mail->username = $this->config->get('config_smtp_username');
+	                $mail->password = $this->config->get('config_smtp_password');
+	                $mail->port = $this->config->get('config_smtp_port');
+	                $mail->timeout = $this->config->get('config_smtp_timeout');
+	                $mail->setTo($order_info['email']);
+	                $mail->setFrom($this->config->get('config_email'));
+	                $mail->setSender($order_info['store_name']);
+	                $mail->setSubject(html_entity_decode($subject, ENT_QUOTES, 'UTF-8'));
+	                $mail->setHtml($html);
+	                $mail->setText(html_entity_decode($text, ENT_QUOTES, 'UTF-8'));
+	                $mail->send();
+                }
             }
             
 			// Admin Alert Mail
@@ -640,6 +642,7 @@ class ModelCheckoutOrder extends Model {
 				$this->model_checkout_voucher->confirm($order_id);
 			}	
 	
+			$notify = $notify && !$this->config->get('config_customer_no_mail');
 			if ($notify) {
 				$language = new Language($order_info['language_directory']);
 				$language->load($order_info['language_filename']);
