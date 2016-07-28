@@ -326,6 +326,9 @@ class ControllerAccountAccount extends Controller
         $this->data['text_reclamation'] = $this->language->get( 'text_reclamation' );
         $this->data['text_add_reclamation'] = $this->language->get( 'text_add_reclamation' );
         $this->data['text_list_reclamation'] = $this->language->get( 'text_list_reclamation' );
+        $this->data['text_customer_report'] = $this->language->get( 'text_customer_report' );
+        $this->data['text_upload_report'] = $this->language->get( 'text_upload_report' );
+        $this->data['text_list_reports'] = $this->language->get( 'text_list_reports' );
                        
        
         // address
@@ -540,6 +543,8 @@ class ControllerAccountAccount extends Controller
         $this->data['document'] = $this->url->link( 'document/document/listdocuments', '', 'SSL' );
         $this->data['add'] = $this->url->link( 'reclamation/reclamation/addreclamation', '', 'SSL' );
         $this->data['list'] = $this->url->link( 'reclamation/reclamation/listreclamation', '', 'SSL' );
+        $this->data['upload_report'] = $this->url->link( 'report/report/upload_report', '', 'SSL' );
+        $this->data['list_reports'] = $this->url->link( 'report/report/list_reports', '', 'SSL' );
         
         $this->data['action'] = $this->url->link('account/account/index', '', 'SSL');
         $this->data['button_continue'] = $this->language->get('text_edit');

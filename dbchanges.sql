@@ -63,3 +63,29 @@ ALTER TABLE `oc_autologin` ADD `url` VARCHAR( 512 ) NULL ;
 
 -- customer autologin table cookie
 ALTER TABLE `oc_autologin` ADD `cookie` VARCHAR( 512 ) NULL DEFAULT NULL ;
+
+-- reports table
+CREATE TABLE `oc_report` (
+ `report_id` int(11) NOT NULL AUTO_INCREMENT,
+ `customer_id` int(32) NOT NULL,
+ `name` varchar(64) NOT NULL,
+ `date_added` datetime NOT NULL,
+ PRIMARY KEY (`report_id`)
+) ENGINE=InnoDB AUTO_INCREMENT=82 DEFAULT CHARSET=latin1
+
+-- report entry table
+CREATE TABLE `oc_report_entry` (
+ `report_entry_id` int(11) NOT NULL AUTO_INCREMENT,
+ `report_id` int(32) NOT NULL,
+ `customer_name` varchar(32) NOT NULL,
+ `work_address` varchar(128) NOT NULL,
+ `CUI` int(32) NOT NULL,
+ `product_code` varchar(64) NOT NULL,
+ `product_name` varchar(64) NOT NULL,
+ `buy_price` float(15,4) NOT NULL,
+ `net_sale_price` float(15,4) NOT NULL,
+ `product_quantity` int(4) NOT NULL,
+ `sale_agent_name` varchar(64) NOT NULL,
+ `month` varchar(32) NOT NULL,
+ PRIMARY KEY (`report_entry_id`)
+) ENGINE=InnoDB AUTO_INCREMENT=141 DEFAULT CHARSET=latin1
