@@ -4,19 +4,20 @@
   <Header>
     <From>
       <Credential domain="Renania.ro"> 
-        <Identity>Renania Trade<Identity/>
+        <Identity>Renania Trade</Identity>
       </Credential>
     </From>
     <To>
       <Credential domain="Renania.ro"> 
-        <Identity>Renania Trade<Identity/>
+        <Identity>Renania Trade</Identity>
       </Credential>
     </To>
     <Sender>
       <Credential domain="Renania.ro"> 
-        <Identity>Renania Trade<Identity/>
+        <Identity>Renania Trade</Identity>
+        <SharedSecret><?php echo $customer_shared_secret; ?></SharedSecret>
       </Credential>
-      <UserAgent/>
+      <UserAgent>Coupa Procurement 1.0</UserAgent>
     </Sender>
   </Header>
   <Message>
@@ -47,8 +48,7 @@
           </UnitPrice>
           <Description xml:lang="en-US"><?php echo $product['name']; ?></Description>
           <UnitOfMeasure>EA</UnitOfMeasure>
-          <Classification domain="UNSPSC"></Classification>
-          <ManufacturerName/>
+          <Classification domain="UNSPSC">14121602</Classification>
           <LeadTime>1</LeadTime>          
         </ItemDetail>
       </ItemIn>

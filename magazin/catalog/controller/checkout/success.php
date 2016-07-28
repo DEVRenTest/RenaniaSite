@@ -16,8 +16,11 @@ class ControllerCheckoutSuccess extends Controller {
 				print '</pre>';
 			}*/
 			if (isset($this->session->data['remote_order_url'])) {
-				$this->data['coupa_url'] = $this->session->data['remote_order_url'];
 				$this->load->model('account/order');
+				$this->load->model('account/customer');
+				$customer = $this->model_account_customer->getCustomer($this->customer->getId());
+				$this->data['customer_shared_secret'] = $customer['secret_code'];
+				$this->data['coupa_url'] = $this->session->data['remote_order_url'];
 				$this->data['remote_cookie'] = $this->session->data['remote_cookie'];
 				$this->data['order_id'] = $this->session->data['order_id'];
 				$order = $this->model_account_order->getOrder($this->session->data['order_id']);
