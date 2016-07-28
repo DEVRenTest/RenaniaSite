@@ -322,8 +322,27 @@
       </tbody>
    </table> 
   <?php }?>
+
+  <?php if ( $customer_B2B ) { ?>
+   <table class="list">
+   <thead>
+      <tr>
+         <td class="left">
+            <?php $counter++; echo $counter . '. ' . $text_customer_report;  ?>
+         </td>
+      </tr>
+      </thead>
+      <tbody>
+         <tr>
+            <td class="left"><a href="<?php echo $upload_report; ?>"><?php echo $text_upload_report; ?></a></td>
+         </tr>
+         <tr>
+            <td class="left"><a href="<?php echo $list_reports; ?>"><?php echo $text_list_reports; ?></a></td>
+         </tr>
+      </tbody>
+   </table> 
+  <?php }?>
   
- 
   <!--?php if ( $customer_B2B && $permission == $text_full_permision ) { ?>
   <table class="list">
    <thead>
