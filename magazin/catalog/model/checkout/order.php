@@ -564,6 +564,16 @@ class ModelCheckoutOrder extends Model {
 					$text .= $order_info['comment'] . "\n\n";
 				}
 			
+				$order_customer_query = $this->db->query("SELECT oco.customer_id, occ.ax_code FROM " . DB_PREFIX . "order oco LEFT JOIN " . DB_PREFIX . "customer occ on oco.customer_id = occ.customer_id WHERE oco.order_id = '" . (int)$order_id . "'");							
+				
+				if ($order_customer_query->num_rows) {					
+					$order_customerAxCode = ' '.$order_customer_query->row['ax_code'];					
+				} else {					
+					$order_customerAxCode = '';				
+				}				
+				$subject = $subject.$order_customerAxCode;					
+				
+			
 				$mail = new Mail(); 
 				$mail->protocol = $this->config->get('config_mail_protocol');
 				$mail->parameter = $this->config->get('config_mail_parameter');
