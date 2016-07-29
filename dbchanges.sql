@@ -89,3 +89,25 @@ CREATE TABLE `oc_report_entry` (
  `month` varchar(32) NOT NULL,
  PRIMARY KEY (`report_entry_id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=141 DEFAULT CHARSET=latin1
+
+-- bulk aquisition revamp
+CREATE TABLE `oc_bulk_group` (
+ `product_id` int(11) NOT NULL,
+ `customer_group_id` int(11) NOT NULL,
+ `piece` tinyint(1) NOT NULL,
+ `bulk` tinyint(1) NOT NULL,
+ UNIQUE KEY `group_product` (`product_id`,`customer_group_id`)
+) ENGINE=InnoDB DEFAULT CHARSET=latin1
+
+CREATE TABLE `oc_bulk_customer` (
+ `product_id` int(11) NOT NULL,
+ `customer_id` int(11) NOT NULL,
+ `piece` tinyint(1) NOT NULL,
+ `bulk` tinyint(1) NOT NULL,
+ UNIQUE KEY `customer_product` (`product_id`,`customer_id`)
+) ENGINE=InnoDB DEFAULT CHARSET=latin1
+
+ALTER TABLE `oc_customer_group`
+ADD `piece` BOOLEAN NOT NULL DEFAULT TRUE,
+ADD `bulk` BOOLEAN NOT NULL DEFAULT TRUE,
+DROP `force_buy_bulk`

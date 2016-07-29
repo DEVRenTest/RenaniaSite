@@ -3,6 +3,8 @@
 $_['heading_title']          = 'Produse'; 
 
 // Text  
+$_['text_piece']             = 'Bucată';
+$_['text_package']           = 'Pachet';
 $_['text_success']           = 'Succes: Ai modificat produsul!';
 $_['text_plus']              = '+';
 $_['text_minus']             = '-';
@@ -28,7 +30,7 @@ $_['column_status']          = 'Status';
 $_['column_action']          = 'Acțiune';
 $_['column_group']           = 'Grup clienţi';
 $_['column_customer']        = 'Client - nume (adresă e-mail)';
-$_['column_override_rule']   = 'Obligă cumpărare en-gros';
+$_['column_acquisition']     = 'Tip achiziţii';
 
 // Tabs
 $_['tab_bulk_buy']           = 'Vânzări en-gros';

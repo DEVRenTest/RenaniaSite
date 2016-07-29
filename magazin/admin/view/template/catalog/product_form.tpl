@@ -893,21 +893,31 @@
             <table class="list" style="width: 95%;">
               <thead>
                 <tr>
-                  <td class="left" colspan="3"><?php echo $text_group_table; ?></td>
+                  <td class="left" colspan="4"><?php echo $text_group_table; ?></td>
                 </tr>
                 <tr>
-                  <td class="left"><?php echo $column_group; ?></td>
-                  <td class="left short-cell"><?php echo $column_override_rule; ?></td>
-                  <td class="left short-cell"></td>
+                  <td class="left" rowspan="2"><?php echo $column_group; ?></td>
+                  <td class="left" colspan="2"><?php echo $column_acquisition; ?></td>
+                  <td class="left short-cell" rowspan="2"></td>
+                </tr>
+                <tr>
+                  <td class="left" width="1"><?php echo $text_piece; ?></td>
+                  <td class="left" width="1"><?php echo $text_package; ?></td>
                 </tr>
               </thead>
               <tbody>
-                <?php foreach ($bulk_buy_overrides['customer_groups'] as $k => $customer_group) { ?>
+                <?php foreach ($bulk_groups as $k => $bulk_group) { ?>
                   <tr>
-                    <td class="left"><?php echo $customer_group['name']; ?></td>
-                    <td class="left short-cell">
-                      <input name="bulk_buy_overrides[customer_groups][<?php echo $k; ?>]" type="radio" value="1"<?php if (1 == $customer_group['override']) { ?> checked="checked"<?php } ?>/><?php echo $text_yes; ?>
-                      <input name="bulk_buy_overrides[customer_groups][<?php echo $k; ?>]" type="radio" value="0"<?php if (0 == $customer_group['override']) { ?> checked="checked"<?php } ?>/><?php echo $text_no; ?>
+                    <td class="left">
+                      <?php echo $bulk_group['customer_group_name']; ?>
+                      <input type="hidden" name="bulk_groups[<?php echo $k; ?>][customer_group_id]" value="<?php echo $bulk_group['customer_group_id']; ?>"/>
+                      <input type="hidden" name="bulk_groups[<?php echo $k; ?>][customer_group_name]" value="<?php echo $bulk_group['customer_group_name']; ?>"/>
+                    </td>
+                    <td class="left">
+                      <input name="bulk_groups[<?php echo $k; ?>][piece]" type="checkbox" value="1"<?php if (isset($bulk_group['piece']) && $bulk_group['piece']) { ?> checked="checked"<?php } ?>/>
+                    </td>
+                    <td class="left">
+                      <input name="bulk_groups[<?php echo $k; ?>][bulk]" type="checkbox" value="1"<?php if (isset($bulk_group['bulk']) && $bulk_group['bulk']) { ?> checked="checked"<?php } ?>/>
                     </td>
                     <td class="left short-cell">
                       <a class="button purge-parent"><?php echo $button_remove; ?></a>
@@ -915,7 +925,7 @@
                   </tr>
                 <?php } ?>
                 <tr id="more-group">
-                  <td class="left" colspan="3">
+                  <td class="left" colspan="4">
                     <label for="customer_groups"><?php echo $entry_add_group_rule; ?></label>
                     <select id="customer_groups">
                       <?php foreach ($customer_groups as $customer_group) { ?>
@@ -932,21 +942,31 @@
             <table class="list" style="width: 95%;">
               <thead>
                 <tr>
-                  <td class="left" colspan="3"><?php echo $text_customer_table; ?></td>
+                  <td class="left" colspan="4"><?php echo $text_customer_table; ?></td>
                 </tr>
                 <tr>
-                  <td class="left"><?php echo $column_customer; ?></td>
-                  <td class="left short-cell"><?php echo $column_override_rule; ?></td>
-                  <td class="left short-cell"></td>
+                  <td class="left" rowspan="2"><?php echo $column_group; ?></td>
+                  <td class="left" colspan="2"><?php echo $column_acquisition; ?></td>
+                  <td class="left short-cell" rowspan="2"></td>
+                </tr>
+                <tr>
+                  <td class="left" width="1"><?php echo $text_piece; ?></td>
+                  <td class="left" width="1"><?php echo $text_package; ?></td>
                 </tr>
               </thead>
               <tbody>
-                <?php foreach ($bulk_buy_overrides['customers'] as $k => $customer) { ?>
+                <?php foreach ($bulk_customers as $k => $bulk_customer) { ?>
                   <tr>
-                    <td class="left"><?php echo $customer['name'] . ' (' . $customer['email'] . ')'; ?></td>
-                    <td class="left short-cell">
-                      <input name="bulk_buy_overrides[customer][<?php echo $k; ?>]" type="radio" value="1"<?php if (1 == $customer['override']) { ?> checked="checked"<?php } ?>/><?php echo $text_yes; ?>
-                      <input name="bulk_buy_overrides[customer][<?php echo $k; ?>]" type="radio" value="0"<?php if (0 == $customer['override']) { ?> checked="checked"<?php } ?>/><?php echo $text_no; ?>
+                    <td class="left">
+                      <?php echo $bulk_customer['customer_name']; ?>
+                      <input type="hidden" name="bulk_customers[<?php echo $k; ?>][customer_id]" value="<?php echo $bulk_customer['customer_id']; ?>"/>
+                      <input type="hidden" name="bulk_customers[<?php echo $k; ?>][customer_name]" value="<?php echo $bulk_customer['customer_name']; ?>"/>
+                    </td>
+                    <td class="left">
+                      <input name="bulk_customers[<?php echo $k; ?>][piece]" type="checkbox" value="1"<?php if (isset($bulk_customer['piece']) && $bulk_customer['piece']) { ?> checked="checked"<?php } ?>/>
+                    </td>
+                    <td class="left">
+                      <input name="bulk_customers[<?php echo $k; ?>][bulk]" type="checkbox" value="1"<?php if (isset($bulk_customer['bulk']) && $bulk_customer['bulk']) { ?> checked="checked"<?php } ?>/>
                     </td>
                     <td class="left short-cell">
                       <a class="button purge-parent"><?php echo $button_remove; ?></a>
@@ -954,7 +974,7 @@
                   </tr>
                 <?php } ?>
                 <tr>
-                  <td class="left" colspan="3">
+                  <td class="left" colspan="4">
                     <label for="customer_autocomplete"><?php echo $entry_add_customer_rule; ?></label>
                     <input type="text" id="customer_autocomplete"></input>
                   </td>
@@ -1620,62 +1640,73 @@ function addProfile() {
     });
 <?php } ?>
 $(document).ready(function(){
+  var group_counter = $('#more-group').closest('tbody').find('tr').length - 1;
+  var customer_counter = $('#customer_autocomplete').closest('tbody').find('tr').length - 1;
   $('#more-group').on('click', 'a.button', function(){
     $(this).closest('tr').before(
       '<tr>' +
-        '<td class="left">' + $('#customer_groups option:selected').text() + '</td>' +
-        '<td class="left short-cell">' +
-          '<input name="bulk_buy_overrides[customer_groups][' + $('#customer_groups').val() + ']" type="radio" value="1"/>' +
-          '<?php echo $text_yes; ?>' +
-          '<input name="bulk_buy_overrides[customer_groups][' + $('#customer_groups').val() + ']" type="radio" value="0"/>' +
-          '<?php echo $text_no; ?>' +
+        '<td class="left">' +
+          $('#customer_groups option:selected').text() +
+          '<input type="hidden" name="bulk_groups[' + group_counter + '][customer_group_id]" value="' + $('#customer_groups').val() + '"/>' +
+          '<input type="hidden" name="bulk_groups[' + group_counter + '][customer_group_name]" value="' + $('#customer_groups option:selected').text() + '"/>' +
+        '</td>' +
+        '<td class="left">' +
+          '<input name="bulk_groups[' + group_counter + '][piece]" type="checkbox" value="1"/>' +
+        '</td>' +
+        '<td class="left">' +
+          '<input name="bulk_groups[' + group_counter + '][bulk]" type="checkbox" value="1"/>' +
         '</td>' +
         '<td class="left short-cell">' +
           '<a class="button purge-parent"><?php echo $button_remove; ?></a>' +
         '</td>' +
       '</tr>'
     );
+    group_counter++;
   });
   $('#tab-bulk-buy').on('click', '.purge-parent', function(){
     $(this).closest('tr').remove();
   });
 
   $('#customer_autocomplete').autocomplete({
-      delay: 3,
-      source: function(request, response) {
-          $.ajax({
-              url: 'index.php?route=sale/customer/autocomplete&token=<?php echo $token; ?>&filter_name=' +  encodeURIComponent(request.term),
-              dataType: 'json',
-      data: {token: '<?php echo $token; ?>', filter_name: encodeURIComponent(request.term)},
-      type: 'POST',
-              success: function(json) {
-                  response($.map(json, function(item) {
-                      return {
-                          label: item.firstname + ' ' + item.lastname + ' (' + item.email + ')',
-                          value: item.customer_id
-                      }
-                  }));
-              }
-          });
-
-      },
-      select: function(event, ui) {
-        $('#customer_autocomplete').closest('tr').before(
-          '<tr>' +
-            '<td class="left">' + ui.item.label + '</td>' +
-            '<td class="left short-cell">' +
-              '<input name="bulk_buy_overrides[customer][' + ui.item.value + ']" type="radio" value="1"/>' +
-              '<?php echo $text_yes; ?>' +
-              '<input name="bulk_buy_overrides[customer][' + ui.item.value + ']" type="radio" value="0"/>' +
-              '<?php echo $text_no; ?>' +
-            '</td>' +
-            '<td class="left short-cell">' +
-              '<a class="button purge-parent"><?php echo $button_remove; ?></a>' +
-            '</td>' +
-          '</tr>'
-        );
-          return false;
-      }
+    delay: 3,
+    source: function(request, response) {
+      $.ajax({
+        url: 'index.php?route=sale/customer/autocomplete&token=<?php echo $token; ?>&filter_name=' +  encodeURIComponent(request.term),
+        dataType: 'json',
+        data: {token: '<?php echo $token; ?>', filter_name: encodeURIComponent(request.term)},
+        type: 'POST',
+        success: function(json) {
+          response($.map(json, function(item) {
+            return {
+              label: item.firstname + ' ' + item.lastname + ' (' + item.email + ')',
+              value: item.customer_id
+            }
+          }));
+        }
+      });
+    },
+    select: function(event, ui) {
+      $('#customer_autocomplete').closest('tr').before(
+        '<tr>' +
+          '<td class="left">' +
+            ui.item.label +
+            '<input type="hidden" name="bulk_customers[' + customer_counter + '][customer_id]" value="' + ui.item.value + '"/>' +
+            '<input type="hidden" name="bulk_customers[' + customer_counter + '][customer_name]" value="' + ui.item.label + '"/>' +
+          '</td>' +
+          '<td class="left">' +
+            '<input name="bulk_customers[' + customer_counter + '][piece]" type="checkbox" value="1"/>' +
+          '</td>' +
+          '<td class="left">' +
+            '<input name="bulk_customers[' + customer_counter + '][bulk]" type="checkbox" value="1"/>' +
+          '</td>' +
+          '<td class="left short-cell">' +
+            '<a class="button purge-parent"><?php echo $button_remove; ?></a>' +
+          '</td>' +
+        '</tr>'
+      );
+      customer_counter++;
+      return false;
+    }
   });
 
 });
