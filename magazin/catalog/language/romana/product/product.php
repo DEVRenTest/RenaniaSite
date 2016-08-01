@@ -79,4 +79,5 @@ $_['text_month_single'] = 'luna';
 $_['text_month_multiple'] = 'luni';
 $_['text_year_single'] = 'an';
 $_['text_year_multiple'] = 'ani';
+$_['text_no_shirt_no_service'] = 'Produsul momentan nu este disponibil pentru dumneavoastră';
 ?>

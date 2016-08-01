@@ -1119,7 +1119,7 @@ class Cart
             $this->remove($key . ':0');
             $this->remove($key . ':1');
             
-            if (!$container_size) {
+            if (!$container_size || !$this->model_catalog_product->customerCanBuyBulk($product_id)) {
                 $this->session->data['cart'][$key . ':0'] = $qty;
             } else {
                 if ($qty % $container_size) {

@@ -198,7 +198,8 @@ class ControllerProductProduct extends Controller {
 	 		}
 	 	}
 
-	 	$this->data['customer_forced_buy_bulk'] = $this->model_catalog_product->customerForcedBuyBulk($product_id);
+		$this->data['buy_piece'] = $this->model_catalog_product->customerCanBuyPiece($product_id);
+		$this->data['buy_bulk'] = $this->model_catalog_product->customerCanBuyBulk($product_id);
 
 		if ($product_info) {
 			$url = '';
@@ -296,6 +297,7 @@ class ControllerProductProduct extends Controller {
             $this->data['text_price_per_package'] = $this->language->get('text_price_per_package');
             $this->data['text_pieces'] = $this->language->get('text_pieces');
             $this->data['text_packages'] = $this->language->get('text_packages');
+            $this->data['text_no_shirt_no_service'] = $this->language->get('text_no_shirt_no_service');
       
             $this->data['text_free_delivery'] = $this->language->get('text_free_delivery');
             $this->data['text_return_guarantee'] = $this->language->get('text_return_guarantee');
