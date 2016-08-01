@@ -131,12 +131,12 @@ class ModelCatalogProduct extends Model {
 
 		if (isset($data['bulk_groups']) && !empty($data['bulk_groups'])) {
 			foreach ($data['bulk_groups'] as $bulk_group) {
-				$this->db->query("INSERT INTO " . DB_PREFIX . "bulk_group SET product_id = '" . (int)$product_id . "', customer_group_id = '" . (int)$bulk_group['customer_group_id'] . "', piece = '" . (int)(isset($bulk_group['piece']) && $bulk_group['piece'] == 1) . "', bulk = '" . (int)(isset($bulk_group['bulk']) &&  $bulk_group['bulk'] == 1) . "'");
+				$this->db->query("INSERT INTO " . DB_PREFIX . "bulk_group SET product_id = '" . (int)$product_id . "', customer_group_id = '" . (int)$bulk_group['customer_group_id'] . "', piece = '" . (int)(isset($bulk_group['piece']) && $bulk_group['piece'] == 1) . "', bulk = '" . (int)(isset($bulk_group['bulk']) &&  $bulk_group['bulk'] == 1) . "' ON DUPLICATE KEY UPDATE piece = '" . (int)(isset($bulk_group['piece']) && $bulk_group['piece'] == 1) . "', bulk = '" . (int)(isset($bulk_group['bulk']) && $bulk_group['bulk'] == 1) . "'");
 			}
 		}
 		if (isset($data['bulk_customers']) && !empty($data['bulk_customers'])) {
 			foreach ($data['bulk_customers'] as $bulk_customer) {
-				$this->db->query("INSERT INTO " . DB_PREFIX . "bulk_customer SET product_id = '" . (int)$product_id . "', customer_id = '" . (int)$bulk_customer['customer_id'] . "', piece = '" . (int)(isset($bulk_customer['piece']) && $bulk_customer['piece'] == 1) . "', bulk = '" . (int)(isset($bulk_customer['bulk']) &&  $bulk_customer['bulk'] == 1) . "'");
+				$this->db->query("INSERT INTO " . DB_PREFIX . "bulk_customer SET product_id = '" . (int)$product_id . "', customer_id = '" . (int)$bulk_customer['customer_id'] . "', piece = '" . (int)(isset($bulk_customer['piece']) && $bulk_customer['piece'] == 1) . "', bulk = '" . (int)(isset($bulk_customer['bulk']) &&  $bulk_customer['bulk'] == 1) . "' ON DUPLICATE KEY UPDATE piece = '" . (int)(isset($bulk_customer['piece']) && $bulk_customer['piece'] == 1) . "', bulk = '" . (int)(isset($bulk_customer['bulk']) && $bulk_customer['bulk'] == 1) . "'");
 			}
 		}
 		
@@ -250,12 +250,12 @@ class ModelCatalogProduct extends Model {
 		$this->db->query("DELETE FROM " . DB_PREFIX . "bulk_customer WHERE product_id = '" . (int)$product_id . "'");
 		if (isset($data['bulk_groups']) && !empty($data['bulk_groups'])) {
 			foreach ($data['bulk_groups'] as $bulk_group) {
-				$this->db->query("INSERT INTO " . DB_PREFIX . "bulk_group SET product_id = '" . (int)$product_id . "', customer_group_id = '" . (int)$bulk_group['customer_group_id'] . "', piece = '" . (int)(isset($bulk_group['piece']) && $bulk_group['piece'] == 1) . "', bulk = '" . (int)(isset($bulk_group['bulk']) &&  $bulk_group['bulk'] == 1) . "'");
+				$this->db->query("INSERT INTO " . DB_PREFIX . "bulk_group SET product_id = '" . (int)$product_id . "', customer_group_id = '" . (int)$bulk_group['customer_group_id'] . "', piece = '" . (int)(isset($bulk_group['piece']) && $bulk_group['piece'] == 1) . "', bulk = '" . (int)(isset($bulk_group['bulk']) &&  $bulk_group['bulk'] == 1) . "' ON DUPLICATE KEY UPDATE piece = '" . (int)(isset($bulk_group['piece']) && $bulk_group['piece'] == 1) . "', bulk = '" . (int)(isset($bulk_group['bulk']) && $bulk_group['bulk'] == 1) . "'");
 			}
 		}
 		if (isset($data['bulk_customers']) && !empty($data['bulk_customers'])) {
 			foreach ($data['bulk_customers'] as $bulk_customer) {
-				$this->db->query("INSERT INTO " . DB_PREFIX . "bulk_customer SET product_id = '" . (int)$product_id . "', customer_id = '" . (int)$bulk_customer['customer_id'] . "', piece = '" . (int)(isset($bulk_customer['piece']) && $bulk_customer['piece'] == 1) . "', bulk = '" . (int)(isset($bulk_customer['bulk']) &&  $bulk_customer['bulk'] == 1) . "'");
+				$this->db->query("INSERT INTO " . DB_PREFIX . "bulk_customer SET product_id = '" . (int)$product_id . "', customer_id = '" . (int)$bulk_customer['customer_id'] . "', piece = '" . (int)(isset($bulk_customer['piece']) && $bulk_customer['piece'] == 1) . "', bulk = '" . (int)(isset($bulk_customer['bulk']) &&  $bulk_customer['bulk'] == 1) . "' ON DUPLICATE KEY UPDATE piece = '" . (int)(isset($bulk_customer['piece']) && $bulk_customer['piece'] == 1) . "', bulk = '" . (int)(isset($bulk_customer['bulk']) && $bulk_customer['bulk'] == 1) . "'");
 			}
 		}
 		
