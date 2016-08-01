@@ -783,24 +783,37 @@ class ModelCatalogProduct extends Model {
 
         return $size_chart_name;
     }
-  
-    public function customerForcedBuyBulk($product_id)
-    {
-    	$result = false;
-    	if ($this->customer->isLogged()) {
-    		// check if product has container size
-	    	$query = $this->db->query("SELECT container_size FROM " . DB_PREFIX . "product WHERE product_id = '" . (int)$product_id . "'");
-	    	if ($query->num_rows && $query->row['container_size']) {
-	    		// check for restriction
-    			$query = $this->db->query("SELECT COALESCE((SELECT force_buy_bulk FROM " . DB_PREFIX . "force_buy_bulk_override_customer WHERE customer_id = '" . $this->customer->getId() . "' AND product_id = '" . (int)$product_id . "'), (SELECT force_buy_bulk FROM " . DB_PREFIX . "force_buy_bulk_override_group WHERE customer_group_id = '" . $this->customer->getCustomerGroupId() . "' AND product_id = '" . (int)$product_id . "'), (SELECT force_buy_bulk FROM " . DB_PREFIX . "customer_group WHERE customer_group_id = '" . $this->customer->getCustomerGroupId() . "')) AS force_buy_bulk");
-    			if ($query->row['force_buy_bulk']) {
-    				$result = true;
-    			}
-	    	}
-    	}
 
-    	return $result;
-    }
+	public function customerCanBuyPiece($product_id)
+	{
+		if (!($this->customer->islogged() && $this->getProductContainerSize($product_id))) {
+			return true;
+		}
+		$query = $this->db->query(
+			"SELECT COALESCE(
+				(SELECT piece FROM " . DB_PREFIX . "bulk_customer WHERE product_id = '" . (int)$product_id . "' AND customer_id = '" . (int)$this->customer->getId() . "'),
+				(SELECT piece FROM " . DB_PREFIX . "bulk_group WHERE product_id = '" . (int)$product_id . "' AND customer_group_id = '" . (int)$this->customer->getCustomerGroupId() . "'),
+				(SELECT piece FROM " . DB_PREFIX . "customer_group WHERE customer_group_id = '" . (int)$this->customer->getCustomerGroupId() . "')
+			) as can_buy_piece"
+		);
+		return (bool)$query->row['can_buy_piece'];
+	}
+
+	public function customerCanBuyBulk($product_id)
+	{
+		if (!($this->customer->islogged() && $this->getProductContainerSize($product_id))) {
+			return false;
+		}
+		$query = $this->db->query(
+			"SELECT COALESCE(
+				(SELECT bulk FROM " . DB_PREFIX . "bulk_customer WHERE product_id = '" . (int)$product_id . "' AND customer_id = '" . (int)$this->customer->getId() . "'),
+				(SELECT bulk FROM " . DB_PREFIX . "bulk_group WHERE product_id = '" . (int)$product_id . "' AND customer_group_id = '" . (int)$this->customer->getCustomerGroupId() . "'),
+				(SELECT bulk FROM " . DB_PREFIX . "customer_group WHERE customer_group_id = '" . (int)$this->customer->getCustomerGroupId() . "')
+			) as can_buy_bulk"
+		);
+		return (bool)$query->row['can_buy_bulk'];
+	}
+
     public function getPackageDiscount($product_id)
     {
     	$result = false;
