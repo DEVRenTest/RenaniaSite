@@ -104,14 +104,16 @@
 							content += '<li>' + data.text_model + data.model + '</li>';
 							content += '<li class="price-list">' + data.text_price_per_piece + '<span id="display-price-piece"> ...</span>' + '</li>';
 							if (data.container_size != 0) {
-								content += '<li class="price-list">' + data.text_price_per_package + '<span id="display-price-package"> ...</span>' + '</li>';
-								content += '<li>' + data.text_pieces_per_package + data.container_size + '</li>';
-								$('#input-packages').prop('disabled', false);
-								$('#input-packages').attr('data-multiplier', data.container_size);
-								$('input[name="package-size"]').val(data.container_size);
-								$('input[name="package-discount"]').val(data.package_discount);
-								if (!data.customer_forced_buy_bulk) {
+								if (data.buy_piece) {
 									$('#input-pieces').prop('disabled', false);
+								}
+								if (data.buy_bulk) {
+									content += '<li class="price-list">' + data.text_price_per_package + '<span id="display-price-package"> ...</span>' + '</li>';
+									content += '<li>' + data.text_pieces_per_package + data.container_size + '</li>';
+									$('#input-packages').prop('disabled', false);
+									$('#input-packages').attr('data-multiplier', data.container_size);
+									$('input[name="package-size"]').val(data.container_size);
+									$('input[name="package-discount"]').val(data.package_discount);
 								}
 							} else {
 								$('#input-pieces').prop('disabled', false);
@@ -164,7 +166,7 @@
 			});
 		});
 		$('#content').on('click', '#add-product', function(){
-			if ($('#fake-form')[0].checkValidity()) {
+			if ($('#fake-form')[0].checkValidity() && ($('#input-packages').val() + $('#input-pieces').val() > 0)) {
 				product_option_combo = ['product', $('input[name="product_id"]').val(), $('#product-size').val(), $('#product-color').val()].join('-');
 				$('#' + product_option_combo).remove();
 				product_row = '';

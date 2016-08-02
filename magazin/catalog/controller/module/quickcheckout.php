@@ -1267,7 +1267,6 @@ class ControllerModuleQuickcheckout extends Controller
                     'option' => $option_data,
                     'quantity' => $product['quantity'],
                     'container_size' => $product['container_size'],
-                    'customer_must_buy_bulk' => $this->model_catalog_product->customerForcedBuyBulk($product['product_id']),
                     'piece_or_package' => $product['piece_or_package'],
                     'stock' => $product['stock'] ? true : !(!$this->config->get( 'config_stock_checkout' ) || $this->config->get( 'config_stock_warning' )),
                     'subtract' => $product['subtract'],
