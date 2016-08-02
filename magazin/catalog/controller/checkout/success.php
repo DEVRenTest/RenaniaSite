@@ -30,7 +30,7 @@ class ControllerCheckoutSuccess extends Controller {
 				$this->data['totals'] = $this->model_account_order->getOrderTotals($this->session->data['order_id']);
 				$this->data['shipping_method'] = $order['shipping_method'];
 				$this->template = 'default/template/api/orderdata.tpl';
-				$this->data['cxml'] = urlencode($this->render());
+				$this->data['cxml'] = base64_encode($this->render());
 			}
 			unset($this->session->data['shipping_method']);
 			unset($this->session->data['shipping_methods']);
