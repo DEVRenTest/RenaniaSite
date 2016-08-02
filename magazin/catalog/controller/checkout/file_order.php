@@ -69,7 +69,7 @@ class ControllerCheckoutFileOrder extends Controller {
                 }
                 
                 if ($input_valid_item) {
-                    $customer_forced_buy_bulk = $this->model_catalog_product->customerForcedBuyBulk($product_id);
+                    $customer_forced_buy_bulk = !$this->model_catalog_product->customerCanBuyPiece($product_id) && $this->model_catalog_product->customerCanBuyBulk($product_id);
                     $container_size = $this->model_catalog_product->getProductContainerSize($product_id);
                     if ($container_size && $customer_forced_buy_bulk) {
                         $product['quantity'] *= $container_size;
