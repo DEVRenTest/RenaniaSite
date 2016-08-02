@@ -239,6 +239,102 @@
             </tr>
           </table>
         </div>
+        <div id="tab-bulk-buy">
+          <p class="help"><?php echo $text_bulk_buy_help; ?></p>
+          <div class="half">
+            <table class="list" style="width: 95%;">
+              <thead>
+                <tr>
+                  <td class="left" colspan="4"><?php echo $text_group_table; ?></td>
+                </tr>
+                <tr>
+                  <td class="left" rowspan="2"><?php echo $column_group; ?></td>
+                  <td class="left" colspan="2"><?php echo $column_acquisition; ?></td>
+                  <td class="left short-cell" rowspan="2"></td>
+                </tr>
+                <tr>
+                  <td class="left" width="1"><?php echo $text_piece; ?></td>
+                  <td class="left" width="1"><?php echo $text_package; ?></td>
+                </tr>
+              </thead>
+              <tbody>
+                <?php foreach ($bulk_groups as $k => $bulk_group) { ?>
+                  <tr>
+                    <td class="left">
+                      <?php echo $bulk_group['customer_group_name']; ?>
+                      <input type="hidden" name="bulk_groups[<?php echo $k; ?>][customer_group_id]" value="<?php echo $bulk_group['customer_group_id']; ?>"/>
+                      <input type="hidden" name="bulk_groups[<?php echo $k; ?>][customer_group_name]" value="<?php echo $bulk_group['customer_group_name']; ?>"/>
+                    </td>
+                    <td class="left">
+                      <input name="bulk_groups[<?php echo $k; ?>][piece]" type="checkbox" value="1"<?php if (isset($bulk_group['piece']) && $bulk_group['piece']) { ?> checked="checked"<?php } ?>/>
+                    </td>
+                    <td class="left">
+                      <input name="bulk_groups[<?php echo $k; ?>][bulk]" type="checkbox" value="1"<?php if (isset($bulk_group['bulk']) && $bulk_group['bulk']) { ?> checked="checked"<?php } ?>/>
+                    </td>
+                    <td class="left short-cell">
+                      <a class="button purge-parent"><?php echo $button_remove; ?></a>
+                    </td>
+                  </tr>
+                <?php } ?>
+                <tr id="more-group">
+                  <td class="left" colspan="4">
+                    <label for="customer_groups"><?php echo $entry_add_group_rule; ?></label>
+                    <select id="customer_groups">
+                      <?php foreach ($customer_groups as $customer_group) { ?>
+                        <option value="<?php echo $customer_group['customer_group_id']; ?>"><?php echo $customer_group['name']; ?></option>
+                      <?php } ?>
+                    </select>
+                    <a class="button"><?php echo $button_insert; ?></a>
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+          <div class="half">
+            <table class="list" style="width: 95%;">
+              <thead>
+                <tr>
+                  <td class="left" colspan="4"><?php echo $text_customer_table; ?></td>
+                </tr>
+                <tr>
+                  <td class="left" rowspan="2"><?php echo $column_group; ?></td>
+                  <td class="left" colspan="2"><?php echo $column_acquisition; ?></td>
+                  <td class="left short-cell" rowspan="2"></td>
+                </tr>
+                <tr>
+                  <td class="left" width="1"><?php echo $text_piece; ?></td>
+                  <td class="left" width="1"><?php echo $text_package; ?></td>
+                </tr>
+              </thead>
+              <tbody>
+                <?php foreach ($bulk_customers as $k => $bulk_customer) { ?>
+                  <tr>
+                    <td class="left">
+                      <?php echo $bulk_customer['customer_name']; ?>
+                      <input type="hidden" name="bulk_customers[<?php echo $k; ?>][customer_id]" value="<?php echo $bulk_customer['customer_id']; ?>"/>
+                      <input type="hidden" name="bulk_customers[<?php echo $k; ?>][customer_name]" value="<?php echo $bulk_customer['customer_name']; ?>"/>
+                    </td>
+                    <td class="left">
+                      <input name="bulk_customers[<?php echo $k; ?>][piece]" type="checkbox" value="1"<?php if (isset($bulk_customer['piece']) && $bulk_customer['piece']) { ?> checked="checked"<?php } ?>/>
+                    </td>
+                    <td class="left">
+                      <input name="bulk_customers[<?php echo $k; ?>][bulk]" type="checkbox" value="1"<?php if (isset($bulk_customer['bulk']) && $bulk_customer['bulk']) { ?> checked="checked"<?php } ?>/>
+                    </td>
+                    <td class="left short-cell">
+                      <a class="button purge-parent"><?php echo $button_remove; ?></a>
+                    </td>
+                  </tr>
+                <?php } ?>
+                <tr>
+                  <td class="left" colspan="4">
+                    <label for="customer_autocomplete"><?php echo $entry_add_customer_rule; ?></label>
+                    <input type="text" id="customer_autocomplete"></input>
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
         <div id="tab-links">
           <table class="form">
             <tr>
@@ -886,104 +982,6 @@
 
             </table>
         </div>
-
-        <div id="tab-bulk-buy">
-          <p class="help"><?php echo $text_bulk_buy_help; ?></p>
-          <div class="half">
-            <table class="list" style="width: 95%;">
-              <thead>
-                <tr>
-                  <td class="left" colspan="4"><?php echo $text_group_table; ?></td>
-                </tr>
-                <tr>
-                  <td class="left" rowspan="2"><?php echo $column_group; ?></td>
-                  <td class="left" colspan="2"><?php echo $column_acquisition; ?></td>
-                  <td class="left short-cell" rowspan="2"></td>
-                </tr>
-                <tr>
-                  <td class="left" width="1"><?php echo $text_piece; ?></td>
-                  <td class="left" width="1"><?php echo $text_package; ?></td>
-                </tr>
-              </thead>
-              <tbody>
-                <?php foreach ($bulk_groups as $k => $bulk_group) { ?>
-                  <tr>
-                    <td class="left">
-                      <?php echo $bulk_group['customer_group_name']; ?>
-                      <input type="hidden" name="bulk_groups[<?php echo $k; ?>][customer_group_id]" value="<?php echo $bulk_group['customer_group_id']; ?>"/>
-                      <input type="hidden" name="bulk_groups[<?php echo $k; ?>][customer_group_name]" value="<?php echo $bulk_group['customer_group_name']; ?>"/>
-                    </td>
-                    <td class="left">
-                      <input name="bulk_groups[<?php echo $k; ?>][piece]" type="checkbox" value="1"<?php if (isset($bulk_group['piece']) && $bulk_group['piece']) { ?> checked="checked"<?php } ?>/>
-                    </td>
-                    <td class="left">
-                      <input name="bulk_groups[<?php echo $k; ?>][bulk]" type="checkbox" value="1"<?php if (isset($bulk_group['bulk']) && $bulk_group['bulk']) { ?> checked="checked"<?php } ?>/>
-                    </td>
-                    <td class="left short-cell">
-                      <a class="button purge-parent"><?php echo $button_remove; ?></a>
-                    </td>
-                  </tr>
-                <?php } ?>
-                <tr id="more-group">
-                  <td class="left" colspan="4">
-                    <label for="customer_groups"><?php echo $entry_add_group_rule; ?></label>
-                    <select id="customer_groups">
-                      <?php foreach ($customer_groups as $customer_group) { ?>
-                        <option value="<?php echo $customer_group['customer_group_id']; ?>"><?php echo $customer_group['name']; ?></option>
-                      <?php } ?>
-                    </select>
-                    <a class="button"><?php echo $button_insert; ?></a>
-                  </td>
-                </tr>
-              </tbody>
-            </table>
-          </div>
-          <div class="half">
-            <table class="list" style="width: 95%;">
-              <thead>
-                <tr>
-                  <td class="left" colspan="4"><?php echo $text_customer_table; ?></td>
-                </tr>
-                <tr>
-                  <td class="left" rowspan="2"><?php echo $column_group; ?></td>
-                  <td class="left" colspan="2"><?php echo $column_acquisition; ?></td>
-                  <td class="left short-cell" rowspan="2"></td>
-                </tr>
-                <tr>
-                  <td class="left" width="1"><?php echo $text_piece; ?></td>
-                  <td class="left" width="1"><?php echo $text_package; ?></td>
-                </tr>
-              </thead>
-              <tbody>
-                <?php foreach ($bulk_customers as $k => $bulk_customer) { ?>
-                  <tr>
-                    <td class="left">
-                      <?php echo $bulk_customer['customer_name']; ?>
-                      <input type="hidden" name="bulk_customers[<?php echo $k; ?>][customer_id]" value="<?php echo $bulk_customer['customer_id']; ?>"/>
-                      <input type="hidden" name="bulk_customers[<?php echo $k; ?>][customer_name]" value="<?php echo $bulk_customer['customer_name']; ?>"/>
-                    </td>
-                    <td class="left">
-                      <input name="bulk_customers[<?php echo $k; ?>][piece]" type="checkbox" value="1"<?php if (isset($bulk_customer['piece']) && $bulk_customer['piece']) { ?> checked="checked"<?php } ?>/>
-                    </td>
-                    <td class="left">
-                      <input name="bulk_customers[<?php echo $k; ?>][bulk]" type="checkbox" value="1"<?php if (isset($bulk_customer['bulk']) && $bulk_customer['bulk']) { ?> checked="checked"<?php } ?>/>
-                    </td>
-                    <td class="left short-cell">
-                      <a class="button purge-parent"><?php echo $button_remove; ?></a>
-                    </td>
-                  </tr>
-                <?php } ?>
-                <tr>
-                  <td class="left" colspan="4">
-                    <label for="customer_autocomplete"><?php echo $entry_add_customer_rule; ?></label>
-                    <input type="text" id="customer_autocomplete"></input>
-                  </td>
-                </tr>
-              </tbody>
-            </table>
-          </div>
-        </div>
-
       </form>
     </div>
   </div>
