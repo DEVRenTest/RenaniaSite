@@ -97,7 +97,7 @@ class ControllerMyocFastOrderLivePriceUpdate extends Controller
             $optionNr = sizeof( $this->model_catalog_product->getProductOptions($product_id) );
             $option_data = $this->cart->buildOptionDataArray( $product_id, $option );
             
-            if( $this->customer->getCustomerGroupId() == 3 || $this->customer->getCustomerGroupId() == 4  || $this->customer->getCustomerGroupId() == 0)
+            if( $this->customer->getCustomerGroupId() == 3 || $this->customer->getCustomerGroupId() == 4  || $this->customer->getCustomerGroupId() == 770) //770 - pentru Zentiva
             {
                 $taxOfOneProductB2B = $total_price_with_tax = $total_price = "";
                 //$option_data = $this->cart->buildOptionDataArray( $product_id, $option );

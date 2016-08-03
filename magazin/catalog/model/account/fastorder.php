@@ -266,7 +266,7 @@ class ModelAccountFastorder extends Model {
 			// if the logged customer is B2B or Gallery + B2B
 			$priceB2B = 0;
 			$B2B = false;
-			if( $this->customer->getCustomerGroupId() == 3 || $this->customer->getCustomerGroupId() == 4  || $this->customer->getCustomerGroupId() == 0)
+			if( $this->customer->getCustomerGroupId() == 3 || $this->customer->getCustomerGroupId() == 4  || $this->customer->getCustomerGroupId() == 770) //770 - pentru Zentiva
 			{
 				$option_data = $this->cart->buildOptionDataArray( $product_id, $option );
 				$priceB2B = $this->cart->calculatePriceB2B( $product_id, $option_data );
