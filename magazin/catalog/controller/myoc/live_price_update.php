@@ -197,7 +197,7 @@ class ControllerMyocLivePriceUpdate extends Controller
                     $pr = $this->currency->format( $taxOfOneProductB2B ) ." (".$this->language->get( 'text_withouth_vat' )." "
                     .$this->currency->format( $priceB2B )." ".")";
 
-                    if ($product_info['container_size']) {
+                    if ($this->model_catalog_product->customerCanBuyBulk($product_id)) {
                         $pr .= "<br>"
                             . $this->language->get('text_price_per_package') 
                             . " "
