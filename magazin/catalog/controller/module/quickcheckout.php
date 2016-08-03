@@ -1859,9 +1859,6 @@ class ControllerModuleQuickcheckout extends Controller
 //            }
 //            // end ax
         }
-        if (isset($this->session->data['remote_order_url'])) {
-            $this->remoteUserSendOrderData($data, $this->session->data['remote_order_url']);
-        }
         // generate an XML with product data and send it to customer push url
         $this->createAndSendCXMLToAutoLoggedInCustomer( $data );
     }
