@@ -74,7 +74,7 @@ class ControllerMyocLivePriceUpdate extends Controller
             $product_info['special'] = false;
         }
 
-        if($product_info['container_size']) {
+        if($this->model_catalog_product->customerCanBuyBulk($product_id)) {
        		$verbosePrice = $this->currency->format( $taxOfOneProduct )." (".$this->language->get( 'text_withouth_vat' )." ".$this->currency->format( $product_info['price'] )." ".")" ."<br>". $this->language->get( 'text_price_per_package' ) ." ". $this->currency->format( ($taxOfOneProduct * $product_info['container_size']) - (($taxOfOneProduct * $product_info['container_size'] * $product_info['package_discount']) / 100) ) ." (".$this->language->get( 'text_withouth_vat' )." ".$this->currency->format(($product_info['price'] * $product_info['container_size']) - (($product_info['price'] * $product_info['container_size'] * $product_info['package_discount']) / 100) )." ".")";
     	} else {
     		$verbosePrice = $this->currency->format( $taxOfOneProduct )." (".$this->language->get( 'text_withouth_vat' )." ".$this->currency->format( $product_info['price'] )." ".")";
