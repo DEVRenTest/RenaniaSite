@@ -103,7 +103,7 @@ class ControllerMyocLivePriceUpdate extends Controller
             $optionNr = sizeof( $this->model_catalog_product->getProductOptions($product_id) );
             $option_data = $this->cart->buildOptionDataArray( $product_id, $option );
             
-            if( $this->customer->getCustomerGroupId() == 3 || $this->customer->getCustomerGroupId() == 4 )
+            if( $this->customer->getCustomerGroupId() == 3 || $this->customer->getCustomerGroupId() == 4  || $this->customer->getCustomerGroupId() == 0)
             {
                 //$option_data = $this->cart->buildOptionDataArray( $product_id, $option );
                 $priceB2B = $this->cart->calculatePriceB2B( $product_id, $option_data );

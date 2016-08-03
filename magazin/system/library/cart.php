@@ -334,7 +334,7 @@ class Cart
                     // if the logged customer is B2B or Gallery + B2B
                     $priceB2B = 0;
                     $B2B = false;                   
-                    if( $this->customer->getCustomerGroupId() == 3 || $this->customer->getCustomerGroupId() == 4 )
+                    if( $this->customer->getCustomerGroupId() == 3 || $this->customer->getCustomerGroupId() == 4  || $this->customer->getCustomerGroupId() == 0)
                     {
                         $B2B = true;
                         $priceB2B = $this->calculatePriceB2B( $product_query->row['product_id'], $option_data );
