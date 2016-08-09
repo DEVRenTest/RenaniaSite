@@ -103,9 +103,10 @@ body.group4 .secondary-menu-item-3 span {
 	padding-left: 15px;
 }
 
-.special_products_form tr {
-	line-height: 400%;
-	font-family: 'Century Gothic';
+#container .special_products_form td,
+#container .special_products_form span {
+	line-height: 300%;
+	font-family: 'Century Gothic' !important;
 }
 
 .special_products_form_buttons {
