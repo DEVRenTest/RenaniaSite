@@ -129,16 +129,14 @@ class ModelCatalogProduct extends Model {
 			}
 		} 
 
-		if (isset($data['bulk_buy_overrides'])) {
-			if (isset($data['bulk_buy_overrides']['customer_groups']) && !empty($data['bulk_buy_overrides']['customer_groups'])) {
-				foreach ($data['bulk_buy_overrides']['customer_groups'] as $customer_group_id => $force_buy_bulk) {
-					$this->db->query("INSERT INTO " . DB_PREFIX . "force_buy_bulk_override_group set product_id = '" . (int)$product_id . "', customer_group_id = '" . (int)$customer_group_id . "', force_buy_bulk = '" . (int)$force_buy_bulk . "'");
-				}
+		if (isset($data['bulk_groups']) && !empty($data['bulk_groups'])) {
+			foreach ($data['bulk_groups'] as $bulk_group) {
+				$this->db->query("INSERT INTO " . DB_PREFIX . "bulk_group SET product_id = '" . (int)$product_id . "', customer_group_id = '" . (int)$bulk_group['customer_group_id'] . "', piece = '" . (int)(isset($bulk_group['piece']) && $bulk_group['piece'] == 1) . "', bulk = '" . (int)(isset($bulk_group['bulk']) &&  $bulk_group['bulk'] == 1) . "' ON DUPLICATE KEY UPDATE piece = '" . (int)(isset($bulk_group['piece']) && $bulk_group['piece'] == 1) . "', bulk = '" . (int)(isset($bulk_group['bulk']) && $bulk_group['bulk'] == 1) . "'");
 			}
-			if (isset($data['bulk_buy_overrides']['customer']) && !empty($data['bulk_buy_overrides']['customer'])) {
-				foreach ($data['bulk_buy_overrides']['customer'] as $customer_id => $force_buy_bulk) {
-					$this->db->query("INSERT INTO " . DB_PREFIX . "force_buy_bulk_override_customer set product_id = '" . (int)$product_id . "', customer_id = '" . (int)$customer_id . "', force_buy_bulk = '" . (int)$force_buy_bulk . "'");
-				}
+		}
+		if (isset($data['bulk_customers']) && !empty($data['bulk_customers'])) {
+			foreach ($data['bulk_customers'] as $bulk_customer) {
+				$this->db->query("INSERT INTO " . DB_PREFIX . "bulk_customer SET product_id = '" . (int)$product_id . "', customer_id = '" . (int)$bulk_customer['customer_id'] . "', piece = '" . (int)(isset($bulk_customer['piece']) && $bulk_customer['piece'] == 1) . "', bulk = '" . (int)(isset($bulk_customer['bulk']) &&  $bulk_customer['bulk'] == 1) . "' ON DUPLICATE KEY UPDATE piece = '" . (int)(isset($bulk_customer['piece']) && $bulk_customer['piece'] == 1) . "', bulk = '" . (int)(isset($bulk_customer['bulk']) && $bulk_customer['bulk'] == 1) . "'");
 			}
 		}
 		
@@ -248,18 +246,16 @@ class ModelCatalogProduct extends Model {
 			}		
 		}
 
-		$this->db->query("DELETE FROM " . DB_PREFIX . "force_buy_bulk_override_group WHERE product_id = '" . (int)$product_id . "'");
-		$this->db->query("DELETE FROM " . DB_PREFIX . "force_buy_bulk_override_customer WHERE product_id = '" . (int)$product_id . "'");
-		if (isset($data['bulk_buy_overrides'])) {
-			if (isset($data['bulk_buy_overrides']['customer_groups']) && !empty($data['bulk_buy_overrides']['customer_groups'])) {
-				foreach ($data['bulk_buy_overrides']['customer_groups'] as $customer_group_id => $force_buy_bulk) {
-					$this->db->query("INSERT INTO " . DB_PREFIX . "force_buy_bulk_override_group set product_id = '" . (int)$product_id . "', customer_group_id = '" . (int)$customer_group_id . "', force_buy_bulk = '" . (int)$force_buy_bulk . "'");
-				}
+		$this->db->query("DELETE FROM " . DB_PREFIX . "bulk_group WHERE product_id = '" . (int)$product_id . "'");
+		$this->db->query("DELETE FROM " . DB_PREFIX . "bulk_customer WHERE product_id = '" . (int)$product_id . "'");
+		if (isset($data['bulk_groups']) && !empty($data['bulk_groups'])) {
+			foreach ($data['bulk_groups'] as $bulk_group) {
+				$this->db->query("INSERT INTO " . DB_PREFIX . "bulk_group SET product_id = '" . (int)$product_id . "', customer_group_id = '" . (int)$bulk_group['customer_group_id'] . "', piece = '" . (int)(isset($bulk_group['piece']) && $bulk_group['piece'] == 1) . "', bulk = '" . (int)(isset($bulk_group['bulk']) &&  $bulk_group['bulk'] == 1) . "' ON DUPLICATE KEY UPDATE piece = '" . (int)(isset($bulk_group['piece']) && $bulk_group['piece'] == 1) . "', bulk = '" . (int)(isset($bulk_group['bulk']) && $bulk_group['bulk'] == 1) . "'");
 			}
-			if (isset($data['bulk_buy_overrides']['customer']) && !empty($data['bulk_buy_overrides']['customer'])) {
-				foreach ($data['bulk_buy_overrides']['customer'] as $customer_id => $force_buy_bulk) {
-					$this->db->query("INSERT INTO " . DB_PREFIX . "force_buy_bulk_override_customer set product_id = '" . (int)$product_id . "', customer_id = '" . (int)$customer_id . "', force_buy_bulk = '" . (int)$force_buy_bulk . "'");
-				}
+		}
+		if (isset($data['bulk_customers']) && !empty($data['bulk_customers'])) {
+			foreach ($data['bulk_customers'] as $bulk_customer) {
+				$this->db->query("INSERT INTO " . DB_PREFIX . "bulk_customer SET product_id = '" . (int)$product_id . "', customer_id = '" . (int)$bulk_customer['customer_id'] . "', piece = '" . (int)(isset($bulk_customer['piece']) && $bulk_customer['piece'] == 1) . "', bulk = '" . (int)(isset($bulk_customer['bulk']) &&  $bulk_customer['bulk'] == 1) . "' ON DUPLICATE KEY UPDATE piece = '" . (int)(isset($bulk_customer['piece']) && $bulk_customer['piece'] == 1) . "', bulk = '" . (int)(isset($bulk_customer['bulk']) && $bulk_customer['bulk'] == 1) . "'");
 			}
 		}
 		
@@ -969,5 +965,34 @@ class ModelCatalogProduct extends Model {
 		return $results;
 	}
 
+	public function getBUlkRulesCustomerGroup($product_id = 0, $customer_group_id = 0)
+	{
+		$result = array();
+		$sql = "SELECT bg.*, cgd.name AS customer_group_name,  pd.name AS product_name FROM " . DB_PREFIX . "bulk_group bg LEFT JOIN " . DB_PREFIX . "customer_group_description cgd ON bg.customer_group_id = cgd.customer_group_id LEFT JOIN " . DB_PREFIX . "product_description pd ON bg.product_id = pd.product_id WHERE cgd.language_id = '" . (int)$this->config->get('config_language_id') . "' AND pd.language_id = '" . (int)$this->config->get('config_language_id') . "' AND ";
+		if ($product_id) {
+			$sql .= "bg.product_id = '" . (int)$product_id . "' AND ";
+		}
+		if ($customer_group_id) {
+			$sql .= "bg.customer_group_id = '" . (int)$customer_group_id . "' AND ";
+		}
+		$sql .= "1";
+		$query = $this->db->query($sql);
+		return $query->rows;
+	}
+
+	public function getBUlkRulesCustomer($product_id = 0, $customer_id = 0)
+	{
+		$result = array();
+		$sql = "SELECT bc.*, CONCAT(c.firstname, ' ', c.lastname, ' (', c.email, ')') AS customer_name,  pd.name AS product_name FROM " . DB_PREFIX . "bulk_customer bc LEFT JOIN " . DB_PREFIX . "customer c ON bc.customer_id = c.customer_id LEFT JOIN " . DB_PREFIX . "product_description pd ON bc.product_id = pd.product_id WHERE pd.language_id = '" . (int)$this->config->get('config_language_id') . "' AND ";
+		if ($product_id) {
+			$sql .= "bc.product_id = '" . (int)$product_id . "' AND ";
+		}
+		if ($customer_id) {
+			$sql .= "bc.customer_id = '" . (int)$customer_id . "' AND ";
+		}
+		$sql .= "1";
+		$query = $this->db->query($sql);
+		return $query->rows;
+	}
 }
 ?>

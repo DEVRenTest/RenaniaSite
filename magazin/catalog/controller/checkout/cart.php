@@ -369,7 +369,6 @@ class ControllerCheckoutCart extends Controller
                     'recurring' => $product['recurring'],
                     'profile_name' => $product['profile_name'],
                     'profile_description' => $profile_description,
-                    'customer_forced_buy_bulk' => $this->model_catalog_product->customerForcedBuyBulk($product['product_id']),
                 );
             }
 

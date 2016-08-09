@@ -5,4 +5,5 @@ $_['text_guest'] = '<p>Comanda Dvs. a fost plasata cu succes!</p><p>Daca aveti a
 $_['text_basket'] = 'Cosul de cumparaturi';
 $_['text_checkout'] = 'Comanda';
 $_['text_success'] = 'Succes';
+$_['button_coupa']  = 'Înapoi la Coupa';
 ?>

@@ -334,7 +334,7 @@ class Cart
                     // if the logged customer is B2B or Gallery + B2B
                     $priceB2B = 0;
                     $B2B = false;                   
-                    if( $this->customer->getCustomerGroupId() == 3 || $this->customer->getCustomerGroupId() == 4 )
+                    if( $this->customer->getCustomerGroupId() == 3 || $this->customer->getCustomerGroupId() == 4  || $this->customer->getCustomerGroupId() == 770) //770 - pentru Zentiva
                     {
                         $B2B = true;
                         $priceB2B = $this->calculatePriceB2B( $product_query->row['product_id'], $option_data );
@@ -1119,7 +1119,7 @@ class Cart
             $this->remove($key . ':0');
             $this->remove($key . ':1');
             
-            if (!$container_size) {
+            if (!$container_size || !$this->model_catalog_product->customerCanBuyBulk($product_id)) {
                 $this->session->data['cart'][$key . ':0'] = $qty;
             } else {
                 if ($qty % $container_size) {

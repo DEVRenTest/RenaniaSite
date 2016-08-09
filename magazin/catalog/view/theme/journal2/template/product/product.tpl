@@ -386,52 +386,59 @@
         <div>
           <div id="product-quantity">
             <p class="text-qty"><?php echo $text_qty; ?></p>
-            <?php if (!$container_size) { ?>
-            <label for="real-quantity"><?php echo $text_pieces; ?>&colon; </label>
-            <input type="text" id="real-quantity" name="quantity" size="3" value=<?php echo $minimum; ?> data-min-value="<?php echo $minimum; ?>" autocomplete="off" />
-            <?php } else { 
-              if ($customer_forced_buy_bulk) { ?>
-              <label id="packages" for="fake_quantity"><?php echo $text_packages; ?>&colon; </label>
-              <input type="hidden" name="quantity" value=<?php echo $minimum; ?> data-min-value="<?php echo $minimum; ?>" autocomplete="off" />
-              <input type="text" id="fake_quantity" size="3"/>
-              <span class="piece-count"></span>
-              <script type="text/javascript">
-                $('#fake_quantity').on('change keyup', function(){
-                  $('input[name="quantity"]').val($(this).val() * <?php echo $container_size; ?>);
-                  $('.piece-count').text('(<?php echo $text_pieces; ?>: ' + $(this).val() * <?php echo $container_size; ?> + ')');
-                });
-              </script>
-              <?php } else { ?>
-              <div class="vertical-centered">
-                <input name="radio_bulk_or_piece" id="radio_bulk" value="1" type="radio" checked="checked"/>
-                <label for="radio_bulk"><?php echo $text_pieces; ?></label><br />
-                <input name="radio_bulk_or_piece" id="radio_piece" value="<?php echo $container_size; ?>"  type="radio"/>
-                <label id="packages" for="radio_piece"><?php echo $text_packages; ?></label>
-              </div>
-              <div class="vertical-centered">
+            <?php switch (array($buy_piece, $buy_bulk)) {
+              case array(false, false): ?>
+                <p><?php echo $text_no_shirt_no_service; ?></p>
+                <?php break;
+              case array(true, false): ?>
+                <label for="real-quantity"><?php echo $text_pieces; ?>&colon; </label>
+                <input type="text" id="real-quantity" name="quantity" size="3" value=<?php echo $minimum; ?> data-min-value="<?php echo $minimum; ?>" autocomplete="off" />
+                <?php break;  
+              case array(false, true): ?>
+                <label id="packages" for="fake_quantity"><?php echo $text_packages; ?>&colon; </label>
                 <input type="hidden" name="quantity" value=<?php echo $minimum; ?> data-min-value="<?php echo $minimum; ?>" autocomplete="off" />
                 <input type="text" id="fake_quantity" size="3"/>
                 <span class="piece-count"></span>
-              </div>
-              <script type="text/javascript">
-                $('input[name^="radio_bulk_or_piece"], #fake_quantity').on('change keyup', function(){
-                  $('input[name="quantity"]').val($('input[name^="radio_bulk_or_piece"]:checked').val() * $('#fake_quantity').val());
-                  if ($('input[name^="radio_bulk_or_piece"]:checked').val() != 1) {
-                    $('.piece-count').text('(<?php echo $text_pieces; ?>: ' + $('#fake_quantity').val() * <?php echo $container_size; ?> + ')');
-                  } else {
-                    if ($('#fake_quantity').val() % <?php echo $container_size; ?> != 0) {
-                      $('.piece-count').empty();
+                <script type="text/javascript">
+                  $('#fake_quantity').on('change keyup', function(){
+                    $('input[name="quantity"]').val($(this).val() * <?php echo $container_size; ?>);
+                    $('.piece-count').text('(<?php echo $text_pieces; ?>: ' + $(this).val() * <?php echo $container_size; ?> + ')');
+                  });
+                </script>
+                <?php break;
+              default: // tru tru, ++ if you get the reference ?>
+                <div class="vertical-centered">
+                  <input name="radio_bulk_or_piece" id="radio_bulk" value="1" type="radio" checked="checked"/>
+                  <label for="radio_bulk"><?php echo $text_pieces; ?></label><br />
+                  <input name="radio_bulk_or_piece" id="radio_piece" value="<?php echo $container_size; ?>"  type="radio"/>
+                  <label id="packages" for="radio_piece"><?php echo $text_packages; ?></label>
+                </div>
+                <div class="vertical-centered">
+                  <input type="hidden" name="quantity" value=<?php echo $minimum; ?> data-min-value="<?php echo $minimum; ?>" autocomplete="off" />
+                  <input type="text" id="fake_quantity" size="3"/>
+                  <span class="piece-count"></span>
+                </div>
+                <script type="text/javascript">
+                  $('input[name^="radio_bulk_or_piece"], #fake_quantity').on('change keyup', function(){
+                    $('input[name="quantity"]').val($('input[name^="radio_bulk_or_piece"]:checked').val() * $('#fake_quantity').val());
+                    if ($('input[name^="radio_bulk_or_piece"]:checked').val() != 1) {
+                      $('.piece-count').text('(<?php echo $text_pieces; ?>: ' + $('#fake_quantity').val() * <?php echo $container_size; ?> + ')');
                     } else {
-                      $('.piece-count').text('(<?php echo $text_packages; ?>: ' + $('#fake_quantity').val() / <?php echo $container_size; ?> + ')');
+                      if ($('#fake_quantity').val() % <?php echo $container_size; ?> != 0) {
+                        $('.piece-count').empty();
+                      } else {
+                        $('.piece-count').text('(<?php echo $text_packages; ?>: ' + $('#fake_quantity').val() / <?php echo $container_size; ?> + ')');
+                      }
                     }
-                  }
-                });
-              </script>
-              <?php } 
+                  });
+                </script>
+                <?php break;
             } ?>
           </div>
           <input type="hidden" name="product_id" value="<?php echo $product_id; ?>" />
+          <?php if ($buy_piece || $buy_bulk) { ?>
           <a id="button-cart" class="button"><span class="button-cart-text"><?php echo $button_cart; ?></span></a>
+          <?php } ?>
           <script>if ($('.product-info .image .label-outofstock').length) { $("#button-cart").addClass('button-disable').attr('disabled', 'disabled'); }</script>
         </div>
           <script>

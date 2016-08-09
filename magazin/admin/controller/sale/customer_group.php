@@ -266,7 +266,9 @@ class ControllerSaleCustomerGroup extends Controller {
 		
 		$this->data['text_yes'] = $this->language->get('text_yes');
 		$this->data['text_no'] = $this->language->get('text_no');
-				
+		$this->data['text_piece'] = $this->language->get('text_piece');
+		$this->data['text_package'] = $this->language->get('text_package');
+
 		$this->data['entry_name'] = $this->language->get('entry_name');
 		$this->data['entry_description'] = $this->language->get('entry_description');
 		$this->data['entry_approval'] = $this->language->get('entry_approval');
@@ -274,7 +276,7 @@ class ControllerSaleCustomerGroup extends Controller {
 		$this->data['entry_company_id_required'] = $this->language->get('entry_company_id_required');
 		$this->data['entry_tax_id_display'] = $this->language->get('entry_tax_id_display');
 		$this->data['entry_tax_id_required'] = $this->language->get('entry_tax_id_required');
-		$this->data['entry_force_buy_bulk'] = $this->language->get('entry_force_buy_bulk');
+		$this->data['entry_bulk_rules'] = $this->language->get('entry_bulk_rules');
 		$this->data['entry_sort_order'] = $this->language->get('entry_sort_order');
 		
 		$this->data['button_save'] = $this->language->get('button_save');
@@ -384,12 +386,20 @@ class ControllerSaleCustomerGroup extends Controller {
 			$this->data['tax_id_required'] = '';
 		}
 
-		if (isset($this->request->post['force_buy_bulk'])) {
-			$this->data['force_buy_bulk'] = $this->request->post['force_buy_bulk'];
+		if (isset($this->request->post['piece'])) {
+			$this->data['piece'] = $this->request->post['piece'];
 		} elseif (!empty($customer_group_info)) {
-			$this->data['force_buy_bulk'] = $customer_group_info['force_buy_bulk'];
+			$this->data['piece'] = $customer_group_info['piece'];
 		} else {
-			$this->data['force_buy_bulk'] = 0;
+			$this->data['piece'] = 0;
+		}
+
+		if (isset($this->request->post['bulk'])) {
+			$this->data['bulk'] = $this->request->post['bulk'];
+		} elseif (!empty($customer_group_info)) {
+			$this->data['bulk'] = $customer_group_info['bulk'];
+		} else {
+			$this->data['bulk'] = 0;
 		}	
 		
 		if (isset($this->request->post['sort_order'])) {

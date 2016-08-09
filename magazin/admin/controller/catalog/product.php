@@ -553,6 +553,8 @@ class ControllerCatalogProduct extends Controller {
 		$this->data['text_group_table'] = $this->language->get('text_group_table');
 		$this->data['text_customer_table'] = $this->language->get('text_customer_table');
 		$this->data['text_bulk_buy_help'] = $this->language->get('text_bulk_buy_help');
+		$this->data['text_piece'] = $this->language->get('text_piece');
+		$this->data['text_package'] = $this->language->get('text_package');
 
 		$this->data['entry_name'] = $this->language->get('entry_name');
 		$this->data['entry_meta_description'] = $this->language->get('entry_meta_description');
@@ -616,7 +618,7 @@ class ControllerCatalogProduct extends Controller {
 		
 		$this->data['column_group'] = $this->language->get('column_group');
 		$this->data['column_customer'] = $this->language->get('column_customer');
-		$this->data['column_override_rule'] = $this->language->get('column_override_rule');
+		$this->data['column_acquisition'] = $this->language->get('column_acquisition');
     
 		$this->data['entry_stock_status_limits'] = $this->language->get('entry_stock_status_limits');
 
@@ -1373,13 +1375,22 @@ class ControllerCatalogProduct extends Controller {
 			$this->data['product_layout'] = array();
 		}
 
-		if (isset($this->request->post['bulk_buy_overrides'])) {
-			$this->data['bulk_buy_overrides'] = $this->request->post['bulk_buy_overrides'];
+		if (isset($this->request->post['bulk_groups'])) {
+			$this->data['bulk_groups'] = $this->request->post['bulk_groups'];
 		} elseif (isset($this->request->get['product_id'])) {
-			$this->data['bulk_buy_overrides'] = $this->model_catalog_product->getProductBulkBuyOverrides($this->request->get['product_id']);
+			$this->data['bulk_groups'] = $this->model_catalog_product->getBUlkRulesCustomerGroup($this->request->get['product_id']);
 		} else {
-			$this->data['bulk_buy_overrides'] = array('customer_groups' => array(), 'customers' => array());
+			$this->data['bulk_groups'] = array();
 		}
+
+		if (isset($this->request->post['bulk_customers'])) {
+			$this->data['bulk_customers'] = $this->request->post['bulk_customers'];
+		} elseif (isset($this->request->get['product_id'])) {
+			$this->data['bulk_customers'] = $this->model_catalog_product->getBUlkRulesCustomer($this->request->get['product_id']);
+		} else {
+			$this->data['bulk_customers'] = array();
+		}
+
 		$this->load->model('design/layout');
 		
 		$this->data['layouts'] = $this->model_design_layout->getLayouts();

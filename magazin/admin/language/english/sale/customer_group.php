@@ -4,6 +4,8 @@ $_['heading_title']             = 'Customer Group';
 
 // Text
 $_['text_success']              = 'Success: You have modified customer groups!';
+$_['text_piece']                = 'Piece';
+$_['text_package']              = 'Package';
 
 // Column
 $_['column_name']               = 'Customer Group Name';
@@ -18,7 +20,7 @@ $_['entry_company_id_display']  = 'Display Company No.:<br /><span class="help">
 $_['entry_company_id_required'] = 'Company No. Required:<br /><span class="help">Select which customer groups must enter their company no. for billing addresses before checkout.</span>';
 $_['entry_tax_id_display']      = 'Display Tax ID.:<br /><span class="help">Display a Tax ID. field for billing addresses.</span>';
 $_['entry_tax_id_required']     = 'Tax ID Required:<br /><span class="help">Select which customer groups must enter their Tax ID for billing addresses before checkout.</span>';
-$_['entry_force_buy_bulk']     = 'Force to buy in bulk:<br /><span class="help">Select if the group should be forced to buy in bulk when available.</span>';
+$_['entry_bulk_rules']          = 'Acquisition privilage for:<br /><span class="help">Mark the acquisition methods available for this group (only affects products that are available en-gros)</span>';
 $_['entry_sort_order']          = 'Sort Order:';
 
 // Error

@@ -3,6 +3,8 @@
 $_['heading_title']          = 'Products'; 
 
 // Text  
+$_['text_piece']             = 'Piece';
+$_['text_package']           = 'Package';
 $_['text_success']           = 'Success: You have modified products!';
 $_['text_plus']              = '+';
 $_['text_minus']             = '-';
@@ -28,7 +30,7 @@ $_['column_status']          = 'Status';
 $_['column_action']          = 'Action';
 $_['column_group']           = 'Customer group';
 $_['column_customer']        = 'Customer - name (e-mail address)';
-$_['column_override_rule']   = 'Force buying in bulk';
+$_['column_acquisition']     = 'Acquisition Type';
 
 // Tabs
 $_['tab_bulk_buy']           = 'Bulk Buy';

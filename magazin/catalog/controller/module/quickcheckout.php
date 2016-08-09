@@ -1267,7 +1267,6 @@ class ControllerModuleQuickcheckout extends Controller
                     'option' => $option_data,
                     'quantity' => $product['quantity'],
                     'container_size' => $product['container_size'],
-                    'customer_must_buy_bulk' => $this->model_catalog_product->customerForcedBuyBulk($product['product_id']),
                     'piece_or_package' => $product['piece_or_package'],
                     'stock' => $product['stock'] ? true : !(!$this->config->get( 'config_stock_checkout' ) || $this->config->get( 'config_stock_warning' )),
                     'subtract' => $product['subtract'],
@@ -1859,9 +1858,6 @@ class ControllerModuleQuickcheckout extends Controller
 //                $this->model_quickcheckout_ax_order->updateAxOrder( $this->checkout['ax_order_id'], $this->checkout['order_id'], $data );
 //            }
 //            // end ax
-        }
-        if (isset($this->session->data['remote_order_url'])) {
-            $this->remoteUserSendOrderData($data, $this->session->data['remote_order_url']);
         }
         // generate an XML with product data and send it to customer push url
         $this->createAndSendCXMLToAutoLoggedInCustomer( $data );

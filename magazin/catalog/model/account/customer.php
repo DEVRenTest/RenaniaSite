@@ -354,7 +354,7 @@ class ModelAccountCustomer extends Model {
 			$this->db->query("INSERT INTO " . DB_PREFIX . "autologin SET customer_id = '" . (int)$customer_id . "', token = '" . $hash . "', url = '" . $this->db->escape($url) . "', cookie = '" . $this->db->escape($cookie) . "'");
 			return $hash;
 		} else {
-			$this->setupLoginToken($customer_id);
+			$this->setupLoginToken($customer_id, $url, $cookie);
 		}
 	}
 
