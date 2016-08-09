@@ -86,6 +86,7 @@ $_['tab_history']             = 'Istoric';
 $_['tab_fraud']               = 'Anti-Frauda';
 $_['tab_ftp']                 = 'FTP';
 $_['tab_ip']                  = 'Adrese IP';
+$_['tab_additional_groups']   = 'Grupuri aditionale';
 $_['tab_links']               = 'Legături';
 $_['tab_log']                 = 'Log';
 $_['tab_image']               = 'Imagini';
@@ -109,6 +110,7 @@ $_['tab_total']               = 'Total';
 $_['tab_transaction']         = 'Tranzacţii';
 $_['tab_voucher']             = 'Vouchere';
 $_['tab_voucher_history']     = 'Istoric Vouchere';
+$_['tab_customer_groups']	  = 'Grupuri de clienti';
 
 // Error
 $_['error_upload_1']          = 'Avertizare: Fişierul uploadat depăşeşte limita maximă din directiva upload_max_filesize din php.ini!';

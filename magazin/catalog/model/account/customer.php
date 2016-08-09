@@ -382,5 +382,17 @@ class ModelAccountCustomer extends Model {
 		}
 		return false;
 	}
+
+	public function getCustomerGroups()
+	{
+		$data = array();
+		$query = $this->db->query("SELECT ctcg.customer_group_id, cgd.name FROM " . DB_PREFIX . "customer_to_customer_group ctcg LEFT JOIN " . DB_PREFIX . "customer_group_description cgd ON ctcg.customer_group_id = cgd.customer_group_id WHERE ctcg.customer_id = '" . (int)$this->customer->getId() . "'");
+
+		foreach ($query->rows as $result) {
+			$data[$result['customer_group_id']] = $result['name'];
+		}
+
+		return $data;
+	}
 }
 ?>

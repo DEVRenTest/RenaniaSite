@@ -89,3 +89,36 @@ CREATE TABLE `oc_report_entry` (
  `month` varchar(32) NOT NULL,
  PRIMARY KEY (`report_entry_id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=141 DEFAULT CHARSET=latin1
+
+-- customer to customer group table
+CREATE TABLE `oc_customer_to_customer_group` (
+ `customer_group_id` int(11) NOT NULL,
+ `customer_id` int(11) NOT NULL,
+ UNIQUE KEY `customer_group_customer_id` (`customer_group_id`,`customer_id`)
+) ENGINE=InnoDB DEFAULT CHARSET=latin1
+
+-- special products request form table
+CREATE TABLE `oc_special_products_request` (
+ `id` int(11) NOT NULL AUTO_INCREMENT,
+ `quantity` int(11) NOT NULL,
+ `unit` int(11) NOT NULL,
+ `initial_quantity` int(11) NOT NULL,
+ `initial_unit` int(11) NOT NULL,
+ `total_value` float NOT NULL,
+ `target_price` float NOT NULL,
+ `target_unit` int(11) NOT NULL,
+ `sales_arguments` text NOT NULL,
+ `manager_approval` tinyint(1) NOT NULL,
+ `first_batch` date NOT NULL,
+ `second_batch` date NOT NULL,
+ `third_batch` date NOT NULL,
+ `fourth_batch` date NOT NULL,
+ `fifth_batch` date NOT NULL,
+ `sixth_batch` date NOT NULL,
+ `alternative_products` text NOT NULL,
+ `customer_feedback` text NOT NULL,
+ `provider_name` varchar(32) NOT NULL,
+ `identified_circumstances` text NOT NULL,
+ `other_informations` text NOT NULL,
+ PRIMARY KEY (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=24 DEFAULT CHARSET=latin1

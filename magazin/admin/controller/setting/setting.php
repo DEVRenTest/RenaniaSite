@@ -45,6 +45,7 @@ class ControllerSettingSetting extends Controller {
 		$this->data['text_payment'] = $this->language->get('text_payment');					
 		$this->data['text_mail'] = $this->language->get('text_mail');
 		$this->data['text_smtp'] = $this->language->get('text_smtp');
+		$this->data['text_customer_additioanl_groups'] = $this->language->get('text_customer_additioanl_groups');
 		
 		$this->data['entry_name'] = $this->language->get('entry_name');
 		$this->data['entry_owner'] = $this->language->get('entry_owner');
@@ -145,9 +146,12 @@ class ControllerSettingSetting extends Controller {
 		$this->data['entry_error_log'] = $this->language->get('entry_error_log');
 		$this->data['entry_error_filename'] = $this->language->get('entry_error_filename');
 		$this->data['entry_google_analytics'] = $this->language->get('entry_google_analytics');
+		$this->data['entry_add_group'] = $this->language->get('entry_add_group');
 		
 		$this->data['button_save'] = $this->language->get('button_save');
 		$this->data['button_cancel'] = $this->language->get('button_cancel');
+		$this->data['button_insert'] = $this->language->get('button_insert');
+		$this->data['button_remove'] = $this->language->get('button_remove');
 
 		$this->data['tab_general'] = $this->language->get('tab_general');
 		$this->data['tab_store'] = $this->language->get('tab_store');
@@ -160,6 +164,7 @@ class ControllerSettingSetting extends Controller {
 		$this->data['tab_server'] = $this->language->get('tab_server');
 		$this->data['tab_auto_login'] = $this->language->get('tab_auto_login');
 		$this->data['tab_api_auto_login'] = $this->language->get('tab_api_auto_login');
+		$this->data['tab_customer_groups'] = $this->language->get('tab_customer_groups');
 
  		if (isset($this->error['warning'])) {
 			$this->data['error_warning'] = $this->error['warning'];
@@ -572,6 +577,11 @@ class ControllerSettingSetting extends Controller {
 		$this->load->model('sale/customer_group');
 		
 		$this->data['customer_groups'] = $this->model_sale_customer_group->getCustomerGroups();
+		
+		$this->data['customer_groups_simple_array'] = array();
+		foreach ($this->data['customer_groups'] as $group) {
+			$this->data['customer_groups_simple_array'][$group['customer_group_id']] = $group['name'];
+		}
 
 		if (isset($this->request->post['config_customer_group_display'])) {
 			$this->data['config_customer_group_display'] = $this->request->post['config_customer_group_display'];
@@ -1081,6 +1091,14 @@ class ControllerSettingSetting extends Controller {
 			$this->data['config_api_auto_login'] = $this->request->post['config_api_auto_login']; 
 		} else {
 			$this->data['config_api_auto_login'] = $this->config->get('config_api_auto_login');
+		}
+
+		if (isset($this->request->post['config_customer_group_access'])) {
+			$this->data['config_customer_group_access'] = $this->request->post['config_customer_group_access']; 
+		} elseif($this->config->get('config_customer_group_access')) {
+			$this->data['config_customer_group_access'] = $this->config->get('config_customer_group_access');
+		} else {
+			$this->data['config_customer_group_access'] = array();
 		}
 						
 		$this->template = 'setting/setting.tpl';

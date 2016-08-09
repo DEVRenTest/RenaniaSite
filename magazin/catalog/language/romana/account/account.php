@@ -51,6 +51,7 @@ $_['text_success'] = 'Succes: Contul tau a fost updatat cu succes.';
 $_['text_client'] = 'Clientul cu codul AX: ';
 $_['text_change_account_info'] = 'a modificat informatiile legate de cont.';
 $_['text_subject_notification'] = 'NOTIFICARE - modificare date';
+$_['text_special_product_request'] = 'Solicitare produse speciale';
 //$_['error_filter_by'] = 'Selectati tipul filtrarii!';
 //$_['error_filter_value'] = 'Nu poate sa fie gol!';
 ?>

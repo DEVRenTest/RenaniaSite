@@ -16,6 +16,13 @@ class ModelSaleCustomer extends Model {
 				}
 			}
 		}
+
+		if (isset($data['customer_groups'])) {
+			foreach ($data['customer_groups'] as $customer_group_id) {
+				$this->db->query("INSERT IGNORE INTO " . DB_PREFIX . "customer_to_customer_group SET customer_id = '" . (int)$customer_id. "', customer_group_id = '" . (int)$customer_group_id . "'");
+			}
+		}
+
 	}
 	
 	public function editCustomer($customer_id, $data) {
@@ -47,6 +54,14 @@ class ModelSaleCustomer extends Model {
 						
 					$this->db->query("UPDATE " . DB_PREFIX . "customer SET address_id = '" . (int)$address_id . "' WHERE customer_id = '" . (int)$customer_id . "'");
 				}
+			}
+		}
+
+		$this->db->query("DELETE FROM " . DB_PREFIX . "customer_to_customer_group WHERE customer_id = '" . (int)$customer_id . "'");
+
+		if (isset($data['customer_groups'])) {
+			foreach ($data['customer_groups'] as $customer_group_id) {
+				$this->db->query("INSERT IGNORE INTO " . DB_PREFIX . "customer_to_customer_group SET customer_id = '" . (int)$customer_id . "', customer_group_id = '" . (int)$customer_group_id . "'");
 			}
 		}
 	}
@@ -540,6 +555,13 @@ class ModelSaleCustomer extends Model {
       	$query = $this->db->query("SELECT COUNT(*) AS total FROM `" . DB_PREFIX . "customer_ban_ip` WHERE `ip` = '" . $this->db->escape($ip) . "'");
 				 
 		return $query->row['total'];
-	}	
+	}
+
+	public function getCustomerGroups($customer_id)
+	{
+		$query = $this->db->query("SELECT ctcg.customer_group_id, cgd.name FROM " . DB_PREFIX . "customer_to_customer_group ctcg LEFT JOIN " . DB_PREFIX . "customer_group_description cgd ON ctcg.customer_group_id = cgd.customer_group_id WHERE ctcg.customer_id = '" . (int)$customer_id . "'");
+
+		return $query->rows;
+	}
 }
 ?>

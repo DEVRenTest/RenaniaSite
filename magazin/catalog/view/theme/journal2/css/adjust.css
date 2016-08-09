@@ -102,3 +102,32 @@ body.group4 .secondary-menu-item-3 span {
 	padding-right:15px;
 	padding-left: 15px;
 }
+
+.special_products_form tr {
+	line-height: 400%;
+	font-family: 'Century Gothic';
+}
+
+.special_products_form_buttons {
+	padding: 15px 30px 35px 30px;
+}
+
+.special_products_form_buttons .button {
+	background-color: rgb(255, 221, 0);
+	color: rgb(65, 64, 66);
+}
+
+.special_products_form_buttons .button:hover {
+	background-color: rgb(65, 64, 66);
+	color: rgb(255, 255, 255);
+}
+
+.form_button .button {
+	background-color: rgb(255, 221, 0);
+	color: rgb(65, 64, 66);
+}
+
+.form_button .button:hover {
+	background-color: rgb(65, 64, 66);
+	color: rgb(255, 255, 255);
+}

@@ -342,6 +342,8 @@
       </tbody>
    </table> 
   <?php }?>
+
+ 
   
   <!--?php if ( $customer_B2B && $permission == $text_full_permision ) { ?>
   <table class="list">
@@ -418,7 +420,7 @@
       <thead>
       <tr>
          <td class="left">
-            12. Cosultanta cos cumparaturi
+            <a href="<?php $counter++; echo $counter . '. ' . $black_list_link; ?>">Cosultanta cos cumparaturi</a>
          </td>
       </tr>
       </thead>
@@ -443,7 +445,24 @@
       </tr>
       </tbody>
    </table>
-    
+
+     <?php if ($show_special_products_form_link) { ?>
+   <table class="list">
+   <thead>
+      <tr>
+         <td class="left">
+            <?php $counter++; echo $counter . '. ' . $text_special_product_request;  ?>
+         </td>
+      </tr>
+      </thead>
+      <tbody>
+         <tr>
+            <td class="left"><a href="<?php echo $special_product_request; ?>"><?php echo $text_special_product_request; ?></a></td>
+         </tr>
+      </tbody>
+   </table> 
+  <?php }?>
+
   <?php echo $content_bottom; ?></div>
 <?php echo $footer; ?> 
 

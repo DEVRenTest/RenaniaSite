@@ -114,6 +114,7 @@ $('body').prepend('<iframe src="<?php echo $store; ?>" style="display: none;"></
     <?php endif; ?>
     Journal.NOTIFICATION_BUTTONS = '<?php echo $this->journal2->settings->get('notification_buttons'); ?>';
 </script>
+<link href='catalog/view/theme/journal2/fonts/century-gothic.ttf' rel='stylesheet' type='text/css'>
 <link rel="stylesheet" type="text/css" href="catalog/view/theme/journal2/css/adjust.css"/>
 </head>
 <body<?php if ($this->customer->isLogged()) echo ' class="group' . $this->customer->getCustomerGroupId() . '"'; ?>>

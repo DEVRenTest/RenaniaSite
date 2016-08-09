@@ -18,7 +18,7 @@
         <?php if ($customer_id) { ?>
         <a href="#tab-history"><?php echo $tab_history; ?></a><a href="#tab-transaction"><?php echo $tab_transaction; ?></a><a href="#tab-reward"><?php echo $tab_reward; ?></a>
         <?php } ?>
-        <a href="#tab-ip"><?php echo $tab_ip; ?></a></div>
+        <a href="#tab-ip"><?php echo $tab_ip; ?></a><a href="#tab-additional_groups"><?php echo $tab_additional_groups; ?></a></div>
       <form action="<?php echo $action; ?>" method="post" enctype="multipart/form-data" id="form">
         <div id="tab-general">
           <div id="vtabs" class="vtabs"><a href="#tab-customer"><?php echo $tab_general; ?></a>
@@ -241,6 +241,7 @@
           <?php $address_row++; ?>
           <?php } ?>
         </div>
+
         <?php if ($customer_id) { ?>
         <div id="tab-history">
           <div id="history"></div>
@@ -316,6 +317,39 @@
                 <td class="center" colspan="4"><?php echo $text_no_results; ?></td>
               </tr>
               <?php } ?>
+            </tbody>
+          </table>
+        </div>
+        <div id="tab-additional_groups">
+          <table class="list" style="width: 40%;">
+            <thead>
+              <tr>
+                <td class="left" colspan="3"><?php echo $text_customer_additioanl_groups; ?></td>
+              </tr>
+            </thead>
+            <tbody>
+              <?php foreach ($customer_additional_groups as $customer_additional_group) { ?>
+              <tr>
+                <td>
+                  <?php echo $customer_additional_group['name']; ?>
+                  <input type="hidden" name="customer_groups[]" value="<?php echo $customer_additional_group['customer_group_id']; ?>" />
+                </td>
+                <td class="left short-cell">
+                  <a class="button purge-parent"><?php echo $button_remove; ?></a>
+                </td>
+              </tr>
+              <?php } ?>
+              <tr id="more-group">
+                <td class="left" colspan="3">
+                  <label for="customer_groups"><?php echo $entry_add_group; ?></label>
+                  <select id="customer_groups">
+                    <?php foreach ($customer_groups as $customer_group) { ?>
+                      <option value="<?php echo $customer_group['customer_group_id']; ?>"><?php echo $customer_group['name']; ?></option>
+                    <?php } ?>
+                  </select>
+                  <a class="button"><?php echo $button_insert; ?></a>
+                </td>
+              </tr>
             </tbody>
           </table>
         </div>
@@ -676,9 +710,28 @@ function removeBanIP(ip) {
 	});	
 };
 document
+
+$(document).ready(function(){
+  $('#more-group').on('click', 'a.button', function(){
+    $(this).closest('tr').before(
+      '<tr>' +
+        '<td class="left">' + $('#customer_groups option:selected').text() + '</td>' +
+        '<input type="hidden" name="customer_groups[]" value="' + $('#customer_groups').val() + '"/>' +
+        '<td class="left short-cell">' +
+          '<a class="button purge-parent"><?php echo $button_remove; ?></a>' +
+        '</td>' +
+      '</tr>'
+    );
+  });
+  $('#tab-additional_groups').on('click', '.purge-parent', function(){
+    $(this).closest('tr').remove();
+  });
+});
 //--></script> 
 <script type="text/javascript"><!--
 $('.htabs a').tabs();
 $('.vtabs a').tabs();
 //--></script> 
+
+
 <?php echo $footer; ?>

@@ -86,6 +86,7 @@ $_['tab_history']                   = 'History';
 $_['tab_fraud']                     = 'Fraud';
 $_['tab_ftp']                       = 'FTP';
 $_['tab_ip']                        = 'IP Addresses';
+$_['tab_additional_groups']   		= 'Additional groups';
 $_['tab_links']                     = 'Links';
 $_['tab_log']                       = 'Log';
 $_['tab_image']                     = 'Image';
@@ -111,6 +112,7 @@ $_['tab_transaction']               = 'Transactions';
 $_['tab_voucher']                   = 'Vouchers';
 $_['tab_voucher_history']           = 'Voucher History';
 $_['tab_price']                     = 'Price';
+$_['tab_customer_groups']	  		= 'Grupuri de clienti';
 
 // Error
 $_['error_upload_1']                = 'Warning: The uploaded file exceeds the upload_max_filesize directive in php.ini!';
