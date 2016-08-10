@@ -26,7 +26,6 @@ class ModelSaleCustomerGroup extends Model {
 		$this->db->query("DELETE FROM " . DB_PREFIX . "product_discount WHERE customer_group_id = '" . (int)$customer_group_id . "'");
 		$this->db->query("DELETE FROM " . DB_PREFIX . "product_special WHERE customer_group_id = '" . (int)$customer_group_id . "'");
 		$this->db->query("DELETE FROM " . DB_PREFIX . "product_reward WHERE customer_group_id = '" . (int)$customer_group_id . "'");
-		$this->db->query("DELETE FROM " . DB_PREFIX . "force_buy_bulk_override_group WHERE customer_group_id = '" . (int)$customer_group_id . "'");
 		$this->db->query("DELETE FROM " . DB_PREFIX . "customer_to_customer_group WHERE customer_group_id = '" . (int)$customer_group_id . "' ");
 		$this->db->query("DELETE FROM " . DB_PREFIX . "oc_bulk_group WHERE customer_group_id = '" . (int)$customer_group_id . "'");
 	}
