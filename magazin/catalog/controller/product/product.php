@@ -160,7 +160,20 @@ class ControllerProductProduct extends Controller {
 		} else {
 			$product_id = 0;
 		}
-    		
+    	
+		$stock_by_color_and_size = $this->model_catalog_product->getStockByColorAndSize( $this->request->get['product_id'] );
+		$colors = array();
+    	$color_size_stocks = array();
+	    foreach ($stock_by_color_and_size['Combinatii'] as $key => $value) {
+	    	if (!in_array($value['Culori'], $colors)) {
+				array_push($colors, $value['Culori']);
+	    	}
+	    	$color_size_stocks[$value['Marimi']][$value['Culori']] = $stock_by_color_and_size['code_ax'][$key];
+	    }
+	    $this->data['color_size_stocks'] = $color_size_stocks;
+	    $this->data['colors'] = $colors;
+	    $this->data['stock_by_color_and_size'] = $stock_by_color_and_size;
+
 		$this->load->model('catalog/product');
 
 		$this->load->model('catalog/visitors');
@@ -332,6 +345,7 @@ class ControllerProductProduct extends Controller {
 			$this->data['tab_review'] = sprintf($this->language->get('tab_review'), $product_info['reviews']);
 			$this->data['tab_related'] = $this->language->get('tab_related');
 			$this->data['tab_complementary'] = $this->language->get('tab_complementary');
+			$this->data['tab_color_size_stock'] = $this->language->get('tab_color_size_stock');
 			
 			$this->data['product_id'] = $this->request->get['product_id'];
 			$this->data['manufacturer'] = $product_info['manufacturer'];

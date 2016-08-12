@@ -132,3 +132,21 @@ body.group4 .secondary-menu-item-3 span {
 	background-color: rgb(65, 64, 66);
 	color: rgb(255, 255, 255);
 }
+
+.color_size_stock table {
+	border: 1px solid #CCCCCC;
+	width: auto !important;
+	margin: 20px;
+}
+
+.color_size_stock th {
+	background-color: rgb(244, 244, 244);
+	padding: 8px 8px;
+}
+
+.color_size_stock table td {
+	border: 1px solid #CCCCCC;
+	width: 40px;
+	margin: 20px;
+	text-align: center;
+}

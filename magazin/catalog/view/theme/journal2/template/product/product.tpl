@@ -532,18 +532,70 @@
     <?php if ($products) { ?>
     <a href="#tab-related" class="tab-related"><?php echo $tab_related; ?> (<?php echo count($products); ?>)</a>
     <?php } ?>
-    <?php if(is_array($product_doc)) { ?>
+   <!--  <?php if(is_array($product_doc)) { ?>
     <a href="#tab-download" style="display: inline;" class="selected">Documente</a>
-    <?php } ?>
+    <?php } ?> -->
     <?php $index = 0; foreach ($this->journal2->settings->get('additional_product_tabs', array()) as $tab): $index++; ?>
     <a href="#additional-product-tab-<?php echo $index; ?>"><?php echo $tab['name']; ?></a>
     <?php endforeach; ?>
+    <?php if ($stock_by_color_and_size['type'] != 1) { ?>
+    <a href="#tab-color-size-stock"><?php echo $tab_color_size_stock; ?></a>
+    <?php } ?>
   </div>
   <?php $index = 0; foreach ($this->journal2->settings->get('additional_product_tabs', array()) as $tab): $index++; ?>
   <div id="additional-product-tab-<?php echo $index; ?>" class="tab-content journal-custom-tab"><?php echo $tab['content']; ?></div>
   <?php endforeach; ?>
   <?php if (!$this->journal2->settings->get('hide_product_description')) { ?>
   <div id="tab-description" class="tab-content" itemprop="description"><?php echo $description; ?></div>
+  <?php } ?>
+  <?php if ($stock_by_color_and_size['type'] != 1) { ?>
+  <div id="tab-color-size-stock" itemprop="color-size-stock">
+    <div class="color_size_stock">
+      <table class="list">
+        <tbody>
+        <?php if ($stock_by_color_and_size['type'] == 2) { ?>
+          <tr>
+          <?php if (!empty($stock_by_color_and_size['Marimi'])) { ?>
+            <?php foreach ($stock_by_color_and_size['Marimi'] as $key => $size) { ?>
+            <th><?php echo $size; ?></th>
+            <?php } ?>
+          <?php } ?>
+          </tr>
+          <tr>
+          <?php if (!empty($stock_by_color_and_size['Culori'])) { ?>
+            <?php foreach ($stock_by_color_and_size['Culori'] as $key => $colour) { ?>
+            <th><?php echo $colour; ?></th>
+            <?php } ?>
+          <?php } ?>
+          </tr>
+          <tr>
+          <?php foreach ($stock_by_color_and_size['code_ax'] as $key => $code_ax) { ?>
+            <td><?php echo $code_ax; ?></td>
+          <?php } ?>
+          </tr>
+        <?php } ?>
+        </tbody>
+        <tbody>
+        <?php if ($stock_by_color_and_size['type'] != 2) { ?>
+          <tr>
+            <th></th>
+            <?php foreach ($colors as $color) { ?>
+            <th><?php echo $color; ?></th>
+            <?php } ?>
+          </tr>
+          <?php foreach ($color_size_stocks as $k => $v) { ?>
+          <tr>
+            <th><?php echo $k; ?></th>
+            <?php foreach ($colors as $color) { ?>
+            <td><?php echo isset($v[$color]) && $v[$color] ? $v[$color] : 0; ?></td>
+            <?php } ?>
+          </tr>
+          <?php } ?>
+        <?php } ?>
+        </tbody>
+      </table>
+    </div>
+  </div>
   <?php } ?>
   <?php if(is_array($product_doc)) { ?>
   <div id="tab-download" class="tab-content">
