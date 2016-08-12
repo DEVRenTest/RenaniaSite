@@ -17,28 +17,28 @@
         <tr>
           <td>
             <?php echo $text_next_months_quantity; ?><span class="required">*</span></br>
-            &emsp;&emsp;<?php echo $text_quantity; ?> <input type="text" name="quantity" required="required" style="width: 6%;" />
-            <?php echo $text_unit; ?> <input type="text" name="unit" required="required" style="width: 6%;" />
+            &emsp;&emsp;<?php echo $text_quantity; ?> <input type="text" name="quantity" required="required" style="width: auto;" />
+            &emsp;&emsp;&emsp;&emsp;<?php echo $text_unit; ?> <input type="text" name="unit" required="required" style="width: auto;" />
           </td>
         </tr>
         <tr>
           <td>
             <?php echo $text_initial_order_quantity; ?><span class="required">*</span></br>
-            &emsp;&emsp;<?php echo $text_quantity; ?> <input type="text" name="initial_quantity" required="required" style="width: 6%;" />
-            <?php echo $text_unit; ?> <input type="text" name="initial_unit" required="required" style="width: 6%;" /></br>
+            &emsp;&emsp;<?php echo $text_quantity; ?> <input type="text" name="initial_quantity" required="required" style="width: auto;" />
+            &emsp;&emsp;&emsp;&emsp;<?php echo $text_unit; ?> <input type="text" name="initial_unit" required="required" style="width: auto;" /></br>
           </td>
         </tr>
         <tr>
           <td>
             <?php echo $text_order_total_value; ?><span class="required">*</span>
-            <input type="text" name="total_value" required="required" style="width: 8%;" /> <?php echo $text_ron; ?></br>
+            <input type="text" name="total_value" required="required" style="width: auto;" /> <?php echo $text_ron; ?></br>
           </td>
         </tr>
         <tr>
           <td>
             <?php echo $text_target_price; ?><span class="required">*</span>
-            <input type="text" name="target_price" required="required" style="width: 8%;" /> <?php echo $text_ron; ?></br>
-            &emsp;&emsp;<?php echo $text_unit; ?> <input type="text" name="target_unit" required="required" style="width: 6%;" /></br>
+            <input type="text" name="target_price" required="required" style="width: auto;" /> <?php echo $text_ron; ?></br>
+            &emsp;&emsp;<?php echo $text_unit; ?> <input type="text" name="target_unit" required="required" style="width: auto;" /></br>
           </td>
         </tr>
         <tr>
@@ -57,12 +57,12 @@
         <tr>
           <td>
               <?php echo $text_order_date_estimation; ?></br>
-              &emsp;&emsp;<?php echo $text_first_batch; ?> <input type="date" class="date" name="first_batch" style="width: 8%;" />
-              <?php echo $text_second_batch; ?> <input type="date" class="date" name="second_batch" style="width: 8%;" />
-              <?php echo $text_third_batch; ?> <input type="date" class="date" name="third_batch" style="width: 8%;" /></br>
-              &emsp;&emsp;<?php echo $text_fourth_batch; ?> <input class="date" type="date" name="fourth_batch" style="width: 8%;" />
-              <?php echo $text_fifth_batch; ?> <input type="date" class="date" name="fifth_batch" style="width: 8%;" />
-              <?php echo $text_sixth_batch; ?> <input type="date" class="date" name="sixth_batch" style="width: 8%;" /></br>
+              &emsp;&emsp;<?php echo $text_first_batch; ?> <input type="date" class="date" name="first_batch" style="width: auto;" />
+              <?php echo $text_second_batch; ?> <input type="date" class="date" name="second_batch" style="width: auto;" />
+              <?php echo $text_third_batch; ?> <input type="date" class="date" name="third_batch" style="width: auto;" /></br>
+              &emsp;&emsp;<?php echo $text_fourth_batch; ?> <input class="date" type="date" name="fourth_batch" style="width: auto;" />
+              <?php echo $text_fifth_batch; ?> <input type="date" class="date" name="fifth_batch" style="width: auto;" />
+              <?php echo $text_sixth_batch; ?> <input type="date" class="date" name="sixth_batch" style="width: auto;" /></br>
           </td>
         </tr>
         <tr>
@@ -77,7 +77,7 @@
         <tr>
           <td>
             <?php echo $text_new_provider; ?></br>
-            <?php echo $text_provider_name; ?> <input type="text" name="provider_name" style="width: 30%;" /></br>
+            <?php echo $text_provider_name; ?> <input type="text" name="provider_name" style="width: auto;" /></br>
             <?php echo $text_identified_circumstances; ?></br>
             <textarea type="text" name="identified_circumstances" style="width: 80%; height: 20%;"></textarea></br>
           </td>
