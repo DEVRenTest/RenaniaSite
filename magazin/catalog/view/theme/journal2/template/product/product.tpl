@@ -538,7 +538,7 @@
     <?php $index = 0; foreach ($this->journal2->settings->get('additional_product_tabs', array()) as $tab): $index++; ?>
     <a href="#additional-product-tab-<?php echo $index; ?>"><?php echo $tab['name']; ?></a>
     <?php endforeach; ?>
-    <?php if ($stock_by_color_and_size['type'] != 1) { ?>
+    <?php if ($stock_by_color_and_size['type'] != 1 && $customer_B2B) { ?>
     <a href="#tab-color-size-stock"><?php echo $tab_color_size_stock; ?></a>
     <?php } ?>
   </div>
@@ -548,7 +548,7 @@
   <?php if (!$this->journal2->settings->get('hide_product_description')) { ?>
   <div id="tab-description" class="tab-content" itemprop="description"><?php echo $description; ?></div>
   <?php } ?>
-  <?php if ($stock_by_color_and_size['type'] != 1) { ?>
+  <?php if ($stock_by_color_and_size['type'] != 1 && $customer_B2B) { ?>
   <div id="tab-color-size-stock" itemprop="color-size-stock">
     <div class="color_size_stock">
       <table class="list">

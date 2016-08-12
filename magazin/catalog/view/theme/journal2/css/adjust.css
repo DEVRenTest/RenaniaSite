@@ -146,7 +146,7 @@ body.group4 .secondary-menu-item-3 span {
 
 .color_size_stock table td {
 	border: 1px solid #CCCCCC;
-	width: 40px;
+	width: auto;
 	margin: 20px;
 	text-align: center;
 }

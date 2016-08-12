@@ -160,7 +160,8 @@ class ControllerProductProduct extends Controller {
 		} else {
 			$product_id = 0;
 		}
-    	
+		$this->data['customer_B2B']  = in_array($this->customer->getCustomerGroupId(), array(3, 4));
+
 		$stock_by_color_and_size = $this->model_catalog_product->getStockByColorAndSize( $this->request->get['product_id'] );
 		$colors = array();
     	$color_size_stocks = array();
