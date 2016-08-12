@@ -532,9 +532,9 @@
     <?php if ($products) { ?>
     <a href="#tab-related" class="tab-related"><?php echo $tab_related; ?> (<?php echo count($products); ?>)</a>
     <?php } ?>
-   <!--  <?php if(is_array($product_doc)) { ?>
+    <?php if(is_array($product_doc)) { ?>
     <a href="#tab-download" style="display: inline;" class="selected">Documente</a>
-    <?php } ?> -->
+    <?php } ?>
     <?php $index = 0; foreach ($this->journal2->settings->get('additional_product_tabs', array()) as $tab): $index++; ?>
     <a href="#additional-product-tab-<?php echo $index; ?>"><?php echo $tab['name']; ?></a>
     <?php endforeach; ?>
