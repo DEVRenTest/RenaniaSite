@@ -144,3 +144,39 @@ ALTER TABLE `oc_customer_group`
 ADD `piece` BOOLEAN NOT NULL DEFAULT TRUE,
 ADD `bulk` BOOLEAN NOT NULL DEFAULT TRUE,
 DROP `force_buy_bulk`
+
+---- company as separate entity
+
+-- create company table
+CREATE TABLE `oc_company` (
+ `company_id` int(11) NOT NULL AUTO_INCREMENT,
+ `ax_code` varchar(64) DEFAULT NULL,
+ `name` varchar(64) DEFAULT NULL,
+ `CUI` varchar(32) DEFAULT NULL,
+ `CIF` int(16) DEFAULT NULL,
+ PRIMARY KEY (`company_id`),
+ UNIQUE KEY `ax_code` (`ax_code`),
+ UNIQUE KEY `CUI` (`CUI`),
+ UNIQUE KEY `CIF` (`CIF`)
+) ENGINE=InnoDB DEFAULT CHARSET=latin1
+
+-- address table changes
+ALTER TABLE `oc_address` ADD `comp_id` INT(11) NULL DEFAULT NULL AFTER `customer_id` ;
+
+-- company to customer junction table
+CREATE TABLE `oc_customer_to_company` (
+ `customer_id` int(11) NOT NULL,
+ `company_id` int(11) NOT NULL,
+ UNIQUE KEY `customer_company` (`customer_id`,`company_id`)
+) ENGINE=InnoDB DEFAULT CHARSET=latin1
+
+-- populate company table
+-- INSERT INTO `oc_company` (`name`) SELECT DISTINCT(`ax_code`) FROM `oc_customer` WHERE `ax_code` <> '';
+
+-- populate junction table with existing links
+-- INSERT INTO `oc_customer_to_company` (`customer_id`, `company_id`) (
+--  SELECT cus.`customer_id`, com.`company_id`
+--   FROM `oc_customer` cus
+--   LEFT JOIN `oc_company` com ON cus.`ax_code` = com.`name`
+--   WHERE cus.`ax_code` <> ''
+-- );
