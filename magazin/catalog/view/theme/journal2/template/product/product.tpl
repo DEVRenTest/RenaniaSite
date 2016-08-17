@@ -471,6 +471,9 @@
         <?php } ?>
         <?php endif; ?>
       </div>
+      <?php if ($video) { ?>
+      <iframe width="436" height="245" src="https://www.youtube.com/embed/<?php echo $video; ?>" frameborder="0" allowfullscreen></iframe>
+      <?php } ?>
       <div class="wishlist-compare">
           <span class="links">
               <a onclick="addToWishList('<?php echo $product_id; ?>');"><?php echo $button_wishlist; ?></a>

@@ -144,3 +144,6 @@ ALTER TABLE `oc_customer_group`
 ADD `piece` BOOLEAN NOT NULL DEFAULT TRUE,
 ADD `bulk` BOOLEAN NOT NULL DEFAULT TRUE,
 DROP `force_buy_bulk`
+
+-- product video
+ALTER TABLE `oc_product` ADD `video` varchar( 512 ) NOT NULL AFTER `image` ;

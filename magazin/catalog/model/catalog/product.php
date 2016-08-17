@@ -151,6 +151,7 @@ class ModelCatalogProduct extends Model {
 				'product_option_quantity' => $uncalculableStock,
 				'stock_status'     => $StockStatus, //$query->row['stock_status'],
 				'image'            => $query->row['image'],
+				'video'			   => $query->row['video'],
 				'manufacturer_id'  => $query->row['manufacturer_id'],
 				'manufacturer'     => $query->row['manufacturer'],
 				'price'            => $priceVal,

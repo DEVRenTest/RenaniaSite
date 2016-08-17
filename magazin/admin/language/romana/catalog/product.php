@@ -71,6 +71,7 @@ $_['entry_weight']           = 'Greutate:';
 $_['entry_length']           = 'Clasa Lungimii:';
 $_['entry_dimension']        = 'Dimensiuni (L x l x Î):';
 $_['entry_image']            = 'Imagine:';
+$_['entry_video']			 = 'URL video:';
 $_['entry_customer_group']   = 'Grupul Clienților:';
 $_['entry_date_start']       = 'Data Începerii:';
 $_['entry_date_end']         = 'Data Încheierii:';

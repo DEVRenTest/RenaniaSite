@@ -590,6 +590,7 @@ class ControllerCatalogProduct extends Controller {
 		$this->data['entry_dimension'] = $this->language->get('entry_dimension');
 		$this->data['entry_length'] = $this->language->get('entry_length');
     	$this->data['entry_image'] = $this->language->get('entry_image');
+    	$this->data['entry_video'] = $this->language->get('entry_video');
     	$this->data['entry_latest'] = $this->language->get('entry_latest');
     	$this->data['entry_download'] = $this->language->get('entry_download');
     	$this->data['entry_category'] = $this->language->get('entry_category');
@@ -894,6 +895,14 @@ class ControllerCatalogProduct extends Controller {
 			$this->data['image'] = $product_info['image'];
 		} else {
 			$this->data['image'] = '';
+		}
+
+		if (isset($this->request->post['video'])) {
+			$this->data['video'] = $this->request->post['video'];
+		} elseif (!empty($product_info)) {
+			$this->data['video'] = $product_info['video'];
+		} else {
+			$this->data['video'] = '';
 		}
 		
 		$this->load->model('tool/image');

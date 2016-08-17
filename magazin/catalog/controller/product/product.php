@@ -212,6 +212,8 @@ class ControllerProductProduct extends Controller {
 	 		}
 	 	}
 
+		$this->data['video'] = substr($product_info['video'], strpos($product_info['video'], "v=") + strlen("v="));
+		
 		$this->data['buy_piece'] = $this->model_catalog_product->customerCanBuyPiece($product_id);
 		$this->data['buy_bulk'] = $this->model_catalog_product->customerCanBuyBulk($product_id);
 
