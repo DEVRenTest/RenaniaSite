@@ -53,7 +53,7 @@ class ModelSaleCompany extends Model
         $this->db->query(
             "INSERT IGNORE INTO " . DB_PREFIX . "customer_to_company (company_id, customer_id)
             SELECT " . (int)$company_id . ", customer_id FROM " . DB_PREFIX . "customer
-            WHERE customer_id IN (" . implode(", ", array_filter($customers, function($item) { return (int)$item && $item > 0; })) . ")"
+            WHERE customer_id IN (" . implode(", ", array_map(function($item) { return (int)$item; }, $customers)) . ")"
         );
     }
 
@@ -122,6 +122,16 @@ class ModelSaleCompany extends Model
         }
         $query = $this->db->query($sql);
         return $query->rows;
+    }
+
+    public function getCompanyCustomers($company_id)
+    {
+        $result = array();
+        $query = $this->db->query("SELECT customer_id FROM " . DB_PREFIX . "customer_to_company WHERE company_id = '" . (int)$company_id . "'");
+        foreach ($query->rows as $row) {
+            $result[] = $row['customer_id'];
+        }
+        return $result;
     }
 
     public function getCompanyCount($data = array())
