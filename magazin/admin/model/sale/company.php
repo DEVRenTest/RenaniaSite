@@ -47,9 +47,7 @@ class ModelSaleCompany extends Model
             return;
         }
         $this->db->query("DELETE FROM " . DB_PREFIX . "customer_to_company WHERE company_id = '" . (int)$company_id . "'");
-        if (empty($customers)) {
-            return;
-        }
+        array_push($customers, -1);
         $this->db->query(
             "INSERT IGNORE INTO " . DB_PREFIX . "customer_to_company (company_id, customer_id)
             SELECT " . (int)$company_id . ", customer_id FROM " . DB_PREFIX . "customer
