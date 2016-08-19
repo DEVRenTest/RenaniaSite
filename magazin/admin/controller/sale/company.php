@@ -122,6 +122,7 @@ class ControllerSaleCompany extends Controller
 
         $this->data['insert'] = $this->url->link('sale/company/insert', 'token=' . $this->session->data['token'], 'SSL');
         $this->data['delete'] = $this->url->link('sale/company/delete', 'token=' . $this->session->data['token'], 'SSL');
+        $this->data['company_edit_url'] = $this->url->link('sale/company/update', 'token=' . $this->session->data['token'], 'SSL');
 
         $data = array(
             'filter_name' => $filter_name,
@@ -135,7 +136,7 @@ class ControllerSaleCompany extends Controller
             $this->data['companies'][$k]['selected'] = isset($this->request->post['selected']) && in_array($v['company_id'], $this->request->post['selected']);
         }
 
-        $language_vars = array('heading_title', 'button_insert', 'button_delete', 'button_edit', 'text_no_results', 'text_name', 'text_ax_code', 'text_cui', 'text_cif', 'text_action');
+        $language_vars = array('heading_title', 'button_insert', 'button_delete', 'button_edit', 'text_no_results', 'text_name', 'text_ax_code', 'text_cui', 'text_cif', 'text_action', 'text_search');
         foreach ($language_vars as $language_var) {
             $this->data[$language_var] = $this->language->get($language_var);
         }
@@ -250,6 +251,15 @@ class ControllerSaleCompany extends Controller
             'common/footer'
         );
         $this->response->setOutput($this->render());
+    }
+
+    public function autocomplete()
+    {
+        $json = array();
+        if (isset($this->request->get['term'])) {
+            $json = $this->model_sale_company->searchCompany($this->request->get['term']);
+        }
+        $this->response->setOutput(json_encode($json));
     }
 
     protected function validate()

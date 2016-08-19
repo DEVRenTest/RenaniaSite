@@ -7,6 +7,7 @@ $_['text_cui']              = 'CUI';
 $_['text_cif']              = 'CIF';
 $_['text_action']           = 'Action';
 $_['text_deleted']          = 'You have deleted %d copmanies.';
+$_['text_search']           = 'Search company (name/cif/ax code/cui)';
 $_['error_permission']      = 'You do not have permission to edit companies.';
 $_['text_company_added']    = 'New company added, you can edit it <a href="%s">here</a>.';
 $_['text_company_modified'] = 'Company modified. You can maked additional changes href="%s">here</a>.';
