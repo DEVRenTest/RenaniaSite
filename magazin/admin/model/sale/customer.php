@@ -127,6 +127,11 @@ class ModelSaleCustomer extends Model {
 		if (!empty($data['filter_date_added'])) {
 			$implode[] = "DATE(c.date_added) = DATE('" . $this->db->escape($data['filter_date_added']) . "')";
 		}
+
+		if (isset($data['filter_ids'])) {
+			array_push($data['filter_ids'], -1);
+			$implode[] = "c.customer_id IN (" . implode(", ", array_map(function($item) { return (int)$item; }, $data['filter_ids'])) . ")";
+		}
 		
 		if ($implode) {
 			$sql .= " AND " . implode(" AND ", $implode);
