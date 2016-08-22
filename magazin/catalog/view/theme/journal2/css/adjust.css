@@ -150,3 +150,31 @@ body.group4 .secondary-menu-item-3 span {
 	margin: 20px;
 	text-align: center;
 }
+
+.products_complementary {
+	width: 115px;
+	margin: 5px 5px 20px 5px;
+	display: inline-block;
+}
+
+.products_related {
+	width: 115px;
+	margin: 5px 5px 20px 5px;
+	display: inline-block;
+}
+
+.products_complementary_name a {
+	color: black;
+}
+
+.products_complementary_price {
+	font-weight: bold;
+}
+
+.products_related_name a {
+	color: black;
+}
+
+.products_related_price, .complementary_title, .related_title {
+	font-weight: bold;
+}

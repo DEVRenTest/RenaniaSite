@@ -521,7 +521,46 @@
        </div>
     </div>
     <?php endif; ?>
-
+  <div class="related_title"><?php echo $text_products_related_title; ?></div>
+  <?php foreach ($products_related as $product_related) { ?>
+  <div class="products_related">
+    <div class="products_related_image">
+      <?php if ($product_related['thumb']) { ?>
+      <a href="<?php echo $product_related['href']; ?>">
+        <img src="<?php echo $product_related['thumb']; ?>" title="<?php echo $product_related['name']; ?>" alt="<?php echo $product_related['name']; ?>" />
+      </a>
+      <?php } ?>
+    </div>
+    <div class="products_related_name">
+      <a href="<?php echo $product_related['href']; ?>"><?php echo $product_related['name']; ?></a>
+    </div>
+    <div class="products_related_price">
+      <?php if ($product_related['price']) { ?>         
+      <span><?php echo $product_related['price']; ?></span>
+      <?php } ?>
+    </div>
+  </div>
+  <?php } ?>
+  <div class="complementary_title"><?php echo $text_products_complementary_title; ?></div>
+  <?php foreach ($products_complementary as $product_complementary) { ?>
+  <div class="products_complementary">
+    <div class="products_complementary_image">
+      <?php if ($product_complementary['thumb']) { ?>
+      <a href="<?php echo $product_complementary['href']; ?>">
+        <img src="<?php echo $product_complementary['thumb']; ?>" title="<?php echo $product_complementary['name']; ?>" alt="<?php echo $product_complementary['name']; ?>" />
+      </a>
+      <?php } ?>
+    </div>
+    <div class="products_complementary_name">
+      <a href="<?php echo $product_complementary['href']; ?>"><?php echo $product_complementary['name']; ?></a>
+    </div>
+    <div class="products_complementary_price">
+      <?php if ($product_complementary['price']) { ?>
+      <span><?php echo $product_complementary['price']; ?></span>
+      <?php } ?>
+    </div>
+  </div>
+  <?php } ?>
   <div id="tabs" class="htabs">
     <?php if (!$this->journal2->settings->get('hide_product_description')) { ?>
     <a href="#tab-description"><?php echo $tab_description; ?></a>

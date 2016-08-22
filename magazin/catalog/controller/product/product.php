@@ -307,6 +307,8 @@ class ControllerProductProduct extends Controller {
 			$this->data['text_wait'] = $this->language->get('text_wait');
 			$this->data['text_tags'] = $this->language->get('text_tags');
             $this->data['text_no_stock'] = $this->language->get('text_no_stock');
+            $this->data['text_products_complementary_title'] = $this->language->get('text_products_complementary_title');
+            $this->data['text_products_related_title'] = $this->language->get('text_products_related_title');
 
             $this->data['text_pieces_per_package'] = $this->language->get('text_pieces_per_package');
             $this->data['text_price_per_piece'] = $this->language->get('text_price_per_piece');
@@ -629,11 +631,60 @@ class ControllerProductProduct extends Controller {
 					'product_id' => $complementary_product['product_id'],
 					'thumb'   	 => $image,
 					'name'    	 => $complementary_product['name'],
-					'price'   	 => ( $B2B ? '' : $price), //$price
+					'price'   	 => $price,
 					'special' 	 => $special,
 					'rating'     => $rating,
 					'reviews'    => sprintf($this->language->get('text_reviews'), (int)$complementary_product['reviews']),
 					'href'    	 => $this->url->link('product/product', 'product_id=' . $complementary_product['product_id'])
+				);
+
+			}
+
+			$this->data['products_related'] = array();
+			$related_products = $this->model_catalog_product->getProductRelated($this->request->get['product_id']);
+			foreach ($related_products as $related_product) {
+				if ($related_product['image']) {
+					$image = $this->model_tool_image->resize($related_product['image'], $this->config->get('config_image_related_width'), $this->config->get('config_image_related_height'));
+				} else {
+					$image = false;
+				}
+
+				if (($this->config->get('config_customer_price') && $this->customer->isLogged()) || !$this->config->get('config_customer_price')) {
+					$price = $this->currency->format($this->tax->calculate($related_product['price'], $related_product['tax_class_id'], TRUE));
+				} else {
+					$price = false;
+				}
+
+				if ((float)$related_product['special']) {
+					$special = $this->currency->format($this->tax->calculate($related_product['special'], $related_product['tax_class_id'], TRUE));
+				} else {
+					$special = false;
+				}
+
+				if ($this->config->get('config_review_status')) {
+					$rating = (int)$related_product['rating'];
+				} else {
+					$rating = false;
+				}
+
+				// if the logged customer is B2B or Gallery + B2B
+				//$B2B = false;
+				if( $this->customer->getCustomerGroupId() == 3 || $this->customer->getCustomerGroupId() == 4 )
+				{
+					//$B2B = true;
+					$this->data['button_view_product'] = $this->language->get('button_view_product');
+				}
+				//$this->data['B2B'] = $B2B;
+
+				$this->data['products_related'][] = array(
+					'product_id' => $related_product['product_id'],
+					'thumb'   	 => $image,
+					'name'    	 => $related_product['name'],
+					'price'   	 => $price,
+					'special' 	 => $special,
+					'rating'     => $rating,
+					'reviews'    => sprintf($this->language->get('text_reviews'), (int)$related_product['reviews']),
+					'href'    	 => $this->url->link('product/product', 'product_id=' . $related_product['product_id'])
 				);
 
 			}
