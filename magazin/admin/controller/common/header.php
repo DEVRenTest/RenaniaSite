@@ -33,6 +33,7 @@ class ControllerCommonHeader extends Controller {
 		$this->data['text_coupon'] = $this->language->get('text_coupon');
 		$this->data['text_currency'] = $this->language->get('text_currency');			
 		$this->data['text_customer'] = $this->language->get('text_customer');
+		$this->data['text_company'] = $this->language->get('text_company');
 		$this->data['text_customer_group'] = $this->language->get('text_customer_group');
 		$this->data['text_customer_field'] = $this->language->get('text_customer_field');
 		$this->data['text_customer_ban_ip'] = $this->language->get('text_customer_ban_ip');
@@ -143,6 +144,7 @@ class ControllerCommonHeader extends Controller {
 			$this->data['coupon'] = $this->url->link('sale/coupon', 'token=' . $this->session->data['token'], 'SSL');
 			$this->data['currency'] = $this->url->link('localisation/currency', 'token=' . $this->session->data['token'], 'SSL');
 			$this->data['customer'] = $this->url->link('sale/customer', 'token=' . $this->session->data['token'], 'SSL');
+			$this->data['company'] = $this->url->link('sale/company', 'token=' . $this->session->data['token'], 'SSL');
 			$this->data['customer_fields'] = $this->url->link('sale/customer_field', 'token=' . $this->session->data['token'], 'SSL');
 			$this->data['customer_group'] = $this->url->link('sale/customer_group', 'token=' . $this->session->data['token'], 'SSL');
 			$this->data['customer_ban_ip'] = $this->url->link('sale/customer_ban_ip', 'token=' . $this->session->data['token'], 'SSL');
