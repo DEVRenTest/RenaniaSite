@@ -43,6 +43,17 @@
         </tr>
         <tr>
           <td>
+            <?php echo $text_product_category; ?><span class="required">*</span>
+            <select name="product_category" required="required">
+              <option value=""><?php echo $text_select_category; ?></option>
+              <?php foreach ($product_categories as $product_category) { ?>
+                <option value="<?php echo $product_category['name']; ?>"><?php echo $product_category['name']; ?></option>
+              <?php } ?>
+            </select>
+          </td>
+        </tr>
+        <tr>
+          <td>
             <?php echo $text_sales_arguments; ?><span class="required">*</span></br>
             <textarea type="text" name="sales_arguments" required="required" style="width: 80%;"></textarea></br>
           </td>

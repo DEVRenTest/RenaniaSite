@@ -60,9 +60,24 @@ class ControllerAccountSpecialProductsRequest extends Controller
         $this->data['text_provider_name'] = $this->language->get('text_provider_name');
         $this->data['text_identified_circumstances'] = $this->language->get('text_identified_circumstances');
         $this->data['text_other_informations'] = $this->language->get('text_other_informations');
+        $this->data['text_product_category'] = $this->language->get('text_product_category');
+        $this->data['text_select_category'] = $this->language->get('text_select_category');
         $this->data['upload_form_button'] = $this->language->get('upload_form_button');
         $this->data['first_upload_form_button'] = $this->language->get('first_upload_form_button');
         $this->data['add_form_button'] = $this->language->get('add_form_button');
+
+        $this->load->model('catalog/category');
+        $product_categories = $this->model_catalog_category->getCategories();
+
+        $this->data['product_categories'] = array();
+        foreach ($product_categories as $product_category) {
+            if ($product_category['top']) {
+                $this->data['product_categories'][] = array(
+                    'category_id' => $product_category['category_id'],
+                    'name'        => $product_category['name']
+                );
+            }
+        }
 
         $this->load->model('account/customer');
         $customer_additional_groups = $this->model_account_customer->getCustomerGroups();
