@@ -93,7 +93,46 @@ class ControllerAccountSpecialProductsRequest extends Controller
         if (($this->request->server['REQUEST_METHOD'] == 'POST')) {
             $this->model_account_special_products_request->addSpecialProductsFrom($this->request->post);
             $subject = $this->language->get('mail_subject_special_products');
-            $message = $this->language->get('mail_message_special_products');
+            $message = $this->language->get('mail_message_special_products') . " " . $this->customer->getFirstName() . " " . $this->customer->getLastName();
+            $message .= $this->language->get('text_mail_address') . " " . $this->customer->getEmail() . "\n\n";
+
+            $special_product_form_entries = $this->model_account_special_products_request->getSpecialProductsFrom($this->customer->getId());
+            foreach ($special_product_form_entries as $special_product_form_entrie) {
+                $message .= $this->language->get('text_next_months_quantity') . "\n\t" . $this->language->get('text_quantity') . " " . $special_product_form_entrie['quantity'] . "\n\t" .
+                            $this->language->get('text_unit') . " " . $special_product_form_entrie['unit'] . "\n";
+                $message .= $this->language->get('text_initial_order_quantity') . "\n\t" . $this->language->get('text_quantity') . " " . $special_product_form_entrie['initial_quantity'] . "\n\t" .
+                            $this->language->get('text_unit') . " " . $special_product_form_entrie['initial_unit'] . "\n";
+                $message .= $this->language->get('text_order_total_value') . " " . $special_product_form_entrie['total_value'] . " " . $this->language->get('text_ron') . "\n";
+                $message .= $this->language->get('text_target_price') . " " . $special_product_form_entrie['target_price'] . " " . $this->language->get('text_ron') . "\n\t" .
+                            $this->language->get('text_unit') . " " . $special_product_form_entrie['target_unit'] . "\n";
+                $message .= $this->language->get('text_product_category') . "\n\t" . $special_product_form_entrie['product_category'] . "\n";
+                $message .= $this->language->get('text_sales_arguments') . "\n\t" . $special_product_form_entrie['sales_arguments'] . "\n";
+                $message .= $this->language->get('text_regional_manager_approval') . " ";
+                if ($special_product_form_entrie['manager_approval'] == 1) {
+                    $message .= $this->language->get('text_yes') . "\n";
+                } else {
+                    $message .= $this->language->get('text_no') . "\n";
+                }
+                $message .= $this->language->get('text_order_date_estimation') . "\n\t";
+                $message .= $this->language->get('text_first_batch') . " ";
+                strtotime($special_product_form_entrie['first_batch']) > 0 ? $message .= $special_product_form_entrie['first_batch'] . "\n\t" : $message .= " " . "\n\t";
+                $message .= $this->language->get('text_second_batch') . " ";
+                strtotime($special_product_form_entrie['second_batch']) > 0 ? $message .= $special_product_form_entrie['second_batch'] . "\n\t" : $message .= " " . "\n\t";
+                $message .= $this->language->get('text_third_batch') . " ";
+                strtotime($special_product_form_entrie['third_batch']) > 0 ? $message .= $special_product_form_entrie['third_batch'] . "\n\t" : $message .= " " . "\n\t";
+                $message .= $this->language->get('text_fourth_batch') . " ";
+                strtotime($special_product_form_entrie['fourth_batch']) > 0 ? $message .= $special_product_form_entrie['fourth_batch'] . "\n\t" : $message .= " " . "\n\t";
+                $message .= $this->language->get('text_fifth_batch') . " ";
+                strtotime($special_product_form_entrie['fifth_batch']) > 0 ? $message .= $special_product_form_entrie['fifth_batch'] . "\n\t" : $message .= " " . "\n\t";
+                $message .= $this->language->get('text_sixth_batch') . " ";
+                strtotime($special_product_form_entrie['sixth_batch']) > 0 ? $message .= $special_product_form_entrie['sixth_batch'] . "\n" : $message .= " " . "\n";
+                $message .= $this->language->get('text_existent_alternative_products') . "\n\t" . $this->language->get('text_alternative_products') . "\n\t\t" . $special_product_form_entrie['alternative_products'] . "\n\t" .
+                            $this->language->get('text_customer_feedback') . "\n\t\t" . $special_product_form_entrie['customer_feedback'] . "\n";
+                $message .= $this->language->get('text_new_provider') . "\n\t" . $this->language->get('text_provider_name') . " " . $special_product_form_entrie['provider_name'] . "\n\t" .
+                            $this->language->get('text_identified_circumstances') . "\n\t\t" . $special_product_form_entrie['identified_circumstances'] . "\n";
+                $message .= $this->language->get('text_other_informations') . "\n\t" . $special_product_form_entrie['other_informations'] . "\n";
+            }
+
             $mail = new Mail();
                 $mail->protocol = $this->config->get('config_mail_protocol');
                 $mail->parameter = $this->config->get('config_mail_parameter');

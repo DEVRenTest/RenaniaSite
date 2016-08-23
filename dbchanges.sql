@@ -147,3 +147,9 @@ DROP `force_buy_bulk`
 
 -- product video
 ALTER TABLE `oc_product` ADD `video` varchar( 512 ) NOT NULL AFTER `image` ;
+
+-- special products request form table
+ALTER TABLE `oc_special_products_request` ADD `product_category` varchar( 32 ) NOT NULL AFTER `target_unit` ;
+
+ALTER TABLE `oc_special_products_request` ADD `customer_id` int( 11 ) NOT NULL AFTER `id` ;
+
