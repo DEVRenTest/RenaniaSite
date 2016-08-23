@@ -394,5 +394,28 @@ class ModelAccountCustomer extends Model {
 
 		return $data;
 	}
+
+	public function getCompanies()
+	{
+		$result = array();
+		$query = $this->db->query(
+			"SELECT c.company_id, c.name
+			FROM " . DB_PREFIX . "customer_to_company ctc
+			LEFT JOIN " . DB_PREFIX . "company c USING (company_id)
+			WHERE ctc.customer_id = '" . (int)$this->customer->getID() . "'"
+		);
+		foreach ($query->rows as $row) {
+			$result[$row['company_id']] = $row['name'];
+		}
+
+		return $result;
+	}
+
+	public function representsCompany($company_id)
+	{
+		$query = $this->db->query("SELECT * FROM " . DB_PREFIX . "customer_to_company WHERE customer_id = '" . (int)$this->customer->getID() . "' AND company_id = '" . (int)$company_id . "'");
+
+		return (bool)$query->num_rows;
+	}
 }
 ?>
