@@ -16,6 +16,7 @@ class ControllerAccountCompany extends Controller
 
         if ('POST' == $_SERVER['REQUEST_METHOD'] && $this->validate()) {
             $this->session->data['company_id'] = (int)$this->request->post['company_id'];
+            unset($this->session->data['order_id']);
             $this->session->data['success'] = $this->language->get('text_success');
             $this->redirect($this->url->link('account/account', '', 'SSL'));
         }

@@ -170,6 +170,8 @@ CREATE TABLE `oc_customer_to_company` (
  UNIQUE KEY `customer_company` (`customer_id`,`company_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1
 
+ALTER TABLE `oc_order` ADD `company_id` INT( 11 ) NULL DEFAULT NULL AFTER `customer_id` ;
+
 -- populate company table
 -- INSERT INTO `oc_company` (`name`) SELECT DISTINCT(`ax_code`) FROM `oc_customer` WHERE `ax_code` <> '';
 

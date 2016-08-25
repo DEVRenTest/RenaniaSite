@@ -4,13 +4,10 @@ class ControllerAccountOrderapproval extends Controller {
 		
 	public function index() {
     	if (!$this->customer->isLogged()) {
-      		$this->session->data['redirect'] = $this->url->link('account/order', '', 'SSL');
-
+      		$this->session->data['redirect'] = $this->url->link('account/orderapproval', '', 'SSL');
 	  		$this->redirect($this->url->link('account/login', '', 'SSL'));
     	}
     	if (!$this->customer->getAxCode() || !$this->customer->getOrderLimit() || $this->customer->getOrderLimit() != -1) {
-      		$this->session->data['redirect'] = $this->url->link('account/account', '', 'SSL');
-
 	  		$this->redirect($this->url->link('account/account', '', 'SSL'));  		
     	}
 		
@@ -76,7 +73,7 @@ class ControllerAccountOrderapproval extends Controller {
 		
 		$this->data['orders'] = array();
 		
-		$results = $this->model_account_customer->getPendingOrders($this->customer->getAxCode());
+		$results = $this->model_account_customer->getPendingOrders();
 		
 		foreach ($results as $result) {
 			$product_total = $this->model_account_order->getTotalOrderProductsByOrderId($result['order_id']);
@@ -124,13 +121,10 @@ class ControllerAccountOrderapproval extends Controller {
 		}	
 
 		if (!$this->customer->isLogged()) {
-			$this->session->data['redirect'] = $this->url->link('account/order/info', 'order_id=' . $order_id, 'SSL');
-			
+			$this->session->data['redirect'] = $this->url->link('account/orderapproval/info', 'order_id=' . $order_id, 'SSL');
 			$this->redirect($this->url->link('account/login', '', 'SSL'));
     	}
     	if (!$this->model_account_customer->canManageOrder($this->request->get['order_id'])) {
-      		$this->session->data['redirect'] = $this->url->link('account/account', '', 'SSL');
-
 	  		$this->redirect($this->url->link('account/account', '', 'SSL'));  		
     	}
 
