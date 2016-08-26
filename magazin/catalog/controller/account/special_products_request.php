@@ -35,6 +35,7 @@ class ControllerAccountSpecialProductsRequest extends Controller
         );
 
         $this->data['heading_title'] = $this->language->get('special_products_request_heading_title');
+        $this->data['text_product_description'] = $this->language->get('text_product_description');
         $this->data['text_next_months_quantity'] = $this->language->get('text_next_months_quantity');
         $this->data['text_quantity'] = $this->language->get('text_quantity');
         $this->data['text_unit'] = $this->language->get('text_unit');
@@ -62,9 +63,11 @@ class ControllerAccountSpecialProductsRequest extends Controller
         $this->data['text_other_informations'] = $this->language->get('text_other_informations');
         $this->data['text_product_category'] = $this->language->get('text_product_category');
         $this->data['text_select_category'] = $this->language->get('text_select_category');
+        $this->data['text_special_product_image'] = $this->language->get('text_special_product_image');
         $this->data['upload_form_button'] = $this->language->get('upload_form_button');
         $this->data['first_upload_form_button'] = $this->language->get('first_upload_form_button');
         $this->data['add_form_button'] = $this->language->get('add_form_button');
+        $this->data['error_manager_approval'] = $this->language->get('error_manager_approval');
 
         $this->load->model('catalog/category');
         $product_categories = $this->model_catalog_category->getCategories();
@@ -91,13 +94,25 @@ class ControllerAccountSpecialProductsRequest extends Controller
         $this->load->model('account/special_products_request');
 
         if (($this->request->server['REQUEST_METHOD'] == 'POST')) {
-            $this->model_account_special_products_request->addSpecialProductsFrom($this->request->post);
+            $allowedExts = array("jpeg", "jpg", "png");
+            $temp = explode( ".", $this->request->files['image']['name']);
+            $extension = end( $temp );
+            if ($this->request->files['image']['name'] != '' && in_array($extension, $allowedExts)) {
+                $name = basename($this->request->files["image"]["name"]);
+                $image = $this->request->files['image']['name'];
+                move_uploaded_file($this->request->files['image']['tmp_name'], "image/specialProduct/$name");
+                $attachment = "image/specialProduct/$name";
+            } else {
+                $image = '';
+            }
+            $this->model_account_special_products_request->addSpecialProductsForm($this->request->post, $image);
             $subject = $this->language->get('mail_subject_special_products');
             $message = $this->language->get('mail_message_special_products') . " " . $this->customer->getFirstName() . " " . $this->customer->getLastName();
             $message .= $this->language->get('text_mail_address') . " " . $this->customer->getEmail() . "\n\n";
 
-            $special_product_form_entries = $this->model_account_special_products_request->getSpecialProductsFrom($this->customer->getId());
+            $special_product_form_entries = $this->model_account_special_products_request->getSpecialProductsForm($this->customer->getId());
             foreach ($special_product_form_entries as $special_product_form_entrie) {
+                $message .= $this->language->get('text_product_description') . "\n\t" . $special_product_form_entrie['product_description'] . "\n";
                 $message .= $this->language->get('text_next_months_quantity') . "\n\t" . $this->language->get('text_quantity') . " " . $special_product_form_entrie['quantity'] . "\n\t" .
                             $this->language->get('text_unit') . " " . $special_product_form_entrie['unit'] . "\n";
                 $message .= $this->language->get('text_initial_order_quantity') . "\n\t" . $this->language->get('text_quantity') . " " . $special_product_form_entrie['initial_quantity'] . "\n\t" .
@@ -146,6 +161,7 @@ class ControllerAccountSpecialProductsRequest extends Controller
                 $mail->setSender($this->config->get('config_name'));
                 $mail->setSubject(html_entity_decode($subject, ENT_QUOTES, 'UTF-8'));
                 $mail->setText(html_entity_decode($message, ENT_QUOTES, 'UTF-8'));
+                $mail->AddAttachment($attachment);
                 $mail->send();
             $this->redirect($this->url->link('account/account', '', 'SSL'));
         }

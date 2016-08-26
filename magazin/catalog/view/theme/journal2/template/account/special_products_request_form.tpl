@@ -6,7 +6,7 @@
 </div>
 <?php echo $column_left; ?><?php echo $column_right; ?>
 <div id="content">
-    <form method="post" enctype="multipart/form-data">
+    <form name="special_products_form" onsubmit="return validateForm()" method="post" enctype="multipart/form-data">
     <div class="special_products_form_buttons">
       <div style="float:left;"><a href="<?php echo $add_form; ?>" class="button"><?php echo $add_form_button; ?></a></div>
       <div style="float:right;"><input type="submit" name="submit" value='<?php echo $first_upload_form_button ?>' class="button" /></div>
@@ -14,6 +14,12 @@
     <h1 class="heading-title"><center><?php echo $heading_title; ?></center></h1>
     <?php echo $content_top; ?>
       <table class="special_products_form">
+      	<tr>
+          <td>
+  			<?php echo $text_product_description; ?><span class="required">*</span></br>
+  			<textarea type="text" name="product_description" required="required" style="width: 80%;"></textarea></br>
+  		  </td>
+      	</tr>
         <tr>
           <td>
             <?php echo $text_next_months_quantity; ?><span class="required">*</span></br>
@@ -61,8 +67,8 @@
         <tr>
           <td>
             <?php echo $text_regional_manager_approval; ?><span class="required">*</span>
-            <input type="radio" name="manager_approval" value="1" checked="checked" /> <?php echo $text_yes; ?>
-            <input type="radio" name="manager_approval" value="0" /> <?php echo $text_no; ?></br>
+            <input id="yes" type="radio" name="manager_approval" value="1" checked="checked" /> <?php echo $text_yes; ?>
+            <input id="no" type="radio" name="manager_approval" value="0" /> <?php echo $text_no; ?></br>
           </td>
         </tr>
         <tr>
@@ -99,6 +105,12 @@
             <textarea type="text" name="other_informations" style="width: 80%;"></textarea>
           </td>
         </tr>
+        <tr>
+          <td>
+            <?php echo $text_special_product_image; ?>
+            &emsp;<input type="file" name="image" value="" />
+          </td>
+        </tr>
       </table>
       <div class="buttons">
         <div class="form_button" style="float: right"><input type="submit" name="submit" value='<?php echo $upload_form_button ?>' class="button" /></div>
@@ -119,3 +131,11 @@ $(document).ready(function() {
   });
 });
 //--></script>
+<script type="text/javascript">
+function validateForm(formData) {
+  if (!this.yes.checked) {
+      alert('<?php echo $error_manager_approval; ?>');
+      return false;
+  }
+}
+</script>

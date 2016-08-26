@@ -153,3 +153,8 @@ ALTER TABLE `oc_special_products_request` ADD `product_category` varchar( 32 ) N
 
 ALTER TABLE `oc_special_products_request` ADD `customer_id` int( 11 ) NOT NULL AFTER `id` ;
 
+ALTER TABLE `oc_special_products_request` ADD `product_description` text NOT NULL AFTER `customer_id` ;
+
+ALTER TABLE `oc_special_products_request` ADD `image` varchar( 255 ) NOT NULL AFTER `other_informations` ;
+
+
