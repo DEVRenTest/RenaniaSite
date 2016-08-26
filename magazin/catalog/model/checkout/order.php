@@ -92,6 +92,7 @@ class ModelCheckoutOrder extends Model {
 				'store_name'              => $order_query->row['store_name'],
 				'store_url'               => $order_query->row['store_url'],				
 				'customer_id'             => $order_query->row['customer_id'],
+				'company_id'              => $order_query->row['company_id'],
 				'firstname'               => $order_query->row['firstname'],
 				'lastname'                => $order_query->row['lastname'],
 				'telephone'               => $order_query->row['telephone'],
@@ -204,7 +205,12 @@ class ModelCheckoutOrder extends Model {
 				$this->mailToSuperior($order_id);
 			}
 				
-			$this->db->query("UPDATE `" . DB_PREFIX . "order` SET order_status_id = '" . (int)$order_status_id . "', date_modified = NOW() WHERE order_id = '" . (int)$order_id . "'");
+			$sql = "UPDATE `" . DB_PREFIX . "order` SET order_status_id = '" . (int)$order_status_id . "', date_modified = NOW()";
+			if ($this->customer->getCompanyId()) {
+				$sql .= ", company_id = '" . (int)$this->customer->getCompanyId() . "'";
+			}
+			$sql .= " WHERE order_id = '" . (int)$order_id . "'";
+			$this->db->query($sql);
 
 			$this->db->query("INSERT INTO " . DB_PREFIX . "order_history SET order_id = '" . (int)$order_id . "', order_status_id = '" . (int)$order_status_id . "', notify = '1', comment = '" . $this->db->escape(($comment && $notify) ? $comment : '') . "', date_added = NOW()");
 
@@ -703,17 +709,16 @@ class ModelCheckoutOrder extends Model {
 	public function mailToSuperior($order_id)
 	{
 		$order_info = $this->getOrder($order_id);
-		$send = false;
-		$order_customer_query = $this->db->query("SELECT c.ax_code FROM " . DB_PREFIX . "order o LEFT JOIN " . DB_PREFIX . "customer c ON c.customer_id = o.customer_id  WHERE o.order_id = '" . (int)$order_id . "'");
-		if ($order_customer_query->num_rows && $order_customer_query->row['ax_code']) {
-			$order_email_query = $this->db->query("SELECT email FROM " . DB_PREFIX . "customer WHERE ax_code = '" . $this->db->escape($order_customer_query->row['ax_code']) . "' AND order_limit = -1");
-			if ($order_email_query->num_rows) {
-				$supervisors = $order_email_query->rows;
-				$send = true;
-			}
+		if (!$order_info || !$order_info['company_id']) {
+			return;
 		}
-
-		if ($send) {
+		$customer_superiors = $this->db->query(
+			"SELECT c.email FROM " . DB_PREFIX . "customer_to_company ctc
+			LEFT JOIN " . DB_PREFIX . "customer c ON ctc.customer_id = c.customer_id
+			WHERE ctc.company_id = '" . (int)$order_info['company_id'] . "'
+			AND c.order_limit = -1" 
+		);
+		if ($customer_superiors->num_rows) {
 			$language = new Language($order_info['language_directory']);
 			$language->load($order_info['language_filename']);
 			$language->load('mail/order');
@@ -734,11 +739,9 @@ class ModelCheckoutOrder extends Model {
 			$mail->setSubject(html_entity_decode($subject, ENT_QUOTES, 'UTF-8'));
 			$mail->setHtml(html_entity_decode($message, ENT_QUOTES, 'UTF-8'));
 
-			foreach ($supervisors as $supervisor) {
-
-				$mail->setTo($supervisor);
+			foreach ($customer_superiors->rows as $row) {
+				$mail->setTo($row['email']);
 				$mail->send();
-
 			}
 			return true;
 		} else {
