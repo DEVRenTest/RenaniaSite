@@ -25,4 +25,5 @@ $_['text_customer_report'] = 'Customer report';
 $_['text_upload_report'] = 'Upload report';
 $_['text_list_reports'] = 'View reports';
 $_['text_special_product_request'] = 'Request special products';
+$_['text_change_company'] = 'Change active company';
 ?>
