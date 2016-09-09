@@ -25,6 +25,7 @@ $_['text_download']                    = 'Downloads';
 $_['text_error_log']                   = 'Error Logs';
 $_['text_extension']                   = 'Extensions';
 $_['text_feed']                        = 'Product Feeds';
+$_['text_form']                        = 'Online form';
 $_['text_filter']                      = 'Filters';
 $_['text_front']                       = 'Store Front';
 $_['text_geo_zone']                    = 'Geo Zones';

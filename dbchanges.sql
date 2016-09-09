@@ -194,3 +194,5 @@ ALTER TABLE `oc_order` ADD `company_id` INT( 11 ) NULL DEFAULT NULL AFTER `custo
 --   LEFT JOIN `oc_company` com ON cus.`ax_code` = com.`name`
 --   WHERE cus.`ax_code` <> ''
 -- );
+
+ALTER TABLE `oc_customer` ADD `show_form` TINYINT( 1 ) NOT NULL DEFAULT '0' AFTER `secret_code` ;

@@ -27,6 +27,21 @@ class ControllerCommonHeader extends Controller {
 		$this->data['direction'] = $this->language->get('direction');
 		$this->data['google_analytics'] = html_entity_decode($this->config->get('config_google_analytics'), ENT_QUOTES, 'UTF-8');
 		$this->data['name'] = $this->config->get('config_name');
+		$this->data['google_form_url'] = $this->config->get('google_form_url');
+
+		$page_url = $_SERVER['HTTP_HOST'] . $_SERVER['REQUEST_URI'];
+		$this->data['show_form'] = false;
+		if ($page_url == substr($this->config->get('google_form_page_url'), strpos($this->config->get('google_form_page_url'), "://") + strlen("://"))) {
+			$this->load->model('account/customer');
+			$results = $this->model_account_customer->getCustomer($this->customer->getId());
+			$this->model_account_customer->updateShowFormStatus();
+			$this->data['show_form'] = $this->config->get('google_form_status')
+				&& ($results['show_form'] != 1)
+				&& ($this->config->get('config_google_form_customer_group') || $this->config->get('form_customers'))
+				&& $this->config->get('google_form_frequency')
+				&& (in_array($this->customer->getCustomerGroupId(), (array)$this->config->get('config_google_form_customer_group')) || in_array($this->customer->getId(), (array)$this->config->get('form_customers')))
+				&& mt_rand(1, $this->config->get('google_form_frequency')) == 1;
+		}
 		
 		if ($this->config->get('config_icon') && file_exists(DIR_IMAGE . $this->config->get('config_icon'))) {
 			$this->data['icon'] = $server . 'image/' . $this->config->get('config_icon');
@@ -156,8 +171,7 @@ class ControllerCommonHeader extends Controller {
 					'href'     => $this->url->link('product/category', 'path=' . $category['category_id'])
 				);
 			}
-		}
-		
+		}		
 		$this->children = array(
 			'module/language',
 			'module/currency',
