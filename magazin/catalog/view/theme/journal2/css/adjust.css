@@ -178,3 +178,6 @@ body.group4 .secondary-menu-item-3 span {
 .products_related_price, .complementary_title, .related_title {
 	font-weight: bold;
 }
+#sticky-wrapper.sticky-wrapper {
+	width: 100% !important;
+}
