@@ -41,6 +41,9 @@
                         <?php endif; /* end v1541 compatibility */ ?>
                     </div>
                 </div>
+                <div class="journal-language" style="display: inline-block;">
+                    <?php echo $language; ?>
+                </div>
                 <?php endif; ?>
                 <?php echo $this->journal2->settings->get('config_primary_menu'); ?>
                 <?php if(in_array( $this->customer->getCustomerGroupId(), array( 3,4 ))) { ?>
@@ -130,7 +133,6 @@
         <?php if (!$this->journal2->html_classes->hasClass('mobile') && $this->journal2->settings->get('responsive_design')): ?>
         <script>
             if($(window).width() < 760){
-                $('.journal-header-center .journal-links').before($('.journal-header-center .journal-language'));
                 $('.journal-header-center .journal-logo').after($('.journal-header-center .journal-search'));
             }
         </script>
