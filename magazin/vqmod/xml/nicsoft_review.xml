@@ -1,0 +1,224 @@
+<modification>
+
+	<id>Review system</id>
+	<version>1.0.0</version>
+	<vqmver>2.1.5</vqmver>
+	<author>Nicsoft Norbi</author>
+
+
+	<file path="admin/view/template/common/" name="header.tpl">
+		<operation error="skip">
+			<search position="before"><![CDATA[<li id="help"><a class="top"><?php echo $text_help; ?></a>]]></search>
+			<add><![CDATA[
+			<!-- nicsoft_review.xml >> -->
+			<li id="help"><a class="top"><?php echo "Comentarii"; ?></a>
+				<ul>
+					<li id="help"><a href="<?php echo $review; ?>"><?php echo "Lista Comentariilor"; ?></a></li>
+					<li id="help"><a href="<?php echo $review_settings; ?>"><?php echo "Setări"; ?></a></li>
+				</ul>
+			</li>
+			<!-- nicsoft_review.xml << -->
+			]]></add>
+		</operation>
+		
+		<operation error="skip">
+			<search position="replace"><![CDATA[<li><a href="<?php echo $review; ?>"><?php echo $text_review; ?></a></li>]]></search>
+			<add><![CDATA[
+			<!-- nicsoft_review.xml >> -->
+			<!-- nicsoft_review.xml << -->
+			]]></add>
+		</operation>
+	</file>	
+	
+	<file path="admin/controller/common/" name="header.php">
+		<operation error="skip">
+			<search position="replace"><![CDATA[$this->data['review'] = $this->url->link('catalog/review', 'token=' . $this->session->data['token'], 'SSL');]]></search>
+			<add><![CDATA[
+/* nicsoft_review.xml >> */
+			        $this->data['review'] = $this->url->link('catalog/review_ns', 'token=' . $this->session->data['token'], 'SSL');
+			        $this->data['review_settings'] = $this->url->link('catalog/review_ns/editReviewSettings', 'token=' . $this->session->data['token'], 'SSL');
+/* nicsoft_review.xml << */		
+            ]]></add>
+		</operation>
+	</file>
+	
+	<file path="catalog/controller/product/" name="product.php">
+		<operation error="skip">
+			<search position="after"><![CDATA[$this->data['review_status'] = $this->config->get('config_review_status');]]></search>
+			<add><![CDATA[
+/* nicsoft_review.xml >> */
+			if (!$this->customer->isLogged())
+				$this->data['review_write'] = 1;
+			else
+				$this->data['review_write'] = 0;
+			
+			$this->data['logged_in'] = $this->customer->isLogged();
+/* nicsoft_review.xml << */		
+            ]]></add>
+		</operation>
+		
+		<operation error="skip">
+			<search position="after"><![CDATA[$this->data['reviews'][] = array(]]></search>
+			<add><![CDATA[
+/* nicsoft_review.xml >> */
+        		'bought'     => $result['bought'],
+        		'title'     => $result['title'],   
+/* nicsoft_review.xml << */		
+            ]]></add>
+		</operation>
+		<operation error="skip">
+			<search position="before"><![CDATA[if ((utf8_strlen($this->request->post['name']) < 3) || (utf8_strlen($this->request->post['name']) > 25)) {]]></search>
+			<add><![CDATA[
+/* nicsoft_review.xml >> 			
+            ]]></add>
+		</operation>
+		<operation error="skip">
+			<search position="before"><![CDATA[if (!isset($json['error'])) {]]></search>
+			<add><![CDATA[
+ nicsoft_review.xml << */				
+            ]]></add>
+		</operation>
+		<operation error="skip">
+			<search position="after"><![CDATA[$this->data['reviews'] = sprintf($this->language->get('text_reviews'), (int)$product_info['reviews']);]]></search>
+			<add><![CDATA[
+/* nicsoft_review.xml >> */
+			$this->data['nr_reviews'] = (int)$product_info['reviews'];	
+/* nicsoft_review.xml << */			
+            ]]></add>
+		</operation>
+		
+	</file>
+	
+	<file path="catalog/view/theme/journal2/template/product/" name="product.tpl">
+		<operation error="skip">
+			<search position="after"><![CDATA[<div id="review"><?php echo $this->journal2->settings->get('product_reviews'); ?></div>]]></search>
+			<add><![CDATA[
+<!-- nicsoft_review.xml >> -->
+				<?php if ($logged_in) { ?>
+		<div id="rev_write_placeholder"><div>+</div> Adauga comentariu nou</div>
+		<div id="rev_write">
+			<h2 id="review-title"><?php echo $text_write; ?></h2>
+			<b><?php echo "Titlu"; ?></b><br />
+			<input type="text" name="title" value="" />
+			<br />
+			<br />
+			<b><?php echo $entry_review; ?></b>
+			<textarea name="text" cols="40" rows="8"></textarea>
+			<span><?php echo $text_note; ?></span><br />
+			<br />
+			<b><?php echo $entry_rating; ?></b> <span><?php echo $entry_bad; ?></span>&nbsp;
+			<input type="radio" name="rating" value="1" />
+			&nbsp;
+			<input type="radio" name="rating" value="2" />
+			&nbsp;
+			<input type="radio" name="rating" value="3" />
+			&nbsp;
+			<input type="radio" name="rating" value="4" />
+			&nbsp;
+			<input type="radio" name="rating" value="5" />
+			&nbsp;<span><?php echo $entry_good; ?></span><br />
+			<br />
+			<div class="buttons">
+			  <div class="right"><a id="button-review" class="button"><?php echo "Adaugare"; ?></a></div>
+			  <div class="right"><a id="rev_write_cancel" class="button"><?php echo "Anulare"; ?></a></div>
+			</div>
+		</div>
+<script>
+jQuery(document).ready(function($) {
+	$('#rev_write_placeholder').click(function () {
+		$('#rev_write_placeholder').hide();
+		$('#rev_write').slideToggle('slow');
+	});
+	$('#rev_write_cancel').click(function () {
+		$('#rev_write').slideToggle('slow');
+		$('#rev_write_placeholder').show();
+		
+		$('input[title=\'title\']').val('');
+		$('textarea[name=\'text\']').val('');
+		$('input[name=\'rating\']:checked').attr('checked', '');
+		$('input[name=\'captcha\']').val('');
+	});
+});
+</script>		
+		<?php } ?>
+  </div>
+  <?php } ?>	
+ <?php if(true==false){ ?>	  
+<!--
+	
+            ]]></add>
+		</operation>
+		
+		<operation error="skip">
+			<search position="replace"><![CDATA[
+			data: 'name=' + encodeURIComponent($('input[name=\'name\']').val()) + '&text=' + encodeURIComponent($('textarea[name=\'text\']').val()) + '&rating=' + encodeURIComponent($('input[name=\'rating\']:checked').val() ? $('input[name=\'rating\']:checked').val() : '') + '&captcha=' + encodeURIComponent($('input[name=\'captcha\']').val()),
+		]]></search>
+			<add><![CDATA[
+/* nicsoft_review.xml >> */	
+			data: 'title=' + encodeURIComponent($('input[name=\'title\']').val()) + '&text=' + encodeURIComponent($('textarea[name=\'text\']').val()) + '&rating=' + encodeURIComponent($('input[name=\'rating\']:checked').val() ? $('input[name=\'rating\']:checked').val() : '') + '&captcha=' + encodeURIComponent($('input[name=\'captcha\']').val()),
+		
+/* nicsoft_review.xml << */		
+            ]]></add>
+		</operation>
+		<operation error="skip">
+			<search position="replace"><![CDATA[		
+			<div><img width="83" height="15" src="catalog/view/theme/default/image/stars-<?php echo $rating; ?>.png" alt="<?php echo $reviews; ?>" />&nbsp;&nbsp;<a onclick="$('a[href=\'#tab-review\']').trigger('click');"><?php echo $reviews; ?></a>&nbsp;&nbsp;&bull;&nbsp;&nbsp;<a onclick="$('a[href=\'#tab-review\']').trigger('click');"><?php echo $text_write; ?></a></div>]]></search>
+			<add><![CDATA[
+<!-- nicsoft_review.xml >> -->	
+			<div><img width="83" height="15" src="catalog/view/theme/default/image/stars-<?php echo $rating; ?>.png" alt="<?php echo $reviews; ?>" />&nbsp;&nbsp;<a onclick="$('a[href=\'#tab-review\']').trigger('click');"><?php echo $nr_reviews." review-uri";//$reviews; ?></a></div>
+<!-- nicsoft_review.xml << -->		
+            ]]></add>
+		</operation>
+		
+		<operation error="skip">
+			<search position="replace"><![CDATA[
+			$('input[name=\'name\']').val('');
+			]]></search>
+			<add><![CDATA[
+/* nicsoft_review.xml >> */	
+			$('input[name=\'title\']').val('');
+/* nicsoft_review.xml << */		
+            ]]></add>
+		</operation>
+		
+		<operation error="skip">
+			<search position="before"><![CDATA[
+			$('#button-review').bind('click', function() {
+			]]></search>
+			<add><![CDATA[
+/* nicsoft_review.xml >> */	
+			if($('#button-review').length > 0)
+/* nicsoft_review.xml << */		
+            ]]></add>
+		</operation>
+		
+	</file>
+	
+	<file path="catalog/view/theme/journal2/template/product/" name="category.tpl">
+		<operation error="skip">
+			<search position="replace"><![CDATA[<div class="rating"><img width="83" height="15" src="<?php echo Journal2Utils::staticAsset("catalog/view/theme/default/image/stars-{$product['rating']}.png"); ?>" alt="<?php echo $product['reviews']; ?>" /></div>]]></search>
+			<add><![CDATA[
+<!-- nicsoft_review.xml >> -->
+			<div class="rating"><img width="83" height="15" src="<?php echo Journal2Utils::staticAsset("catalog/view/theme/default/image/stars-{$product['rating']}.png"); ?>" /> <a href="<?php echo $product['href']; ?>#tab-review"><div class="nr_rew">(<?php echo $product['reviews']; ?> review-uri)</div></a></div>
+<!-- nicsoft_review.xml << -->			
+			]]></add>
+		</operation>
+		
+	</file>
+	
+	<file path="catalog/controller/product/" name="category.php">
+		<operation error="skip">
+			<search position="replace"><![CDATA['reviews' => sprintf( $this->language->get( 'text_reviews' ), ( int ) $result['reviews'] ),]]></search>
+			<add><![CDATA[
+/* nicsoft_review.xml >> */
+			'reviews' => $result['reviews'] ,
+/* nicsoft_review.xml << */
+			]]></add>
+		</operation>
+		
+	</file>
+	
+	
+
+</modification>
+

@@ -1652,3 +1652,114 @@ select#size_product_option_value_id {
 .fixed_header {
   position: fixed!important;
 }
+
+
+/* >>>>>>>>>>>>>>>>>> Review  System  */
+.review-list{
+	border:none;
+	margin-bottom: 0;
+    padding-bottom: 0;
+}
+
+.review-list div.verified{
+	width: 17px !important;
+    height: 17px !important;
+    background-color: #090 !important;
+    border: 1px solid #090 !important;
+    border-radius: 100% !important;
+    text-align: center !important;
+    color: white !important;
+    display: inline-block !important;
+    font-size: 11px !important;
+    line-height: 14px;
+}
+.review-list div.bought{
+	padding: 10px 0px 0px 0px;
+	line-height: 14px;
+}
+.review-list div.review_title{
+	font-size:15px;
+	font-weight:bold;
+	padding-bottom:10px;
+}
+.review-list .rating{
+	padding:0px;
+	margin:0px;
+	display:block;
+	width: 100%;
+	padding-bottom:10px;
+}
+.review-list .text{
+	max-width:710px;
+	display:inline-block;
+}
+.review-list .rating{
+	float:left;
+}
+.review-list .author{
+	vertical-align: top;
+	border: 0 none;
+	width:100%;
+	max-width:145px;
+	display:inline-block;
+	font-weight: normal;
+	font-size: 11px;
+}
+.review-list .author b{ /* customer name */
+	border:none;
+	color:#005eb8;
+	font-size: 12px;
+    font-weight: bold;
+}
+.review-list .author span{ /* acum x zile */
+	font-size: 11px;
+    font-weight: normal;
+}
+#rev_write{ display:none;}
+#rev_write_placeholder{
+	cursor:pointer;
+	width:auto;
+	font-size:13px;
+	color: #5F6874;
+	font-weight: bold;
+}
+#rev_write_placeholder div{
+	float: left;
+    display: inline-block;
+    color: #5F6874;
+    border: 2px solid #5F6874;
+    border-radius: 100%;
+    font-weight: bolder;
+    width: 17px !important;
+    padding-left: 1px;
+    height: 17px;
+    line-height: 13px;
+	margin-left:10px;
+	margin-right:10px;
+}
+#rev_write{
+	/* margin-left:10px; */
+	width:100% !important;
+}
+#tab-review .buttons{
+	background-color: transparent !important;
+}
+#tab-review .buttons #rev_write_cancel {
+	margin-left:12px;
+}
+.product-grid-item .rating { 
+   top: 58px !important;
+   margin: 0 auto !important;
+   width:100%;
+   text-align:center;
+   left:0px !important;
+}
+.nr_rew{
+	font-size:11px;
+	color: #005eb8;
+	display:inline-block;
+	margin-top: 1px;
+    vertical-align: top;
+	cursor:pointer;
+}
+ /* <<<<<<<<<<<<<<<<<<< Review  System  */
