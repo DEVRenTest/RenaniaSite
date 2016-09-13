@@ -177,6 +177,7 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
             $header_type = $header_type . '.nosearch';
         }
     }
+    $header_type = 'center.nolang-nocurr';
     if (class_exists('VQMod')) {
         global $vqmod;
         if ($vqmod !== null) {

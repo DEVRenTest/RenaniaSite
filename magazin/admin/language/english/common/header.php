@@ -101,4 +101,9 @@ $_['text_paypal_manage']               = 'PayPal';
 $_['text_paypal_search']               = 'Search';
 $_['text_recurring_profile']           = 'Recurring Profiles';
 
+$_['text_customer_settings'] = 'Customer settings';
+$_['text_export'] = 'Export / Import';
+$_['text_useful_documents'] = 'Useful documents';
+$_['text_reclamation'] = 'Complaints';
+$_['text_setting_email_addresses'] = 'E-mail address settings';
 ?>

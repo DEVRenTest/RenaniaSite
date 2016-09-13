@@ -201,10 +201,6 @@ class ModelCheckoutOrder extends Model {
 				$order_status_id = $this->config->get('config_order_status_id');
 			}
 
-			if ($order_status_id == $this->config->get('config_unapproved_order_status_id')) {
-				$this->mailToSuperior($order_id);
-			}
-				
 			$sql = "UPDATE `" . DB_PREFIX . "order` SET order_status_id = '" . (int)$order_status_id . "', date_modified = NOW()";
 			if ($this->customer->getCompanyId()) {
 				$sql .= ", company_id = '" . (int)$this->customer->getCompanyId() . "'";
@@ -569,15 +565,8 @@ class ModelCheckoutOrder extends Model {
 					$text .= $language->get('text_new_comment') . "\n\n";
 					$text .= $order_info['comment'] . "\n\n";
 				}
-			
-				$order_customer_query = $this->db->query("SELECT oco.customer_id, occ.ax_code FROM " . DB_PREFIX . "order oco LEFT JOIN " . DB_PREFIX . "customer occ on oco.customer_id = occ.customer_id WHERE oco.order_id = '" . (int)$order_id . "'");							
-				
-				if ($order_customer_query->num_rows) {					
-					$order_customerAxCode = ' '.$order_customer_query->row['ax_code'];					
-				} else {					
-					$order_customerAxCode = '';				
-				}				
-				$subject = $subject.$order_customerAxCode;					
+
+				$subject = $subject . ' ' . $this->customer->getAxCode();					
 				
 			
 				$mail = new Mail(); 
@@ -605,6 +594,9 @@ class ModelCheckoutOrder extends Model {
 					}
 				}				
 			}		
+		}
+		if ($order_status_id == $this->config->get('config_unapproved_order_status_id')) {
+			$this->mailToSuperior($order_id);
 		}
 	}
 	

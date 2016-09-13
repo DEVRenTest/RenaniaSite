@@ -14,4 +14,6 @@ $_['entry_sort_order'] = 'Sort Order:';
 
 // Error
 $_['error_permission'] = 'Warning: You do not have permission to modify free shipping!';
+
+$_['entry_total_b2b'] = 'Total <b>B2B</b> customers:<br /><span class="help">Minimum total cost to be eligible for free delivery.</span>';
 ?>

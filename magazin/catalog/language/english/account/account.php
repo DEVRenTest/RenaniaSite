@@ -58,4 +58,5 @@ $_['text_change_account_info'] = 'changed account info.';
 $_['text_subject_notification'] = 'NOTIFICATION - change data';
 
 $_['text_special_product_request'] = 'Request special products';
+$_['text_change_company'] = 'Change active company';
 ?>

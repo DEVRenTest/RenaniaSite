@@ -245,3 +245,6 @@ body.group4 .secondary-menu-item-3 span {
 	overflow-y: scroll;
 	padding-right: 20px;
 }*/
+#sticky-wrapper.sticky-wrapper {
+	width: 100% !important;
+}

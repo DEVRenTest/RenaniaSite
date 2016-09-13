@@ -76,4 +76,13 @@ $_['error_postcode']        = 'Postcode must be between 2 and 10 characters for 
 $_['error_country']         = 'Please select a country!';
 $_['error_zone']            = 'Please select a region / state!';
 $_['error_order_limit']     = 'Invalid order limit!';
+
+$_['entry_middlename'] = '';
+$_['entry_ax_code'] = 'Customer AX code:';
+$_['entry_payment_term'] = 'Payment due:';
+$_['entry_customer_type'] = 'Customer type';
+$_['text_master'] = 'Full access customer';
+$_['text_slave'] = 'Limited access customer';
+$_['text_full_permision'] = 'full';
+$_['text_limited_permision'] = 'limited';
 ?>

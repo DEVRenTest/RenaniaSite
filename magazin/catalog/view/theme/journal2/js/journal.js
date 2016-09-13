@@ -477,7 +477,6 @@ Journal.onMobile = function () {
 
     /* switch elements */
     $('.journal-header-default .journal-search, .journal-header-menu .journal-search').after($('.journal-header-default .journal-cart, .journal-header-menu .journal-cart'));
-    $('.journal-header-center .journal-links').before($('.journal-header-center .journal-language'));
     $('.journal-header-center .journal-logo').after($('.journal-header-center .journal-search'));
 
     Journal.itemsEqualHeight();
@@ -486,7 +485,6 @@ Journal.onMobile = function () {
 Journal.onTablet = function () {
     /* switch some elements in markup */
     $('.journal-header-default .journal-search, .journal-header-menu .journal-search').after($('.journal-header-default .journal-cart, .journal-header-menu .journal-cart'));
-    $('.journal-header-center .journal-links').after($('.journal-header-center .journal-language'));
     if (!$('.journal-header-center').hasClass('journal-header-mega')) {
         $('.journal-header-center .journal-search').after($('.journal-header-center .journal-logo'));
     }
@@ -502,7 +500,6 @@ Journal.onTablet = function () {
 Journal.onDesktop = function () {
     /* switch some elements in markup */
     $('.journal-header-default .journal-login, .journal-header-menu .journal-login').before($('.journal-header-default .journal-cart, .journal-header-menu .journal-cart'));
-    $('.journal-header-center .journal-links').after($('.journal-header-center .journal-language'));
     if (!$('.journal-header-center').hasClass('journal-header-mega')) {
         $('.journal-header-center .journal-search').after($('.journal-header-center .journal-logo'));
     }
