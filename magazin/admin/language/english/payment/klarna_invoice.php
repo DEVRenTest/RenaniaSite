@@ -28,4 +28,8 @@ $_['entry_sort_order']      = 'Sort Order:';
 
 // Error
 $_['error_permission']      = 'Warning: You do not have permission to modify payment Klarna Part Payment!';
+
+$_['error_pclass'] = 'pClass for %s could not be handled. Error code: %s; Error message: %s';
+$_['error_curl'] = 'Curl Error - Code: %d; Message: %s';
+$_['error_log'] = 'There were errors loading this module. Please check the log file.';
 ?>

@@ -199,4 +199,53 @@ $_['error_upload']                            = 'Upload required!';
 $_['error_filename']                          = 'Filename must be between 3 and 128 characters!';
 $_['error_filetype']                          = 'Invalid file type!';
 $_['error_action']                            = 'Warning: Could not complete this action!';
+
+$_['processed_mail_comment'] = 'Dear Customer,
+
+Your order was successfully registered. Our representative will contact you shortly for confirmation.
+
+Thank you for shopping with us. ';
+$_['shipped_mail_comment'] = 'Dear Customer,
+
+Thank you for your order.
+
+The products will be delivered to you on DATA through GLS Romania courier service.
+Your order\'s total value is PRET, including VAT and delivery cost.
+
+We look forward to doing business with you again! ';
+$_['complete_mail_comment'] = 'Esteemed business associate,
+
+Thank you for using our B2B platform.
+
+Your order was processed. Details described below:
+
+
+ Delivery date: DATA 
+
+ Delivery service: GLS Romania.
+
+ Order details and history: https://b2b.renania.ro/index.php?route=account/order
+
+
+ For additional details, please don\'t hesitate to contact by phone through 0372-700300. ';
+$_['expediatAuto_mail_comment'] = 'Esteemed business associate,
+
+Thank you for using our B2B platform.
+
+Your order was processed. Details described below:
+
+
+ Delivery date: DATA 
+
+ Delivery service: Auto Renania
+
+ Order details and history: https://b2b.renania.ro/index.php?route=account/order
+
+
+ For additional details, please don\'t hesitate to contact by phone through 0372-700300. ';
+$_['canceled_mail_comment'] = 'Esteemed customer,
+
+Your order was cancelled on account of not receiving further confirmation.
+
+We look forward to doing business with you again! ';
 ?>

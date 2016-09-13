@@ -66,4 +66,20 @@ $_['error_email']         = 'E-Mail Address does not appear to be valid!';
 $_['error_telephone']     = 'Telephone must be between 3 and 32 characters!';
 $_['error_product']       = 'Product Name must be greater than 3 and less than 255 characters!';
 $_['error_model']         = 'Product Model must be greater than 3 and less than 64 characters!';
+
+$_['text_color'] = 'Color:';
+$_['text_size'] = 'Size:';
+$_['text_configuration'] = 'Configuration:';
+$_['entry_color'] = 'Color:';
+$_['entry_size'] = 'Size:';
+$_['entry_configuration'] = 'Configuration:';
+$_['text_mail_dear_client'] = 'Esteemed ';
+$_['text_mail_pedding_content_1'] = 'Thank you for choosing us to be your supplier and consultant for workwear and general workplace safety equipment. We assure you our team continually strives to improve the quality of our services to further increase the efficiency of our collaboration. Feel free to review our product return policy if you have any concerns regarding refunds.';
+$_['text_mail_pedding_content_2'] = 'Product return request was registered for order #';
+$_['text_mail_pedding_content_3'] = ' with product return #';
+$_['text_mail_pedding_content_4'] = ' and was submitted for processing. Products subject of the return are as follows:';
+$_['text_mail_pedding_content_5'] = 'We will notify you about it\'s progress as soon as it goes through our approval process.';
+$_['text_mail_thankyou'] = 'Thank you for taking an interest in our products, we would be happy to assist you for any additional information.';
+$_['text_mail_sincerely'] = 'Sincerely,';
+$_['text_mail_companty'] = 'Renania Trade SRL';
 ?>
