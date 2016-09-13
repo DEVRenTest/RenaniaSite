@@ -40,5 +40,6 @@ $_['text_mail_address'] = 'customer, with email';
 $_['upload_form_button'] = 'Send';
 $_['first_upload_form_button'] = 'SEND';
 $_['add_form_button'] = 'ADD';
+$_['error_manager_approval'] = 'Need regional manager approval to request new products!';
 
 ?>

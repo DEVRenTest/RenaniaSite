@@ -12,9 +12,6 @@ $_['text_invoice_number'] = 'Numar factura:';
 $_['text_date_day_month_year'] = 'Data(ziua,luna,anul):';
 $_['text_number_accompanying_the_goods'] = 'Numar aviz insotire a marfii:(daca este cazul)';
 $_['text_buyer'] = 'Cumparator:';
-
-
-
 $_['text_i_am_returning_customer'] = 'Am deja cont';
 $_['text_register'] = 'Creeaza cont nou';
 $_['text_guest'] = 'Comanda fara cont';

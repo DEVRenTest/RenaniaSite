@@ -21,4 +21,7 @@ $_['error_firstname']  = 'First Name must be between 1 and 32 characters!';
 $_['error_lastname']   = 'Last Name must be between 1 and 32 characters!';
 $_['error_email']      = 'E-Mail Address does not appear to be valid!';
 $_['error_telephone']  = 'Telephone must be between 3 and 32 characters and numeric!';
+$_['text_subject_notification'] = 'NOTIFICATION - change date';
+$_['text_client'] = 'Customer with AX code: ';
+$_['text_change_account_info'] = 'changed account info.';
 ?>
