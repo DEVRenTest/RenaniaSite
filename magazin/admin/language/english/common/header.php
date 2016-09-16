@@ -25,6 +25,7 @@ $_['text_download']                    = 'Downloads';
 $_['text_error_log']                   = 'Error Logs';
 $_['text_extension']                   = 'Extensions';
 $_['text_feed']                        = 'Product Feeds';
+$_['text_form']                        = 'Online form';
 $_['text_filter']                      = 'Filters';
 $_['text_front']                       = 'Store Front';
 $_['text_geo_zone']                    = 'Geo Zones';
@@ -100,4 +101,9 @@ $_['text_paypal_manage']               = 'PayPal';
 $_['text_paypal_search']               = 'Search';
 $_['text_recurring_profile']           = 'Recurring Profiles';
 
+$_['text_customer_settings'] = 'Customer settings';
+$_['text_export'] = 'Export / Import';
+$_['text_useful_documents'] = 'Useful documents';
+$_['text_reclamation'] = 'Complaints';
+$_['text_setting_email_addresses'] = 'E-mail address settings';
 ?>

@@ -29,4 +29,6 @@ $_['text_date_added_asc'] = 'Date added ASC';
 $_['text_date_added_desc'] = 'Date added DESC';
 $_['text_limit']        = 'Show:';
 $_['filter_flag_entry']	= 'New products';
+
+$_['button_sort_toggle'] = 'C<br />A<br />T<br />E<br />G<br />O<br />R<br />I<br />E<br />S';
 ?>

@@ -62,4 +62,6 @@ $_['tab_general']                       = 'General';
 $_['tab_api_details']                   = 'API details';
 $_['tab_order_status']                  = 'Order status';
 $_['tab_customise']                     = 'Customise checkout';
+
+$_['entry_order_status'] = 'Order Status:';
 ?>

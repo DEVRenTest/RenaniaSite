@@ -568,5 +568,10 @@ class ModelSaleCustomer extends Model {
 
 		return $query->rows;
 	}
+
+	public function resetShowFormStatus()
+	{
+		$this->db->query("UPDATE " . DB_PREFIX . "customer SET show_form = 0 WHERE 1");
+	}
 }
 ?>

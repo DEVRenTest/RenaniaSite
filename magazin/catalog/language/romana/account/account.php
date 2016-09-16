@@ -14,6 +14,8 @@ $_['text_order_approval'] = 'Comenzi in asteptare de aprobare.';
 $_['text_download'] = 'Descarcari';
 $_['text_reward'] = 'Punctele dvs de recompensa';
 $_['text_return'] = 'Cererile dvs de returnare';
+$_['text_recurring']     = 'Plati recurente';
+$_['text_transactions']  = 'Transactii';
 $_['text_transaction'] = 'Transactiile Dvs';
 $_['text_newsletter'] = 'Abonare / Dezabonare newsletter';
 $_['text_payment_term'] = 'Termen de plata';
@@ -52,6 +54,7 @@ $_['text_client'] = 'Clientul cu codul AX: ';
 $_['text_change_account_info'] = 'a modificat informatiile legate de cont.';
 $_['text_subject_notification'] = 'NOTIFICARE - modificare date';
 $_['text_special_product_request'] = 'Solicitare produse speciale';
+$_['text_change_company'] = 'Schimbare firmă activă';
 //$_['error_filter_by'] = 'Selectati tipul filtrarii!';
 //$_['error_filter_value'] = 'Nu poate sa fie gol!';
 ?>

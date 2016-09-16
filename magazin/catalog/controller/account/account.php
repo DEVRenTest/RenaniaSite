@@ -298,6 +298,7 @@ class ControllerAccountAccount extends Controller
         $this->data['text_available_delivery_addresses'] = $this->language->get( 'text_available_delivery_addresses' );
         $this->data['text_add_new_address'] = $this->language->get( 'text_add_new_address' );
         $this->data['text_company_details'] = $this->language->get( 'text_company_details' );
+        $this->data['text_change_company'] = $this->language->get('text_change_company');
 
         $this->data['text_my_account'] = $this->language->get( 'text_my_account' );
         $this->data['text_my_orders'] = $this->language->get( 'text_my_orders' );
@@ -546,6 +547,8 @@ class ControllerAccountAccount extends Controller
         $this->data['upload_report'] = $this->url->link( 'report/report/upload_report', '', 'SSL' );
         $this->data['list_reports'] = $this->url->link( 'report/report/list_reports', '', 'SSL' );
         $this->data['special_product_request'] = $this->url->link( 'account/special_products_request/specialproductsrequest', '', 'SSL' );
+        $this->data['change_company'] = $this->url->link('account/company', '', 'SSL');
+        $this->data['prod_fast_order'] = $this->url->link('product/fast_order', '', 'SSL');
 
         $customer_additional_groups = $this->model_account_customer->getCustomerGroups();
 

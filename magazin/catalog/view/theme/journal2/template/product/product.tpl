@@ -521,6 +521,7 @@
        </div>
     </div>
     <?php endif; ?>
+  <?php if ($products_related) { ?>
   <div class="related_title"><?php echo $text_products_related_title; ?></div>
   <?php foreach ($products_related as $product_related) { ?>
   <div class="products_related">
@@ -541,6 +542,8 @@
     </div>
   </div>
   <?php } ?>
+  <?php } ?>
+  <?php if ($products_complementary) { ?>
   <div class="complementary_title"><?php echo $text_products_complementary_title; ?></div>
   <?php foreach ($products_complementary as $product_complementary) { ?>
   <div class="products_complementary">
@@ -560,6 +563,7 @@
       <?php } ?>
     </div>
   </div>
+  <?php } ?>
   <?php } ?>
   <div id="tabs" class="htabs">
     <?php if (!$this->journal2->settings->get('hide_product_description')) { ?>

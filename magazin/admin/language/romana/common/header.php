@@ -26,6 +26,7 @@ $_['text_download']                    = 'Descărcări';
 $_['text_error_log']                   = 'Jurnal De Erori';
 $_['text_extension']                   = 'Extensii';
 $_['text_feed']                        = 'Fluxurile De Produse';
+$_['text_form']                        = 'Chestionar online';
 $_['text_filter']                      = 'Filtre';
 $_['text_front']                       = 'Față Magazin';
 $_['text_geo_zone']                    = 'Zone Geografice';

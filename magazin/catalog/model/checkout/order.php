@@ -201,10 +201,6 @@ class ModelCheckoutOrder extends Model {
 				$order_status_id = $this->config->get('config_order_status_id');
 			}
 
-			if ($order_status_id == $this->config->get('config_unapproved_order_status_id')) {
-				$this->mailToSuperior($order_id);
-			}
-				
 			$sql = "UPDATE `" . DB_PREFIX . "order` SET order_status_id = '" . (int)$order_status_id . "', date_modified = NOW()";
 			if ($this->customer->getCompanyId()) {
 				$sql .= ", company_id = '" . (int)$this->customer->getCompanyId() . "'";
@@ -598,6 +594,9 @@ class ModelCheckoutOrder extends Model {
 					}
 				}				
 			}		
+		}
+		if ($order_status_id == $this->config->get('config_unapproved_order_status_id')) {
+			$this->mailToSuperior($order_id);
 		}
 	}
 	

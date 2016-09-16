@@ -21,5 +21,4 @@ $_['text_have_not_specified_delimiter'] = 'Nu ati specificat delimitatorul';
 $_['text_xml_file_not_contain_mandatory_data'] = 'Fisierul XML nu contine datele obligatorie!';
 $_['text_csv_file_not_contain_mandatory_data'] = 'Fisierul CSV nu contine datele obligatorie!';
 
-
 ?>

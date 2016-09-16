@@ -4,8 +4,7 @@ $_['text_account'] = 'Cont';
 $_['text_login'] = 'Logare';
 $_['text_new_customer'] = 'Client Nou';
 $_['text_register'] = 'Creeaza cont';
-$_['text_register_account'] = '
-Prin crearea unui cont veti putea face cumparaturi mai rapid, veti fi pus la curent cu derularea comenzilor in curs, si veti tine evidenta comenzilor efectuate.';
+$_['text_register_account'] = 'Prin crearea unui cont veti putea face cumparaturi mai rapid, veti fi pus la curent cu derularea comenzilor in curs, si veti tine evidenta comenzilor efectuate.';
 $_['text_returning_customer'] = 'Client existent';
 $_['text_i_am_returning_customer'] = 'Am cont';
 $_['text_forgotten'] = 'Am uitat parola';

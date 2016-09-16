@@ -25,7 +25,19 @@ $_['text_buy_bulk'] = 'Pachete:';
 $_['text_piece'] = 'Bucata';
 $_['text_bulk'] = 'Pachet';
 $_['text_container_size'] = 'Produse/pachet: ';
+$_['text_until_cancelled']   = 'pana cand sunt anulate';
+$_['text_recurring_item']    = 'Element recurent';
+$_['text_payment_profile']   = 'Plata';
+$_['text_trial_description'] = '%s fiecare %d %s(s) pentru %d plata atunci';
+$_['text_payment_description'] = '%s fiecare %d %s(s) pentru %d plata';
+$_['text_payment_until_canceled_description'] = '%s fiecare %d %s(s) pana cand sunt anulate';
+$_['text_day']               = 'zi';
+$_['text_week']              = 'saptamana';
+$_['text_semi_month']        = 'jumatate de luna';
+$_['text_month']             = 'luna';
+$_['text_year']              = 'an';
 $_['product_name_package'] = '%s (pachet)';
+
 $_['column_image'] = 'Imagine';
 $_['column_name'] = 'Numele produsului';
 $_['column_model'] = 'Model';
@@ -55,4 +67,9 @@ $_['error_country'] = 'Selectati o tara!';
 $_['error_zone'] = 'Selectati un judet!';
 $_['error_shipping'] = 'Atentie: Selectati metoda de livrare!';
 $_['error_no_shipping'] = 'Atentie: Nu sunt metode de livrare disponibile pentru zona dvs. Va rugam sa ne  <a href="%s">contactati</a> pentru asistenta!';
+
+$_['error_profile_required'] = 'Please select a payment profile!';
+$_['text_trial']             = '%s fiecare %s %s pentru %s plati atunci ';
+$_['text_recurring']         = '%s fiecare %s %s';
+$_['text_length']            = ' pentru %s plati';
 ?>

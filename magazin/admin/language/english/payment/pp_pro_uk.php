@@ -26,4 +26,11 @@ $_['error_permission']   = 'Warning: You do not have permission to modify paymen
 $_['error_username']     = 'API Username Required!'; 
 $_['error_password']     = 'API Password Required!'; 
 $_['error_signature']    = 'API Signature Required!'; 
+
+$_['entry_vendor'] = 'Merchant:<br /><span class="help">Merchant ID of the account you created on Website Payments Pro.</span>';
+$_['entry_user'] = 'User:<br /><span class="help">If you create several users for your account, submit the ID if the user that should be used to processed the transactions. If you do not set any additional users, use the merchant ID.</span>';
+$_['entry_partner'] = 'Partner:<br /><span class="help">ID you received from the authorized Paypal Reseller who registered you for PayflowSDK. If you bought the account directly from PayPal, use \'PayPalUK\' (without quotes).</span>';
+$_['error_vendor'] = 'Merchant required!';
+$_['error_user'] = 'User required!';
+$_['error_partner'] = 'Partner required!';
 ?>

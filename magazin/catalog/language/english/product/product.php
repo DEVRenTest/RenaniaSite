@@ -89,4 +89,18 @@ $_['error_captcha']     = 'Warning: Verification code does not match the image!'
 $_['error_upload']      = 'Upload required!';
 $_['error_filename']    = 'Filename must be between 3 and 64 characters!';
 $_['error_filetype']    = 'Invalid file type!';
+
+$_['text_tax_withvat'] = 'With VAT';
+$_['text_hello'] = 'Hello,';
+$_['text_no_price_for_b2b_clients'] = 'Warning! Product without price for B2B customers!';
+$_['text_customer'] = 'Customer';
+$_['text_looked_at_product'] = 'looked at product';
+$_['text_with_concatenated_code'] = ', with concatenated code';
+$_['text_not_yet_been_defined_special_price'] = ' , but for this not yet been defined special B2B price.';
+$_['text_with_ax_code'] = 'With AX code';
+$_['text_free_delivery'] = 'Free shipping over 350 Ron + VAT';
+$_['text_return_guarantee'] = 'Return guarantee 10 days';
+$_['text_delivery'] = 'Delivery in 2 days';
+$_['text_see_corresponding_size'] = 'See correspondence sizes';
+$_['tab_complementary'] = 'Complementary products';
 ?>

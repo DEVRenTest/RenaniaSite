@@ -113,6 +113,7 @@ $_['tab_voucher']                   = 'Vouchers';
 $_['tab_voucher_history']           = 'Voucher History';
 $_['tab_price']                     = 'Price';
 $_['tab_customer_groups']	  		= 'Grupuri de clienti';
+$_['tab_google_form']	  	  		= 'Online form';
 
 // Error
 $_['error_upload_1']                = 'Warning: The uploaded file exceeds the upload_max_filesize directive in php.ini!';
@@ -123,4 +124,6 @@ $_['error_upload_6']                = 'Warning: Missing a temporary folder!';
 $_['error_upload_7']                = 'Warning: Failed to write file to disk!';
 $_['error_upload_8']                = 'Warning: File upload stopped by extension!';
 $_['error_upload_999']              = 'Warning: No error code available!';
+
+$_['tab_mapping_ax_code'] = 'AX code mapping';
 ?>
