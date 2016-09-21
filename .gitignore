@@ -105,3 +105,4 @@ deployment/
 deploy/
 magazin/catalog/controller/api/tester.php
 magazin/admin/controller/tool/script.php
+deployment_config.ini
