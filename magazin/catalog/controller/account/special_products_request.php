@@ -396,7 +396,27 @@ class ControllerAccountSpecialProductsRequest extends Controller
                 $mail->password = $this->config->get('config_smtp_password');
                 $mail->port = $this->config->get('config_smtp_port');
                 $mail->timeout = $this->config->get('config_smtp_timeout');
-                $mail->setTo('isty_szekely2000@yahoo.com');
+				if($special_product_form_entrie['product_category'] == 'INCALTAMINTE'){
+					$mail->setTo('incaltaminte@renania.ro');
+				}else if($special_product_form_entrie['product_category'] == 'IMBRACAMINTE'){
+					$mail->setTo('imbracaminte@renania.ro');
+				}else if($special_product_form_entrie['product_category'] == 'CASTI DE PROTECTIE'){
+					$mail->setTo('protectia.capului@renania.ro');
+				}else if($special_product_form_entrie['product_category'] == 'PROTECTIE VIZUALA'){
+					$mail->setTo('protectia.capului@renania.ro');
+				}else if($special_product_form_entrie['product_category'] == 'PROTECTIE AUDITIVA'){
+					$mail->setTo('protectia.capului@renania.ro');
+				}else if($special_product_form_entrie['product_category'] == 'PROTECTIE RESPIRATORIE'){
+					$mail->setTo('protectia.capului@renania.ro');
+				}else if($special_product_form_entrie['product_category'] == 'LUCRU LA INALTIME'){
+					$mail->setTo('lucru.inaltime@renania.ro');
+				}else if($special_product_form_entrie['product_category'] == 'ARTICOLE TEHNICE'){
+					$mail->setTo('tehnice.curatenie@renania.ro');
+				}else if($special_product_form_entrie['product_category'] == 'CURATENIE SI IGIENA'){
+					$mail->setTo('tehnice.curatenie@renania.ro');
+				}else{
+					$mail->setTo('claudia.grec@renania.ro');
+				}
                 $mail->setFrom($this->config->get('config_email'));
                 $mail->setSender($this->config->get('config_name'));
                 $mail->setSubject(html_entity_decode($subject, ENT_QUOTES, 'UTF-8'));
