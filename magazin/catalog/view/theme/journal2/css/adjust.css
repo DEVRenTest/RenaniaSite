@@ -69,7 +69,7 @@ body.group4 .secondary-menu-item-3 span {
 }
 
 #cc-notification {
-	display: inline !important;
+	display: inline;
 }
 
 .list .bad_row td {
