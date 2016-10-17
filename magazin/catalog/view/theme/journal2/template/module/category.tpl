@@ -14,8 +14,11 @@
 
     <?php $filterProCounter = 1;?>
     <?php foreach ($categories as $category) { ?>
-    <?php $jsForMenu = '';?>
-    <?php if ($category['category_id'] == $category_id) { ?>
+    <?php $jsForMenu = '';
+    //FIX Bela
+    $this_route =  $this->request->get['route'];
+    ?>
+    <?php if ($category['category_id'] == $category_id && /*FIX Bela*/ !preg_match("/\/product$/",$this_route) /*FIX Bela*/ ) { ?>
     <?php $jsForMenu = 'onclick="handleMenuHideing( event );"';?>
             <span style="background-repeat:no-repeat;">
             <a href="<?php echo $category['href']; ?>" <?php echo $jsForMenu;?> class="active" style=" background-image:url(<?php echo $category['image']; ?>)"><?php echo $category['name']; ?></a>
