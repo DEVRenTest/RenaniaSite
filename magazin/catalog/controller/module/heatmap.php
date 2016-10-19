@@ -70,21 +70,24 @@ class ControllerModuleHeatMap extends Controller {
 	
     public function display_statistics() {
         $this->load->language('module/heatmap');
-        $sql_query = "SELECT count(*) AS last_hour FROM `" . DB_PREFIX . "heatmap` WHERE (`inserted_time` > NOW() - INTERVAL 1 HOUR) AND from_page='".$_GET['l']."'";
+        $sql_append = "";
+        if ( preg_match("/-art(.+)\.html$/",$_GET['l'],$arrMatches) ) {
+            $sql_append = "OR from_page LIKE '%-art".$arrMatches[1]."%'";
+        }
+        $sql_query = "SELECT count(*) AS last_hour FROM `" . DB_PREFIX . "heatmap` WHERE (`inserted_time` > NOW() - INTERVAL 1 HOUR) AND (from_page='".$_GET['l']."' ".$sql_append.")";
         $result = $this->db->query($sql_query);
         $last_hour = 0;
         if (list($key,$record) = each($result->rows) ) {
             $last_hour = $record['last_hour'];
         } 
-        # $sql_query = "SELECT count(*) AS last_day FROM `" . DB_PREFIX . "heatmap` WHERE (`inserted_time` > NOW() - INTERVAL 24 HOUR) AND from_page='".$_GET['l']."'";
-        $sql_query = "SELECT count(*) AS last_day FROM `" . DB_PREFIX . "heatmap` WHERE (`inserted_time` > CURRENT_DATE()) AND from_page='".$_GET['l']."'";
+        $sql_query = "SELECT count(*) AS last_day FROM `" . DB_PREFIX . "heatmap` WHERE (`inserted_time` > CURRENT_DATE()) AND (from_page='".$_GET['l']."' ".$sql_append.")";
         
         $result = $this->db->query($sql_query);
         $last_day = 0;
         if (list($key,$record) = each($result->rows) ) {
             $last_day = $record['last_day'];
         } 
-        $sql_query = "SELECT count(*) AS total_click FROM `" . DB_PREFIX . "heatmap` WHERE from_page='".$_GET['l']."'";
+        $sql_query = "SELECT count(*) AS total_click FROM `" . DB_PREFIX . "heatmap` WHERE (from_page='".$_GET['l']."' ".$sql_append.")";
         $result = $this->db->query($sql_query);
         $total_click = 0;
         if (list($key,$record) = each($result->rows) ) {
@@ -98,7 +101,11 @@ class ControllerModuleHeatMap extends Controller {
 	public function display_clicks() {
 		// Your code
 		# var_dump($_GET);
-        $sql_query = "SELECT * FROM `" . DB_PREFIX . "heatmap`  WHERE from_page='".$_GET['l']."'";
+        $sql_append = "";
+        if ( preg_match("/-art(.+)\.html$/",$_GET['l'],$arrMatches) ) {
+            $sql_append = "OR from_page LIKE '%-art".$arrMatches[1]."%'";
+        }
+        $sql_query = "SELECT * FROM `" . DB_PREFIX . "heatmap`  WHERE (from_page='".$_GET['l']."' ".$sql_append.")";
         $result = $this->db->query($sql_query);
         $html = '<div id="clickmap-container">'; 
         while (list($key,$record) = each($result->rows) ) {
