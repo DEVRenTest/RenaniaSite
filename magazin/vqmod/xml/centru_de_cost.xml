@@ -20,7 +20,8 @@
             ]]>
             </add>
 		</operation>
-		<operation>
+		
+        <operation>
 			<search position="after"><![CDATA[
             <td class="left"><input type="text" name="filter_ax_code" value="<?php echo $filter_ax_code; ?>" /></td>        
             ]]></search>
@@ -82,7 +83,8 @@
             ]]>
             </add>
 		</operation>
-		<operation>
+		
+        <operation>
 			<search position="before"><![CDATA[
             if( isset( $this->request->get['filter_ax_code'] ) )
             ]]></search>
@@ -123,6 +125,21 @@
             ]]>
             </add>
 		</operation>
+        
+		<operation>
+			<search position="replace"><![CDATA[
+            'date_added' => date( $this->language->get( 'date_format_short' ), strtotime( $result['date_added'] ) ),
+            ]]></search>
+			<add>
+            <![CDATA[
+            //EXTENTION_CENTRU_DE_COST START
+            'date_added' => date( "d.m.Y H:i:s", strtotime( $result['date_added'] ) ),
+            //EXTENTION_CENTRU_DE_COST END
+            ]]>
+            </add>
+		</operation>
+
+        
 
 		<operation>
 			<search position="before"><![CDATA[
@@ -167,13 +184,6 @@
             ]]>
             </add>
 		</operation>
-        
-$sql = "SELECT o.order_id, CONCAT(o.firstname, ' ', o.lastname) AS customer, c.ax_code, o.customer_group_id, (SELECT os.name FROM " . DB_PREFIX . "order_status os WHERE os.order_status_id = o.order_status_id AND os.language_id = '" . (int)$this->config->get('config_language_id') . "') AS status, o.total, o.currency_code, o.currency_value, o.date_added, o.date_modified FROM `" . DB_PREFIX . "order` o LEFT JOIN " . DB_PREFIX . "customer c ON o.customer_id = c.customer_id";        
     </file>
-        
-        
-C:\wamp\www\RenaniaLNew\admin\model\sale\order.php  
-    
-    
 </modification>
 
