@@ -400,6 +400,8 @@ class ControllerAccountSpecialProductsRequest extends Controller
 					$mail->setTo('incaltaminte@renania.ro');
 				}else if($special_product_form_entrie['product_category'] == 'IMBRACAMINTE'){
 					$mail->setTo('imbracaminte@renania.ro');
+				}else if($special_product_form_entrie['product_category'] == 'MANUSI'){
+					$mail->setTo('manusi@renania.ro');
 				}else if($special_product_form_entrie['product_category'] == 'CASTI DE PROTECTIE'){
 					$mail->setTo('protectia.capului@renania.ro');
 				}else if($special_product_form_entrie['product_category'] == 'PROTECTIE VIZUALA'){
