@@ -1,0 +1,52 @@
+<modification>
+	<id>email_client_la_reclamatii</id>
+	<version>1.0.0</version>
+	<vqmver>2.1.5</vqmver>
+	<author>Szasz Bela</author>
+	<file name="admin/view/template/catalog/reclamation_form.tpl">
+		<operation>
+			<search position="before"><![CDATA[
+              <?php echo $column_title; ?>: <?php echo $recl_subject; ?> <br>
+            ]]></search>
+			<add>
+            <![CDATA[
+              <?php print "Email client: ".$this->data['email']; ?> <br>
+            ]]>
+            </add>
+		</operation>
+    </file>	
+
+	<file name="admin/model/catalog/reclamation.php">
+		<operation>
+			<search position="before"><![CDATA[
+    public function getReclamationDetails( $reclamation_id )
+            ]]></search>
+			<add>
+            <![CDATA[
+    public function getReclamationDetailCustomerEmail( $customer_id )
+    {
+        $query = $this->db->query( "SELECT email FROM ".DB_PREFIX."customer WHERE customer_id = '".( int ) $customer_id."'" );
+        return $query->row;
+    }
+            ]]>
+            </add>
+		</operation>
+    </file>	
+
+    <file name="admin/controller/catalog/reclamation.php">
+		<operation>
+			<search position="after"><![CDATA[
+$reclamation_info = $this->model_catalog_reclamation->getReclamationDetails( $id );
+            ]]></search>
+			<add>
+            <![CDATA[
+        $arr_email_info = $this->model_catalog_reclamation->getReclamationDetailCustomerEmail( $reclamation_info['customer_id'] );
+        $this->data['email'] = $arr_email_info['email'];
+            ]]>
+            </add>
+		</operation>
+    </file>	
+    
+    
+</modification>
+
