@@ -423,7 +423,11 @@
 							<tr>
 								<td>Document</td>
 								<td>
-								<?php foreach ($languages as $language) { ?>
+								<?php foreach ($languages as $language) { 
+                                        if ( $language['code'] != 'ro' ) {
+                                            continue;
+                                        }
+                                ?>
 									<input name="product_document[language_id]" type="hidden" class="product_document_element" value="<?php echo $language['language_id']; ?>">
 									<input id="field<?php echo $language['language_id']; ?>" type="text" name="product_document[file_name]" value="<?php echo isset($description_document[$language['language_id']]) ? $description_document[$language['language_id']]['file_name'] : ''; ?>" class="product_document_element" />
 									<a onclick="docupload(this.id)" id="button-upload<?php echo $language['language_id']; ?>" class="button">Adaugare document</a>
@@ -531,7 +535,11 @@
 							<tr>
 								<td>Document</td>
 								<td>
-								<?php foreach ($languages as $language) { ?>
+								<?php foreach ($languages as $language) { 
+                                        if ( $language['code'] != 'ro' ) {
+                                            continue;
+                                        }
+                                ?>
 									<input name="product_document[language_id]" type="hidden" class="product_document_update_<?= $document['product_description_download_pdf_id'] ?>" value="<?php echo $language['language_id']; ?>">
 
 									<input id="field<?php echo $document['product_description_download_pdf_id']; ?>" type="text" name="product_document[file_name]" value="<?= $document['file_name'] ?>" class="product_document_update_<?= $document['product_description_download_pdf_id'] ?>" />
