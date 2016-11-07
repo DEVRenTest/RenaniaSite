@@ -1762,4 +1762,14 @@ select#size_product_option_value_id {
     vertical-align: top;
 	cursor:pointer;
 }
+@media screen AND (max-width:769px)
+{
+	.review-list table tbody tr td{
+		display:block;
+		width:100%;
+	}
+	.review-list{
+		border-bottom: 1px dotted gray !important;
+	}
+}
  /* <<<<<<<<<<<<<<<<<<< Review  System  */
