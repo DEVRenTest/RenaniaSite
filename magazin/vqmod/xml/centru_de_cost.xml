@@ -1,0 +1,189 @@
+<modification>
+	<id>centru_de_cost</id>
+	<version>1.0.0</version>
+	<vqmver>2.1.5</vqmver>
+	<author>Szasz Bela</author>
+	<file name="admin/view/template/sale/order_list.tpl">
+		<operation>
+			<search position="before"><![CDATA[
+                <td class="left"><?php if ($sort == 'status') { ?>
+            ]]></search>
+			<add>
+            <![CDATA[
+              <!-- EXTENTION_CENTRU_DE_COST START -->
+              <td class="left">
+
+                <a>Centru de cost</a>
+
+              </td>
+              <!-- EXTENTION_CENTRU_DE_COST END -->
+            ]]>
+            </add>
+		</operation>
+		
+        <operation>
+			<search position="after"><![CDATA[
+            <td class="left"><input type="text" name="filter_ax_code" value="<?php echo $filter_ax_code; ?>" /></td>        
+            ]]></search>
+			<add>
+            <![CDATA[
+              <!-- EXTENTION_CENTRU_DE_COST START -->
+              <td class="left"><input type="text" name="filter_centru_de_cost" value="<?php echo $filter_centru_de_cost; ?>" /></td>
+              <!-- EXTENTION_CENTRU_DE_COST END -->
+            ]]>
+            </add>
+		</operation>
+
+		<operation>
+			<search position="after"><![CDATA[
+            <td class="left <?php echo( ($order['customer_group_id'] ==3 || $order['customer_group_id'] ==4 ) ? "b2b_customer":"" ); ?>"><?php echo $order['ax_code']; ?></td>
+            ]]></search>
+			<add>
+            <![CDATA[
+              <!-- EXTENTION_CENTRU_DE_COST START -->
+              <td class="left"><?php echo $order['CENTRU_COST'];?></td>
+              <!-- EXTENTION_CENTRU_DE_COST END -->
+            ]]>
+            </add>
+		</operation>
+        
+		<operation>
+			<search position="before"><![CDATA[
+            var filter_ax_code = $('input[name=\'filter_ax_code\']').attr('value');
+            ]]></search>
+			<add>
+            <![CDATA[
+            //EXTENTION_CENTRU_DE_COST START
+            var filter_centru_de_cost = $('input[name=\'filter_centru_de_cost\']').attr('value');
+            if (filter_centru_de_cost) {
+                url += '&filter_centru_de_cost=' + encodeURIComponent(filter_centru_de_cost);
+            }
+            //EXTENTION_CENTRU_DE_COST END
+            ]]>
+            </add>
+		</operation>
+    </file>	
+	<file name="admin/controller/sale/order.php">
+		<operation>
+			<search position="before"><![CDATA[
+            if( isset( $this->request->get['filter_ax_code'] ) )
+            ]]></search>
+			<add>
+            <![CDATA[
+            //EXTENTION_CENTRU_DE_COST START
+            if( isset( $this->request->get['filter_centru_de_cost'] ) )
+            {
+                $filter_centru_de_cost = $this->request->get['filter_centru_de_cost'];
+            }
+            else
+            {
+                $filter_centru_de_cost = null;
+            }
+            //EXTENTION_CENTRU_DE_COST END
+            ]]>
+            </add>
+		</operation>
+		
+        <operation>
+			<search position="before"><![CDATA[
+            if( isset( $this->request->get['filter_ax_code'] ) )
+            ]]></search>
+			<add>
+            <![CDATA[
+            //EXTENTION_CENTRU_DE_COST START
+            if( isset( $this->request->get['filter_centru_de_cost']) )
+            {
+                $url .= '&filter_centru_de_cost='.$this->request->get['filter_centru_de_cost'];
+            }
+            //EXTENTION_CENTRU_DE_COST END
+            ]]>
+            </add>
+		</operation>
+
+		<operation>
+			<search position="before"><![CDATA[
+            'filter_order_status_id' => $filter_order_status_id,
+            ]]></search>
+			<add>
+            <![CDATA[
+            //EXTENTION_CENTRU_DE_COST START
+            'filter_centru_de_cost' => $filter_centru_de_cost,
+            //EXTENTION_CENTRU_DE_COST END
+            ]]>
+            </add>
+		</operation>
+
+		<operation>
+			<search position="before"><![CDATA[
+            'customer_group_id' => $result['customer_group_id'],
+            ]]></search>
+			<add>
+            <![CDATA[
+                //EXTENTION_CENTRU_DE_COST START
+                'CENTRU_COST' => $result['CENTRU_COST'],
+                //EXTENTION_CENTRU_DE_COST END
+            ]]>
+            </add>
+		</operation>
+        
+		<operation>
+			<search position="replace"><![CDATA[
+            'date_added' => date( $this->language->get( 'date_format_short' ), strtotime( $result['date_added'] ) ),
+            ]]></search>
+			<add>
+            <![CDATA[
+            //EXTENTION_CENTRU_DE_COST START
+            'date_added' => date( "d.m.Y H:i:s", strtotime( $result['date_added'] ) ),
+            //EXTENTION_CENTRU_DE_COST END
+            ]]>
+            </add>
+		</operation>
+
+        
+
+		<operation>
+			<search position="before"><![CDATA[
+            $this->data['filter_order_status_id'] = $filter_order_status_id;
+            ]]></search>
+			<add>
+            <![CDATA[
+            // EXTENTION_CENTRU_DE_COST START
+            $this->data['filter_centru_de_cost'] = $filter_centru_de_cost;
+            // EXTENTION_CENTRU_DE_COST END
+            ]]>
+            </add>
+		</operation>
+    </file>
+    
+	<file name="admin/model/sale/order.php">
+		<operation>
+			<search position="before"><![CDATA[
+            $sort_data = array(
+            ]]></search>
+			<add>
+            <![CDATA[
+            //EXTENTION_CENTRU_DE_COST START
+            if (!empty($data['filter_centru_de_cost'])) {
+                $sql .= " AND a.CENTRU_COST LIKE '" . $this->db->escape($data['filter_centru_de_cost']) . "'";
+            }
+            //EXTENTION_CENTRU_DE_COST END
+            ]]>
+            </add>
+		</operation>
+
+		<operation>
+			<search position="replace"><![CDATA[
+            $sql = "SELECT o.order_id, CONCAT(o.firstname, ' ', o.lastname) AS customer, c.ax_code, o.customer_group_id, (SELECT os.name FROM " . DB_PREFIX . "order_status os WHERE os.order_status_id = o.order_status_id AND os.language_id = '" . (int)$this->config->get('config_language_id') . "') AS status, o.total, o.currency_code, o.currency_value, o.date_added, o.date_modified FROM `" . DB_PREFIX . "order` o LEFT JOIN " . DB_PREFIX . "customer c ON o.customer_id = c.customer_id";        
+            ]]></search>
+			<add>
+            <![CDATA[
+            //EXTENTION_CENTRU_DE_COST START
+            $sql = "SELECT o.order_id, a.CENTRU_COST,CONCAT(o.firstname, ' ', o.lastname) AS customer, c.ax_code, o.customer_group_id, (SELECT os.name FROM " . DB_PREFIX . "order_status os WHERE os.order_status_id = o.order_status_id AND os.language_id = '" . (int)$this->config->get('config_language_id') . "') AS status, o.total, o.currency_code, o.currency_value, o.date_added, o.date_modified FROM `" . DB_PREFIX . "order` o LEFT JOIN " . DB_PREFIX . "customer c ON o.customer_id = c.customer_id";
+            $sql .= " LEFT JOIN _AX_CUSTOMERS a ON c.ax_code = a.accountnum";
+            //EXTENTION_CENTRU_DE_COST END
+            ]]>
+            </add>
+		</operation>
+    </file>
+</modification>
+
