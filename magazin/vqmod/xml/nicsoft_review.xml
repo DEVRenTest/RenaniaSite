@@ -12,7 +12,7 @@
 			<add><![CDATA[
 			<!-- nicsoft_review.xml >> -->
 			<li id="help"><a class="top"><?php echo "Comentarii"; ?></a>
-				<ul>
+				<ul> 
 					<li id="help"><a href="<?php echo $review; ?>"><?php echo "Lista Comentariilor"; ?></a></li>
 					<li id="help"><a href="<?php echo $review_settings; ?>"><?php echo "Setări"; ?></a></li>
 				</ul>

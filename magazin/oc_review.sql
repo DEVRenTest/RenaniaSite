@@ -1,3 +1,5 @@
+/* Inainte sa copiati fisierele rulati sriptul aceasta. Daca aveti reviewuri in sistem si nu vreti sa stergeti rulati scriptul oc_review2*/
+
 -- phpMyAdmin SQL Dump
 -- version 4.0.10.14
 -- http://www.phpmyadmin.net

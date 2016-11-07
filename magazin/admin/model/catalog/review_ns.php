@@ -1,6 +1,6 @@
 <?php
 class ModelCatalogReviewns extends Model {
-	public function addReview($data) {
+	public function addReview($data) { 
 		
 	$ipaddress = '';
     if (isset($_SERVER['HTTP_CLIENT_IP']))
