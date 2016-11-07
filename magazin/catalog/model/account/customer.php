@@ -11,12 +11,12 @@ class ModelAccountCustomer extends Model {
 		
 		$customer_group_info = $this->model_account_customer_group->getCustomerGroup($customer_group_id);
 		
-      	$this->db->query("INSERT INTO " . DB_PREFIX . "customer SET store_id = '" . (int)$this->config->get('config_store_id') . "', firstname = '" . $this->db->escape($data['firstname']) . "', lastname = '" . $this->db->escape($data['lastname']) . "', email = '" . $this->db->escape($data['email']) . "', telephone = '" . $this->db->escape($data['telephone']) . "', fax = '" . $this->db->escape($data['fax']) . "', salt = '" . $this->db->escape($salt = substr(md5(uniqid(rand(), true)), 0, 9)) . "', password = '" . $this->db->escape(sha1($salt . sha1($salt . sha1($data['password'])))) . "', newsletter = '" . (isset($data['newsletter']) ? (int)$data['newsletter'] : 0) . "', customer_group_id = '" . (int)$customer_group_id . "', ip = '" . $this->db->escape($this->request->server['REMOTE_ADDR']) . "', status = '1', approved = '" . (int)!$customer_group_info['approval'] . "', date_added = NOW(), permission = 'full' ");
+      	$this->db->query("INSERT INTO " . DB_PREFIX . "customer SET store_id = '" . (int)$this->config->get('config_store_id') . "', firstname = '" . $this->db->escape($data['firstname']) . "', lastname = '" . $this->db->escape($data['lastname']) . "', email = '" . $this->db->escape($data['email']) . "', telephone = '" . $this->db->escape($data['telephone']) . "', fax = '" . $this->db->escape($data['fax']) . "', salt = '" . $this->db->escape($salt = substr(md5(uniqid(rand(), true)), 0, 9)) . "', password = '" . $this->db->escape(sha1($salt . sha1($salt . sha1($data['password'])))) . "', newsletter = '" . (isset($data['newsletter']) ? (int)$data['newsletter'] : 0) . "', customer_group_id = '" . (int)$customer_group_id . "', ip = '" . $this->db->escape($this->request->server['REMOTE_ADDR']) . "', status = '1', approved = '" . (int)!$customer_group_info['approval'] . "', date_added = NOW(), permission = 'full', company_name = '" . $this->db->escape($data['company_name']) . "', CIF = '" . $this->db->escape($data['CIF']) . "', CUI = '" . $this->db->escape($data['CUI']) . "'");
       	
 		$customer_id = $this->db->getLastId();
 			
       	//$this->db->query("INSERT INTO " . DB_PREFIX . "address SET customer_id = '" . (int)$customer_id . "', firstname = '" . $this->db->escape($data['firstname']) . "', lastname = '" . $this->db->escape($data['lastname']) . "', company = '" . $this->db->escape($data['company']) . "', company_id = '" . $this->db->escape($data['company_id']) . "', banca = '" . $this->db->escape( isset($data['banca']) ? $data['banca'] : "") . "', iban = '" . $this->db->escape(isset($data['iban']) ? $data['iban'] : "") . "', tax_id = '" . $this->db->escape($data['tax_id']) . "', address_1 = '" . $this->db->escape($data['address_1']) . "', address_2 = '" . $this->db->escape($data['address_2']) . "', city = '" . $this->db->escape($data['city']) . "', postcode = '" . $this->db->escape($data['postcode']) . "', country_id = '" . (int)$data['country_id'] . "', zone_id = '" . (int)$data['zone_id'] . "'");
-        $this->db->query("INSERT INTO " . DB_PREFIX . "address SET customer_id = '" . (int)$customer_id . "', firstname = '" . $this->db->escape($data['firstname']) . "', lastname = '" . $this->db->escape($data['lastname']) . "', company = '" . $this->db->escape($data['company']) . "', company_id = '" . $this->db->escape($data['company_id']) . "', tax_id = '" . $this->db->escape($data['tax_id']) . "', address_1 = '" . $this->db->escape($data['address_1']) . "', address_2 = '" . $this->db->escape($data['address_2']) . "', city = '" . $this->db->escape($data['city']) . "', postcode = '" . $this->db->escape($data['postcode']) . "', country_id = '" . (int)$data['country_id'] . "', zone_id = '" . (int)$data['zone_id'] . "'");
+        $this->db->query("INSERT INTO " . DB_PREFIX . "address SET customer_id = '" . (int)$customer_id . "', firstname = '" . $this->db->escape($data['firstname']) . "', lastname = '" . $this->db->escape($data['lastname']) . "', company = '" . $this->db->escape($data['company_name']) . "', company_id = '" . $this->db->escape($data['CUI']) . "', tax_id = '" . $this->db->escape($data['CIF']) . "', address_1 = '" . $this->db->escape($data['address_1']) . "', address_2 = '" . $this->db->escape($data['address_2']) . "', city = '" . $this->db->escape($data['city']) . "', postcode = '" . $this->db->escape($data['postcode']) . "', country_id = '" . (int)$data['country_id'] . "', zone_id = '" . (int)$data['zone_id'] . "'");
 		
 		$address_id = $this->db->getLastId();
 
@@ -315,18 +315,20 @@ class ModelAccountCustomer extends Model {
 			return false;
 		}
 		$total_spent = $this->db->query("SELECT COALESCE(SUM(total), 0) as total FROM " . DB_PREFIX . "order WHERE customer_id = '" . (int)$customer_id . "' AND DATE(date_added) = CURDATE()")->row['total'];
-		if ($limit < $total_spent) {
-			return true;
-		} else {
-			return false;
-		}
+		return $limit < $total_spent;
 	}
 
-	public function getPendingOrders($ax_code) {
-		if (!$ax_code) {
-			return array();
-		}
-		$q = $this->db->query("SELECT o.*, os.name AS status FROM " . DB_PREFIX . "order o LEFT JOIN " . DB_PREFIX . "customer c ON o.customer_id = c.customer_id LEFT JOIN " . DB_PREFIX . "order_status os ON o.order_status_id = os.order_status_id WHERE c.ax_code = '" . $this->db->escape($ax_code) . "' AND o.order_status_id = '" . $this->config->get('config_unapproved_order_status_id') . "'");
+	public function getPendingOrders() {
+		$q = $this->db->query(
+			"SELECT o.*, os.name AS status
+			FROM " . DB_PREFIX . "order o
+			INNER JOIN (SELECT company_id FROM " . DB_PREFIX . "customer_to_company WHERE customer_id = '" . (int)$this->customer->getID() . "') comp
+				ON o.company_id = comp.company_id
+			LEFT JOIN " . DB_PREFIX . "order_status os
+				ON o.order_status_id = os.order_status_id
+			WHERE o.order_status_id = '" . $this->config->get('config_unapproved_order_status_id') . "'"
+		);
+		
 		if ($q->num_rows) {
 			return $q->rows;
 		} else {
@@ -338,12 +340,89 @@ class ModelAccountCustomer extends Model {
 		if (!$this->customer->getAxCode() || !$this->customer->getOrderLimit() || $this->customer->getOrderLimit() != -1) {
 			return false;
 		}
-		$q = $this->db->query("SELECT o.order_status_id, c.ax_code FROM " . DB_PREFIX . "order o LEFT JOIN " . DB_PREFIX . "customer c ON o.customer_id = c.customer_id WHERE o.order_id = '" . (int)$order_id . "'");
-		if ($q->num_rows && $q->row['ax_code'] == $this->customer->getAxCode() && $q->row['order_status_id'] == $this->config->get('config_unapproved_order_status_id')) {
-			return true;
+		$query = $this->db->query(
+			"SELECT * FROM " . DB_PREFIX . "order o
+			INNER JOIN (SELECT company_id FROM " . DB_PREFIX . "customer_to_company WHERE customer_id = '" . (int)$this->customer->getID() . "') comp
+				ON o.company_id = comp.company_id
+			LEFT JOIN " . DB_PREFIX . "order_status os
+				ON o.order_status_id = os.order_status_id
+			WHERE o.order_id = '" . (int)$order_id . "'
+			AND o.order_status_id = '" . $this->config->get('config_unapproved_order_status_id') . "'"
+		);
+
+		return (bool)$query->num_rows;
+	}
+
+	public function setupLoginToken($customer_id, $url, $cookie)
+	{
+		$hash = bin2hex(mcrypt_create_iv(16, MCRYPT_DEV_URANDOM));
+		$query = $this->db->query("SELECT * FROM " . DB_PREFIX . "autologin WHERE token = '" . $hash . "'");
+		if (!$query->num_rows) {
+			$this->db->query("INSERT INTO " . DB_PREFIX . "autologin SET customer_id = '" . (int)$customer_id . "', token = '" . $hash . "', url = '" . $this->db->escape($url) . "', cookie = '" . $this->db->escape($cookie) . "'");
+			return $hash;
 		} else {
-			return false;
+			$this->setupLoginToken($customer_id, $url, $cookie);
 		}
+	}
+
+	public function validateLoginToken($hashed_customer_id, $token, $expire_interval = 1800)
+	{
+		$now = time();
+		$sql = "SELECT a.autologin_id, a.customer_id, a.url, a.cookie FROM " . DB_PREFIX . "autologin a LEFT JOIN " . DB_PREFIX . "customer c ON a.customer_id = c.customer_id WHERE MD5(a.customer_id) = '" . $this->db->escape($hashed_customer_id) . "' AND a.token = '" . $this->db->escape($token) . "' AND c.store_id = '" . (int)$this->config->get('config_store_id') . "'";
+		if ($expire_interval) {
+			$sql .= " AND " . ($now - (int)$expire_interval) . " < UNIX_TIMESTAMP(a.date_added)";
+		}
+		$query = $this->db->query($sql);
+		if ($query->num_rows) {
+			$this->db->query("DELETE FROM " . DB_PREFIX . "autologin WHERE autologin_id = '" . $query->row['autologin_id'] . "'");
+			return $query->row;
+		} else {
+			return array('autologin_id' => 0, 'customer_id' => 0, 'url' => '');
+		}
+	}
+
+	public function getCustomerBySecretCode($code)
+	{
+		$query = $this->db->query("SELECT * FROM " . DB_PREFIX . "customer WHERE secret_code = '" . $this->db->escape($code) . "'");
+		if ($query->num_rows) {
+			return $query->row;
+		}
+		return false;
+	}
+
+	public function getCustomerGroups()
+	{
+		$data = array();
+		$query = $this->db->query("SELECT ctcg.customer_group_id, cgd.name FROM " . DB_PREFIX . "customer_to_customer_group ctcg LEFT JOIN " . DB_PREFIX . "customer_group_description cgd ON ctcg.customer_group_id = cgd.customer_group_id WHERE ctcg.customer_id = '" . (int)$this->customer->getId() . "'");
+
+		foreach ($query->rows as $result) {
+			$data[$result['customer_group_id']] = $result['name'];
+		}
+
+		return $data;
+	}
+
+	public function getCompanies()
+	{
+		$result = array();
+		$query = $this->db->query(
+			"SELECT c.company_id, c.name
+			FROM " . DB_PREFIX . "customer_to_company ctc
+			LEFT JOIN " . DB_PREFIX . "company c USING (company_id)
+			WHERE ctc.customer_id = '" . (int)$this->customer->getID() . "'"
+		);
+		foreach ($query->rows as $row) {
+			$result[$row['company_id']] = $row['name'];
+		}
+
+		return $result;
+	}
+
+	public function representsCompany($company_id)
+	{
+		$query = $this->db->query("SELECT * FROM " . DB_PREFIX . "customer_to_company WHERE customer_id = '" . (int)$this->customer->getID() . "' AND company_id = '" . (int)$company_id . "'");
+
+		return (bool)$query->num_rows;
 	}
 }
 ?>

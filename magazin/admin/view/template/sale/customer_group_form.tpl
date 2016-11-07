@@ -104,18 +104,13 @@
                <?php } ?></td>
            </tr>
            <tr>
-             <td><?php echo $entry_force_buy_bulk; ?></td>
-             <td><?php if ($force_buy_bulk) { ?>
-               <input type="radio" name="force_buy_bulk" value="1" checked="checked" />
-               <?php echo $text_yes; ?>
-               <input type="radio" name="force_buy_bulk" value="0" />
-               <?php echo $text_no; ?>
-               <?php } else { ?>
-               <input type="radio" name="force_buy_bulk" value="1" />
-               <?php echo $text_yes; ?>
-               <input type="radio" name="force_buy_bulk" value="0" checked="checked" />
-               <?php echo $text_no; ?>
-               <?php } ?></td>
+            <td><?php echo $entry_bulk_rules; ?></td>
+            <td>
+              <label for="#piece"><?php echo $text_piece; ?></label>
+              <input id="piece" type="checkbox" name="piece"<?php if ($piece) { ?> checked="checked"<?php } ?>/>
+              <label for="#bulk"><?php echo $text_package; ?></label>
+              <input id="bulk" type="checkbox" name="bulk"<?php if ($bulk) { ?> checked="checked"<?php } ?>/>
+            </td>
            </tr>
            <tr>
              <td><?php echo $entry_sort_order; ?></td>

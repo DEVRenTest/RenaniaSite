@@ -11,6 +11,7 @@ $_['text_balance']          = 'Balanță:';
 $_['text_add_ban_ip']       = 'Baneaza Ip-ul';
 $_['text_remove_ban_ip']    = 'Debaneaza IP-ul';
 $_['text_unlimited']        = 'Nelimitat';
+$_['text_customer_additioanl_groups'] = 'Grupuri aditionale de clienti';
 
 // Column
 $_['column_name']           = 'Numele clientului';
@@ -58,6 +59,7 @@ $_['entry_description']     = 'Descriere:';
 $_['entry_amount']          = 'Cantitate:';
 $_['entry_points']          = 'Puncte:<br /><span class="help">Use minus to remove points</span>';
 $_['entry_order_limit']     = 'Limită comenzi:';
+$_['entry_add_group']  		= 'Adauga grup';
 
 // Error
 $_['error_warning']         = 'Atenție: Vă rugăm verificați formularul pentru erori!';

@@ -74,8 +74,8 @@ class ControllerMyocLivePriceUpdate extends Controller
             $product_info['special'] = false;
         }
 
-        if($product_info['container_size']) {
-       		$verbosePrice = $this->currency->format( $taxOfOneProduct )." (".$this->language->get( 'text_withouth_vat' )." ".$this->currency->format( $product_info['price'] )." ".")" ."<br>". $this->language->get( 'text_price_per_package' ) ." ". $this->currency->format( ($taxOfOneProduct * $product_info['container_size']) - (($taxOfOneProduct * $product_info['container_size'] * $product_info['package_discount']) / 100) );
+        if($this->model_catalog_product->customerCanBuyBulk($product_id)) {
+       		$verbosePrice = $this->currency->format( $taxOfOneProduct )." (".$this->language->get( 'text_withouth_vat' )." ".$this->currency->format( $product_info['price'] )." ".")" ."<br>". $this->language->get( 'text_price_per_package' ) ." ". $this->currency->format( ($taxOfOneProduct * $product_info['container_size']) - (($taxOfOneProduct * $product_info['container_size'] * $product_info['package_discount']) / 100) ) ." (".$this->language->get( 'text_withouth_vat' )." ".$this->currency->format(($product_info['price'] * $product_info['container_size']) - (($product_info['price'] * $product_info['container_size'] * $product_info['package_discount']) / 100) )." ".")";
     	} else {
     		$verbosePrice = $this->currency->format( $taxOfOneProduct )." (".$this->language->get( 'text_withouth_vat' )." ".$this->currency->format( $product_info['price'] )." ".")";
     	}
@@ -103,7 +103,7 @@ class ControllerMyocLivePriceUpdate extends Controller
             $optionNr = sizeof( $this->model_catalog_product->getProductOptions($product_id) );
             $option_data = $this->cart->buildOptionDataArray( $product_id, $option );
             
-            if( $this->customer->getCustomerGroupId() == 3 || $this->customer->getCustomerGroupId() == 4 )
+            if( $this->customer->getCustomerGroupId() == 3 || $this->customer->getCustomerGroupId() == 4  || $this->customer->getCustomerGroupId() == 770) //770 - pentru Zentiva
             {
                 //$option_data = $this->cart->buildOptionDataArray( $product_id, $option );
                 $priceB2B = $this->cart->calculatePriceB2B( $product_id, $option_data );
@@ -135,7 +135,7 @@ class ControllerMyocLivePriceUpdate extends Controller
 
                     $message .= $this->language->get('text_not_yet_been_defined_special_price');
         
-                    $this->sendAlertMail( $subject, $message );
+                    //$this->sendAlertMail( $subject, $message );
                     
                 }
                 else if( $priceB2B == 0 && $optionNr >0 && sizeof( $option ) > 0 )
@@ -181,7 +181,7 @@ class ControllerMyocLivePriceUpdate extends Controller
 
                         $message .= $this->language->get('text_not_yet_been_defined_special_price');                       
 
-                       $this->sendAlertMail( $subject, $message );      
+                       //$this->sendAlertMail( $subject, $message );      
                     }
 
                 }
@@ -196,6 +196,14 @@ class ControllerMyocLivePriceUpdate extends Controller
 
                     $pr = $this->currency->format( $taxOfOneProductB2B ) ." (".$this->language->get( 'text_withouth_vat' )." "
                     .$this->currency->format( $priceB2B )." ".")";
+
+                    if ($this->model_catalog_product->customerCanBuyBulk($product_id)) {
+                        $pr .= "<br>"
+                            . $this->language->get('text_price_per_package') 
+                            . " "
+                            . $this->currency->format($taxOfOneProductB2B * $product_info['container_size'] * (100 - $product_info['package_discount']) / 100)
+                            . " (" . $this->language->get('text_withouth_vat') . " " . $this->currency->format($priceB2B * $product_info['container_size'] * (100 - $product_info['package_discount']) / 100) . " )";
+                    }
                     
                     $concatenated_code = $this->cart->getProductAxCode( $product_id, $option_data );
                     
@@ -207,7 +215,8 @@ class ControllerMyocLivePriceUpdate extends Controller
                     $have_b2b_price = 1;
                 }                                 
             }
-
+            $product_ax_code = $this->cart->getProductAxCode( $product_id, $option_data );
+            $b2b_product_stoc = $this->getB2BProductStock( $product_ax_code );
 
             $json['have_b2b_price'] = $have_b2b_price;
             $json['price'] = ( $B2B ? $pr : $finalValue ); // $finalValue;
@@ -240,6 +249,8 @@ class ControllerMyocLivePriceUpdate extends Controller
             $json['text_out_of_stock'] = $this->language->get('text_out_of_stock');
             $json['text_delivery'] = $this->language->get('text_delivery');
             $json['text_please_select_desired_options'] = $this->language->get('text_please_select_desired_options');
+            $json['raw_price_data'] = array('base_price' => round((($B2B && $priceB2B) ? $priceB2B : $product_info['price']), 2));
+            $json['raw_price_data']['vat_price'] = round($this->tax->calculate($json['raw_price_data']['base_price'], $product_info['tax_class_id'], TRUE), 2);
         }
 
         $this->cart->clear();

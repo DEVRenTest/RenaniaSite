@@ -767,6 +767,8 @@ class ControllerSaleCustomer extends Controller
         $this->data['text_slave'] = $this->language->get( 'text_slave' );
         $this->data['text_full_permision'] = $this->language->get( 'text_full_permision' );
         $this->data['text_limited_permision'] = $this->language->get( 'text_limited_permision' );
+        $this->data['text_customer_additioanl_groups'] = $this->language->get( 'text_customer_additioanl_groups' );
+        $this->data['entry_add_group'] = $this->language->get( 'entry_add_group' );
         
         $this->data['entry_password'] = $this->language->get( 'entry_password' );
         $this->data['entry_confirm'] = $this->language->get( 'entry_confirm' );
@@ -796,8 +798,10 @@ class ControllerSaleCustomer extends Controller
         $this->data['button_add_transaction'] = $this->language->get( 'button_add_transaction' );
         $this->data['button_add_reward'] = $this->language->get( 'button_add_reward' );
         $this->data['button_remove'] = $this->language->get( 'button_remove' );
+        $this->data['button_insert'] = $this->language->get( 'button_insert' );
 
         $this->data['tab_general'] = $this->language->get( 'tab_general' );
+        $this->data['tab_additional_groups'] = $this->language->get( 'tab_additional_groups' );
         $this->data['tab_address'] = $this->language->get( 'tab_address' );
         $this->data['tab_history'] = $this->language->get( 'tab_history' );
         $this->data['tab_transaction'] = $this->language->get( 'tab_transaction' );
@@ -1161,6 +1165,8 @@ class ControllerSaleCustomer extends Controller
         {
             $this->data['newsletter'] = '';
         }
+
+        $this->data['customer_additional_groups'] = $this->model_sale_customer->getCustomerGroups($this->request->get['customer_id']);
 
         $this->load->model( 'sale/customer_group' );
 

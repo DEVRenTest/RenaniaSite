@@ -369,7 +369,6 @@ class ControllerCheckoutCart extends Controller
                     'recurring' => $product['recurring'],
                     'profile_name' => $product['profile_name'],
                     'profile_description' => $profile_description,
-                    'customer_forced_buy_bulk' => $this->model_catalog_product->customerForcedBuyBulk($product['product_id']),
                 );
             }
 
@@ -867,6 +866,16 @@ class ControllerCheckoutCart extends Controller
         $this->response->setOutput( json_encode( $json ) );
     }
 
+    public function addMultiple()
+    {
+        if (isset($this->request->post['products'])) {
+            foreach ($this->request->post['products'] as $product) {
+                $this->cart->add($product['id'], $product['quantity'], $product['option'], 0);
+            }
+        }
+        $this->redirect($this->url->link('checkout/cart', '', 'SSL'));
+    }
+
     public function quote()
     {
         $this->language->load( 'checkout/cart' );
@@ -967,6 +976,9 @@ class ControllerCheckoutCart extends Controller
 			// se citeste valoarea de la care taxa de transpot este gratuita
 			$this->load->model( 'setting/setting' );
 			$setting_info_free = $this->model_setting_setting->getSetting('free', $this->config->get( 'config_store_id' ));
+            if (!$setting_info_free) {
+                $setting_info_free = $this->model_setting_setting->getSetting('free');
+            }
 /*			print_r( $results );
 			die();*/
 

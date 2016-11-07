@@ -4,6 +4,9 @@ class Customer {
 	private $firstname;
 	private $lastname;
 	private $email;
+	private $company_id;
+	private $company_name;
+	private $multiple_companies;
 	private $telephone;
 	private $fax;
 	private $newsletter;
@@ -28,6 +31,7 @@ class Customer {
 			$customer_query = $this->db->query("SELECT * FROM " . DB_PREFIX . "customer WHERE customer_id = '" . (int)$this->session->data['customer_id'] . "' AND status = '1'");
 			
 			if ($customer_query->num_rows) {
+				$this->companyData();
 				$this->customer_id = $customer_query->row['customer_id'];
 				$this->firstname = $customer_query->row['firstname'];
 				$this->lastname = $customer_query->row['lastname'];
@@ -37,7 +41,6 @@ class Customer {
 				$this->newsletter = $customer_query->row['newsletter'];
 				$this->customer_group_id = $customer_query->row['customer_group_id'];
 				$this->address_id = $customer_query->row['address_id'];
-        $this->ax_code = $customer_query->row['ax_code'];
         $this->permission = $customer_query->row['permission'];
         $this->order_limit = $customer_query->row['order_limit'];
 //        $this->payment_term = $customer_query->row['payment_term'];
@@ -87,7 +90,7 @@ class Customer {
 					}
 				}			
 			}
-									
+			$this->companyData();
 			$this->customer_id = $customer_query->row['customer_id'];
 			$this->firstname = $customer_query->row['firstname'];
 			$this->lastname = $customer_query->row['lastname'];
@@ -97,7 +100,6 @@ class Customer {
 			$this->newsletter = $customer_query->row['newsletter'];
 			$this->customer_group_id = $customer_query->row['customer_group_id'];
 			$this->address_id = $customer_query->row['address_id'];
-      $this->ax_code = $customer_query->row['ax_code'];
       $this->permission = $customer_query->row['permission'];
 //      $this->payment_term = $customer_query->row['payment_term'];
       
@@ -113,17 +115,23 @@ class Customer {
 		$this->db->query("UPDATE " . DB_PREFIX . "customer SET cart = '" . $this->db->escape(isset($this->session->data['cart']) ? serialize($this->session->data['cart']) : '') . "', wishlist = '" . $this->db->escape(isset($this->session->data['wishlist']) ? serialize($this->session->data['wishlist']) : '') . "' WHERE customer_id = '" . (int)$this->customer_id . "'");
 		
 		unset($this->session->data['customer_id']);
+		unset($this->session->data['remote_order_url']);
+		unset($this->session->data['remote_cookie']);
+		unset($this->session->data['company_id']);
 
 		$this->customer_id = '';
 		$this->firstname = '';
 		$this->lastname = '';
+		$this->company_id = 0;
+		$this->company_name = '';
+		$this->ax_code = '';
+		$this->multiple_companies = false;
 		$this->email = '';
 		$this->telephone = '';
 		$this->fax = '';
 		$this->newsletter = '';
 		$this->customer_group_id = '';
 		$this->address_id = '';
-    $this->ax_code = '';
     $this->permission = '';
 //    $this->payment_term = '';
   	}
@@ -228,6 +236,49 @@ class Customer {
 	
 		return $query->row['total'];	
   	}	
-    
+
+	public function getCompanyId()
+	{
+		return $this->company_id;
+	}
+
+	public function getCompanyName()
+	{
+		return $this->company_name;
+	}
+
+	public function representsMultipleCompanies()
+	{
+		return $this->multiple_companies;
+	}
+
+	protected function companyData()
+	{
+		$companies = array();
+		$company_query = $this->db->query(
+			"SELECT c.* FROM " . DB_PREFIX . "customer_to_company ctc LEFT JOIN " . DB_PREFIX . "company c ON ctc.company_id = c.company_id
+			WHERE ctc.customer_id = '" . (int)$this->session->data['customer_id'] . "'" 
+		);
+		foreach ($company_query->rows as $row) {
+			$companies[$row['company_id']] = $row;
+		}
+		$this->multiple_companies = count($companies) > 1;
+		if (!empty($companies)) {
+			if (isset($this->session->data['company_id']) && array_key_exists($this->session->data['company_id'], $companies)) {
+				$company = $companies[$this->session->data['company_id']];
+			} else {
+				$company = array_shift($companies);
+			}
+			$this->session->data['company_id'] = $company['company_id'];
+			$this->company_id = $company['company_id'];
+			$this->company_name = $company['name'];
+			$this->ax_code = $company['ax_code'];
+		} else {
+			$this->company_id = 0;
+			$this->company_name = '';
+			$this->ax_code = '';
+			unset($this->session->data['company_id']);
+		}
+	}
 }
 ?>

@@ -83,7 +83,6 @@
     if ($this->journal2->settings->get('responsive_design')) {
         $this->journal2->minifier->addStyle('catalog/view/theme/journal2/css/responsive.css');
     }
-    $this->journal2->minifier->addStyle('catalog/view/theme/journal2/css/adjust.css');
 ?>
 <?php echo $this->journal2->minifier->css(); ?>
 <?php if ($this->journal2->cache->getDeveloperMode() || !$this->journal2->minifier->getMinifyCss()): ?>
@@ -115,8 +114,19 @@ $('body').prepend('<iframe src="<?php echo $store; ?>" style="display: none;"></
     <?php endif; ?>
     Journal.NOTIFICATION_BUTTONS = '<?php echo $this->journal2->settings->get('notification_buttons'); ?>';
 </script>
+<link href='catalog/view/theme/journal2/fonts/century-gothic.ttf' rel='stylesheet' type='text/css'>
+<link rel="stylesheet" type="text/css" href="catalog/view/theme/journal2/css/adjust.css"/>
 </head>
-<body>
+<body<?php if ($this->customer->isLogged()) echo ' class="group' . $this->customer->getCustomerGroupId() . '"'; ?>>
+<!-- Google Tag Manager -->
+<noscript><iframe src="//www.googletagmanager.com/ns.html?id=GTM-WLK3KG"
+height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
+<script>(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
+new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
+j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
+'//www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
+})(window,document,'script','dataLayer','GTM-WLK3KG');</script>
+<!-- End Google Tag Manager -->
 <!--[if lt IE 9]>
 <div class="old-browser"><?php echo $this->journal2->settings->get('old_browser_message', 'You are using an old browser. Please <a href="http://windows.microsoft.com/en-us/internet-explorer/download-ie">upgrade to a newer version</a> or <a href="http://browsehappy.com/">try a different browser</a>.'); ?></div>
 <![endif]-->
@@ -167,6 +177,7 @@ $('body').prepend('<iframe src="<?php echo $store; ?>" style="display: none;"></
             $header_type = $header_type . '.nosearch';
         }
     }
+    $header_type = 'center.nolang-nocurr';
     if (class_exists('VQMod')) {
         global $vqmod;
         if ($vqmod !== null) {

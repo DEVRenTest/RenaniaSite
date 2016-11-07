@@ -298,6 +298,7 @@ class ControllerAccountAccount extends Controller
         $this->data['text_available_delivery_addresses'] = $this->language->get( 'text_available_delivery_addresses' );
         $this->data['text_add_new_address'] = $this->language->get( 'text_add_new_address' );
         $this->data['text_company_details'] = $this->language->get( 'text_company_details' );
+        $this->data['text_change_company'] = $this->language->get('text_change_company');
 
         $this->data['text_my_account'] = $this->language->get( 'text_my_account' );
         $this->data['text_my_orders'] = $this->language->get( 'text_my_orders' );
@@ -326,8 +327,11 @@ class ControllerAccountAccount extends Controller
         $this->data['text_reclamation'] = $this->language->get( 'text_reclamation' );
         $this->data['text_add_reclamation'] = $this->language->get( 'text_add_reclamation' );
         $this->data['text_list_reclamation'] = $this->language->get( 'text_list_reclamation' );
-                       
-       
+        $this->data['text_customer_report'] = $this->language->get( 'text_customer_report' );
+        $this->data['text_upload_report'] = $this->language->get( 'text_upload_report' );
+        $this->data['text_list_reports'] = $this->language->get( 'text_list_reports' );
+        $this->data['text_special_product_request'] = $this->language->get( 'text_special_product_request' );
+
         // address
         $this->load->model('account/address');
         $this->data['addresses'] = array();
@@ -540,7 +544,18 @@ class ControllerAccountAccount extends Controller
         $this->data['document'] = $this->url->link( 'document/document/listdocuments', '', 'SSL' );
         $this->data['add'] = $this->url->link( 'reclamation/reclamation/addreclamation', '', 'SSL' );
         $this->data['list'] = $this->url->link( 'reclamation/reclamation/listreclamation', '', 'SSL' );
-        
+        $this->data['upload_report'] = $this->url->link( 'report/report/upload_report', '', 'SSL' );
+        $this->data['list_reports'] = $this->url->link( 'report/report/list_reports', '', 'SSL' );
+        $this->data['special_product_request'] = $this->url->link( 'account/special_products_request/specialproductsrequest', '', 'SSL' );
+        $this->data['change_company'] = $this->url->link('account/company', '', 'SSL');
+        $this->data['prod_fast_order'] = $this->url->link('product/fast_order', '', 'SSL');
+
+        $customer_additional_groups = $this->model_account_customer->getCustomerGroups();
+
+        $customer_all_groups = array_merge(array_flip($customer_additional_groups), array($this->customer->getCustomerGroupId()));
+        $allowed_groups = $this->config->get('config_customer_group_access') ? $this->config->get('config_customer_group_access') : array();
+        $this->data['show_special_products_form_link'] = (bool)array_intersect($customer_all_groups, $allowed_groups);
+
         $this->data['action'] = $this->url->link('account/account/index', '', 'SSL');
         $this->data['button_continue'] = $this->language->get('text_edit');
 

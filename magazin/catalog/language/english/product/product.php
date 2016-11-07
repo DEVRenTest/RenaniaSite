@@ -50,8 +50,12 @@ $_['text_year_multiple'] = 'years';
 
 $_['text_pieces_per_package']  = 'Pieces/package:';
 $_['text_price_per_piece']     = 'Price/piece:';
+$_['text_price_per_package']   = 'Price/package:';
 $_['text_pieces']              = 'Pieces';
 $_['text_packages']            = 'Packages';
+$_['text_no_shirt_no_service'] = 'This product is not available to you for purchase at this time';
+$_['text_products_complementary_title'] = 'Complementary products';
+$_['text_products_related_title'] = 'Related products';
 
 $_['text_trial_description'] = '%s every %d %s(s) for %d payment(s) then';
 $_['text_payment_description'] = '%s every %d %s(s) for %d payment(s)';
@@ -74,7 +78,8 @@ $_['entry_captcha']     = 'Enter the code in the box below:';
 $_['tab_description']   = 'Description';
 $_['tab_attribute']     = 'Specification';
 $_['tab_review']        = 'Reviews (%s)';
-$_['tab_related']       = 'Related Products'; 
+$_['tab_related']       = 'Related Products';
+$_['tab_color_size_stock'] = 'Stock by sizes and colors';
 
 // Error
 $_['error_name']        = 'Warning: Review Name must be between 3 and 25 characters!';

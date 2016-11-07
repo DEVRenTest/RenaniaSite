@@ -151,6 +151,7 @@ class ModelCatalogProduct extends Model {
 				'product_option_quantity' => $uncalculableStock,
 				'stock_status'     => $StockStatus, //$query->row['stock_status'],
 				'image'            => $query->row['image'],
+				'video'			   => $query->row['video'],
 				'manufacturer_id'  => $query->row['manufacturer_id'],
 				'manufacturer'     => $query->row['manufacturer'],
 				'price'            => $priceVal,
@@ -783,24 +784,37 @@ class ModelCatalogProduct extends Model {
 
         return $size_chart_name;
     }
-  
-    public function customerForcedBuyBulk($product_id)
-    {
-    	$result = false;
-    	if ($this->customer->isLogged()) {
-    		// check if product has container size
-	    	$query = $this->db->query("SELECT container_size FROM " . DB_PREFIX . "product WHERE product_id = '" . (int)$product_id . "'");
-	    	if ($query->num_rows && $query->row['container_size']) {
-	    		// check for restriction
-    			$query = $this->db->query("SELECT COALESCE((SELECT force_buy_bulk FROM " . DB_PREFIX . "force_buy_bulk_override_customer WHERE customer_id = '" . $this->customer->getId() . "' AND product_id = '" . (int)$product_id . "'), (SELECT force_buy_bulk FROM " . DB_PREFIX . "force_buy_bulk_override_group WHERE customer_group_id = '" . $this->customer->getCustomerGroupId() . "' AND product_id = '" . (int)$product_id . "'), (SELECT force_buy_bulk FROM " . DB_PREFIX . "customer_group WHERE customer_group_id = '" . $this->customer->getCustomerGroupId() . "')) AS force_buy_bulk");
-    			if ($query->row['force_buy_bulk']) {
-    				$result = true;
-    			}
-	    	}
-    	}
 
-    	return $result;
-    }
+	public function customerCanBuyPiece($product_id)
+	{
+		if (!($this->customer->islogged() && $this->getProductContainerSize($product_id))) {
+			return true;
+		}
+		$query = $this->db->query(
+			"SELECT COALESCE(
+				(SELECT piece FROM " . DB_PREFIX . "bulk_customer WHERE product_id = '" . (int)$product_id . "' AND customer_id = '" . (int)$this->customer->getId() . "'),
+				(SELECT piece FROM " . DB_PREFIX . "bulk_group WHERE product_id = '" . (int)$product_id . "' AND customer_group_id = '" . (int)$this->customer->getCustomerGroupId() . "'),
+				(SELECT piece FROM " . DB_PREFIX . "customer_group WHERE customer_group_id = '" . (int)$this->customer->getCustomerGroupId() . "')
+			) as can_buy_piece"
+		);
+		return (bool)$query->row['can_buy_piece'];
+	}
+
+	public function customerCanBuyBulk($product_id)
+	{
+		if (!($this->customer->islogged() && $this->getProductContainerSize($product_id))) {
+			return false;
+		}
+		$query = $this->db->query(
+			"SELECT COALESCE(
+				(SELECT bulk FROM " . DB_PREFIX . "bulk_customer WHERE product_id = '" . (int)$product_id . "' AND customer_id = '" . (int)$this->customer->getId() . "'),
+				(SELECT bulk FROM " . DB_PREFIX . "bulk_group WHERE product_id = '" . (int)$product_id . "' AND customer_group_id = '" . (int)$this->customer->getCustomerGroupId() . "'),
+				(SELECT bulk FROM " . DB_PREFIX . "customer_group WHERE customer_group_id = '" . (int)$this->customer->getCustomerGroupId() . "')
+			) as can_buy_bulk"
+		);
+		return (bool)$query->row['can_buy_bulk'];
+	}
+
     public function getPackageDiscount($product_id)
     {
     	$result = false;
@@ -816,7 +830,7 @@ class ModelCatalogProduct extends Model {
   	{
   		$now = time();
   		$result = false;
-  		$query = $this->db->query("SELECT UNIX_TIMESTAMP(o.date_added) as date_added FROM " . DB_PREFIX . "order o LEFT JOIN " . DB_PREFIX . "order_product op ON o.order_id = op.order_id WHERE op.product_id = '" . (int)$product_id . "' AND o.order_status_id != 0 AND o.store_id = '" . (int)$this->config->get('config_store_id') . "' ORDER BY o.date_added DESC LIMIT 1");
+  		$query = $this->db->query("SELECT UNIX_TIMESTAMP(o.date_added) as date_added FROM " . DB_PREFIX . "order o LEFT JOIN " . DB_PREFIX . "order_product op ON o.order_id = op.order_id WHERE op.product_id = '" . (int)$product_id . "' AND o.order_status_id != 0 ORDER BY o.date_added DESC LIMIT 1");
   		if ($query->num_rows) {
   			$result = $query->row['date_added'];
   			if (($min_time_elapsed && $min_time_elapsed > 0 && $now - $min_time_elapsed <= $query->row['date_added'])
@@ -834,5 +848,152 @@ class ModelCatalogProduct extends Model {
   		}
   		return 0;
   	}
+
+  	public function modelToId($model)
+  	{
+  		$query = $this->db->query("SELECT product_id FROM " . DB_PREFIX . "product WHERE model = '" . $this->db->escape($model) . "'");
+  		if ($query->num_rows) {
+  			return $query->row['product_id'];
+  		} else {
+  			return 0;
+  		}
+  	}
+
+  	public function getStockByColorAndSize($product_id)
+	{
+		$stock_by_color_and_size = array();
+
+		$prQuery = $this->db->query( "SELECT pr.product_id, pr_desc.name, pr.upc FROM oc_product pr JOIN oc_product_description pr_desc ON (pr_desc.product_id = pr.product_id ) WHERE pr.product_id='".$product_id."'" );
+
+		if( $prQuery->num_rows > 0 )
+		{
+				$stock_by_color_and_size = array(
+					"product_id" => $product_id,
+					"product_upc" => $prQuery->row['upc'],
+					"Marimi" => array( ),
+					"Culori" => array( ),
+					"Denumire" => $prQuery->row['name'],
+					"code_ax" => "",
+					"type" => "1",
+					"Combinatii" => array( )
+				);
+
+				$concatenated_code = '';
+
+				// option query
+				$optionQuery = $this->db->query( "SELECT pov.product_option_value_id as ov_id, pov.product_option_id as o_id, od.name as o_name, ovd.name as ov_name
+                                FROM oc_product_option_value AS pov
+                                JOIN oc_option_value_description AS ovd ON ( ovd.option_value_id = pov.option_value_id )
+                                JOIN oc_option_description AS od ON ( od.`option_id` = ovd.`option_id` )
+                                WHERE pov.`product_id` = '".$product_id."' ORDER BY  ov_id ASC ;" );
+
+				// feching options
+				if( $optionQuery->num_rows > 0 )
+				{
+					foreach( $optionQuery->rows as $value )
+					{
+						$stock_by_color_and_size[$value["o_name"]][$value["ov_id"]] = $value["ov_name"];
+					}
+
+					// setting up type to 2
+					$stock_by_color_and_size["type"] = 2;
+				}
+
+				// get option combinations
+				$optioncombinationQuery = $this->db->query( "SELECT pocv.product_option_combination_id, ovd.name as ov_name, od.name as o_name FROM oc_product_option_combination_value pocv
+                                JOIN oc_product_option_combination poc ON (poc.product_option_combination_id = pocv.product_option_combination_id)
+                                JOIN oc_option_value_description AS ovd ON ( ovd.option_value_id = pocv.option_value_id )
+                                JOIN oc_option_description AS od ON ( od.`option_id` = ovd.`option_id` )
+                                WHERE poc.product_id='".$product_id."' ORDER BY product_option_combination_id ASC;" );
+
+				if( $optioncombinationQuery->num_rows > 0 )
+				{
+					$product_option_combination_id = array( );
+					foreach( $optioncombinationQuery->rows as $key => $val )
+					{
+						$stock_by_color_and_size["Combinatii"][$val["product_option_combination_id"]][$val["o_name"]] = $val["ov_name"];
+					}
+
+					// setting up type to 3
+					$stock_by_color_and_size["type"] = 3;
+				}
+
+				$this->load->model( 'catalog/ax_stoc' );
+				if( $stock_by_color_and_size["type"] == 1 )//simple product
+				{
+					// get ax codes
+					$concatenated_code = $this->getProductAxCode( $stock_by_color_and_size["type"], $stock_by_color_and_size['product_id'] );
+
+					$stock_by_color_and_size[ "Marimi" ] = array();
+					$stock_by_color_and_size[ "Culori" ] = array();
+					$stock_by_color_and_size[ "code_ax" ] = $concatenated_code;
+
+				}
+				else if( $stock_by_color_and_size["type"] == 2 )
+				{
+					if (  !empty( $stock_by_color_and_size["Marimi"] ) )
+					{
+						foreach( $stock_by_color_and_size["Marimi"] as $key => $value )
+						{
+							// get ax codes
+							$concatenated_code = $this->getProductAxCode( $stock_by_color_and_size["type"], $stock_by_color_and_size['product_id'], '',  $key);
+							$stock_by_color_and_size[ "code_ax" ][$key] = $this->model_catalog_ax_stoc->getStoc( $concatenated_code );
+						}
+					}
+
+					if (  !empty( $stock_by_color_and_size["Culori"] ) )
+					{
+						foreach( $stock_by_color_and_size["Culori"] as $key => $value )
+						{
+							// get ax codes
+							$concatenated_code = $this->getProductAxCode( $stock_by_color_and_size["type"], $stock_by_color_and_size['product_id'], '', $key);
+							$stock_by_color_and_size[ "code_ax" ][$key] = $this->model_catalog_ax_stoc->getStoc( $concatenated_code );
+						}
+					}
+				}
+				else if( $stock_by_color_and_size["type"] == 3 )
+				{
+					foreach( $stock_by_color_and_size["Combinatii"] as $key => $value )
+					{
+						// get ax codes
+						$concatenated_code = $this->getProductAxCode( $stock_by_color_and_size["type"], $stock_by_color_and_size['product_id'], '', $key );
+						$stock_by_color_and_size[ "code_ax" ][$key] = $this->model_catalog_ax_stoc->getStoc( $concatenated_code );
+					}
+				}
+		}
+
+		return $stock_by_color_and_size;
+	}
+
+	public function getProductAxCode( $type, $product_id, $option_data = array( ), $Id = 0 )
+	{
+		$concatenated_code = '';
+
+		if( $type == 1 ) // product
+		{
+			$query = $this->db->query( "SELECT axc.ax_code as concatenated_code FROM ax_code axc WHERE axc.type= 1 AND axc.id = '".( int ) $product_id."' " );
+			if( $query->num_rows > 0 )
+			{
+				$concatenated_code = $query->row['concatenated_code'];
+			}
+		}
+		else if( $type == 2 ) // option
+		{
+			$query = $this->db->query( "SELECT axc.ax_code as concatenated_code FROM ax_code axc WHERE axc.type= 2 AND axc.id = '".( int ) $Id."' " );
+			if( $query->num_rows > 0 )
+			{
+				$concatenated_code = $query->row['concatenated_code'];
+			}
+		}
+		else if( $type == 3 )  // option_combination
+		{
+			$query3 = $this->db->query( "SELECT axc.ax_code as concatenated_code FROM ax_code axc WHERE axc.type= 3 AND axc.id = '".( int ) $Id."' " );
+			if( $query3->num_rows > 0 )
+			{
+				$concatenated_code = $query3->row['concatenated_code'];
+			}
+		}
+		return $concatenated_code;
+	}
 }
 ?>

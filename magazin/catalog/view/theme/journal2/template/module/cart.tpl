@@ -1,7 +1,8 @@
 <div id="cart">
 
   <div class="heading" >
-    <a><span id="cart-total"><?php echo $text_items; ?></span><i></i></a>
+    <!-- <a><span id="cart-total"><?php echo $text_items; ?></span><i></i></a> -->
+    <a><i></i></a>
   </div>
   <div class="content">
     <div class="cart-wrapper">
@@ -50,9 +51,9 @@
         <?php } ?>
       </table>
     </div>
-    <div class="checkout"><a class="button" href="<?php echo $cart; ?>"><?php echo $text_cart; ?></a> <a class="button" href="<?php echo $checkout; ?>"><?php echo $text_checkout; ?></a></div>
+    <div class="checkout"><a class="button" href="<?php echo $cart; ?>"><?php echo $text_cart; ?></a> <a class="button" href="<?php echo $checkout; ?>"><?php echo $text_checkout; ?></a></br> <a class="button" style="margin-top: 20px" href="<?php echo $file_order; ?>"><?php echo $text_file_order; ?></a></div>
     <?php } else { ?>
-    <div class="empty"><?php echo $text_empty; ?></div>
+    <div class="checkout"><a class="button" href="<?php echo $file_order; ?>"><?php echo $text_file_order; ?></a></div>
     <?php } ?>
   </div>
 </div>

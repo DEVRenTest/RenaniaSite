@@ -92,6 +92,7 @@ class ModelCheckoutOrder extends Model {
 				'store_name'              => $order_query->row['store_name'],
 				'store_url'               => $order_query->row['store_url'],				
 				'customer_id'             => $order_query->row['customer_id'],
+				'company_id'              => $order_query->row['company_id'],
 				'firstname'               => $order_query->row['firstname'],
 				'lastname'                => $order_query->row['lastname'],
 				'telephone'               => $order_query->row['telephone'],
@@ -200,11 +201,12 @@ class ModelCheckoutOrder extends Model {
 				$order_status_id = $this->config->get('config_order_status_id');
 			}
 
-			if ($order_status_id == $this->config->get('config_unapproved_order_status_id')) {
-				$this->mailToSuperior($order_id);
+			$sql = "UPDATE `" . DB_PREFIX . "order` SET order_status_id = '" . (int)$order_status_id . "', date_modified = NOW()";
+			if ($this->customer->getCompanyId()) {
+				$sql .= ", company_id = '" . (int)$this->customer->getCompanyId() . "'";
 			}
-				
-			$this->db->query("UPDATE `" . DB_PREFIX . "order` SET order_status_id = '" . (int)$order_status_id . "', date_modified = NOW() WHERE order_id = '" . (int)$order_id . "'");
+			$sql .= " WHERE order_id = '" . (int)$order_id . "'";
+			$this->db->query($sql);
 
 			$this->db->query("INSERT INTO " . DB_PREFIX . "order_history SET order_id = '" . (int)$order_id . "', order_status_id = '" . (int)$order_status_id . "', notify = '1', comment = '" . $this->db->escape(($comment && $notify) ? $comment : '') . "', date_added = NOW()");
 
@@ -499,21 +501,23 @@ class ModelCheckoutOrder extends Model {
 
                 $text .= $language->get('text_new_footer') . "\n\n";
 
-                $mail = new Mail();
-                $mail->protocol = $this->config->get('config_mail_protocol');
-                $mail->parameter = $this->config->get('config_mail_parameter');
-                $mail->hostname = $this->config->get('config_smtp_host');
-                $mail->username = $this->config->get('config_smtp_username');
-                $mail->password = $this->config->get('config_smtp_password');
-                $mail->port = $this->config->get('config_smtp_port');
-                $mail->timeout = $this->config->get('config_smtp_timeout');
-                $mail->setTo($order_info['email']);
-                $mail->setFrom($this->config->get('config_email'));
-                $mail->setSender($order_info['store_name']);
-                $mail->setSubject(html_entity_decode($subject, ENT_QUOTES, 'UTF-8'));
-                $mail->setHtml($html);
-                $mail->setText(html_entity_decode($text, ENT_QUOTES, 'UTF-8'));
-                $mail->send();
+                if ($this->customer->isLogged() && !$this->config->get('config_customer_no_mail')) {
+	                $mail = new Mail();
+	                $mail->protocol = $this->config->get('config_mail_protocol');
+	                $mail->parameter = $this->config->get('config_mail_parameter');
+	                $mail->hostname = $this->config->get('config_smtp_host');
+	                $mail->username = $this->config->get('config_smtp_username');
+	                $mail->password = $this->config->get('config_smtp_password');
+	                $mail->port = $this->config->get('config_smtp_port');
+	                $mail->timeout = $this->config->get('config_smtp_timeout');
+	                $mail->setTo($order_info['email']);
+	                $mail->setFrom($this->config->get('config_email'));
+	                $mail->setSender($order_info['store_name']);
+	                $mail->setSubject(html_entity_decode($subject, ENT_QUOTES, 'UTF-8'));
+	                $mail->setHtml($html);
+	                $mail->setText(html_entity_decode($text, ENT_QUOTES, 'UTF-8'));
+	                $mail->send();
+                }
             }
             
 			// Admin Alert Mail
@@ -561,6 +565,9 @@ class ModelCheckoutOrder extends Model {
 					$text .= $language->get('text_new_comment') . "\n\n";
 					$text .= $order_info['comment'] . "\n\n";
 				}
+
+				$subject = $subject . ' ' . $this->customer->getAxCode();					
+				
 			
 				$mail = new Mail(); 
 				$mail->protocol = $this->config->get('config_mail_protocol');
@@ -587,6 +594,9 @@ class ModelCheckoutOrder extends Model {
 					}
 				}				
 			}		
+		}
+		if ($order_status_id == $this->config->get('config_unapproved_order_status_id')) {
+			$this->mailToSuperior($order_id);
 		}
 	}
 	
@@ -640,6 +650,7 @@ class ModelCheckoutOrder extends Model {
 				$this->model_checkout_voucher->confirm($order_id);
 			}	
 	
+			$notify = $notify && !$this->config->get('config_customer_no_mail');
 			if ($notify) {
 				$language = new Language($order_info['language_directory']);
 				$language->load($order_info['language_filename']);
@@ -690,17 +701,16 @@ class ModelCheckoutOrder extends Model {
 	public function mailToSuperior($order_id)
 	{
 		$order_info = $this->getOrder($order_id);
-		$send = false;
-		$order_customer_query = $this->db->query("SELECT c.ax_code FROM " . DB_PREFIX . "order o LEFT JOIN " . DB_PREFIX . "customer c ON c.customer_id = o.customer_id  WHERE o.order_id = '" . (int)$order_id . "'");
-		if ($order_customer_query->num_rows && $order_customer_query->row['ax_code']) {
-			$order_email_query = $this->db->query("SELECT email FROM " . DB_PREFIX . "customer WHERE ax_code = '" . $this->db->escape($order_customer_query->row['ax_code']) . "' AND order_limit = -1");
-			if ($order_email_query->num_rows) {
-				$supervisors = $order_email_query->rows;
-				$send = true;
-			}
+		if (!$order_info || !$order_info['company_id']) {
+			return;
 		}
-
-		if ($send) {
+		$customer_superiors = $this->db->query(
+			"SELECT c.email FROM " . DB_PREFIX . "customer_to_company ctc
+			LEFT JOIN " . DB_PREFIX . "customer c ON ctc.customer_id = c.customer_id
+			WHERE ctc.company_id = '" . (int)$order_info['company_id'] . "'
+			AND c.order_limit = -1" 
+		);
+		if ($customer_superiors->num_rows) {
 			$language = new Language($order_info['language_directory']);
 			$language->load($order_info['language_filename']);
 			$language->load('mail/order');
@@ -721,11 +731,9 @@ class ModelCheckoutOrder extends Model {
 			$mail->setSubject(html_entity_decode($subject, ENT_QUOTES, 'UTF-8'));
 			$mail->setHtml(html_entity_decode($message, ENT_QUOTES, 'UTF-8'));
 
-			foreach ($supervisors as $supervisor) {
-
-				$mail->setTo($supervisor);
+			foreach ($customer_superiors->rows as $row) {
+				$mail->setTo($row['email']);
 				$mail->send();
-
 			}
 			return true;
 		} else {

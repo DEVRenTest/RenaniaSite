@@ -67,7 +67,17 @@
       </tbody>
 </table>  
 </form>
-
+<?php if ($this->customer->representsMultipleCompanies()) { ?>
+<table class="list">
+   <thead>
+      <tr>
+         <td>
+            <?php echo ++$counter . '.'; ?> <a href="<?php echo $change_company; ?>"><?php echo $text_change_company; ?></a> &lpar;<?php echo $this->customer->getCompanyName(); ?>&rpar;
+         </td>
+      </tr>
+      </thead>
+</table>   
+<?php } ?>
 <table class="list">
    <thead>
       <tr>
@@ -80,7 +90,6 @@
       </tr>
       </thead>
 </table>   
-
 <?php if ( $customer_B2B ) { ?>
 <table class="list">
    <thead>
@@ -103,7 +112,6 @@
            <?php } ?>
       </tbody>
 </table>  
-
 <!--<table class="list">
    <thead>
       <tr>
@@ -129,8 +137,6 @@
       </tbody>
 </table>-->
 <?php } ?>
-
-
 <?php if ( !$customer_B2B ) { ?>
 <table class="list">
     <thead>
@@ -151,7 +157,6 @@
     </tbody>
 </table>  
 <?php }?>
-
 <table class="list">
    <thead>
       <tr>
@@ -181,8 +186,6 @@
             ?>
       </tbody>
 </table> 
-  
-
 <!--<table class="list">
    <thead>
       <tr>
@@ -195,8 +198,6 @@
       </tr>
       </thead>
 </table>  -->
-
-
 <table class="list">
    <thead>
       <tr>
@@ -217,7 +218,6 @@
          </tr>
       </tbody>
 </table>  
-
 <?php if($show_approval_link){?>
 <table class="list">
    <thead>
@@ -234,7 +234,6 @@
       </tbody>
 </table>  
  <?php }?>
-   
   <?php if ( $customer_B2B ) { ?>
   <table class="list">
    <thead>
@@ -283,8 +282,36 @@
       </tbody>
    </table> 
   <?php }?>
-  
-    
+   <table class="list">
+      <thead>
+      <tr>
+         <td class="left">
+            <?php $counter++; echo $counter . '. ' . $text_fast_order; ?>
+         </td>
+      </tr>
+      </thead>
+      <tbody>
+      <tr>
+         <td class="left"><a href="<?php echo $prod_fast_order; ?>"><?php echo $text_fast_order; ?></a></td>
+      </tr>
+      </tbody>
+   </table>
+  <?php if ($show_special_products_form_link) { ?>
+   <table class="list">
+   <thead>
+      <tr>
+         <td class="left">
+            <?php $counter++; echo $counter . '. ' . $text_special_product_request;  ?>
+         </td>
+      </tr>
+      </thead>
+      <tbody>
+         <tr>
+            <td class="left"><a href="<?php echo $special_product_request; ?>"><?php echo $text_special_product_request; ?></a></td>
+         </tr>
+      </tbody>
+   </table> 
+  <?php }?>
   <?php if ( $customer_B2B ) { ?>
   <table class="list">
    <thead>
@@ -301,8 +328,6 @@
       </tbody>
    </table> 
   <?php }?>
-     
-  
   <?php if ( $customer_B2B ) { ?>
    <table class="list">
    <thead>
@@ -322,14 +347,32 @@
       </tbody>
    </table> 
   <?php }?>
-  
- 
+  <?php if ( $customer_B2B ) { ?>
+   <table class="list">
+   <thead>
+      <tr>
+         <td class="left">
+            <?php $counter++; echo $counter . '. ' . $text_customer_report;  ?>
+         </td>
+      </tr>
+      </thead>
+      <tbody>
+         <tr>
+            <td class="left"><a href="<?php echo $upload_report; ?>"><?php echo $text_upload_report; ?></a></td>
+         </tr>
+         <tr>
+            <td class="left"><a href="<?php echo $list_reports; ?>"><?php echo $text_list_reports; ?></a></td>
+         </tr>
+      </tbody>
+   </table> 
+  <?php }?>
   <!--?php if ( $customer_B2B && $permission == $text_full_permision ) { ?>
   <table class="list">
    <thead>
       <tr>
          <td class="left">
-            <?php $counter++; echo $counter . '. ' . $text_agents;  ?>
+            <?php //$counter++; 
+			echo $counter . '. ' . $text_agents;  ?>
          </td>
       </tr>
       </thead>
@@ -348,8 +391,6 @@
       </tbody>
    </table> 
   <!---?php }?--->
-  
-  
     <table class="list">
    <thead>
       <tr>
@@ -364,8 +405,6 @@
          </tr>
       </tbody>
 </table> 
-  
-  
    <?php if ( $customer_B2B ) { ?>
     <table class="list">
     <thead>
@@ -393,13 +432,12 @@
       </thead>
    </table>
    <?php }*/ ?>
-
    <?php if($customer_B2B && $customer_have_carts && $deelete == 'delete to saved carts') { ?>
    <table class="list">
       <thead>
       <tr>
          <td class="left">
-            12. Cosultanta cos cumparaturi
+            <a href="<?php $counter++; echo $counter . '. ' . $black_list_link; ?>">Cosultanta cos cumparaturi</a>
          </td>
       </tr>
       </thead>
@@ -410,32 +448,14 @@
        </tbody>
    </table>
    <?php } ?>
-   <table class="list">
-      <thead>
-      <tr>
-         <td class="left">
-            <?php $counter++; echo $counter . '. ' . $text_fast_order; ?>
-         </td>
-      </tr>
-      </thead>
-      <tbody>
-      <tr>
-         <td class="left"><a href="<?= $fast_order; ?>"><?php echo $text_fast_order; ?></a></td>
-      </tr>
-      </tbody>
-   </table>
-    
   <?php echo $content_bottom; ?></div>
 <?php echo $footer; ?> 
-
 <script>
    $("#invoice_type").change(function (e){  
       e.preventDefault();
       var invoice_type = $(this).attr('value');
-      
       window.location.href ="<?php echo $list_invoices."&invoice_type="; ?>" + invoice_type;
    });
-   
    $("#filter_by").change(function (e){  
       e.preventDefault();
       var filter_by = $(this).attr('value');
@@ -447,19 +467,13 @@
       {
          $("#filter_value").val('');
       }
-      
    });
-
-   
    $("#agent_id").change(function (e){  
       e.preventDefault();
       var agent_id = $(this).attr('value');
-      
       window.location.href ="<?php echo $show_agent_info."&id="; ?>" + agent_id;
    });
-   
    $(document).ready(function(){
-   
       $('.confirm').click(function(){
          var answer = confirm("<?php echo $text_are_you_sure; ?> ");
          if (answer)
@@ -471,8 +485,5 @@
             return false;
          }
        });
-   
    });
-   
-   
 </script>

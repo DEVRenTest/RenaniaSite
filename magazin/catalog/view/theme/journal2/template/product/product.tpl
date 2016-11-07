@@ -166,7 +166,9 @@
         <div id="hide_visitors_on_mobile">
        	<span id="visitors_online" <?php if($visitors == 0) { ?>style="display:none"<?php } ?>><font color="red"><?php echo $visitors_online; ?></font><br /></span>
        	</div>
-        <span><font color="red"><?php echo $text_last_purchased?></font></span><br />
+        <?php if ($text_last_purchased) { ?>
+          <span><font color="red"><?php echo $text_last_purchased?></font></span><br />
+        <?php } ?>
         <?php if ($container_size) { ?>
         <span class="p-model"><?php echo $text_pieces_per_package; ?></span> <span><?php echo $container_size; ?></span>
         <?php } ?>
@@ -384,52 +386,59 @@
         <div>
           <div id="product-quantity">
             <p class="text-qty"><?php echo $text_qty; ?></p>
-            <?php if (!$container_size) { ?>
-            <label for="real-quantity"><?php echo $text_pieces; ?>&colon; </label>
-            <input type="text" id="real-quantity" name="quantity" size="3" value=<?php echo $minimum; ?> data-min-value="<?php echo $minimum; ?>" autocomplete="off" />
-            <?php } else { 
-              if ($customer_forced_buy_bulk) { ?>
-              <label id="packages" for="fake_quantity"><?php echo $text_packages; ?>&colon; </label>
-              <input type="hidden" name="quantity" value=<?php echo $minimum; ?> data-min-value="<?php echo $minimum; ?>" autocomplete="off" />
-              <input type="text" id="fake_quantity" size="3"/>
-              <span class="piece-count"></span>
-              <script type="text/javascript">
-                $('#fake_quantity').on('change keyup', function(){
-                  $('input[name="quantity"]').val($(this).val() * <?php echo $container_size; ?>);
-                  $('.piece-count').text('(<?php echo $text_pieces; ?>: ' + $(this).val() * <?php echo $container_size; ?> + ')');
-                });
-              </script>
-              <?php } else { ?>
-              <div class="vertical-centered">
-                <input name="radio_bulk_or_piece" id="radio_bulk" value="1" type="radio" checked="checked"/>
-                <label for="radio_bulk"><?php echo $text_pieces; ?></label><br />
-                <input name="radio_bulk_or_piece" id="radio_piece" value="<?php echo $container_size; ?>"  type="radio"/>
-                <label id="packages" for="radio_piece"><?php echo $text_packages; ?></label>
-              </div>
-              <div class="vertical-centered">
+            <?php switch (array($buy_piece, $buy_bulk)) {
+              case array(false, false): ?>
+                <p><?php echo $text_no_shirt_no_service; ?></p>
+                <?php break;
+              case array(true, false): ?>
+                <label for="real-quantity"><?php echo $text_pieces; ?>&colon; </label>
+                <input type="text" id="real-quantity" name="quantity" size="3" value=<?php echo $minimum; ?> data-min-value="<?php echo $minimum; ?>" autocomplete="off" />
+                <?php break;  
+              case array(false, true): ?>
+                <label id="packages" for="fake_quantity"><?php echo $text_packages; ?>&colon; </label>
                 <input type="hidden" name="quantity" value=<?php echo $minimum; ?> data-min-value="<?php echo $minimum; ?>" autocomplete="off" />
                 <input type="text" id="fake_quantity" size="3"/>
                 <span class="piece-count"></span>
-              </div>
-              <script type="text/javascript">
-                $('input[name^="radio_bulk_or_piece"], #fake_quantity').on('change keyup', function(){
-                  $('input[name="quantity"]').val($('input[name^="radio_bulk_or_piece"]:checked').val() * $('#fake_quantity').val());
-                  if ($('input[name^="radio_bulk_or_piece"]:checked').val() != 1) {
-                    $('.piece-count').text('(<?php echo $text_pieces; ?>: ' + $('#fake_quantity').val() * <?php echo $container_size; ?> + ')');
-                  } else {
-                    if ($('#fake_quantity').val() % <?php echo $container_size; ?> != 0) {
-                      $('.piece-count').empty();
+                <script type="text/javascript">
+                  $('#fake_quantity').on('change keyup', function(){
+                    $('input[name="quantity"]').val($(this).val() * <?php echo $container_size; ?>);
+                    $('.piece-count').text('(<?php echo $text_pieces; ?>: ' + $(this).val() * <?php echo $container_size; ?> + ')');
+                  });
+                </script>
+                <?php break;
+              default: // tru tru, ++ if you get the reference ?>
+                <div class="vertical-centered">
+                  <input name="radio_bulk_or_piece" id="radio_bulk" value="1" type="radio" checked="checked"/>
+                  <label for="radio_bulk"><?php echo $text_pieces; ?></label><br />
+                  <input name="radio_bulk_or_piece" id="radio_piece" value="<?php echo $container_size; ?>"  type="radio"/>
+                  <label id="packages" for="radio_piece"><?php echo $text_packages; ?></label>
+                </div>
+                <div class="vertical-centered">
+                  <input type="hidden" name="quantity" value=<?php echo $minimum; ?> data-min-value="<?php echo $minimum; ?>" autocomplete="off" />
+                  <input type="text" id="fake_quantity" size="3"/>
+                  <span class="piece-count"></span>
+                </div>
+                <script type="text/javascript">
+                  $('input[name^="radio_bulk_or_piece"], #fake_quantity').on('change keyup', function(){
+                    $('input[name="quantity"]').val($('input[name^="radio_bulk_or_piece"]:checked').val() * $('#fake_quantity').val());
+                    if ($('input[name^="radio_bulk_or_piece"]:checked').val() != 1) {
+                      $('.piece-count').text('(<?php echo $text_pieces; ?>: ' + $('#fake_quantity').val() * <?php echo $container_size; ?> + ')');
                     } else {
-                      $('.piece-count').text('(<?php echo $text_packages; ?>: ' + $('#fake_quantity').val() / <?php echo $container_size; ?> + ')');
+                      if ($('#fake_quantity').val() % <?php echo $container_size; ?> != 0) {
+                        $('.piece-count').empty();
+                      } else {
+                        $('.piece-count').text('(<?php echo $text_packages; ?>: ' + $('#fake_quantity').val() / <?php echo $container_size; ?> + ')');
+                      }
                     }
-                  }
-                });
-              </script>
-              <?php } 
+                  });
+                </script>
+                <?php break;
             } ?>
           </div>
           <input type="hidden" name="product_id" value="<?php echo $product_id; ?>" />
+          <?php if ($buy_piece || $buy_bulk) { ?>
           <a id="button-cart" class="button"><span class="button-cart-text"><?php echo $button_cart; ?></span></a>
+          <?php } ?>
           <script>if ($('.product-info .image .label-outofstock').length) { $("#button-cart").addClass('button-disable').attr('disabled', 'disabled'); }</script>
         </div>
           <script>
@@ -462,6 +471,9 @@
         <?php } ?>
         <?php endif; ?>
       </div>
+      <?php if ($video) { ?>
+      <iframe width="436" height="245" src="https://www.youtube.com/embed/<?php echo $video; ?>" frameborder="0" allowfullscreen></iframe>
+      <?php } ?>
       <div class="wishlist-compare">
           <span class="links">
               <a onclick="addToWishList('<?php echo $product_id; ?>');"><?php echo $button_wishlist; ?></a>
@@ -509,7 +521,46 @@
        </div>
     </div>
     <?php endif; ?>
-
+  <div class="related_title"><?php echo $text_products_related_title; ?></div>
+  <?php foreach ($products_related as $product_related) { ?>
+  <div class="products_related">
+    <div class="products_related_image">
+      <?php if ($product_related['thumb']) { ?>
+      <a href="<?php echo $product_related['href']; ?>">
+        <img src="<?php echo $product_related['thumb']; ?>" title="<?php echo $product_related['name']; ?>" alt="<?php echo $product_related['name']; ?>" />
+      </a>
+      <?php } ?>
+    </div>
+    <div class="products_related_name">
+      <a href="<?php echo $product_related['href']; ?>"><?php echo $product_related['name']; ?></a>
+    </div>
+    <div class="products_related_price">
+      <?php if ($product_related['price']) { ?>         
+      <span><?php echo $product_related['price']; ?></span>
+      <?php } ?>
+    </div>
+  </div>
+  <?php } ?>
+  <div class="complementary_title"><?php echo $text_products_complementary_title; ?></div>
+  <?php foreach ($products_complementary as $product_complementary) { ?>
+  <div class="products_complementary">
+    <div class="products_complementary_image">
+      <?php if ($product_complementary['thumb']) { ?>
+      <a href="<?php echo $product_complementary['href']; ?>">
+        <img src="<?php echo $product_complementary['thumb']; ?>" title="<?php echo $product_complementary['name']; ?>" alt="<?php echo $product_complementary['name']; ?>" />
+      </a>
+      <?php } ?>
+    </div>
+    <div class="products_complementary_name">
+      <a href="<?php echo $product_complementary['href']; ?>"><?php echo $product_complementary['name']; ?></a>
+    </div>
+    <div class="products_complementary_price">
+      <?php if ($product_complementary['price']) { ?>
+      <span><?php echo $product_complementary['price']; ?></span>
+      <?php } ?>
+    </div>
+  </div>
+  <?php } ?>
   <div id="tabs" class="htabs">
     <?php if (!$this->journal2->settings->get('hide_product_description')) { ?>
     <a href="#tab-description"><?php echo $tab_description; ?></a>
@@ -523,9 +574,15 @@
     <?php if ($products) { ?>
     <a href="#tab-related" class="tab-related"><?php echo $tab_related; ?> (<?php echo count($products); ?>)</a>
     <?php } ?>
+    <?php if(is_array($product_doc)) { ?>
+    <a href="#tab-download" style="display: inline;" class="selected">Documente</a>
+    <?php } ?>
     <?php $index = 0; foreach ($this->journal2->settings->get('additional_product_tabs', array()) as $tab): $index++; ?>
     <a href="#additional-product-tab-<?php echo $index; ?>"><?php echo $tab['name']; ?></a>
     <?php endforeach; ?>
+    <?php if ($stock_by_color_and_size['type'] != 1 && $customer_B2B) { ?>
+    <a href="#tab-color-size-stock"><?php echo $tab_color_size_stock; ?></a>
+    <?php } ?>
   </div>
   <?php $index = 0; foreach ($this->journal2->settings->get('additional_product_tabs', array()) as $tab): $index++; ?>
   <div id="additional-product-tab-<?php echo $index; ?>" class="tab-content journal-custom-tab"><?php echo $tab['content']; ?></div>
@@ -533,6 +590,84 @@
   <?php if (!$this->journal2->settings->get('hide_product_description')) { ?>
   <div id="tab-description" class="tab-content" itemprop="description"><?php echo $description; ?></div>
   <?php } ?>
+  <?php if ($stock_by_color_and_size['type'] != 1 && $customer_B2B) { ?>
+  <div id="tab-color-size-stock" itemprop="color-size-stock">
+    <div class="color_size_stock">
+      <table class="list">
+        <tbody>
+        <?php if ($stock_by_color_and_size['type'] == 2) { ?>
+          <tr>
+          <?php if (!empty($stock_by_color_and_size['Marimi'])) { ?>
+            <?php foreach ($stock_by_color_and_size['Marimi'] as $key => $size) { ?>
+            <th><?php echo $size; ?></th>
+            <?php } ?>
+          <?php } ?>
+          </tr>
+          <tr>
+          <?php if (!empty($stock_by_color_and_size['Culori'])) { ?>
+            <?php foreach ($stock_by_color_and_size['Culori'] as $key => $colour) { ?>
+            <th><?php echo $colour; ?></th>
+            <?php } ?>
+          <?php } ?>
+          </tr>
+          <tr>
+          <?php foreach ($stock_by_color_and_size['code_ax'] as $key => $code_ax) { ?>
+            <td><?php echo $code_ax; ?></td>
+          <?php } ?>
+          </tr>
+        <?php } ?>
+        </tbody>
+        <tbody>
+        <?php if ($stock_by_color_and_size['type'] != 2) { ?>
+          <tr>
+            <th></th>
+            <?php foreach ($colors as $color) { ?>
+            <th><?php echo $color; ?></th>
+            <?php } ?>
+          </tr>
+          <?php foreach ($color_size_stocks as $k => $v) { ?>
+          <tr>
+            <th><?php echo $k; ?></th>
+            <?php foreach ($colors as $color) { ?>
+            <td><?php echo isset($v[$color]) && $v[$color] ? $v[$color] : 0; ?></td>
+            <?php } ?>
+          </tr>
+          <?php } ?>
+        <?php } ?>
+        </tbody>
+      </table>
+    </div>
+  </div>
+  <?php } ?>
+  <?php if(is_array($product_doc)) { ?>
+  <div id="tab-download" class="tab-content">
+    <div class="download_description">
+      <span><?php //echo '<pre>'; print_r($product_doc); ?></span>
+      <table>
+        <thead>
+          <tr>
+            <td>Nume document</td>
+            <td>Tip document</td>
+            <td>Descriere document</td>
+            <td>Descarcare</td>
+          </tr>
+        </thead>
+        <tbody>
+          <?foreach ($product_doc as $doc) { ?>
+          <tr>
+            <td><?= $doc['name'] ?></td>
+            <td><?= $doc['type'] ?></td>
+            <td><?= $doc['description'] ?></td>
+            <td>
+              <a class="button" href="<?php echo $doc['href']; ?>">Descarcare</a><br>
+            </td>
+          </tr>
+          <?php } ?>
+        </tbody>
+      </table>
+    </div>
+  </div>
+  <?php /*echo "<pre>"; print_r($product_doc);*/ } ?>
   <?php if ($attribute_groups) { ?>
   <div id="tab-attribute" class="tab-content">
     <table class="attribute">

@@ -66,7 +66,7 @@ class ControllerProductSearch extends Controller {
 		}
 		
 		if (isset($this->request->get['search'])) {
-			$this->document->setTitle($this->language->get('heading_title') .  ' - ' . $this->request->get['search']);
+			$this->document->setTitle($this->request->get['search'].$this->language->get('heading_title'));
 		} else {
 			$this->document->setTitle($this->language->get('heading_title'));
 		}
@@ -126,7 +126,7 @@ class ControllerProductSearch extends Controller {
    		);
 		
 		if (isset($this->request->get['search'])) {
-    		$this->data['heading_title'] = $this->language->get('heading_title') .  ' - ' . $this->request->get['search'];
+    		$this->data['heading_title'] =  $this->request->get['search'].$this->language->get('heading_title');
 		} else {
 			$this->data['heading_title'] = $this->language->get('heading_title');
 		}
@@ -460,6 +460,24 @@ class ControllerProductSearch extends Controller {
 		);
 				
 		$this->response->setOutput($this->render());
+  	}
+
+  	public function autocomplete()
+  	{
+  		$this->language->load('product/search');
+  		$json = array();
+  		if (isset($this->request->get['term'])) {
+  			$this->load->model('catalog/product');
+  			$products = $this->model_catalog_product->getProducts(array('filter_name' => $this->request->get['term']));
+  			if ($products) {
+  				foreach ($products as $product) {
+  					$json[] = array('value' => $product['product_id'], 'label' => $product['name']);
+  				}
+  			} else {
+  				$json[] = array('value' => 0, 'label' => $this->language->get('no_products_found'));
+  			}
+  		}
+  		$this->response->setOutput(json_encode($json));
   	}
 }
 ?>

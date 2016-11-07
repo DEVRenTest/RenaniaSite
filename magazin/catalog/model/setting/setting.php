@@ -1,7 +1,7 @@
 <?php 
 class ModelSettingSetting extends Model {
 	public function getSetting($group, $store_id = 0) {
-      
+	  
 //    $query = $this->db->query("SELECT value  FROM `oc_setting` WHERE `group` LIKE '%quickcheckout%' ORDER BY `oc_setting`.`group` ASC ");
 //
 //    $array = unserialize( $query->row['value'] );
@@ -13,11 +13,11 @@ class ModelSettingSetting extends Model {
 //    
 //    print "ok";
 //    die('from here');
-                
-        
+				
+		
 		$data = array(); 		
 		$query = $this->db->query("SELECT * FROM " . DB_PREFIX . "setting WHERE store_id = '" . (int)$store_id . "' AND `group` = '" . $this->db->escape($group) . "'");
-    		
+			
 		foreach ($query->rows as $result) {
 			if (!$result['serialized']) {
 				$data[$result['key']] = $result['value'];
@@ -25,7 +25,19 @@ class ModelSettingSetting extends Model {
 				$data[$result['key']] = unserialize($result['value']);
 			}
 		}
-    
+	
+		if ($this->customer->isLogged()) {
+			$this->load->model('setting/customer_setting');
+			$customer_settings = array_merge(
+				$this->model_setting_customer_setting->getSettings(array('group' => $group, 'customer_id' => $this->customer->getId(), 'store_id' => -1)),
+				$this->model_setting_customer_setting->getSettings(array('group' => $group, 'customer_id' => $this->customer->getId(), 'store_id' => $store_id))
+			);
+			if ($customer_settings) {
+				foreach ($customer_settings as $s) {
+					$data[$s['key']] = $s['value'];
+				}
+			}
+		}
 //    if ( $_SERVER['REMOTE_ADDR'] == '188.26.23.46' )
 //    {
 //        print "group=".$group."<br>";

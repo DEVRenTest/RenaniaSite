@@ -160,7 +160,21 @@ class ControllerProductProduct extends Controller {
 		} else {
 			$product_id = 0;
 		}
-    		
+		$this->data['customer_B2B']  = in_array($this->customer->getCustomerGroupId(), array(3, 4));
+
+		$stock_by_color_and_size = $this->model_catalog_product->getStockByColorAndSize( $this->request->get['product_id'] );
+		$colors = array();
+    	$color_size_stocks = array();
+	    foreach ($stock_by_color_and_size['Combinatii'] as $key => $value) {
+	    	if (!in_array($value['Culori'], $colors)) {
+				array_push($colors, $value['Culori']);
+	    	}
+	    	$color_size_stocks[$value['Marimi']][$value['Culori']] = $stock_by_color_and_size['code_ax'][$key];
+	    }
+	    $this->data['color_size_stocks'] = $color_size_stocks;
+	    $this->data['colors'] = $colors;
+	    $this->data['stock_by_color_and_size'] = $stock_by_color_and_size;
+
 		$this->load->model('catalog/product');
 
 		$this->load->model('catalog/visitors');
@@ -179,7 +193,7 @@ class ControllerProductProduct extends Controller {
 
 	 	$this->data['text_last_purchased'] = '';
 
-	 	$lastOrder = $this->model_catalog_product->lastOrderDate($product_id);
+	 	$lastOrder = $this->model_catalog_product->lastOrderDate($product_id, 60, 3 * 24 * 3600);
 
 	 	if ($lastOrder) {
 	 		$lastOrderAgo = $this->timeAgo(time() - $lastOrder);
@@ -198,7 +212,10 @@ class ControllerProductProduct extends Controller {
 	 		}
 	 	}
 
-	 	$this->data['customer_forced_buy_bulk'] = $this->model_catalog_product->customerForcedBuyBulk($product_id);
+		$this->data['video'] = substr($product_info['video'], strpos($product_info['video'], "v=") + strlen("v="));
+		
+		$this->data['buy_piece'] = $this->model_catalog_product->customerCanBuyPiece($product_id);
+		$this->data['buy_bulk'] = $this->model_catalog_product->customerCanBuyBulk($product_id);
 
 		if ($product_info) {
 			$url = '';
@@ -290,11 +307,15 @@ class ControllerProductProduct extends Controller {
 			$this->data['text_wait'] = $this->language->get('text_wait');
 			$this->data['text_tags'] = $this->language->get('text_tags');
             $this->data['text_no_stock'] = $this->language->get('text_no_stock');
+            $this->data['text_products_complementary_title'] = $this->language->get('text_products_complementary_title');
+            $this->data['text_products_related_title'] = $this->language->get('text_products_related_title');
 
             $this->data['text_pieces_per_package'] = $this->language->get('text_pieces_per_package');
             $this->data['text_price_per_piece'] = $this->language->get('text_price_per_piece');
+            $this->data['text_price_per_package'] = $this->language->get('text_price_per_package');
             $this->data['text_pieces'] = $this->language->get('text_pieces');
             $this->data['text_packages'] = $this->language->get('text_packages');
+            $this->data['text_no_shirt_no_service'] = $this->language->get('text_no_shirt_no_service');
       
             $this->data['text_free_delivery'] = $this->language->get('text_free_delivery');
             $this->data['text_return_guarantee'] = $this->language->get('text_return_guarantee');
@@ -329,6 +350,7 @@ class ControllerProductProduct extends Controller {
 			$this->data['tab_review'] = sprintf($this->language->get('tab_review'), $product_info['reviews']);
 			$this->data['tab_related'] = $this->language->get('tab_related');
 			$this->data['tab_complementary'] = $this->language->get('tab_complementary');
+			$this->data['tab_color_size_stock'] = $this->language->get('tab_color_size_stock');
 			
 			$this->data['product_id'] = $this->request->get['product_id'];
 			$this->data['manufacturer'] = $product_info['manufacturer'];
@@ -609,11 +631,60 @@ class ControllerProductProduct extends Controller {
 					'product_id' => $complementary_product['product_id'],
 					'thumb'   	 => $image,
 					'name'    	 => $complementary_product['name'],
-					'price'   	 => ( $B2B ? '' : $price), //$price
+					'price'   	 => $price,
 					'special' 	 => $special,
 					'rating'     => $rating,
 					'reviews'    => sprintf($this->language->get('text_reviews'), (int)$complementary_product['reviews']),
 					'href'    	 => $this->url->link('product/product', 'product_id=' . $complementary_product['product_id'])
+				);
+
+			}
+
+			$this->data['products_related'] = array();
+			$related_products = $this->model_catalog_product->getProductRelated($this->request->get['product_id']);
+			foreach ($related_products as $related_product) {
+				if ($related_product['image']) {
+					$image = $this->model_tool_image->resize($related_product['image'], $this->config->get('config_image_related_width'), $this->config->get('config_image_related_height'));
+				} else {
+					$image = false;
+				}
+
+				if (($this->config->get('config_customer_price') && $this->customer->isLogged()) || !$this->config->get('config_customer_price')) {
+					$price = $this->currency->format($this->tax->calculate($related_product['price'], $related_product['tax_class_id'], TRUE));
+				} else {
+					$price = false;
+				}
+
+				if ((float)$related_product['special']) {
+					$special = $this->currency->format($this->tax->calculate($related_product['special'], $related_product['tax_class_id'], TRUE));
+				} else {
+					$special = false;
+				}
+
+				if ($this->config->get('config_review_status')) {
+					$rating = (int)$related_product['rating'];
+				} else {
+					$rating = false;
+				}
+
+				// if the logged customer is B2B or Gallery + B2B
+				//$B2B = false;
+				if( $this->customer->getCustomerGroupId() == 3 || $this->customer->getCustomerGroupId() == 4 )
+				{
+					//$B2B = true;
+					$this->data['button_view_product'] = $this->language->get('button_view_product');
+				}
+				//$this->data['B2B'] = $B2B;
+
+				$this->data['products_related'][] = array(
+					'product_id' => $related_product['product_id'],
+					'thumb'   	 => $image,
+					'name'    	 => $related_product['name'],
+					'price'   	 => $price,
+					'special' 	 => $special,
+					'rating'     => $rating,
+					'reviews'    => sprintf($this->language->get('text_reviews'), (int)$related_product['reviews']),
+					'href'    	 => $this->url->link('product/product', 'product_id=' . $related_product['product_id'])
 				);
 
 			}
@@ -638,6 +709,12 @@ class ControllerProductProduct extends Controller {
 
             $product_size_chart = $this->model_catalog_product->getProductSizeChart( $this->request->get['product_id'] );
             $this->data['product_size_chart'] = $product_size_chart;
+
+            if (isset($this->request->get['ajax'])) {
+            	$this->response->setOutput(json_encode($this->data));
+            	$this->response->output();
+            	exit();
+            }
 			
 			if (file_exists(DIR_TEMPLATE . $this->config->get('config_template') . '/template/product/product.tpl')) {
 				$this->template = $this->config->get('config_template') . '/template/product/product.tpl';

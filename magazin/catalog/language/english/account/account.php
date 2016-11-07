@@ -21,4 +21,9 @@ $_['text_transaction']   = 'Your Transactions';
 $_['text_newsletter']    = 'Subscribe / unsubscribe to newsletter';
 $_['text_recurring']     = 'Recurring payments';
 $_['text_transactions']  = 'Transactions';
+$_['text_customer_report'] = 'Customer report';
+$_['text_upload_report'] = 'Upload report';
+$_['text_list_reports'] = 'View reports';
+$_['text_special_product_request'] = 'Request special products';
+$_['text_change_company'] = 'Change active company';
 ?>

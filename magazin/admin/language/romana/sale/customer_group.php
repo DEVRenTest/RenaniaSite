@@ -4,6 +4,8 @@ $_['heading_title']    = 'Grup De Clienti';
 
 // Text
 $_['text_success']     = 'Succes: ati modificat grupurile de clienti!!';
+$_['text_piece']       = 'Bucată';
+$_['text_package']     = 'Pachet';
 
 // Column
 $_['column_name']      = 'Numele Grupului De clienti';
@@ -18,7 +20,7 @@ $_['entry_company_id_display']  = 'Afisarea Numarului Companiei:<br /><span clas
 $_['entry_company_id_required'] = 'Numarul Companiei Obligatoriu:<br /><span class="help">Aceasta setare face ca numarul companiei sa fie camp obligatoriu in formularul de inregistrare.</span>';
 $_['entry_tax_id_display']      = 'Afisare Cod TVA.:<br /><span class="help">Aceasta setare poate afisa campul Cod TVA in formularul de inregistrare.</span>';
 $_['entry_tax_id_required']     = 'Cod TVA Obligatoriu:<br /><span class="help">Aceasta setare face campul Cod TVA obligatoriu in formularul de inregistrare.</span>';
-$_['entry_force_buy_bulk']     = 'Obligă cumpărarea la pachet:<br /><span class="help">Selectează dacă grupul de clienţi este obligat să cumpere la pachet produsele care vin la pachet.</span>';
+$_['entry_bulk_rules']          = 'Privilegii de achiziţie la:<br /><span class="help">Bifează metodele de achiziţie valbile pentru acest grup (doar pentru produsele care vin la pachet, restul produselor nu sunt afectate)</span>';
 $_['entry_sort_order']          = 'Sortare Ordine:';
 
 // Error

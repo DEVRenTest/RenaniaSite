@@ -33,6 +33,11 @@ $_['entry_zone']           = 'Region / State:';
 $_['entry_newsletter']     = 'Subscribe:';
 $_['entry_password']       = 'Password:';
 $_['entry_confirm']        = 'Password Confirm:';
+$_['entry_CUI']            = 'CUI:';
+$_['entry_CIF']            = 'CIF:';
+$_['entry_account_type']   = 'Account Type';
+$_['radio_button_private'] = 'Private';
+$_['radio_button_company'] = 'Company';
 
 // Error
 $_['error_exists']         = 'Warning: E-Mail Address is already registered!';
@@ -53,4 +58,8 @@ $_['error_postcode']       = 'Postcode must be between 2 and 10 characters!';
 $_['error_country']        = 'Please select a country!';
 $_['error_zone']           = 'Please select a region / state!';
 $_['error_agree']          = 'Warning: You must agree to the %s!';
+$_['error_company_name']   = 'Company name required!';
+$_['error_CUI']            = 'CUI required for companies!';
+$_['error_CIF']            = 'CIF required for companies!';
+
 ?>

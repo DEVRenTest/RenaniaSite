@@ -1,0 +1,28 @@
+<modification>
+	<id>Customer Settings Override</id>
+	<version>1.0</version>
+	<vqmver>1.1.0</vqmver>
+	<author>Szentgyörgyi Csaba</author>
+	<file name="admin/controller/common/header.php">
+		<operation>
+			<search position="after"><![CDATA[$this->data['text_setting'] = $this->language->get('text_setting');]]></search>
+			<add><![CDATA[		$this->data['text_customer_settings'] = $this->language->get('text_customer_settings');]]></add>
+		</operation>
+		<operation>
+			<search position="after"><![CDATA[$this->data['setting'] = $this->url->link('setting/store', 'token=' . $this->session->data['token'], 'SSL');]]></search>
+			<add><![CDATA[			$this->data['customer_settings'] = $this->url->link('setting/customer_settings', 'token=' . $this->session->data['token'], 'SSL');]]></add>
+		</operation>
+	</file>
+	<file name="admin/language/english/common/header.php">
+		<operation>
+			<search position="after"><![CDATA[$_['text_customer_ban_ip']             = 'Banned IP';]]></search>
+			<add><![CDATA[$_['text_customer_settings']           = 'Customer settings';]]></add>
+		</operation>
+	</file>
+	<file name="admin/view/template/common/header.tpl">
+		<operation>
+			<search position="after"><![CDATA[<li><a href="<?php echo $setting; ?>"><?php echo $text_setting; ?></a></li>]]></search>
+			<add><![CDATA[          <li><a href="<?php echo $customer_settings; ?>"><?php echo $text_customer_settings; ?></a></li>]]></add>
+		</operation>
+	</file>
+</modification>

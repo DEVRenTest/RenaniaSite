@@ -103,3 +103,5 @@ magazin/catalog/controller/common/test.php
 magazin/admin/controller/common/test.php
 deployment/
 deploy/
+magazin/catalog/controller/api/tester.php
+magazin/admin/controller/tool/script.php

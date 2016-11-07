@@ -597,7 +597,7 @@ Top Menu Product Categories
 
 .search_container {
     display: inline-block;
-    max-width: 220px;
+    max-width: 160px;
 }
 
 #search input {
@@ -1832,7 +1832,7 @@ Header Cart
 @media only screen and (max-width: 1000px) {
 
     header {
-        position: fixed!important;
+        /*position: fixed!important;*/
     }
 
     .extended-container {

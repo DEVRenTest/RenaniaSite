@@ -12,6 +12,14 @@ class ControllerModuleQuickcheckout extends Controller
     private $checkout = array( );
     private $texts = array( 'title', 'tooltip', 'description', 'text' );
 
+    private $log;
+
+    public function __construct($registry)
+    {
+        $this->log = new Log('checkout_log.txt');
+        parent::__construct($registry);
+    }
+
     public function index()
     {
         if( $this->cart->hasProducts() )
@@ -1259,7 +1267,6 @@ class ControllerModuleQuickcheckout extends Controller
                     'option' => $option_data,
                     'quantity' => $product['quantity'],
                     'container_size' => $product['container_size'],
-                    'customer_must_buy_bulk' => $this->model_catalog_product->customerForcedBuyBulk($product['product_id']),
                     'piece_or_package' => $product['piece_or_package'],
                     'stock' => $product['stock'] ? true : !(!$this->config->get( 'config_stock_checkout' ) || $this->config->get( 'config_stock_warning' )),
                     'subtract' => $product['subtract'],
@@ -1852,7 +1859,6 @@ class ControllerModuleQuickcheckout extends Controller
 //            }
 //            // end ax
         }
-
         // generate an XML with product data and send it to customer push url
         $this->createAndSendCXMLToAutoLoggedInCustomer( $data );
     }
@@ -2412,6 +2418,10 @@ class ControllerModuleQuickcheckout extends Controller
         $this->load->model( 'setting/setting' );
         $setting_info_free = $this->model_setting_setting->getSetting('free', $this->config->get( 'config_store_id' ));
 
+        if (!$setting_info_free) {
+            $setting_info_free = $this->model_setting_setting->getSetting('free');
+        }
+
         foreach( $results as $result )
         {
             if( $this->config->get( $result['code'].'_status' ) )
@@ -2428,7 +2438,7 @@ class ControllerModuleQuickcheckout extends Controller
                         {
                             $this->settings['step']['shipping_method']['default_option'] = 'free';
 
-							if ( $result['code'] == 'free' || $result['code'] == 'pickup' )
+							if ( $result['code'] == 'free' || $result['code'] == 'pickup' || $result['code'] == 'pickup2' || $result['code'] == 'pickup3')
 							{
 								$quote_data[$result['code']] = array(
 									'title' => $quote['title'],
@@ -2455,7 +2465,7 @@ class ControllerModuleQuickcheckout extends Controller
                         {
                             $this->settings['step']['shipping_method']['default_option'] = 'free';
 
-							if ( $result['code'] == 'free' || $result['code'] == 'pickup'  )
+							if ( $result['code'] == 'free' || $result['code'] == 'pickup' || $result['code'] == 'pickup2' || $result['code'] == 'pickup3')
 							{
 								$quote_data[$result['code']] = array(
 									'title' => $quote['title'],
@@ -2466,7 +2476,7 @@ class ControllerModuleQuickcheckout extends Controller
 							}
                         }
                         else
-                        if ( $result['code'] == 'courier' || $result['code'] == 'pickup' )
+                        if ( $result['code'] == 'courier' || $result['code'] == 'pickup' || $result['code'] == 'pickup2' || $result['code'] == 'pickup3')
                         {
 //                            $quote_data['courier'] = array(
 //                                'title' => $quote['title'],
@@ -3081,6 +3091,29 @@ class ControllerModuleQuickcheckout extends Controller
         $this->response->setOutput( $this->render() );
     }
 
+    private function remoteUserSendOrderData($data, $url)
+    {
+        $this->data = $data;
+        $this->data['remote_cookie'] = $this->session->data['remote_cookie'];
+        $this->data['order_id'] = $this->session->data['order_id'];
+        $this->template = 'default/template/api/orderdata.tpl';
+        $ch = curl_init();
+        curl_setopt($ch, CURLOPT_URL, $url);
+        curl_setopt($ch, CURLOPT_HEADER, 1);
+        curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, 0);
+        curl_setopt($ch, CURLOPT_SSL_VERIFYHOST, 0);
+        curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
+        curl_setopt($ch, CURLOPT_CUSTOMREQUEST, 'POST');
+        curl_setopt($ch, CURLOPT_POST, 1);
+        curl_setopt($ch, CURLOPT_POSTFIELDS, $this->render());
+        curl_setopt($ch, CURLOPT_HTTPHEADER, array('Content-type: text/xml'));
+        curl_exec($ch);
+        $this->log->write('=======================================================================================');
+        $this->log->write('=======================================================================================');
+        $this->log->write('Order #' . $this->session->data['order_id']);
+        $this->log->write('URL "' . $url . '"');
+        $this->log->write('Data below' . PHP_EOL . $this->render());
+        exit();
+    }
 }
-
 ?>

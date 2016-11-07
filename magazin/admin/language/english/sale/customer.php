@@ -11,6 +11,7 @@ $_['text_balance']          = 'Balance:';
 $_['text_add_ban_ip']       = 'Add Ban IP';
 $_['text_remove_ban_ip']    = 'Remove Ban IP';
 $_['text_unlimited']        = 'Unlimited';
+$_['text_customer_additioanl_groups'] = 'Additional customer groups';
 
 // Column
 $_['column_name']           = 'Customer Name';
@@ -54,6 +55,7 @@ $_['entry_description']     = 'Description:';
 $_['entry_amount']          = 'Amount:';
 $_['entry_points']          = 'Points:<br /><span class="help">Use minus to remove points</span>';
 $_['entry_order_limit']     = 'Order limit:';
+$_['entry_add_group']  		= 'Add group';
 
 // Error
 $_['error_warning']         = 'Warning: Please check the form carefully for errors!';

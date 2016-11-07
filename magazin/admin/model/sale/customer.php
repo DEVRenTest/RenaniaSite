@@ -16,6 +16,13 @@ class ModelSaleCustomer extends Model {
 				}
 			}
 		}
+
+		if (isset($data['customer_groups'])) {
+			foreach ($data['customer_groups'] as $customer_group_id) {
+				$this->db->query("INSERT IGNORE INTO " . DB_PREFIX . "customer_to_customer_group SET customer_id = '" . (int)$customer_id. "', customer_group_id = '" . (int)$customer_group_id . "'");
+			}
+		}
+
 	}
 	
 	public function editCustomer($customer_id, $data) {
@@ -49,6 +56,14 @@ class ModelSaleCustomer extends Model {
 				}
 			}
 		}
+
+		$this->db->query("DELETE FROM " . DB_PREFIX . "customer_to_customer_group WHERE customer_id = '" . (int)$customer_id . "'");
+
+		if (isset($data['customer_groups'])) {
+			foreach ($data['customer_groups'] as $customer_group_id) {
+				$this->db->query("INSERT IGNORE INTO " . DB_PREFIX . "customer_to_customer_group SET customer_id = '" . (int)$customer_id . "', customer_group_id = '" . (int)$customer_group_id . "'");
+			}
+		}
 	}
 
 	public function editToken($customer_id, $token) {
@@ -61,7 +76,7 @@ class ModelSaleCustomer extends Model {
 		$this->db->query("DELETE FROM " . DB_PREFIX . "customer_transaction WHERE customer_id = '" . (int)$customer_id . "'");
 		$this->db->query("DELETE FROM " . DB_PREFIX . "customer_ip WHERE customer_id = '" . (int)$customer_id . "'");
 		$this->db->query("DELETE FROM " . DB_PREFIX . "address WHERE customer_id = '" . (int)$customer_id . "'");
-		$this->db->query("DELETE FROM " . DB_PREFIX . "force_buy_bulk_override_customer WHERE customer_id = '" . (int)$customer_id . "'");
+		$this->db->query("DELETE FROM " . DB_PREFIX . "bulk_customer WHERE customer_id = '" . (int)$customer_id . "'");
 	}
 	
 	public function getCustomer($customer_id) {
@@ -111,6 +126,11 @@ class ModelSaleCustomer extends Model {
 				
 		if (!empty($data['filter_date_added'])) {
 			$implode[] = "DATE(c.date_added) = DATE('" . $this->db->escape($data['filter_date_added']) . "')";
+		}
+
+		if (isset($data['filter_ids'])) {
+			array_push($data['filter_ids'], -1);
+			$implode[] = "c.customer_id IN (" . implode(", ", array_map(function($item) { return (int)$item; }, $data['filter_ids'])) . ")";
 		}
 		
 		if ($implode) {
@@ -540,6 +560,13 @@ class ModelSaleCustomer extends Model {
       	$query = $this->db->query("SELECT COUNT(*) AS total FROM `" . DB_PREFIX . "customer_ban_ip` WHERE `ip` = '" . $this->db->escape($ip) . "'");
 				 
 		return $query->row['total'];
-	}	
+	}
+
+	public function getCustomerGroups($customer_id)
+	{
+		$query = $this->db->query("SELECT ctcg.customer_group_id, cgd.name FROM " . DB_PREFIX . "customer_to_customer_group ctcg LEFT JOIN " . DB_PREFIX . "customer_group_description cgd ON ctcg.customer_group_id = cgd.customer_group_id WHERE ctcg.customer_id = '" . (int)$customer_id . "'");
+
+		return $query->rows;
+	}
 }
 ?>

@@ -20,6 +20,7 @@ $_['text_shipping']                = 'Shipping Address';
 $_['text_payment']                 = 'Payment Address';
 $_['text_mail']                    = 'Mail';
 $_['text_smtp']                    = 'SMTP';
+$_['text_customer_additioanl_groups'] = 'Grupuri de clienti';
 
 // Entry
 $_['entry_name']                   = 'Store Name:';
@@ -119,6 +120,8 @@ $_['entry_error_display']          = 'Display Errors:';
 $_['entry_error_log']              = 'Log Errors:';
 $_['entry_error_filename']         = 'Error Log Filename:';
 $_['entry_google_analytics']       = 'Google Analytics Code:<br /><span class="help">Login to your <a href="http://www.google.com/analytics/" target="_blank"><u>Google Analytics</u></a> account and after creating your web site profile copy and paste the analytics code into this field.</span>';
+$_['entry_auto_login']			   = 'Auto login token';
+$_['entry_add_group']			   = 'Adauga grup';
 
 // Error
 $_['error_warning']                = 'Warning: Please check the form carefully for errors!';
