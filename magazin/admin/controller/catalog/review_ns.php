@@ -1,6 +1,6 @@
 <?php
 class ControllerCatalogReviewns extends Controller {
-	private $error = array(); 
+	private $error = array();
  
 	public function index() {
 		$this->language->load('catalog/review_ns');
