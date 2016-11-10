@@ -645,15 +645,15 @@
   <?php } ?>
   <?php if(is_array($product_doc)) { ?>
   <div id="tab-download" class="tab-content">
-    <div class="download_description">
+    <div class="download_description" id="download_descriptionPDF">
       <span><?php //echo '<pre>'; print_r($product_doc); ?></span>
       <table>
         <thead>
           <tr>
-            <td>Nume document</td>
-            <td>Tip document</td>
-            <td>Descriere document</td>
-            <td>Descarcare</td>
+            <td class="titlePDF">Nume document</td>
+            <td class="titlePDF">Tip document</td>
+            <td class="titlePDF">Descriere document</td>
+            <td class="titlePDF"></td>
           </tr>
         </thead>
         <tbody>
