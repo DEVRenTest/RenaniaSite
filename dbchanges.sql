@@ -194,3 +194,28 @@ ALTER TABLE `oc_order` ADD `company_id` INT( 11 ) NULL DEFAULT NULL AFTER `custo
 --   LEFT JOIN `oc_company` com ON cus.`ax_code` = com.`name`
 --   WHERE cus.`ax_code` <> ''
 -- );
+
+ALTER TABLE `oc_customer` ADD `show_form` TINYINT( 1 ) NOT NULL DEFAULT '0' AFTER `secret_code` ;
+
+-- special products request form table
+ALTER TABLE `oc_special_products_request` 
+ADD `customer` VARCHAR( 64 ) NOT NULL AFTER `customer_id`,
+ADD `customer_type` VARCHAR( 64 ) NOT NULL AFTER `customer`,
+ADD `av_rv` VARCHAR( 64 ) NOT NULL AFTER `customer_type`,
+ADD `requested_delivery_term` DATE NOT NULL AFTER `av_rv`,
+ADD `aplication_description` TEXT NOT NULL AFTER `image`,
+ADD `working_conditions` TEXT NOT NULL AFTER `aplication_description`,
+ADD `protection_type` TEXT NOT NULL AFTER `working_conditions`,
+ADD `technical_specification` TEXT NOT NULL AFTER `protection_type`,
+ADD `respiratory_protection_gases` TEXT NOT NULL AFTER `technical_specification`,
+ADD `respiratory_protection_dust` TEXT NOT NULL AFTER `respiratory_protection_gases`,
+ADD `heat_transmission` TEXT NOT NULL AFTER `respiratory_protection_dust`,
+ADD `temperature` TEXT NOT NULL AFTER `heat_transmission`,
+ADD `protection_level` TEXT NOT NULL AFTER `temperature`,
+ADD `chemical_substance_name` TEXT NOT NULL AFTER `protection_level`,
+ADD `CAS_number` TEXT NOT NULL AFTER `chemical_substance_name`,
+ADD `contact_duration` TEXT NOT NULL AFTER `CAS_number`,
+ADD `product_type` VARCHAR( 64 ) NOT NULL AFTER `contact_duration`;
+ADD `requested_material` VARCHAR( 64 ) NOT NULL AFTER `product_type`;
+ADD `grammage` float NOT NULL AFTER `requested_material`;
+ADD `color` VARCHAR( 64 ) NOT NULL AFTER `grammage`;

@@ -103,4 +103,9 @@ $_['error_no_payment']               = 'Warning: No Payment options are availabl
 $_['text_trial']                    = '%s every %s %s for %s payments then ';
 $_['text_recurring']                = '%s every %s %s';
 $_['text_length']                   = ' for %s payments';
+
+$_['text_requisition_number'] = 'Customer requisition number';
+$_['text_reference'] = 'Customer reference';
+$_['entry_identity_card_number'] = 'Identity card number';
+$_['error_identity_card_number'] = 'Identity card number - series ( composed of two letters) and number ( 6-digit )!';
 ?>

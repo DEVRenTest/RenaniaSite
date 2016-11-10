@@ -111,6 +111,7 @@ $_['tab_transaction']         = 'Tranzacţii';
 $_['tab_voucher']             = 'Vouchere';
 $_['tab_voucher_history']     = 'Istoric Vouchere';
 $_['tab_customer_groups']	  = 'Grupuri de clienti';
+$_['tab_google_form']	  	  = 'Chestionar online';
 
 // Error
 $_['error_upload_1']          = 'Avertizare: Fişierul uploadat depăşeşte limita maximă din directiva upload_max_filesize din php.ini!';

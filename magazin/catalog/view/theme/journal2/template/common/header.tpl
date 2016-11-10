@@ -189,6 +189,27 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
         require DIR_TEMPLATE . $this->config->get('config_template') . "/template/journal2/headers/{$header_type}.tpl";
     }
 ?>
+<?php if ($show_form) { ?>
+<div id="form-group">
+    <div id="shadow-overlay"></div>
+    <div id="popup">
+        <iframe src="<?php echo $google_form_url; ?>" frameborder="0" marginheight="0" marginwidth="0"></iframe>
+        <button id="close"><a href="#">X</a></button>
+    </div>
+</div>
+<?php } ?>
+<script>
+$(document).ready(function () {
+    $("#form-group").hide().fadeIn(1000);
+
+    $("#close").on("click", function (e) {
+        e.preventDefault();
+        $("#form-group").fadeOut(1000);
+    });
+
+});
+</script>
+
 <?php if ($this->journal2->settings->get('config_top_modules')): ?>
 <div id="top-modules">
    <?php echo $this->journal2->settings->get('config_top_modules'); ?>

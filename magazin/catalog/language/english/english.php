@@ -77,4 +77,7 @@ $_['text_medium_stock'] = "In stoc";
 $_['text_low_stock'] = "Stoc limitat";
 $_['text_no_stock'] = "Not in stock";
 $_['text_in_stock']	= "In stock";
+
+$_['text_out_of_stock'] = 'Out of stock';
+$_['text_please_select_desired_options'] = 'Please select desired options';
 ?>

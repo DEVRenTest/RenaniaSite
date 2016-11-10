@@ -151,4 +151,7 @@ $_['error_ftp_username']           = 'FTP Username required!';
 $_['error_ftp_password']           = 'FTP Password required!';
 $_['error_error_filename']         = 'Error Log Filename required!';
 $_['error_encryption']             = 'Encryption must be between 3 and 32 characters!';
+
+$_['entry_order_customer_refused_status'] = 'Status for orders denied by supervisor:';
+$_['entry_api_auto_login'] = 'API auto login';
 ?>

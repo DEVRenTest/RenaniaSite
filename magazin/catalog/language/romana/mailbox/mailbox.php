@@ -20,5 +20,4 @@ $_['text_allowed_extensions'] = 'Extensiile permise sunt de tip doc, docx, xls, 
 $_['text_file'] = 'Fisierul(-ele) - <strong>';
 $_['text_does_not_meet'] = ' </strong> - nu corespund(e) cerintelor!';
 
-
 ?>

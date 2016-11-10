@@ -46,9 +46,6 @@
                 </div>
                 <?php endif; ?>
                 <?php echo $this->journal2->settings->get('config_primary_menu'); ?>
-                <?php if(in_array( $this->customer->getCustomerGroupId(), array( 3,4 ))) { ?>
-                    <span class="text_welcome_b2b"><?php echo $text_welcome_b2b; ?></span>
-                <?php } ?>
             </div>
         </div>
 

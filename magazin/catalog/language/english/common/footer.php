@@ -15,4 +15,6 @@ $_['text_order']        = 'Order History';
 $_['text_wishlist']     = 'Wish List';
 $_['text_newsletter']   = 'Newsletter';
 $_['text_powered']      = '%s';
+
+$_['text_anpc'] = 'ANPC';
 ?>

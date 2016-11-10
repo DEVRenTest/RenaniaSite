@@ -318,7 +318,9 @@ class ModelCatalogProduct extends Model {
 			} elseif ($data['sort'] == 'p.price') {
 				$sql .= " ORDER BY (CASE WHEN special IS NOT NULL THEN special WHEN discount IS NOT NULL THEN discount ELSE p.price END)";
 			} else {
-				$sql .= " ORDER BY " . $data['sort'];
+				# $sql .= " ORDER BY " . $data['sort'];
+                //SORT_FIX: (Bela)
+				$sql .= " ORDER BY p.flag=1 DESC,p.date_added DESC, LCASE(pd.name),".$data['sort'];
 			}
 		} else {
 			$sql .= " ORDER BY p.sort_order";	

@@ -424,5 +424,10 @@ class ModelAccountCustomer extends Model {
 
 		return (bool)$query->num_rows;
 	}
+
+	public function updateShowFormStatus()
+	{
+		$query = $this->db->query("UPDATE " . DB_PREFIX . "customer SET show_form = 1 WHERE customer_id = '" . (int)$this->customer->getID() . "' ");
+	}
 }
 ?>

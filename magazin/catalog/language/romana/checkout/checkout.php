@@ -26,6 +26,16 @@ $_['text_address_existing'] = 'Vreau sa folosesc o adresa existenta';
 $_['text_shipping_method'] = 'Va rugam sa selectati metoda de livrare dorita pentru aceasta comanda.';
 $_['text_payment_method'] = 'Va rugam sa selectati metoda de plata dorita pentru aceasta comanda.';
 $_['text_comments'] = 'Adauga comentarii despre comanda ta';
+$_['text_recurring_item']            = 'Element recurent';
+$_['text_payment_profile']           = 'Plata';
+$_['text_trial_description']         = '%s fiecare %d %s(s) pentru %d plata atunci';
+$_['text_payment_description']       = '%s fiecare %d %s(s) pentru %d plata';
+$_['text_payment_until_canceled_description'] = '%s fiecare %d %s(s) inainte de anulare';
+$_['text_day']                       = 'zi';
+$_['text_week']                      = 'saptamana';
+$_['text_semi_month']                = 'jumatate de luna';
+$_['text_month']                     = 'luna';
+$_['text_year']                      = 'an';
 $_['column_name'] = 'Denumirea produsului';
 $_['column_model'] = 'Model';
 $_['column_quantity'] = 'Cantitate';
@@ -84,4 +94,8 @@ $_['text_requisition_number'] = 'Numar referinta factura';// Numar cerere client
 $_['text_reference'] = 'Referinta client';// Numar ordine client, Customer reference
 $_['entry_identity_card_number'] = 'Serie carte identitate';
 $_['error_identity_card_number'] = 'Seria cartii de identitate - seria (compusa din doua litere) și numărul (compus din 6 cifre)!';
+
+$_['text_trial']                    = '%s fiecare %s %s pentru %s plati atunci ';
+$_['text_recurring']                = '%s fiecare %s %s';
+$_['text_length']                   = ' pentru %s plati';
 ?>
