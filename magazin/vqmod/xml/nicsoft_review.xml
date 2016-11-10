@@ -10,7 +10,7 @@
 		<operation error="skip">
 			<search position="before"><![CDATA[<li id="help"><a class="top"><?php echo $text_help; ?></a>]]></search>
 			<add><![CDATA[
-			<!-- nicsoft_review.xml >> --> 
+			<!-- nicsoft_review.xml >> -->
 			<li id="help"><a class="top"><?php echo "Comentarii"; ?></a>
 				<ul>
 					<li id="help"><a href="<?php echo $review; ?>"><?php echo "Lista Comentariilor"; ?></a></li>
