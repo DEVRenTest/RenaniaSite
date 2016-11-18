@@ -52,7 +52,9 @@
 								nx();
 							}).fadeIn(90);
 							$('#myoc-lpu-special').fadeOut(100).delay(10).queue(function(nx) {
-								$(this).html(myocData.special);
+                                var special_price = "<div>"+myocData.special.replace("RON"," RON")+" (TVA inclus)</div>";
+								//myocData.special
+                                $(this).html(special_price);
 								nx();
 							}).fadeIn(90);
 							$('#myoc-lpu-extax').fadeOut(90).delay(20).queue(function(nx) {
