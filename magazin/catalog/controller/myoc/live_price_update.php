@@ -70,6 +70,7 @@ class ControllerMyocLivePriceUpdate extends Controller
 
         if ($product_info['special']) {
             $product_info['special'] = $this->currency->format( $this->tax->calculate( $product_info['special'], $product_info['tax_class_id'], TRUE /*$this->config->get( 'config_tax' )*/ ) );
+            $product_info['special'] = "<div>".preg_replace("/RON/"," RON (TVA inclus)",$product_info['special'])."</div>";
         } else {
             $product_info['special'] = false;
         }
