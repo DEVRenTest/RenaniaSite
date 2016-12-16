@@ -245,3 +245,10 @@ CREATE TABLE IF NOT EXISTS `oc_order_pers` (
     KEY `order_id` (`order_id`)
 );
 ALTER TABLE oc_product CHANGE personalizare_online personalizare_online int(11) NOT NULL DEFAULT '0';
+
+--  _AX_TRANZIT  table
+
+CREATE TABLE `_ax_tranzit` (
+ `codconcatenat` varchar(250) NOT NULL,
+ `livrareconfirmata` date NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=latin1

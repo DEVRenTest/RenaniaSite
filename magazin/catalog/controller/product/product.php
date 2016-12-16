@@ -175,6 +175,19 @@ class ControllerProductProduct extends Controller {
 	    $this->data['colors'] = $colors;
 	    $this->data['stock_by_color_and_size'] = $stock_by_color_and_size;
 
+	    $transit_by_color_and_size = $this->model_catalog_product->getTransitByColorAndSize( $this->request->get['product_id']);
+		$product_colors = array();
+		$color_size_transits = array();
+		foreach ($transit_by_color_and_size['Combinatii'] as $key => $value) {
+			if (!in_array($value['Culori'], $product_colors)) {
+				array_push($product_colors, $value['Culori']);
+			}
+			$color_size_transits[$value['Marimi']][$value['Culori']] = $transit_by_color_and_size['code_ax'][$key];
+		}
+		$this->data['color_size_transits'] = $color_size_transits;
+		$this->data['product_colors'] = $product_colors;
+		$this->data['transit_by_color_and_size'] = $transit_by_color_and_size;
+
 		$this->load->model('catalog/product');
 
 		$this->load->model('catalog/visitors');
@@ -351,6 +364,7 @@ class ControllerProductProduct extends Controller {
 			$this->data['tab_related'] = $this->language->get('tab_related');
 			$this->data['tab_complementary'] = $this->language->get('tab_complementary');
 			$this->data['tab_color_size_stock'] = $this->language->get('tab_color_size_stock');
+			$this->data['tab_color_size_transit'] = $this->language->get('tab_color_size_transit');
 			
 			$this->data['product_id'] = $this->request->get['product_id'];
 			$this->data['manufacturer'] = $product_info['manufacturer'];
