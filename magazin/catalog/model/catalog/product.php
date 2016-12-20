@@ -997,5 +997,101 @@ class ModelCatalogProduct extends Model {
 		}
 		return $concatenated_code;
 	}
+
+	public function getTransitByColorAndSize($product_id)
+	{
+		$transit_by_color_and_size = array();
+
+		$prQuery = $this->db->query( "SELECT pr.product_id, pr_desc.name, pr.upc FROM oc_product pr JOIN oc_product_description pr_desc ON (pr_desc.product_id = pr.product_id ) WHERE pr.product_id='".$product_id."'" );
+
+		if( $prQuery->num_rows > 0 )
+		{
+				$transit_by_color_and_size = array(
+					"product_id" => $product_id,
+					"product_upc" => $prQuery->row['upc'],
+					"Marimi" => array(),
+					"Culori" => array(),
+					"Denumire" => $prQuery->row['name'],
+					"code_ax" => "",
+					"type" => "1",
+					"Combinatii" => array()
+				);
+
+				$concatenated_code = '';
+
+				$optionQuery = $this->db->query( "SELECT pov.product_option_value_id as ov_id, pov.product_option_id as o_id, od.name as o_name, ovd.name as ov_name
+                                FROM oc_product_option_value AS pov
+                                JOIN oc_option_value_description AS ovd ON ( ovd.option_value_id = pov.option_value_id )
+                                JOIN oc_option_description AS od ON ( od.`option_id` = ovd.`option_id` )
+                                WHERE pov.`product_id` = '".$product_id."' ORDER BY  ov_id ASC ;" );
+
+				if( $optionQuery->num_rows > 0 )
+				{
+					foreach( $optionQuery->rows as $value )
+					{
+						$transit_by_color_and_size[$value["o_name"]][$value["ov_id"]] = $value["ov_name"];
+					}
+
+					$transit_by_color_and_size["type"] = 2;
+				}
+
+				$optioncombinationQuery = $this->db->query( "SELECT pocv.product_option_combination_id, ovd.name as ov_name, od.name as o_name FROM oc_product_option_combination_value pocv
+                                JOIN oc_product_option_combination poc ON (poc.product_option_combination_id = pocv.product_option_combination_id)
+                                JOIN oc_option_value_description AS ovd ON ( ovd.option_value_id = pocv.option_value_id )
+                                JOIN oc_option_description AS od ON ( od.`option_id` = ovd.`option_id` )
+                                WHERE poc.product_id='".$product_id."' ORDER BY product_option_combination_id ASC;" );
+
+				if( $optioncombinationQuery->num_rows > 0 )
+				{
+					$product_option_combination_id = array( );
+					foreach( $optioncombinationQuery->rows as $key => $val )
+					{
+						$transit_by_color_and_size["Combinatii"][$val["product_option_combination_id"]][$val["o_name"]] = $val["ov_name"];
+					}
+
+					$transit_by_color_and_size["type"] = 3;
+				}
+
+				$this->load->model( 'catalog/ax_tranzit' );
+				if( $transit_by_color_and_size["type"] == 1 )
+				{
+					$concatenated_code = $this->getProductAxCode( $transit_by_color_and_size["type"], $transit_by_color_and_size['product_id'] );
+
+					$transit_by_color_and_size[ "Marimi" ] = array();
+					$transit_by_color_and_size[ "Culori" ] = array();
+					$transit_by_color_and_size[ "code_ax" ] = $concatenated_code;
+				}
+				else if( $transit_by_color_and_size["type"] == 2 )
+				{
+					if (  !empty( $transit_by_color_and_size["Marimi"] ) )
+					{
+						foreach( $transit_by_color_and_size["Marimi"] as $key => $value )
+						{
+							$concatenated_code = $this->getProductAxCode( $transit_by_color_and_size["type"], $transit_by_color_and_size['product_id'], '',  $key);
+							$transit_by_color_and_size[ "code_ax" ][$key] = $this->model_catalog_ax_tranzit->getTransit( $concatenated_code );
+						}
+					}
+
+					if (  !empty( $transit_by_color_and_size["Culori"] ) )
+					{
+						foreach( $transit_by_color_and_size["Culori"] as $key => $value )
+						{
+							$concatenated_code = $this->getProductAxCode( $transit_by_color_and_size["type"], $transit_by_color_and_size['product_id'], '', $key);
+							$transit_by_color_and_size[ "code_ax" ][$key] = $this->model_catalog_ax_tranzit->getTransit( $concatenated_code );
+						}
+					}
+				}
+				else if( $transit_by_color_and_size["type"] == 3 )
+				{
+					foreach( $transit_by_color_and_size["Combinatii"] as $key => $value )
+					{
+						$concatenated_code = $this->getProductAxCode( $transit_by_color_and_size["type"], $transit_by_color_and_size['product_id'], '', $key );
+						$transit_by_color_and_size[ "code_ax" ][$key] = $this->model_catalog_ax_tranzit->getTransit( $concatenated_code );
+					}
+				}
+		}
+
+		return $transit_by_color_and_size;
+	}
 }
 ?>

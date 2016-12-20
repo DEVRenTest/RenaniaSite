@@ -587,6 +587,9 @@
     <?php if ($stock_by_color_and_size['type'] != 1 && $customer_B2B) { ?>
     <a href="#tab-color-size-stock"><?php echo $tab_color_size_stock; ?></a>
     <?php } ?>
+    <?php if ($transit_by_color_and_size['type'] != 1 && $customer_B2B) { ?>
+    <a href="#tab-transit"><?php echo $tab_color_size_transit; ?></a>
+    <?php } ?>
   </div>
   <?php $index = 0; foreach ($this->journal2->settings->get('additional_product_tabs', array()) as $tab): $index++; ?>
   <div id="additional-product-tab-<?php echo $index; ?>" class="tab-content journal-custom-tab"><?php echo $tab['content']; ?></div>
@@ -634,6 +637,55 @@
             <th><?php echo $k; ?></th>
             <?php foreach ($colors as $color) { ?>
             <td><?php echo isset($v[$color]) && $v[$color] ? $v[$color] : 0; ?></td>
+            <?php } ?>
+          </tr>
+          <?php } ?>
+        <?php } ?>
+        </tbody>
+      </table>
+    </div>
+  </div>
+  <?php } ?>
+  <?php if ($transit_by_color_and_size['type'] != 1 && $customer_B2B) { ?>
+  <div id="tab-transit" itemprop="transit">
+    <div class="color_size_stock">
+      <table class="list">
+        <tbody>
+        <?php if ($transit_by_color_and_size['type'] == 2) { ?>
+          <tr>
+          <?php if (!empty($transit_by_color_and_size['Marimi'])) { ?>
+            <?php foreach ($transit_by_color_and_size['Marimi'] as $key => $size) { ?>
+            <th><?php echo $size; ?></th>
+            <?php } ?>
+          <?php } ?>
+          </tr>
+          <tr>
+          <?php if (!empty($transit_by_color_and_size['Culori'])) { ?>
+            <?php foreach ($transit_by_color_and_size['Culori'] as $key => $colour) { ?>
+            <th><?php echo $colour; ?></th>
+            <?php } ?>
+          <?php } ?>
+          </tr>
+          <tr>
+          <?php foreach ($transit_by_color_and_size['code_ax'] as $key => $code_ax) { ?>
+            <td><?php echo isset($code_ax) && $code_ax && ($code_ax != '1900-01-01') ? $code_ax : "-"; ?></td>
+          <?php } ?>
+          </tr>
+        <?php } ?>
+        </tbody>
+        <tbody>
+        <?php if ($transit_by_color_and_size['type'] != 2) { ?>
+          <tr>
+            <th></th>
+            <?php foreach ($product_colors as $color) { ?>
+            <th><?php echo $color; ?></th>
+            <?php } ?>
+          </tr>
+          <?php foreach ($color_size_transits as $size => $value) { ?>
+          <tr>
+            <th><?php echo $size; ?></th>
+            <?php foreach ($product_colors as $color) { ?>
+            <td><?php echo isset($value[$color]) && $value[$color] && ($value[$color] != '1900-01-01') ? $value[$color] : "-"; ?></td>
             <?php } ?>
           </tr>
           <?php } ?>

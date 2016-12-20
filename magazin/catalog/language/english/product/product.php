@@ -80,6 +80,7 @@ $_['tab_attribute']     = 'Specification';
 $_['tab_review']        = 'Reviews (%s)';
 $_['tab_related']       = 'Related Products';
 $_['tab_color_size_stock'] = 'Stock by sizes and colors';
+$_['tab_color_size_transit'] = 'Transit by sizes and colors';
 
 // Error
 $_['error_name']        = 'Warning: Review Name must be between 3 and 25 characters!';

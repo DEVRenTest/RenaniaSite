@@ -40,6 +40,7 @@ $_['tab_attribute'] = 'Specificatii';
 $_['tab_review'] = 'Opinii (%s)';
 $_['tab_related'] = 'Produse inrudite';
 $_['tab_color_size_stock'] = 'Stoc structurat pe marimi-culori';
+$_['tab_color_size_transit'] = 'Tranzit structurat pe marimi si culori';
 $_['error_name'] = 'Eroare: Eroare Numele trebuie sa aiba intre 3 si 25 de caractere!';
 $_['error_text'] = 'Eroare: Opinia trebuie sa contina intre 30 si 1000 de caractere!';
 $_['error_rating'] = 'Va rugam selectati o nota!';
