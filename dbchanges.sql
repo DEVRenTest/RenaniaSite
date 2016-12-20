@@ -219,3 +219,36 @@ ADD `product_type` VARCHAR( 64 ) NOT NULL AFTER `contact_duration`;
 ADD `requested_material` VARCHAR( 64 ) NOT NULL AFTER `product_type`;
 ADD `grammage` float NOT NULL AFTER `requested_material`;
 ADD `color` VARCHAR( 64 ) NOT NULL AFTER `grammage`;
+
+ALTER TABLE oc_setting CHANGE `value` `value` MEDIUMTEXT NOT NULL DEFAULT '';
+CREATE TABLE IF NOT EXISTS `oc_heatmap` (
+    `id_heat` int(11) NOT NULL AUTO_INCREMENT,
+    `from_user` varchar(250) NOT NULL DEFAULT '',
+    `from_page` varchar(250) NOT NULL,
+    `coord_x` int(11) NOT NULL DEFAULT '0',
+    `coord_y` int(11) NOT NULL DEFAULT '0',
+    `percent_x` int(11) NOT NULL DEFAULT '0',
+    `percent_y` int(11) NOT NULL DEFAULT '0',
+    `resolution` varchar(100) NOT NULL DEFAULT '',
+    `inserted_time` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    PRIMARY KEY (`id_heat`),
+    KEY `from_page` (`from_page`)
+);
+CREATE TABLE IF NOT EXISTS `oc_order_pers` (
+    `id_order_pers` int(11) NOT NULL AUTO_INCREMENT,
+    `order_id` int(11) NOT NULL DEFAULT '0',
+    `product_id` int(11) NOT NULL DEFAULT '0',
+    `pers_id` int(11) NOT NULL DEFAULT '0',
+    `pers_value` decimal(15,4) NOT NULL DEFAULT '0.0000',
+    `inserted_time` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    PRIMARY KEY (`id_order_pers`),
+    KEY `order_id` (`order_id`)
+);
+ALTER TABLE oc_product CHANGE personalizare_online personalizare_online int(11) NOT NULL DEFAULT '0';
+
+--  _AX_TRANZIT  table
+
+CREATE TABLE `_ax_tranzit` (
+ `codconcatenat` varchar(250) NOT NULL,
+ `livrareconfirmata` date NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=latin1

@@ -933,3 +933,7 @@ OC2
    #hide_visitors_on_mobile{ 
    	display: none !important; }
 }
+#download_descriptionPDF td.titlePDF{
+font-weight:bold;
+padding-bottom:10px;
+}
