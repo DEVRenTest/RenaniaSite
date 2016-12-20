@@ -668,7 +668,7 @@
           </tr>
           <tr>
           <?php foreach ($transit_by_color_and_size['code_ax'] as $key => $code_ax) { ?>
-            <td><?php echo ($code_ax != 0 ? $code_ax : "-"); ?></td>
+            <td><?php echo isset($code_ax) && $code_ax && ($code_ax != '1900-01-01') ? $code_ax : "-"; ?></td>
           <?php } ?>
           </tr>
         <?php } ?>
@@ -685,7 +685,7 @@
           <tr>
             <th><?php echo $size; ?></th>
             <?php foreach ($product_colors as $color) { ?>
-            <td><?php echo isset($value[$color]) && $value[$color] ? $value[$color] : "-"; ?></td>
+            <td><?php echo isset($value[$color]) && $value[$color] && ($value[$color] != '1900-01-01') ? $value[$color] : "-"; ?></td>
             <?php } ?>
           </tr>
           <?php } ?>
